@@ -34,7 +34,7 @@ Groofy Code is an online platform that aims to bring together coding enthusiasts
 
 # FAQ
 
-#Contributers
+# Contributers
 1. Hazem Adel
 2. Omar Esawy
 3. Mahmoud
