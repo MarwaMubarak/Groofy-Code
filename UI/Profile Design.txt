@@ -1,0 +1,8 @@
+Profile:
+Settings for profile as editing information
+Change Skins
+Change Badges at most (3 badges)
+Exp
+Friends
+History Of Matches
+Statistics

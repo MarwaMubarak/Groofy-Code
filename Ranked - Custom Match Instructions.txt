@@ -1,0 +1,46 @@
+Ranked Match:
+Senario 1: 
+Someone has disconnected for more than 30 seconds --> Ban Time
+
+Senario 2:
+Duplicated Source Code --> Ban for the account if it happens 5 times
+
+Seniaro 3:
+Pressing on Draw Button OR Time Expired
+In case of draw (0 -> 10) negative trophies
+
+Senario 4:
+Calculating trophies for the winner and the loser by the number of wrong answers and the time which gets the first accepted.
+
+Senario 5:
+Pressing on Extra 30 minutes
+Send a request for the opponent for extra 30 minutes (The opponent has to accept the request to add the time).
+
+
+- Duration: 90 Minutes 
+- Judged Match: First Accepted
+- Problems: exactly one problem
+- Block copy paste
+- Adding Live Templates
+
+
+
+Custom Match:
+
+Senario 1:
+The player can leave the match
+
+Senario 2:
+Pressing on Extra 30 minutes multiple times
+Send a request for the opponent for extra 30 minutes (The opponent has to accept the request to add the time).
+
+
+- Type: Team or Individual (Team max 5 members)
+- Duration: X Minutes -> Unlimited requesting 30 minutes
+- Judged Match: Penality / Solve most of the problems / Scores
+- Problems: Multiple problems (Chosen or Randomized)
+- Block copy paste
+- Adding Live Templates
+
+
+
