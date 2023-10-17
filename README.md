@@ -4,7 +4,7 @@ Groofy Code is an online platform that aims to bring together coding enthusiasts
 # To build the project
 Run the following command:
 ``` 
-npm i axios react-router-dom formik react-redux @reduxjs/toolkit typescript
+npm install
 ```
 Then start the server by using the following command:
 ```
