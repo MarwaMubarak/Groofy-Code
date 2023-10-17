@@ -14,6 +14,10 @@ Groofy Code is an online platform that aims to bring together coding enthusiasts
   <img src="UI/HomePage.png" name="Home Page">
 </details>
 <details>
+    <summary>Profile Page</summary>
+  <img src="UI/Profile Page.jpg" name="Profile Page">
+</details>
+<details>
     <summary>Clan Chat</summary>
   <img src="UI/ClanChatPage.png" name="Clan Chat">
 </details>
