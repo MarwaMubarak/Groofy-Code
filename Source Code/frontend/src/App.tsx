@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Home } from "./pages";
+import { Home, Match } from "./pages";
 function App() {
   return (
     <BrowserRouter>
@@ -11,6 +11,7 @@ function App() {
         <Route path="/signup" />
         <Route path="/news" />
         <Route path="/help" />
+        <Route path="/match" element={<Match />} />
       </Routes>
     </BrowserRouter>
   );

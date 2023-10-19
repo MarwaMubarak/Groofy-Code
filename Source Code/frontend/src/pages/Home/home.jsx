@@ -1,7 +1,5 @@
-import React from "react";
-
 const Home = () => {
-  return <div>Hello Groofy</div>;
+  return <div className="home-div">Homepage</div>;
 };
 
 export default Home;

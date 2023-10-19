@@ -1,0 +1,264 @@
+.match-sections {
+  display: flex;
+  margin-top: 25px;
+}
+.match-sections .psec,
+.match-sections .esec {
+  flex: 1;
+  min-height: calc(100vh - 222px);
+}
+.match-sections .psec {
+  border-right: 2px solid #dddddd;
+}
+.match-sections .psec .problem-disc {
+  margin-left: 20px;
+  margin-right: 10px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+}
+.match-sections .psec .problem-disc .ptitle {
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: bold;
+  position: relative;
+}
+.match-sections .psec .problem-disc .ptitle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
+  width: 250px;
+  height: 2px;
+  background-color: #ddd;
+}
+.match-sections .psec .problem-disc .pdisc {
+  margin-top: 25px;
+  font-size: 18px;
+  color: #555;
+  line-height: 1.5;
+}
+.match-sections .psec .testcases {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 15px;
+}
+.match-sections .psec .testcases .tch {
+  font-weight: 500;
+  font-size: 25px;
+  background-color: #143f6b;
+  color: #fff;
+  padding: 8px 60px;
+  border-radius: 4px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.match-sections .psec .testcases .tcs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 65px 0;
+  width: 100%;
+  margin-left: 20px;
+  margin-top: 50px;
+  padding: 15px;
+}
+.match-sections .psec .testcases .tcs-container .tc-box {
+  position: relative;
+}
+.match-sections .psec .testcases .tcs-container .tc-box .tc-num {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.match-sections .psec .testcases .tcs-container .tc-box:not(:last-of-type)::after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 120px);
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -40px;
+}
+.match-sections .esec {
+  padding-left: 13px;
+  margin-top: 17px;
+}
+.match-sections .esec .coding-sec {
+  position: relative;
+}
+.match-sections .esec .coding-sec::after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 10px);
+  height: 2px;
+  background-color: #ddd;
+  bottom: -32px;
+}
+.match-sections .esec .coding-sec .lng {
+  margin-left: 30px;
+  display: flex;
+  align-items: center;
+}
+.match-sections .esec .coding-sec .lng .cl-title {
+  font-size: 25px;
+}
+.match-sections .esec .coding-sec .lng select {
+  margin-left: 15px;
+  border: none;
+  width: 200px;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #d9d9d9;
+  color: #143f6b;
+  font-size: 18px;
+  font-weight: bold;
+}
+.match-sections .esec .coding-sec .lng select:focus {
+  outline: none;
+}
+.match-sections .esec .coding-sec .editor {
+  margin-top: 20px;
+}
+.match-sections .esec .coding-sec .editor textarea {
+  resize: none;
+  height: 400px;
+  width: calc(100% - 10px);
+  margin-right: 10px;
+  border: none;
+  background-color: #2e2e2e;
+  border-radius: 12px;
+  caret-color: #feb139;
+  padding-left: 5px;
+  padding-top: 5px;
+  color: #fff;
+}
+.match-sections .esec .coding-sec .editor textarea:focus {
+  outline: none;
+}
+.match-sections .esec .coding-sec .compiling-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 20px;
+  margin-top: 15px;
+}
+.match-sections .esec .coding-sec .compiling-btns button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 5px;
+  background-color: #feb139;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  font-size: 17px;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.match-sections .esec .coding-sec .compiling-btns button:hover {
+  box-shadow: none;
+}
+.match-sections .esec .coding-sec .compiling-btns button img {
+  width: 25px;
+}
+.match-sections .esec .op-sec {
+  margin-top: 55px;
+}
+.match-sections .esec .op-sec .op-title {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.match-sections .esec .op-sec .op-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+  gap: 42px 0;
+  margin-right: 10px;
+}
+.match-sections .esec .op-sec .op-info .op-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+.match-sections .esec .op-sec .op-info .op-box:not(:last-of-type)::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #ddd;
+  bottom: -31px;
+}
+.match-sections .esec .op-sec .op-info .op-box .info-title {
+  font-weight: bold;
+  font-size: 20px;
+  position: relative;
+}
+.match-sections .esec .op-sec .op-info .op-box .info-title::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -5px;
+}
+.match-sections .esec .op-sec .op-info .op-box .op-info-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 0 20px;
+  margin-top: 20px;
+}
+.match-sections .esec .op-sec .op-info .op-box .op-info-container .op-info-box {
+  background-color: #e5e5e5;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0 8px;
+  padding: 6px 9px;
+}
+.match-sections .esec .op-sec .op-info .op-box .op-info-container .op-info-box img {
+  width: 25px;
+  border-radius: 50%;
+}
+.match-sections .esec .op-sec .op-info .op-box .op-info-container .op-info-box .details {
+  display: inline-block;
+  color: rgba(245, 83, 83, 0.6);
+  margin-left: 25px;
+  font-weight: normal;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.match-sections .esec .op-sec .op-info .op-box .op-info-container .op-info-box .details:hover {
+  color: #f55353;
+  font-weight: bold;
+}/*# sourceMappingURL=match.css.map */

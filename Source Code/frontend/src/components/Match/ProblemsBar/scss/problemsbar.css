@@ -1,0 +1,53 @@
+.problems-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #143f6b;
+  border-radius: 6px;
+  margin-left: 20px;
+  margin-right: 80px;
+  margin-bottom: 30px;
+  padding: 6px 26px 6px 18px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.problems-bar span {
+  color: #fff;
+  font-size: 25px;
+  font-weight: 500;
+}
+.problems-bar .problems-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 25px;
+}
+.problems-bar .problems-container .problem {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  transition: 0.3s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+.problems-bar .problems-container .problem.active {
+  border: 3px solid #f55353;
+}
+.problems-bar .problems-container .problem:not(.active) {
+  opacity: 0.5;
+}
+.problems-bar .problems-container .problem:not(.active):hover {
+  opacity: 1;
+}
+.problems-bar .problems-container .problem.y {
+  background-color: #18cf08;
+}
+.problems-bar .problems-container .problem.n {
+  background-color: #ee0000;
+}
+.problems-bar .problems-container .problem.p {
+  background-color: #a3a3a3;
+}/*# sourceMappingURL=problemsbar.css.map */
