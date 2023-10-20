@@ -1,0 +1,27 @@
+@use "../../../../../shared/styles/colors" as *;
+@use "../../../../../shared/styles/mixins" as *;
+
+@mixin matchInfoBox {
+  .m-infobox {
+    @include center;
+    position: relative;
+    gap: 0 5px;
+    background-color: $darkColor;
+    color: $blueColor;
+    border-radius: 15px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 1px 20px;
+    .dot {
+      position: absolute;
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background-color: $redColor;
+      left: 10px;
+    }
+    .match-info {
+      margin-left: 5px;
+    }
+  }
+}

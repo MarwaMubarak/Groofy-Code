@@ -1,0 +1,12 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+@use "./sections/editorsection" as *;
+@use "./sections/outputsection" as *;
+
+.esec {
+  // min-height: calc(100vh - 212px);
+  padding-left: 13px;
+  margin-top: 17px;
+  @include editorSection;
+  @include outputSection;
+}

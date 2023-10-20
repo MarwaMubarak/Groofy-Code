@@ -1,125 +1,16 @@
 @use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+@use "./sections/matchinfobox" as *;
+@use "./sections/players" as *;
 
 .scoreboard {
   background-color: #fff;
   border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include center;
   flex-direction: column;
   width: fit-content;
   margin: 5px auto 10px;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
-  .m-infobox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    gap: 0 5px;
-    background-color: $darkColor;
-    color: $blueColor;
-    border-radius: 15px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    padding: 1px 20px;
-    .dot {
-      position: absolute;
-      height: 8px;
-      width: 8px;
-      border-radius: 50%;
-      background-color: $redColor;
-      left: 10px;
-    }
-    .match-info {
-      margin-left: 5px;
-    }
-  }
-  .players {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0 80px;
-    padding: 5px 12px;
-    span {
-      font-size: 40px;
-      font-weight: bold;
-    }
-    .player {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .first-status,
-      .second-status {
-        position: relative;
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
-        top: 10px;
-      }
-      .first-status {
-        background-color: #cecece;
-        left: 10px;
-      }
-      .second-status {
-        right: 10px;
-        img {
-          max-width: 100%;
-          border-radius: 50%;
-        }
-      }
-      .info {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        .usn {
-          background-color: $btnColor;
-          color: #000;
-          font-weight: 500;
-          border-radius: 15px;
-          padding: 0 16px;
-          font-size: 14px;
-        }
-        img {
-          width: 65px;
-          height: 65px;
-          border-radius: 50%;
-        }
-      }
-      .pr-st {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0 8px;
-        position: relative;
-        .pr {
-          border-radius: 4px;
-          height: 18px;
-          width: 18px;
-          font-size: 15px;
-          text-align: center;
-          color: #000;
-          &.y {
-            background-color: $greenColor;
-          }
-          &.n {
-            background-color: #ee0000;
-          }
-          &.p {
-            background-color: #a3a3a3;
-          }
-        }
-        &.first,
-        &.second {
-          top: 8px;
-        }
-        &.first {
-          right: 16px;
-        }
-        &.second {
-          left: 16px;
-        }
-      }
-    }
-  }
+  box-shadow: $cardShadow;
+  @include matchInfoBox;
+  @include players;
 }

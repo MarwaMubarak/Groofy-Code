@@ -1,0 +1,124 @@
+.esec {
+  padding-left: 13px;
+  margin-top: 17px;
+}
+.esec .coding-sec {
+  position: relative;
+}
+.esec .coding-sec::after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 10px);
+  height: 2px;
+  background-color: #ddd;
+  bottom: -32px;
+}
+.esec .coding-sec .lng {
+  margin-left: 30px;
+  display: flex;
+  align-items: center;
+}
+.esec .coding-sec .lng .cl-title {
+  font-size: 25px;
+}
+.esec .coding-sec .lng select {
+  margin-left: 15px;
+  border: none;
+  width: 200px;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #d9d9d9;
+  color: #143f6b;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.esec .coding-sec .lng select:focus {
+  outline: none;
+}
+.esec .coding-sec .editor {
+  margin-top: 20px;
+}
+.esec .coding-sec .editor textarea {
+  resize: none;
+  height: 400px;
+  width: calc(100% - 10px);
+  margin-right: 10px;
+  border: none;
+  background-color: #2e2e2e;
+  border-radius: 12px;
+  caret-color: #feb139;
+  padding-left: 5px;
+  padding-top: 5px;
+  color: #fff;
+}
+.esec .coding-sec .editor textarea:focus {
+  outline: none;
+}
+.esec .coding-sec .compiling-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 20px;
+  margin-top: 15px;
+}
+.esec .op-sec {
+  margin-top: 55px;
+}
+.esec .op-sec .op-title {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.esec .op-sec .op-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+  gap: 42px 0;
+  margin-right: 10px;
+}
+.esec .op-sec .op-info .op-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+.esec .op-sec .op-info .op-box:not(:last-of-type)::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #ddd;
+  bottom: -31px;
+}
+.esec .op-sec .op-info .op-box .info-title {
+  font-weight: bold;
+  font-size: 20px;
+  position: relative;
+}
+.esec .op-sec .op-info .op-box .info-title::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -5px;
+}
+.esec .op-sec .op-info .op-box .op-info-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 0 20px;
+  margin-top: 20px;
+}/*# sourceMappingURL=codingsection.css.map */

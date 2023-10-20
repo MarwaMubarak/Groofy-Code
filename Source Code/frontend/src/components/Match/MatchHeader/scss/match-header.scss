@@ -1,9 +1,8 @@
 @use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
 .header-div {
   height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include between;
   padding: 0 20px;
   background: linear-gradient(
       90deg,
@@ -29,9 +28,7 @@
     }
   }
   .user-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include center;
     user-select: none;
     gap: 0 3px;
     .h-usn {

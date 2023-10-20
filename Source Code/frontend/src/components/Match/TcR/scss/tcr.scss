@@ -1,0 +1,32 @@
+@use "../../../../shared/styles/colors" as *;
+
+.tcr {
+  background-color: #e5e5e5;
+  border-radius: 6px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0 8px;
+  padding: 6px 9px;
+  .tcr-text {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .tcr-icn {
+    width: 25px;
+    border-radius: 50%;
+  }
+  .details {
+    display: inline-block;
+    color: rgba($redColor, 0.6);
+    margin-left: 25px;
+    font-weight: normal;
+    user-select: none;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      color: $redColor;
+      font-weight: bold;
+    }
+  }
+}

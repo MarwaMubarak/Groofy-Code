@@ -1,0 +1,85 @@
+@use "../../../../../shared/styles/colors" as *;
+@use "../../../../../shared/styles/mixins" as *;
+
+@mixin players {
+  .players {
+    @include between;
+    gap: 0 80px;
+    padding: 5px 12px;
+    span {
+      font-size: 40px;
+      font-weight: bold;
+    }
+    .player {
+      @include center;
+      .first-status,
+      .second-status {
+        position: relative;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        top: 10px;
+      }
+      .first-status {
+        background-color: #cecece;
+        left: 10px;
+      }
+      .second-status {
+        right: 10px;
+        img {
+          max-width: 100%;
+          border-radius: 50%;
+        }
+      }
+      .info {
+        @include center;
+        flex-direction: column;
+        .usn {
+          background-color: $btnColor;
+          color: #000;
+          font-weight: 500;
+          border-radius: 15px;
+          padding: 0 16px;
+          font-size: 14px;
+        }
+        img {
+          width: 65px;
+          height: 65px;
+          border-radius: 50%;
+        }
+      }
+      .pr-st {
+        @include center;
+        gap: 0 8px;
+        position: relative;
+        .pr {
+          border-radius: 4px;
+          height: 18px;
+          width: 18px;
+          font-size: 15px;
+          text-align: center;
+          color: #000;
+          &.y {
+            background-color: $greenColor;
+          }
+          &.n {
+            background-color: #ee0000;
+          }
+          &.p {
+            background-color: #a3a3a3;
+          }
+        }
+        &.first,
+        &.second {
+          top: 8px;
+        }
+        &.first {
+          right: 16px;
+        }
+        &.second {
+          left: 16px;
+        }
+      }
+    }
+  }
+}

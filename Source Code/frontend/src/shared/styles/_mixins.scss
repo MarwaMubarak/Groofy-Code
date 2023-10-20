@@ -1,0 +1,34 @@
+@use "./colors" as *;
+// Centering
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Between
+@mixin between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Separator
+@mixin bottomSeparator($widthVal, $topVal, $bottomVal, $trStatus) {
+  &::after {
+    content: "";
+    position: absolute;
+    width: #{$widthVal};
+    height: 2px;
+    background-color: $separatorColor;
+    @if ($trStatus == 1) {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    @if ($topVal == 0) {
+      bottom: #{$bottomVal};
+    } @else {
+      top: #{$topVal};
+    }
+  }
+}
