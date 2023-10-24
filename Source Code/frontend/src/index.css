@@ -8,3 +8,6 @@ body {
   font-family: "Roboto", sans-serif;
   background-color: #eaedf2;
 }
+ul{
+  list-style: none;
+}
