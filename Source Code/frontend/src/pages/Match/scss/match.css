@@ -1,9 +1,28 @@
-.match-sections {
+.match-div {
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (min-width: 768px) {
+  .match-div {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .match-div {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .match-div {
+    width: 1510px;
+  }
+}
+.match-div .match-sections {
   display: flex;
   margin-top: 25px;
 }
-.match-sections .psec,
-.match-sections .esec {
+.match-div .match-sections .psec,
+.match-div .match-sections .esec {
   flex: 1;
   min-height: calc(100vh - 222px);
 }/*# sourceMappingURL=match.css.map */
