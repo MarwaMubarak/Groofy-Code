@@ -6,7 +6,6 @@
 .esec {
   // min-height: calc(100vh - 212px);
   padding-left: 13px;
-  margin-top: 17px;
   @include editorSection;
   @include outputSection;
 }

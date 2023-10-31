@@ -21,12 +21,12 @@ const CodingSection = () => {
         <div className="compiling-btns">
           <GBtn
             btnText="Run Testcases"
-            icnSrc="/Assets/run-testcases.svg"
+            icnSrc="/Assets/SVG/run-testcases.svg"
             clickEvent={() => {}}
           />
           <GBtn
             btnText="Submit"
-            icnSrc="/Assets/submit.svg"
+            icnSrc="/Assets/SVG/submit.svg"
             clickEvent={() => {}}
           />
         </div>
@@ -37,14 +37,18 @@ const CodingSection = () => {
           <div className="op-box">
             <span className="info-title">Valid Testcases:</span>
             <div className="op-info-container">
-              <TcR tcNum={1} icnSrc="/Assets/success.png" tcStatus />
-              <TcR tcNum={2} icnSrc="/Assets/success.png" tcStatus />
+              <TcR tcNum={1} icnSrc="/Assets/Images/success.png" tcStatus />
+              <TcR tcNum={2} icnSrc="/Assets/Images/success.png" tcStatus />
             </div>
           </div>
           <div className="op-box">
             <span className="info-title">Invalid Testcases:</span>
             <div className="op-info-container">
-              <TcR tcNum={3} icnSrc="/Assets/wrong.png" tcStatus={false} />
+              <TcR
+                tcNum={3}
+                icnSrc="/Assets/Images/wrong.png"
+                tcStatus={false}
+              />
             </div>
           </div>
         </div>

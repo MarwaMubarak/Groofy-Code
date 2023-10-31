@@ -1,43 +1,43 @@
-.friends-background{
-    display: flex;
-    flex-direction: column;
-    right: 0;
-    top: 12%;
-    background-color: white;
-    width: 600px;
-    height: 300px;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 97% 100%, 7% 100%, 0 90%);
+.friends-background {
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  top: 12%;
+  background-color: white;
+  height: 250px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 97% 100%, 7% 100%, 0 90%);
 }
-.friends-background h2{
-    margin-left: 15px;
-    margin-top: 30px;
+.friends-background h2 {
+  margin-left: 15px;
+  margin-top: 30px;
 }
-.friends-header{
-    display: flex;
-    /* align-items: center; */
+.friends-header {
+  display: flex;
+  /* align-items: center; */
 }
-.friends-header img{
-    width: 40px;
-    height: 40px;
-    margin-top: 25px;
-    margin-left: 30px;
+.friends-header img {
+  width: 40px;
+  height: 40px;
+  margin-top: 25px;
+  margin-left: 30px;
 }
-.friends-body{
-    margin-left: 30px;
-    margin-top: 20px;
+.friends-body {
+  margin-left: 30px;
+  margin-top: 20px;
 }
-.friends-body li:not(:last-child){
-    margin-bottom: 10px;
+.friends-body li:not(:last-child) {
+  margin-bottom: 10px;
 }
-.friends-body li{
-    display: flex;
-    align-items: center;
+.friends-body li {
+  display: flex;
+  align-items: center;
 }
-.friends-body h3{
-    font-weight:400;
+.friends-body h3 {
+  font-size: 16px;
+  font-weight: 400;
 }
-.friends-body img{
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+.friends-body img {
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
 }

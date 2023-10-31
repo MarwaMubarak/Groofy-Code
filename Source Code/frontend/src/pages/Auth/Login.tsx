@@ -13,7 +13,7 @@ const Login = () => {
         </form>
       </div>
       <div className="auth-img">
-        <img src="/Assets/authPic.png" alt="AuthPic" />
+        <img src="/Assets/Images/authPic.png" alt="AuthPic" />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import {
   EventSection,
   FriendsSection,
   MainHome,
-  NavBar
+  NavBar,
 } from "../../components";
 import "./scss/home.css";
 // Bootstrap CSS
@@ -11,17 +11,17 @@ import "./scss/home.css";
 // import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const Home = () => {
-  return(
-    <div className="homepage">
-      <NavBar/>
+  return (
+    <>
+      <NavBar idx={0} />
       <div className="mainhome">
-        <MainHome/>
+        <MainHome />
         <div className="actionsection">
-          <EventSection/>
-          <FriendsSection/>
+          <EventSection />
+          <FriendsSection />
         </div>
       </div>
-  </div>
+    </>
   );
 };
 

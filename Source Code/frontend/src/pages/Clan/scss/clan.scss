@@ -2,16 +2,21 @@
 @use "../../../shared/styles/mixins" as *;
 
 .clan-div {
-  display: flex;
+  @include center;
   margin-top: 70px;
   margin-left: 120px;
   margin-right: 60px;
   gap: 0 42px;
+  height: calc(100vh - 130px);
   .c-info {
     display: flex;
     flex-direction: column;
-    gap: 28px 0;
+    gap: 25px 0;
+    height: 100%;
     .c-box {
+      &:nth-child(1) {
+        flex: 2;
+      }
       background-color: #fff;
       padding: 15px 20px;
       clip-path: polygon(
@@ -91,16 +96,18 @@
   }
   .c-chat {
     background-color: #fff;
+    height: 100%;
     width: 75%;
     clip-path: polygon(
       50% 0%,
       100% 0,
       100% 60%,
       100% 100%,
-      3% 100%,
+      2% 100%,
       0% 95%,
       0 0
     );
+    box-shadow: 40px 11px 15px 0px rgba(0, 0, 0, 0.1);
     .ch-header {
       display: flex;
       justify-content: flex-start;
@@ -131,10 +138,11 @@
     }
     .ch {
       height: calc(100% - 175px);
-      overflow-y: visible;
+      overflow-y: auto;
       margin-top: 10px;
       padding-left: 20px;
       padding-right: 20px;
+      @include scrollbar;
       .msg-box {
         display: flex;
         align-items: center;
@@ -170,13 +178,15 @@
       border-top: 1px solid #ddd;
       display: flex;
       textarea {
-        padding: 20px 75px 60px 40px;
+        // padding: 20px 75px 60px 40px;
+        padding: 20px 75px 10px 40px;
         width: 100%;
         border: none;
         font-size: 16px;
         font-family: "Roboto", sans-serif;
         resize: none;
         overflow-y: auto;
+        @include scrollbar;
         &:focus {
           outline: none;
         }

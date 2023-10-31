@@ -32,3 +32,18 @@
     }
   }
 }
+
+// Scrollbar
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    &-track {
+      background-color: #f1f5f9;
+      border-radius: 10px;
+    }
+    &-thumb {
+      background-color: $mainColor;
+      border-radius: 10px;
+    }
+  }
+}

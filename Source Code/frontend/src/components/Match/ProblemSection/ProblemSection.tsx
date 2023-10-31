@@ -1,9 +1,9 @@
-import { ProblemsBar, Testcase } from "../..";
+import { Testcase } from "../..";
 import "./scss/problemsection.css";
 const ProblemSection = () => {
   return (
     <div className="psec">
-      <ProblemsBar />
+      {/* <ProblemsBar /> */}
       <div className="problem-disc">
         <span className="ptitle">Problem Title</span>
         <p className="pdisc">

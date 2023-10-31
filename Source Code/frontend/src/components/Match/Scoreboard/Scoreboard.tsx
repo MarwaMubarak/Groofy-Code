@@ -12,7 +12,7 @@ const Scoreboard = () => {
           <div className="info">
             <div className="usn">Username</div>
             <div className="img">
-              <img src="/Assets/defAv.png" alt="ProfilePhoto" />
+              <img src="/Assets/Images/defAv.png" alt="ProfilePhoto" />
             </div>
           </div>
           <div className="pr-st first">
@@ -31,12 +31,12 @@ const Scoreboard = () => {
           <div className="info">
             <div className="usn">Username</div>
             <div className="img">
-              <img src="/Assets/defAv2.png" alt="ProfilePhoto" />
+              <img src="/Assets/Images/defAv2.png" alt="ProfilePhoto" />
             </div>
           </div>
           <div className="second-status">
             <div className="finished">
-              <img src="/Assets/success.png" alt="Success" />
+              <img src="/Assets/Images/success.png" alt="Success" />
             </div>
           </div>
         </div>

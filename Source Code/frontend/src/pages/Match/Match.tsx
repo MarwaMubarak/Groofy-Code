@@ -11,6 +11,10 @@ const Match = () => {
     <>
       <MatchHeader />
       <div className="match-div">
+        <button className="exit-btn">
+          <img src="/Assets/SVG/exit.svg" alt="Exit" />
+          <span>Leave</span>
+        </button>
         <Scoreboard />
         <div className="match-sections">
           <ProblemSection />

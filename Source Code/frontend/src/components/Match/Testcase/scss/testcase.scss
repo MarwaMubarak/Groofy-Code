@@ -1,9 +1,10 @@
+@use "../../../../shared/styles/colors" as *;
 .testcase {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  flex-direction: column;
-  gap: 8px 0;
+  flex-wrap: wrap;
+  gap: 0 30px;
   width: fit-content;
   .card {
     background-color: #fff;
