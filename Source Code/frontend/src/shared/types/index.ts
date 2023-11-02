@@ -20,3 +20,21 @@ export interface cardProps {
   cardButtonTitle: string;
   clickEvent: () => void;
 }
+
+// Achievemnt in profile props
+export interface achievementProps {
+  achievementImg: string;
+  achievementTitle: string;
+  achievementName: string;
+  achievementScore: number;
+  achievementTrophy: string;
+  scoreColor: string
+  clickEvent: () => void;
+}
+
+// Achievemnt in profile props
+export interface profileImageProps {
+  profileImg: string;
+  tagSkinImg: string;
+  clickEvent: () => void;
+}

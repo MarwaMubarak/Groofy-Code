@@ -1,0 +1,64 @@
+.solver-info h4{
+    margin-top: 10px;
+    color: gray;
+    font-size: 14px;
+    margin-right: 10px;
+}
+.solver-info{
+    margin-right: 250px;
+}
+.Address-info{
+    display: flex;
+    margin-bottom: 30px;
+}
+.details-section{
+    margin-top: 20px;
+    display: flex;
+}
+.details-title{
+    font-weight: 400;
+    margin-right: 10px;
+}
+.details-info{
+    font-weight: bold;
+    margin-right: 7px;
+}
+.details-achievement{
+    position: absolute;
+    margin-top: 100px;
+    background-color: #EFEFEF;
+    border-radius: 35px;
+    width: 600px;
+    height: 470px;
+}
+.data-container{
+    display: flex;
+    position: relative;
+    align-items: center;
+    position: absolute;
+    left: 50px;
+    /* top: 40px; */
+    height: 100%;
+}
+.data-container-column{
+    display: flex;
+    flex-direction: column;
+    margin-right: 60px;
+}
+.data-container-column h3{
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.data-container-field{
+    background-color: #DADADA;
+    width: 200px;
+    height: 45px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+
+}
+.data-field-info{
+    margin-top: 10px;
+    margin-left: 15px;
+    font-weight: bold;
+}
