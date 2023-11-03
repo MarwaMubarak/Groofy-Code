@@ -99,11 +99,12 @@ UserSchema.virtual("submissions", {
   foreignField: { $in: ["users"] },
 });
 // Clan Table
-UserSchema.virtual("clan", {
-  ref: "Clan",
-  localField: "_id",
-  foreignField: { $in: ["members"] },
-});
+////TO DO uncomment when possiable
+// UserSchema.virtual("clan", {
+//   ref: "Clan",
+//   localField: "_id",
+//   foreignField: { $in: ["members"] },
+// });
 
 // Generating token
 UserSchema.methods.generateAuthToken = function () {
