@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Home, Login, SignUp, Match } from "./pages";
+import { Home, Login, SignUp, Match, Clan, Profile } from "./pages";
 function App() {
   return (
     <BrowserRouter>
@@ -7,8 +7,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/profile" />
-        <Route path="/clan" />
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/clan" element={<Clan />} />
         <Route path="/news" />
         <Route path="/help" />
         <Route path="/match" element={<Match />} />

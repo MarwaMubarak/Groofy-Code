@@ -8,19 +8,15 @@
   background-color: #143f6b;
 }
 .header-div .logo {
-  color: #fff;
-  font-size: 30px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
-  cursor: pointer;
-}
-.header-div .logo span {
-  color: #f55353;
+  width: 130px;
+  height: auto;
 }
 .header-div .m-dur {
   color: #fff;
   font-size: 25px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .header-div .m-dur span {
   color: #f6f54d;

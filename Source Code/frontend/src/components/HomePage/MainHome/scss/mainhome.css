@@ -1,0 +1,36 @@
+.background {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: white;
+  align-items: center;
+  width: 100%;
+  height: 650px;
+  clip-path: polygon(0 0, 100% 0, 100% 95%, 97% 100%, 3% 100%, 0 95%);
+}
+.background::before,
+.background::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  background-color: #ddd;
+}
+.background::before {
+  top: 100px;
+}
+.background::after {
+  bottom: 80px;
+}
+.logo {
+  width: fit-content;
+}
+.logo-container {
+  margin-top: 30px;
+  margin-bottom: 80px;
+}
+.background-items {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+}

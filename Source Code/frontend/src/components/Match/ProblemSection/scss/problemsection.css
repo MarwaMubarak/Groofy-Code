@@ -1,5 +1,5 @@
 .psec {
-  border-right: 2px solid #ddd;
+  border-right: 2px solid #ababab;
 }
 .psec .problem-disc {
   margin-left: 20px;
@@ -66,7 +66,7 @@
   font-size: 20px;
   font-weight: 500;
 }
-.psec .testcases .tcs-container .tc-box::after {
+.psec .testcases .tcs-container .tc-box:not(:last-of-type)::after {
   content: "";
   position: absolute;
   width: calc(100% - 120px);
@@ -75,4 +75,7 @@
   left: 50%;
   transform: translateX(-50%);
   bottom: -40px;
+}
+.psec .testcases .tcs-container .tc-box:not(:last-of-type)::after {
+  background-color: #ababab;
 }/*# sourceMappingURL=problemsection.css.map */

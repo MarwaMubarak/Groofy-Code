@@ -12,17 +12,13 @@
     linear-gradient(90deg, rgba(0, 0, 0, 0) 70%, rgba(245, 83, 83, 0.3) 100%);
   background-color: $mainColor;
   .logo {
-    color: #fff;
-    font-size: 30px;
-    user-select: none;
-    cursor: pointer;
-    span {
-      color: $redColor;
-    }
+    width: 130px;
+    height: auto;
   }
   .m-dur {
     color: #fff;
     font-size: 25px;
+    user-select: none;
     span {
       color: $yellowColor;
     }

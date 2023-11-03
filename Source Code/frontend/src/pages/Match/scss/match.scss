@@ -1,10 +1,54 @@
 @use "../../../shared/styles/colors" as *;
-.match-sections {
-  display: flex;
-  margin-top: 25px;
-  .psec,
-  .esec {
-    flex: 1;
-    min-height: calc(100vh - 222px);
+@use "../../../shared/styles/mixins" as *;
+.match-div {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  .exit-btn {
+    position: absolute;
+    left: 210px;
+    top: 50px;
+    @include between;
+    gap: 0 5px;
+    border: none;
+    border-radius: 6px;
+    background-color: $redColor;
+    padding: 4px 12px;
+    user-select: none;
+    color: #fff;
+    box-shadow: $headerShadow;
+    transition: 0.3s;
+    &:hover {
+      box-shadow: none;
+    }
+    cursor: pointer;
+    img {
+      width: 30px;
+    }
+    span {
+      font-family: "Roboto", sans-serif;
+      font-size: 25px;
+    }
+  }
+  @media (min-width: 768px) {
+    width: 750px;
+  }
+  @media (min-width: 992px) {
+    width: 970px;
+  }
+  @media (min-width: 1200px) {
+    width: 1510px;
+  }
+  .match-sections {
+    display: flex;
+    margin-top: 25px;
+    .psec,
+    .esec {
+      flex: 1;
+      height: calc(100vh - 229px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      @include scrollbar;
+    }
   }
 }

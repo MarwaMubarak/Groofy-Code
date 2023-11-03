@@ -3,7 +3,7 @@
 .psec {
   // min-height: calc(100vh - 212px);
   // overflow-y: auto;
-  border-right: 2px solid $separatorColor;
+  border-right: 2px solid #ababab;
   .problem-disc {
     margin-left: 20px;
     margin-right: 10px;
@@ -55,7 +55,12 @@
           font-size: 20px;
           font-weight: 500;
         }
-        @include bottomSeparator(calc(100% - 120px), 0, -40px, 1);
+        &:not(:last-of-type) {
+          @include bottomSeparator(calc(100% - 120px), 0, -40px, 1);
+          &::after {
+            background-color: #ababab;
+          }
+        }
       }
     }
   }
