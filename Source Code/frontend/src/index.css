@@ -17,3 +17,14 @@ ul {
 a {
   text-decoration: none;
 }
+::-webkit-scrollbar{
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(0, 25, 52);
+  border-radius: 5px;
+}

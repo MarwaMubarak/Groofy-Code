@@ -1,0 +1,45 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.profile-page-style{
+    margin: auto;
+    .profile-main {
+        display: flex;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 50px;
+        // .slider-style{
+            // position: relative;
+            // left: 10px;
+        // }
+    }
+        @media (max-width: 400px) {
+        width: 100vw;
+        }
+        @media (min-width: 2000px) {
+        width: 90vw;
+        } 
+        @media (min-width: 2400px) {
+        width: 80vw;
+        } 
+        @media (min-width: 2800px) {
+        width: 70vw;
+        } 
+        @media (min-width: 3200px) {
+        width: 60vw;
+        } 
+        @media (min-width: 3600px) {
+        width: 50vw;
+    
+        } 
+        @media (min-width: 4000px) {
+        width: 40vw;
+        } 
+        @media (min-width: 4400px) {
+        width: 35vw;
+        } 
+        @media (min-width: 7000px) {
+            width: 25vw;
+            } 
+ }

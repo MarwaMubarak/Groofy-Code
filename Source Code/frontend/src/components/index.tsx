@@ -15,6 +15,8 @@ import MainProfile from "./Profile/MainProfile/MainProfile";
 import InformationSection from "./Profile/InformationSection/InformationSection"
 import ProfileAchievemnts from "./Profile/Achievement/Achievement"
 import ProfilePicture from "./Profile/ProfilePicture/ProfilePicture";
+import GroofyHeader from "./GroofyHeader/GroofyHeader";
+import GroofyFooter from "./GroofyFooter/GroofyFooter";
 
 export {
   MatchHeader,
@@ -33,5 +35,7 @@ export {
   MainProfile,
   InformationSection,
   ProfileAchievemnts,
-  ProfilePicture
+  ProfilePicture,
+  GroofyHeader,
+  GroofyFooter
 };

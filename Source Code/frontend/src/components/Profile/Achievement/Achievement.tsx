@@ -6,7 +6,7 @@ const ProfileAchievemnts = (props : achievementProps) => {
     <div className="achievement-container">
         <h3>{props.achievementTitle}</h3>
         <h4>{props.achievementName}</h4>
-        <div className="logo-contanier">
+        <div className="achievement-picture-contanier">
             <img src={props.achievementImg}/> 
         </div>
         <div className="profile-trophies">

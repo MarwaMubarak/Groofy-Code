@@ -1,0 +1,41 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+.footer-container{
+    margin-top: 300px;
+    min-height: 300px;
+    align-items: center;
+    // border-radius: 0 0 15px 15px;
+    display: flex;
+    gap: 50px;
+    flex-direction: column;
+    padding: 0 20px;
+     background-color: $mainColor;
+    .footer-contacts{
+        position: relative;
+        // margin-left: 325px;
+        margin-top: 40px;
+        color: white;
+        width: fit-content;
+        img{
+            cursor: pointer;
+            margin-right: 15px;
+            width: 40px;
+        }
+    }
+    .footer-welcome{
+        position: relative;
+        color: white;
+        width: 1300px;
+        font-weight: 500;
+        padding-bottom: 40px;
+        border-bottom: 1px solid #DDD;
+    }
+    .footer-copyrights{
+        position: relative;
+        color: white;
+        width: 1300px;
+        font-weight: 300;
+        font-size: 16px;
+        margin-bottom: 100px;
+    }
+}

@@ -1,18 +1,66 @@
-.mainhome {
+.home-container {
   display: flex;
-  margin-left: 150px;
+  flex-direction: column;
+  position: relative;
+  margin: auto;
+}
+.home-container .mainhome {
+  display: flex;
+  position: relative;
+  margin: auto;
+  width: 100%;
   margin-top: 50px;
-  /* gap: 100px; */
 }
-.background {
-  flex: 3;
-  margin-right: 80px;
-}
-.events-background {
-  margin-bottom: 50px;
-}
-.actionsection {
+.home-container .mainhome .actionsection {
   flex: 1;
   flex-direction: column;
   gap: 40px;
 }
+.home-container .background {
+  flex: 3;
+  margin-right: 80px;
+  margin-left: 150px;
+}
+.home-container .events-background {
+  margin-bottom: 50px;
+}
+@media (max-width: 400px) {
+  .home-container {
+    width: 100vw;
+  }
+}
+@media (min-width: 2000px) {
+  .home-container {
+    width: 90vw;
+  }
+}
+@media (min-width: 2400px) {
+  .home-container {
+    width: 80vw;
+  }
+}
+@media (min-width: 2800px) {
+  .home-container {
+    width: 70vw;
+  }
+}
+@media (min-width: 3200px) {
+  .home-container {
+    width: 60vw;
+  }
+}
+@media (min-width: 3600px) {
+  .home-container {
+    width: 50vw;
+  }
+}
+@media (min-width: 4000px) {
+  .home-container {
+    width: 40vw;
+  }
+}
+@media (min-width: 4400px) {
+  .home-container {
+    width: 30vw;
+  }
+}/*# sourceMappingURL=home.css.map */

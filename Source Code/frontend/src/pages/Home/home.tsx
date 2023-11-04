@@ -1,6 +1,8 @@
 import {
   EventSection,
   FriendsSection,
+  GroofyFooter,
+  GroofyHeader,
   MainHome,
   NavBar,
 } from "../../components";
@@ -13,13 +15,17 @@ import "./scss/home.css";
 const Home = () => {
   return (
     <>
-      <NavBar idx={0} />
-      <div className="mainhome">
-        <MainHome />
-        <div className="actionsection">
-          <EventSection />
-          <FriendsSection />
+      <div className="home-container">
+        <GroofyHeader/>
+        <div className="mainhome">
+          <NavBar idx={0} />
+          <MainHome />
+          <div className="actionsection">
+            <EventSection />
+            <FriendsSection />
+          </div>
         </div>
+        <GroofyFooter/>
       </div>
     </>
   );

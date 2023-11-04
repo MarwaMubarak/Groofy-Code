@@ -1,0 +1,70 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+.header-container{
+    height: 80px;
+    border-radius: 0 0 15px 15px;
+    @include between;
+    padding: 0 20px;
+     background: linear-gradient(
+      90deg,
+      rgba(20, 63, 107, 0) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    linear-gradient(90deg, rgba(0, 0, 0, 0) 70%, rgba(245, 83, 83, 0.3) 100%);
+     background-color: $mainColor;
+    .header-logo {
+        width: 130px;
+        height: auto;
+    }
+    .header-user-area {
+        @include center;
+        user-select: none;
+        .header-h-usn {
+          color: #fff;
+          font-weight: 400;
+          font-size: 18px;
+          margin-right: 10px;
+        }
+        .header-h-imgbox {
+          @include center;
+          position: relative;
+          margin-right: 10px;
+          .header-pr-ph {
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            box-shadow: $headerShadow;
+            transition: 0.3s;
+            &:hover {
+            box-shadow: none;
+            }
+            cursor: pointer;
+        }
+        }
+      }
+      .exit-btn {
+        @include center;
+        width: 32px;
+        height: 32px;
+        gap: 0 5px;
+        border: none;
+        border-radius: 50%;
+        background-color: $redColor;
+        padding: 4px 12px;
+        user-select: none;
+        color: #fff;
+        box-shadow: $headerShadow;
+        transition: 0.3s;
+        &:hover {
+          box-shadow: none;
+        }
+        cursor: pointer;
+        img {
+          width: 22px;
+        }
+        span {
+          font-family: "Roboto", sans-serif;
+          font-size: 18px;
+        }
+      }
+}
