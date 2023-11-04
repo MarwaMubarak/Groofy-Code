@@ -7,27 +7,23 @@ import {
   NavBar,
 } from "../../components";
 import "./scss/home.css";
-// Bootstrap CSS
-// import "bootstrap/dist/css/bootstrap.min.css";
-// // Bootstrap Bundle JS
-// import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const Home = () => {
   return (
-    <>
-      <div className="home-container">
-        <GroofyHeader/>
-        <div className="mainhome">
-          <NavBar idx={0} />
+    <div className="home-div">
+      <GroofyHeader />
+      <div className="h-wrapper">
+        <NavBar idx={0} />
+        <div className="h-content">
           <MainHome />
-          <div className="actionsection">
+          <div className="activities-section">
             <EventSection />
             <FriendsSection />
           </div>
         </div>
-        <GroofyFooter/>
       </div>
-    </>
+      <GroofyFooter />
+    </div>
   );
 };
 

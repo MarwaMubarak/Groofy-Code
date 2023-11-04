@@ -1,5 +1,6 @@
 .footer-container {
-  margin-top: 300px;
+  width: 100%;
+  margin-top: 100px;
   min-height: 300px;
   align-items: center;
   display: flex;
@@ -26,7 +27,7 @@
   width: 1300px;
   font-weight: 500;
   padding-bottom: 40px;
-  border-bottom: 1px solid #DDD;
+  border-bottom: 1px solid #ddd;
 }
 .footer-container .footer-copyrights {
   position: relative;

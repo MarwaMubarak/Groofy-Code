@@ -2,7 +2,7 @@ import "./scss/friendssection.css";
 
 const FriendsSection = () => {
   return (
-    <div className="friends-background">
+    <div className="friends-background ac-box">
       <div className="friends-header">
         <img src="./Assets/SVG/friends.svg" alt="Friends" />
         <h2>Friends</h2>

@@ -3,15 +3,15 @@ import "./scss/mainhome.css";
 
 const MainHome = () => {
   return (
-    <div className="background">
-      <div className="logo-container">
+    <div className="match-selector">
+      <div className="ms-logo">
         <img
           className="logo"
           src="/Assets/Images/GroofyCodeLogo.png"
           alt="groofycode"
         />
       </div>
-      <div className="background-items">
+      <div className="ms-items">
         <GameModeCard
           cardImg="/Assets/Images/customize.png"
           cardTitle="Customize"

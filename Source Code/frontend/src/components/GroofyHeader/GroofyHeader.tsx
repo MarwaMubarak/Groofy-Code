@@ -1,8 +1,8 @@
-import "./scss/groofyheader.scss";
+import "./scss/groofyheader.css";
 
 const GroofyHeader = () => {
   return (
-    <div className="header-container"> 
+    <div className="header-container">
       <div className="header-logo">
         <img src="/Assets/Images/GroofyCodeLogo.png" alt="Logo" />
       </div>

@@ -1,6 +1,9 @@
 .header-container {
-  height: 80px;
-  border-radius: 0 0 15px 15px;
+  height: 60px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,7 +47,7 @@
 .header-container .header-user-area .header-h-imgbox .header-pr-ph:hover {
   box-shadow: none;
 }
-.header-container .exit-btn {
+.header-container .header-user-area .exit-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,13 +66,13 @@
   transition: 0.3s;
   cursor: pointer;
 }
-.header-container .exit-btn:hover {
+.header-container .header-user-area .exit-btn:hover {
   box-shadow: none;
 }
-.header-container .exit-btn img {
+.header-container .header-user-area .exit-btn img {
   width: 22px;
 }
-.header-container .exit-btn span {
+.header-container .header-user-area .exit-btn span {
   font-family: "Roboto", sans-serif;
   font-size: 18px;
 }/*# sourceMappingURL=groofyheader.css.map */

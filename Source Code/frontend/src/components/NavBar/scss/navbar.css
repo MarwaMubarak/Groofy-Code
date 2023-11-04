@@ -5,64 +5,35 @@
   padding: 20px 30px 70px;
   width: 65px;
   height: 500px;
-  position: fixed;
+  position: relative;
 }
 .slider-style::before {
   content: "";
   position: absolute;
-  background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.3) 100%
-    ),
-    linear-gradient(180deg, rgba(245, 83, 83, 0.3) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(180deg, rgba(245, 83, 83, 0.3) 0%, rgba(0, 0, 0, 0) 100%);
   background-color: #143f6b;
   width: 65px;
   height: calc(100% - 45px);
   top: 0;
-  border-radius: 0px 15px 15px 0 ;
+  border-radius: 0px 15px 15px 0;
   /* right: 0; */
 }
-/* .slider-style::after {
-  content: "";
-  position: absolute;
-  height: 42px;
-  width: 100%;
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-  background-color: #143f6b;
-  bottom: 4px;
-  clip-path: polygon(50% 0%, 100% 0, 59% 100%, 0 100%, 0 0);
-} */
-
-.icons-style {
+.slider-style .icons-style {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   z-index: 1;
-  height: calc(75%);
+  height: 75%;
   left: 12px;
-  margin-bottom: auto;  
+  margin-bottom: auto;
 }
-
-.icon {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  width: 35px;
-  height: auto;
-  cursor: pointer;
-  z-index: 1;
-}
-.icons-style li {
+.slider-style .icons-style li {
   position: relative;
+  width: -moz-fit-content;
   width: fit-content;
 }
-li.active::before,
-li:not(.active):hover::before {
+.slider-style .icons-style li.active::before, .slider-style .icons-style li:not(.active):hover::before {
   content: "";
   position: absolute;
   background-color: #f55353;
@@ -72,11 +43,28 @@ li:not(.active):hover::before {
   top: 10px;
   z-index: 1;
 }
-.iconClan {
+.slider-style .icons-style li .icon {
   margin-top: 8px;
   margin-bottom: 8px;
-  position: relative;
-  left: -3px;
+  width: 35px;
+  height: auto;
   cursor: pointer;
+  z-index: 1;
 }
 
+/* 
+.slider-style::after {
+    content: "";
+    position: absolute;
+    height: 42px;
+    width: 100%;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+    background-color: #143f6b;
+    bottom: 4px;
+    clip-path: polygon(50% 0%, 100% 0, 59% 100%, 0 100%, 0 0);
+} 
+*//*# sourceMappingURL=navbar.css.map */

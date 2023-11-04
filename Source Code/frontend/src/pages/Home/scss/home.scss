@@ -1,58 +1,44 @@
 @use "../../../shared/styles/colors" as *;
 @use "../../../shared/styles/mixins" as *;
 
-
-
-.home-container{
-    display: flex;
-    flex-direction: column;
-    position: relative;
+.home-div {
+  @include center;
+  flex-direction: column;
+  @media (min-width: 768px) {
+    width: 750px;
     margin: auto;
-    .mainhome {
-        display: flex;
-        position: relative;
-        margin: auto;
-        width: 100%;
-        margin-top: 50px;
-        .actionsection {
-            flex: 1;
-            flex-direction: column;
-            gap: 40px;
-        }
-    }
-    .background {
-        flex: 3;
-        margin-right: 80px;
-        margin-left: 150px;
-    }
-    .events-background {
-    margin-bottom: 50px;
-    }
-    @media (max-width: 400px) {
-    width: 100vw;
-    }
-    @media (min-width: 2000px) {
-    width: 90vw;
-    } 
-    @media (min-width: 2400px) {
-    width: 80vw;
-    } 
-    @media (min-width: 2800px) {
-    width: 70vw;
-    } 
-    @media (min-width: 3200px) {
-    width: 60vw;
-    } 
-    @media (min-width: 3600px) {
-    width: 50vw;
-
-    } 
-    @media (min-width: 4000px) {
-    width: 40vw;
-    } 
-    @media (min-width: 4400px) {
-    width: 30vw;
-    } 
-      
   }
-
+  @media (min-width: 992px) {
+    width: 970px;
+    margin: auto;
+  }
+  @media (min-width: 1200px) {
+    width: 100%;
+  }
+  @media (min-width: 1800px) {
+    width: 1510px;
+    margin: auto;
+  }
+  .h-wrapper {
+    @include between;
+    width: 100%;
+    margin-top: 25px;
+    .h-content {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: calc(100% - 125px);
+      margin-left: 40px;
+      .activities-section {
+        @include center;
+        flex-direction: column;
+        .ac-box {
+          width: 300px;
+          &:not(:last-of-type) {
+            margin-bottom: 60px;
+          }
+        }
+      }
+    }
+  }
+}

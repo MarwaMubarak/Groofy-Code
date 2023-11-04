@@ -4,32 +4,32 @@
   align-items: center;
   position: relative;
 }
-.cardImg {
-  width: 115px;
+.cardContainer .cardImg {
+  width: 90px;
   height: auto;
   margin-bottom: 10px;
 }
-.cardTitle {
+.cardContainer .cardTitle {
   width: 115px;
-  font-size: 22px;
+  font-size: 20px;
   margin-top: 5px;
   margin-bottom: 13px;
   text-align: center;
   height: auto;
 }
-.cardDescription {
+.cardContainer .cardDescription {
   color: #777;
   width: 150px;
   margin-left: 25px;
   height: auto;
   margin-bottom: 40px;
 }
-.btn-container {
+.cardContainer .btn-container {
   height: 100%;
   display: flex;
   align-items: flex-end;
 }
-.btn-container .groofybtn {
+.cardContainer .btn-container .groofybtn {
   width: 90px;
   color: #fff;
-}
+}/*# sourceMappingURL=gamemodecard.css.map */
