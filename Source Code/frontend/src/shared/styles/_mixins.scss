@@ -13,6 +13,13 @@
   align-items: center;
 }
 
+// Start
+@mixin start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 // Separator
 @mixin bottomSeparator($widthVal, $topVal, $bottomVal, $trStatus) {
   &::after {

@@ -1,0 +1,75 @@
+.login-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  display: flex;
+  align-items: flex-start;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
+  height: 100vh;
+  flex-direction: column;
+  border-radius: 6px;
+}
+.login-div .auth-title {
+  position: relative;
+  font-weight: bold;
+  font-size: 26px;
+  margin: 20px 0 60px 30px;
+}
+.login-div .auth-title::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  width: 50px;
+  height: 5px;
+  background-color: #ddd;
+}
+.login-div .auth-title span {
+  color: #f55353;
+}
+.login-div .auth-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px 45px 100px;
+}
+.login-div .auth-form .f-sbmt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.login-div .auth-form .f-sbmt .frg-pass {
+  margin-top: 20px;
+  margin-bottom: 25px;
+  color: #f55353;
+  transition: 0.3s;
+}
+.login-div .auth-form .f-sbmt .frg-pass:hover {
+  text-decoration: underline;
+}
+.login-div .auth-form .f-sbmt .alrg {
+  position: relative;
+}
+.login-div .auth-form .f-sbmt .alrg::before {
+  content: "";
+  position: absolute;
+  width: calc(100% + 100px);
+  height: 1px;
+  background-color: #ddd;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.login-div .auth-form .f-sbmt .alrg a {
+  margin-left: 5px;
+  color: #f55353;
+  transition: 0.3s;
+}
+.login-div .auth-form .f-sbmt .alrg a:hover {
+  text-decoration: underline;
+}/*# sourceMappingURL=login.css.map */

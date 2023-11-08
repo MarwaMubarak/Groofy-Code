@@ -10,7 +10,7 @@ import "./scss/home.css";
 
 const Home = () => {
   return (
-    <div className="home-div">
+    <div className="home-div align">
       <GroofyHeader />
       <div className="h-wrapper">
         <NavBar idx={0} />

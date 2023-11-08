@@ -4,21 +4,6 @@
 .home-div {
   @include center;
   flex-direction: column;
-  @media (min-width: 768px) {
-    width: 750px;
-    margin: auto;
-  }
-  @media (min-width: 992px) {
-    width: 970px;
-    margin: auto;
-  }
-  @media (min-width: 1200px) {
-    width: 100%;
-  }
-  @media (min-width: 1800px) {
-    width: 1510px;
-    margin: auto;
-  }
   .h-wrapper {
     @include between;
     width: 100%;

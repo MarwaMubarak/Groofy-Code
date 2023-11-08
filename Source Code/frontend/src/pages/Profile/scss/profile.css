@@ -7,49 +7,4 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 50px;
-}
-@media (max-width: 400px) {
-  .profile-page-style {
-    width: 100vw;
-  }
-}
-@media (min-width: 2000px) {
-  .profile-page-style {
-    width: 90vw;
-  }
-}
-@media (min-width: 2400px) {
-  .profile-page-style {
-    width: 80vw;
-  }
-}
-@media (min-width: 2800px) {
-  .profile-page-style {
-    width: 70vw;
-  }
-}
-@media (min-width: 3200px) {
-  .profile-page-style {
-    width: 60vw;
-  }
-}
-@media (min-width: 3600px) {
-  .profile-page-style {
-    width: 50vw;
-  }
-}
-@media (min-width: 4000px) {
-  .profile-page-style {
-    width: 40vw;
-  }
-}
-@media (min-width: 4400px) {
-  .profile-page-style {
-    width: 35vw;
-  }
-}
-@media (min-width: 7000px) {
-  .profile-page-style {
-    width: 25vw;
-  }
 }/*# sourceMappingURL=profile.css.map */

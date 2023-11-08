@@ -12,11 +12,12 @@ import FriendsSection from "./HomePage/FriendsSection/FriendsSection";
 import EventSection from "./HomePage/EventSection/EventSection";
 import GameModeCard from "./HomePage/MainHome/GameModeCard/GameModeCard";
 import MainProfile from "./Profile/MainProfile/MainProfile";
-import InformationSection from "./Profile/InformationSection/InformationSection"
-import ProfileAchievemnts from "./Profile/Achievement/Achievement"
+import InformationSection from "./Profile/InformationSection/InformationSection";
+import ProfileAchievemnts from "./Profile/Achievement/Achievement";
 import ProfilePicture from "./Profile/ProfilePicture/ProfilePicture";
 import GroofyHeader from "./GroofyHeader/GroofyHeader";
 import GroofyFooter from "./GroofyFooter/GroofyFooter";
+import GroofyField from "./Auth/GroofyField/GroofyField";
 
 export {
   MatchHeader,
@@ -37,5 +38,6 @@ export {
   ProfileAchievemnts,
   ProfilePicture,
   GroofyHeader,
-  GroofyFooter
+  GroofyFooter,
+  GroofyField,
 };

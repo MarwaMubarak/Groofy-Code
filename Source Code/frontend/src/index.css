@@ -17,7 +17,7 @@ ul {
 a {
   text-decoration: none;
 }
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 12px;
 }
 ::-webkit-scrollbar-track {
@@ -27,4 +27,27 @@ a {
 ::-webkit-scrollbar-thumb {
   background-color: rgb(0, 25, 52);
   border-radius: 5px;
+}
+@media (min-width: 768px) {
+  .align {
+    width: 750px;
+    margin: auto;
+  }
+}
+@media (min-width: 992px) {
+  .align {
+    width: 970px;
+    margin: auto;
+  }
+}
+@media (min-width: 1200px) {
+  .align {
+    width: 100%;
+  }
+}
+@media (min-width: 1800px) {
+  .align {
+    width: 1510px;
+    margin: auto;
+  }
 }

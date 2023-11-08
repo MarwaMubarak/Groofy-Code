@@ -8,13 +8,13 @@ import "./scss/profile.css";
 
 const Profile = () => {
   return (
-    <div className="profile-page-style">
-      <GroofyHeader/>
+    <div className="profile-page-style align">
+      <GroofyHeader />
       <div className="profile-main">
         <NavBar idx={1} />
-        <MainProfile/>
+        <MainProfile />
       </div>
-      <GroofyFooter/>
+      <GroofyFooter />
     </div>
   );
 };

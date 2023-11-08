@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Home, Login, SignUp, Match, Clan, Profile } from "./pages";
+import { Home, Login, SignUp, Match, Clan, Profile, NewProfile } from "./pages";
 // import { GroofyFooter } from "./components";
 function App() {
   return (
@@ -9,6 +9,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/new_profile" element={<NewProfile />} />
         <Route path="/clan" element={<Clan />} />
         <Route path="/news" />
         <Route path="/help" />

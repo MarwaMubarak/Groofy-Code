@@ -28,7 +28,7 @@ export interface achievementProps {
   achievementName: string;
   achievementScore: number;
   achievementTrophy: string;
-  scoreColor: string
+  scoreColor: string;
   clickEvent: () => void;
 }
 
@@ -37,4 +37,11 @@ export interface profileImageProps {
   profileImg: string;
   tagSkinImg: string;
   clickEvent: () => void;
+}
+
+// Groofy Input props
+export interface GroofyInputProps {
+  giText: string;
+  giPlaceholder: string;
+  giType: string;
 }
