@@ -39,7 +39,7 @@
   bottom: 5px;
   height: 2px;
   width: 100%;
-  background-color: #c1c1c1;
+  background-color: rgba(238, 238, 238, 0.9333333333);
 }
 .play-container .gamemode .gm-info p {
   width: 300px;
@@ -48,4 +48,4 @@
 .play-container .gamemode .groofybtn {
   background-color: #0e141e;
   color: #fff;
-}/*# sourceMappingURL=new_home.css.map */
+}/*# sourceMappingURL=New_Home.css.map */

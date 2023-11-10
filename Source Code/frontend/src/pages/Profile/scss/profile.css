@@ -1,10 +1,11 @@
 .profile-page-style {
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 .profile-page-style .profile-main {
   display: flex;
   position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
+  margin: auto;
 }/*# sourceMappingURL=profile.css.map */

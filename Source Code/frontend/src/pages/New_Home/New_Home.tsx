@@ -1,4 +1,4 @@
-import { GBtn, GroofyHeader } from "../../components";
+import { GBtn, GroofyHeader, GroofyFooter } from "../../components";
 import "./scss/new_home.css";
 
 const New_Home = () => {

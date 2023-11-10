@@ -1,12 +1,10 @@
 .footer-container {
   width: 100%;
   margin-top: 100px;
-  min-height: 300px;
   align-items: center;
   display: flex;
   gap: 50px;
   flex-direction: column;
-  padding: 0 20px;
   background-color: #0e141e;
 }
 .footer-container .footer-contacts {

@@ -2,6 +2,7 @@
 @use "../../../shared/styles/mixins" as *;
 
 .play-container {
+
   @include center;
   background-color: #fff;
   .gamemode {
@@ -22,7 +23,7 @@
       }
     }
     &:last-of-type {
-      background-color: #2992d8;
+      background-color:  #2992d8;
       h3 {
         &::after {
           left: 0;
@@ -40,7 +41,7 @@
           bottom: 5px;
           height: 2px;
           width: 100%;
-          background-color: #c1c1c1;
+          background-color: #eeee;
         }
       }
       p {

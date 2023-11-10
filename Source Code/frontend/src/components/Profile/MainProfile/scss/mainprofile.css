@@ -8,6 +8,7 @@
   height: 1200px;
   clip-path: polygon(0 0, 100% 0, 100% 95%, 97% 100%, 3% 100%, 0 95%);
   transform: scale(0.9);
+  padding-right: 80px;
 }
 .backgroundProfile::before,
 .backgroundProfile::after {
