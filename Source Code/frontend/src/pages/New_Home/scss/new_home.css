@@ -1,1 +1,51 @@
-/*# sourceMappingURL=new_home.css.map */
+.play-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+.play-container .gamemode {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  height: 350px;
+  padding: 10px 40px;
+}
+.play-container .gamemode:first-of-type {
+  flex-direction: row-reverse;
+  background-color: #dea248;
+}
+.play-container .gamemode:first-of-type .gm-info {
+  text-align: end;
+}
+.play-container .gamemode:first-of-type .gm-info h3::after {
+  right: 0;
+}
+.play-container .gamemode:last-of-type {
+  background-color: #2992d8;
+}
+.play-container .gamemode:last-of-type h3::after {
+  left: 0;
+}
+.play-container .gamemode .gm-info h3 {
+  font-size: 70px;
+  color: #fff;
+  position: relative;
+}
+.play-container .gamemode .gm-info h3::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  height: 2px;
+  width: 100%;
+  background-color: #c1c1c1;
+}
+.play-container .gamemode .gm-info p {
+  width: 300px;
+  line-height: 1.6;
+}
+.play-container .gamemode .groofybtn {
+  background-color: #0e141e;
+  color: #fff;
+}/*# sourceMappingURL=new_home.css.map */
