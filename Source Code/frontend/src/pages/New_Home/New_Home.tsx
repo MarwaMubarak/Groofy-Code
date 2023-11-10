@@ -1,16 +1,13 @@
-import { GroofyFooter, GroofyHeader } from "../../components";
-import "./scss/new_home.css"
-  
-const New_Home = () => {
-    return (
-      <div className="align">
-        <GroofyHeader idx={0}/>
-        
+import { GroofyHeader } from "../../components";
+import "./scss/new_home.css";
 
-        {/* <GroofyFooter/> */}
-      </div>
-    );
+const New_Home = () => {
+  return (
+    <>
+      <GroofyHeader idx={0} />
+      <div className="align"></div>
+    </>
+  );
 };
-  
-  export default New_Home;
-  
+
+export default New_Home;
