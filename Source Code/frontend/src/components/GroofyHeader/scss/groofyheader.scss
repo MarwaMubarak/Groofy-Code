@@ -9,16 +9,70 @@
   z-index: 1000;
   @include between;
   padding: 0 20px;
-  background: linear-gradient(
-      90deg,
-      rgba(20, 63, 107, 0) 0%,
-      rgba(0, 0, 0, 0.2) 100%
-    ),
-    linear-gradient(90deg, rgba(0, 0, 0, 0) 70%, rgba(245, 83, 83, 0.3) 100%);
   background-color: $mainColor;
   .header-logo {
     width: 130px;
     height: auto;
+    position: relative;
+    span{
+      color: white;
+      font-size: 24px;
+      span{
+        color: $blueColor;
+      }
+    }
+    &::after{
+      content: "";
+      position: absolute;
+      width: 0.5px;
+      height: 20px;
+      background-color: #DDDD;
+      margin-left: 10px;
+      margin-top: 4px;
+    }    
+  }
+  .header-nav-items{
+    @include center;
+    li{
+      &:not(:last-of-type){
+        // margin-right: 60px;
+      }
+      img{
+        width: 36px;
+        height: 36px;
+      }
+      svg{
+        width: 36px;
+        height: 36px;
+        stroke: $blueColor;
+      }
+      &.active{
+        border-bottom: 2px solid $blueColor;
+        stroke: $blueColor;
+        g{
+          stroke: $blueColor;
+          path{
+            stroke: $blueColor;
+          }
+        }
+      }
+      padding: 10px 40px;
+      cursor: pointer;
+      transition: 0.3s;
+      &:hover{
+        background-color: rgb(22, 30, 46);
+        border-radius: 10px;
+        stroke: $blueColor;
+        g{
+          stroke: $blueColor;
+          path{
+            stroke: $blueColor;
+          }
+        }
+      }
+
+      // &:
+    }
   }
   .header-user-area {
     @include center;
@@ -35,8 +89,8 @@
       margin-right: 10px;
       .header-pr-ph {
         border-radius: 50%;
-        width: 42px;
-        height: 42px;
+        width: 36px;
+        height: 36px;
         box-shadow: $headerShadow;
         transition: 0.3s;
         &:hover {
@@ -45,30 +99,30 @@
         cursor: pointer;
       }
     }
-    .exit-btn {
-      @include center;
-      width: 32px;
-      height: 32px;
-      gap: 0 5px;
-      border: none;
-      border-radius: 50%;
-      background-color: $redColor;
-      padding: 4px 12px;
-      user-select: none;
-      color: #fff;
-      box-shadow: $headerShadow;
-      transition: 0.3s;
-      &:hover {
-        box-shadow: none;
-      }
-      cursor: pointer;
-      img {
-        width: 22px;
-      }
-      span {
-        font-family: "Roboto", sans-serif;
-        font-size: 18px;
-      }
-    }
+    // .exit-btn {
+    //   @include center;
+    //   width: 32px;
+    //   height: 32px;
+    //   gap: 0 5px;
+    //   border: none;
+    //   border-radius: 50%;
+    //   background-color: $redColor;
+    //   padding: 4px 12px;
+    //   user-select: none;
+    //   color: #fff;
+    //   box-shadow: $headerShadow;
+    //   transition: 0.3s;
+    //   &:hover {
+    //     box-shadow: none;
+    //   }
+    //   cursor: pointer;
+    //   img {
+    //     width: 22px;
+    //   }
+    //   span {
+    //     font-family: "Roboto", sans-serif;
+    //     font-size: 18px;
+    //   }
+    // }
   }
 }

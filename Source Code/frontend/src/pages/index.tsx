@@ -1,4 +1,4 @@
-import Home from "./Home/Home";
+import Home from "./Home/home";
 import Match from "./Match/Match";
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";

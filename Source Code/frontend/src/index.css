@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: OpenSans, Arial, Helvetica, sans-serif;
   /* background-color: #eaedf2;
   background-color: #e4e9ee; */
   background-image: url("../public/Assets/tile_background.png");

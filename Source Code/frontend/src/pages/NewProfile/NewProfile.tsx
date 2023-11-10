@@ -4,7 +4,7 @@ import "./scss/newprofile.css";
 const NewProfile = () => {
   return (
     <div className="profile-div align">
-      <GroofyHeader />
+      <GroofyHeader idx={0}/>
       <div className="p-wrapper">
         <NavBar idx={1} />
         <div className="p-content">

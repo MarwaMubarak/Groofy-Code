@@ -9,7 +9,7 @@
 .signup-div .features {
   width: 40%;
   height: 600px;
-  background-color: #143f6b;
+  background-color: #0e141e;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border-radius: 6px 0 0 6px;
 }
@@ -44,7 +44,7 @@
   align-items: center;
   margin-right: 15px;
   padding: 25px;
-  background-color: #0075ff;
+  background-color: #00A9FF;
   border-radius: 12px;
 }
 .signup-div .features .ft-container .ft-box .ftb-icn img {
