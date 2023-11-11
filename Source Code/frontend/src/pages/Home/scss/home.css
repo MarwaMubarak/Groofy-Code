@@ -1,32 +1,83 @@
-.home-div {
+.play-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  background-color: #fff;
 }
-.home-div .h-wrapper {
+.play-container .gamemode {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-top: 25px;
+  flex: 1;
+  height: 350px;
+  padding: 10px 35px;
 }
-.home-div .h-wrapper .h-content {
+.play-container .gamemode:first-of-type {
+  flex-direction: row-reverse;
+  background-color: #f55353;
+}
+.play-container .gamemode:first-of-type .gm-info::before {
+  left: -30px;
+}
+.play-container .gamemode:first-of-type .gm-info h3::after {
+  right: 0;
+}
+.play-container .gamemode:last-of-type {
+  background-color: #2992d8;
+}
+.play-container .gamemode:last-of-type .gm-info::before {
+  right: -30px;
+}
+.play-container .gamemode:last-of-type h3::after {
+  left: 0;
+}
+.play-container .gamemode .gm-info {
+  position: relative;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  width: calc(100% - 125px);
-  margin-left: 40px;
+  flex-direction: column;
+  text-align: center;
 }
-.home-div .h-wrapper .h-content .activities-section {
+.play-container .gamemode .gm-info::before {
+  content: "";
+  position: absolute;
+  top: -0.1px;
+  height: calc(100% - 18px);
+  width: 2px;
+  background-color: rgba(238, 238, 238, 0.9333333333);
+}
+.play-container .gamemode .gm-info h3 {
+  display: flex;
+  flex-direction: column;
+  font-size: 70px;
+  color: #fff;
+  margin-bottom: 30px;
+}
+.play-container .gamemode .gm-info h3 span {
+  margin-top: 10px;
+}
+.play-container .gamemode .gm-info p {
+  width: 300px;
+  line-height: 1.6;
+}
+.play-container .gamemode .gm-details {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-.home-div .h-wrapper .h-content .activities-section .ac-box {
-  width: 300px;
+.play-container .gamemode .gm-details p {
+  width: 400px;
+  font-size: 22px;
+  line-height: 1.6;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
 }
-.home-div .h-wrapper .h-content .activities-section .ac-box:not(:last-of-type) {
-  margin-bottom: 60px;
-}/*# sourceMappingURL=home.css.map */
+.play-container .gamemode .groofybtn {
+  background-color: #0e141e;
+  color: #fff;
+  width: 100px;
+  padding: 10px;
+}/*# sourceMappingURL=Home.css.map */

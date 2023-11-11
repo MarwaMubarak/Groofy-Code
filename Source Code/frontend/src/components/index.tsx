@@ -7,10 +7,6 @@ import CodingSection from "./Match/CodingSection/CodingSection";
 import TcR from "./Match/TcR/TcR";
 import GBtn from "./GBtn/GBtn";
 import NavBar from "./NavBar/NavBar";
-import MainHome from "./HomePage/MainHome/MainHome";
-import FriendsSection from "./HomePage/FriendsSection/FriendsSection";
-import EventSection from "./HomePage/EventSection/EventSection";
-import GameModeCard from "./HomePage/MainHome/GameModeCard/GameModeCard";
 import MainProfile from "./Profile/MainProfile/MainProfile";
 import InformationSection from "./Profile/InformationSection/InformationSection";
 import ProfileAchievemnts from "./Profile/Achievement/Achievement";
@@ -18,6 +14,8 @@ import ProfilePicture from "./Profile/ProfilePicture/ProfilePicture";
 import GroofyHeader from "./GroofyHeader/GroofyHeader";
 import GroofyFooter from "./GroofyFooter/GroofyFooter";
 import GroofyField from "./Auth/GroofyField/GroofyField";
+import Friends from "./Friends/Friends";
+import SingleFriend from "./Friends/SingleFriend/SingleFriend";
 
 export {
   MatchHeader,
@@ -29,10 +27,6 @@ export {
   TcR,
   GBtn,
   NavBar,
-  MainHome,
-  FriendsSection,
-  EventSection,
-  GameModeCard,
   MainProfile,
   InformationSection,
   ProfileAchievemnts,
@@ -40,4 +34,6 @@ export {
   GroofyHeader,
   GroofyFooter,
   GroofyField,
+  Friends,
+  SingleFriend
 };

@@ -1,29 +1,88 @@
 @use "../../../shared/styles/colors" as *;
 @use "../../../shared/styles/mixins" as *;
 
-.home-div {
+.play-container {
+
   @include center;
-  flex-direction: column;
-  .h-wrapper {
+  background-color: #fff;
+  .gamemode {
     @include between;
-    width: 100%;
-    margin-top: 25px;
-    .h-content {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      width: calc(100% - 125px);
-      margin-left: 40px;
-      .activities-section {
-        @include center;
-        flex-direction: column;
-        .ac-box {
-          width: 300px;
-          &:not(:last-of-type) {
-            margin-bottom: 60px;
+    flex: 1;
+    height: 350px;
+    padding: 10px 35px;
+    &:first-of-type {
+      flex-direction: row-reverse;
+      background-color: $redColor;
+      .gm-info {
+        &::before{
+          left: -30px;
+        }
+        h3 {
+          &::after {
+            right: 0;
           }
         }
       }
+    }
+    &:last-of-type {
+      background-color:  #2992d8;
+      .gm-info{
+        &::before{
+          right: -30px;
+        }
+      }
+      h3 {
+        &::after {
+          left: 0;
+        }
+      }
+    }
+    .gm-info {
+      position: relative;
+      @include center;
+      flex-direction: column;
+      text-align: center;
+      &::before {
+        content: "";
+        position: absolute;
+        top: -0.1px;
+        height: calc(100% - 18px);
+        width: 2px;
+        background-color: #eeee;
+      }
+      h3 {
+        display: flex;
+        flex-direction: column;
+        font-size: 70px;
+        color: #fff;
+        margin-bottom: 30px;
+        span{
+          margin-top: 10px;
+        }
+      }
+      p {
+        width: 300px;
+        line-height: 1.6;
+      }
+    }
+    .gm-details{
+      // margin-bottom: 65px;
+      @include center;
+      flex-direction: column;
+      p{
+        width: 400px;
+        font-size: 22px;
+        line-height: 1.6;
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+    }
+    .groofybtn {
+      background-color: $mainColor;
+      color: #fff;
+      width: 100px;
+      padding: 10px;
     }
   }
 }

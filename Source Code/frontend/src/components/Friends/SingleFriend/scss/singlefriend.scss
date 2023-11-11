@@ -1,0 +1,61 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.singlefriend-container{
+    @include between;
+    padding: 22px 13px 8px;
+    position: relative;
+    transition: 0.3s;
+    &:hover{
+        background-color: #eeee;
+    }
+    &:not(:first-of-type)::before{
+        content: "";
+        position: absolute;
+        width: 100%;
+        // left: 40px;
+        height: 1px;
+        top: 0;
+        background-color: #dddd;
+    }
+    .sf-info{
+        @include center;
+        .sf-img{
+            @include center;
+            flex-direction: column;
+            position: relative;
+            margin-right: 12px;
+            top: -10px;
+            img{
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+            }
+            span{
+                color: #ff8c00;
+                font-size: 12px;
+                // margin-top: 15px;
+                margin-bottom: 2px;
+            }
+        }
+        .sf-details{
+            p{
+                color: #005ed1;
+                font-size: 12px;
+                // font-weight: bold;
+            }
+        }
+    }
+    .sf-invite{
+        transition: 0.3s;
+        padding: 8px 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        &:hover{
+            background-color: #dddd;
+        }
+        img{
+            width: 22px;
+        }
+    }
+}
