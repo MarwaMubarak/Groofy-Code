@@ -40,6 +40,10 @@
   color: #ff8c00;
   font-size: 12px;
   margin-bottom: 2px;
+  font-weight: bold;
+}
+.singlefriend-container .sf-info .sf-details h3 {
+  font-size: 16px;
 }
 .singlefriend-container .sf-info .sf-details p {
   color: #005ed1;

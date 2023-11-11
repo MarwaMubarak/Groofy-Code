@@ -1,16 +1,18 @@
-import { GBtn, GroofyHeader, GroofyFooter, Friends } from "../../components";
-import "./scss/Home.css";
+import { GBtn, GroofyHeader, Friends } from "../../components";
+import "./scss/home.css";
 
 const Home = () => {
   return (
     <>
       <GroofyHeader idx={0} />
-      <Friends/>
+      <Friends />
       <div className="home-container">
         <div className="play-container">
           <div className="gamemode">
             <div className="gm-info">
-              <h3>Casual<span>Match</span></h3>
+              <h3>
+                Casual<span>Match</span>
+              </h3>
             </div>
             <div className="gm-details">
               <p>
@@ -19,17 +21,18 @@ const Home = () => {
               </p>
               <GBtn btnText="Battle" clickEvent={() => {}} />
             </div>
-            
           </div>
           <div className="gamemode">
             <div className="gm-info">
-              <h3>Ranked<span>Match</span></h3>
+              <h3>
+                Ranked<span>Match</span>
+              </h3>
             </div>
             <div className="gm-details">
-                <p>
+              <p>
                 Challenge your skills and climb the ranks with the option to
                 play in a competitive ranked match.
-                </p>
+              </p>
               <GBtn btnText="Battle" clickEvent={() => {}} />
             </div>
           </div>

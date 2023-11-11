@@ -1,11 +1,16 @@
 .friends-container {
   position: fixed;
-  bottom: 0;
+  bottom: -356.5px;
   right: 40px;
   width: 330px;
   border-radius: 10px 10px 0 0;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  z-index: 100000;
   background-color: white;
+  transition: 0.3s;
+}
+.friends-container.true {
+  bottom: 0;
 }
 .friends-container .friends-header {
   display: flex;
@@ -36,6 +41,9 @@
   border-radius: 50%;
   transition: 0.3s;
 }
+.friends-container .friends-header .fh-arrow.true {
+  transform: rotate(180deg);
+}
 .friends-container .friends-header .fh-arrow:hover {
   background-color: rgba(238, 238, 238, 0.9333333333);
 }
@@ -44,12 +52,70 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  width: calc(100% - 50px);
+  margin: 10px auto 15px;
+}
+.friends-container .friends-content .fc-search::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 200px;
+  background-color: #ddd;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .friends-container .friends-content .fc-search img {
   position: absolute;
-  left: 15px;
-  width: 24px;
+  left: 6px;
+  width: 20px;
 }
 .friends-container .friends-content .fc-search input {
   width: 100%;
+  padding: 12px 6px 12px 30px;
+  border: none;
+  background-color: #eee;
+  border-radius: 6px;
+  outline: 2px solid transparent;
+  transition: 0.3s;
+}
+.friends-container .friends-content .fc-search input:hover, .friends-container .friends-content .fc-search input:focus {
+  outline-color: #00A9FF;
+}
+.friends-container .friends-content .fc-online {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee;
+  margin: 10px 15px 5px;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.friends-container .friends-content .fc-online .fc-box {
+  position: relative;
+}
+.friends-container .friends-content .fc-online .fc-box:first-of-type {
+  margin-left: 14px;
+}
+.friends-container .friends-content .fc-online .fc-box::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.friends-container .friends-content .fc-online .fc-box.total::before {
+  background-color: #0e141e;
+}
+.friends-container .friends-content .fc-online .fc-box.online::before {
+  background-color: #18cf08;
+}
+.friends-container .friends-content .fc-friends {
+  height: 248px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }/*# sourceMappingURL=friends.css.map */
