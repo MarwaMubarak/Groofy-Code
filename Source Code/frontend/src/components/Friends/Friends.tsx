@@ -22,13 +22,15 @@ const Friends = () => {
       <div className="friends-content">
         <div className="fc-search">
           <img src="/Assets/SVG/search-icon.svg" alt="SearchIcon" />
-          <input type="text" placeholder="Search Friend" />
+          <input type="text" placeholder="Search Friends" />
         </div>
         <div className="fc-online">
-          <span className="fc-box total">Friends: 20</span>
-          <span className="fc-box online">Online: 5</span>
+          <span className="fc-box total active">Contacts (20)</span>
+          <span className="fc-box online">Requests (5)</span>
         </div>
         <div className="fc-friends">
+          <SingleFriend />
+          <SingleFriend />
           <SingleFriend />
           <SingleFriend />
           <SingleFriend />

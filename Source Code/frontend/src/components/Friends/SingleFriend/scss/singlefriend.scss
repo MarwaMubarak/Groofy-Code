@@ -3,11 +3,11 @@
 
 .singlefriend-container {
   @include between;
-  padding: 22px 13px 8px;
+  padding: 13px;
   position: relative;
   transition: 0.3s;
   &:hover {
-    background-color: #eeee;
+    background-color: hsla(0, 0%, 93%, 0.933);
   }
   &:not(:first-of-type)::before {
     content: "";
@@ -24,18 +24,17 @@
       flex-direction: column;
       position: relative;
       margin-right: 12px;
-      top: -10px;
       img {
         border-radius: 50%;
         width: 36px;
         height: 36px;
       }
-      span {
-        color: #ff8c00;
-        font-size: 12px;
-        margin-bottom: 2px;
-        font-weight: bold;
-      }
+    //   span {
+    //     color: #ff8c00;
+    //     font-size: 12px;
+    //     margin-bottom: 2px;
+    //     font-weight: bold;
+    //   }
     }
     .sf-details {
       h3 {

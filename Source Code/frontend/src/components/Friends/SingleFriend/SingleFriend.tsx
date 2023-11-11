@@ -5,7 +5,6 @@ const SingleFriend = () => {
     <div className="singlefriend-container">
       <div className="sf-info">
         <div className="sf-img">
-          <span>Master</span>
           <img src="/Assets/Images/profile_picture.jpg" alt="FriendPhoto" />
         </div>
         <div className="sf-details">

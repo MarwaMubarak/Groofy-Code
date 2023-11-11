@@ -3,9 +3,9 @@
 
 .friends-container {
   position: fixed;
-  bottom: -356.5px;
+  bottom: -410px;
   right: 40px;
-  width: 330px;
+  width: 340px;
   border-radius: 10px 10px 0 0;
   box-shadow: $headerShadow;
   z-index: 100000;
@@ -17,7 +17,7 @@
   .friends-header {
     @include between;
     cursor: pointer;
-    padding: 13px 13px 8px;
+    padding: 13px;
     border-radius: 10px 10px 0 0;
     border-bottom: 1px solid #dddd;
     &:hover {
@@ -37,8 +37,9 @@
       padding: 8px;
       border-radius: 50%;
       transition: 0.3s;
+      transform: rotate(180deg);
       &.true {
-        transform: rotate(180deg);
+        transform: rotate(0deg);
       }
       &:hover {
         background-color: #eeee;
@@ -50,17 +51,7 @@
       @include center;
       position: relative;
       width: calc(100% - 50px);
-      margin: 10px auto 15px;
-      &::after {
-        content: "";
-        position: absolute;
-        height: 2px;
-        width: 200px;
-        background-color: #ddd;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
+      margin: 15px auto 10px;
       img {
         position: absolute;
         left: 6px;
@@ -68,46 +59,56 @@
       }
       input {
         width: 100%;
-        padding: 12px 6px 12px 30px;
+        padding: 8px 6px 8px 30px;
         border: none;
         background-color: #eee;
         border-radius: 6px;
         outline: 2px solid transparent;
         transition: 0.3s;
+        font-size: 16px;
         &:hover,
         &:focus {
-          outline-color: $blueColor;
+          outline-color: #0f7cb3;
         }
       }
     }
     .fc-online {
       @include between;
-      background-color: #eee;
-      margin: 10px 15px 5px;
-      padding: 10px;
-      border-radius: 12px;
+      flex: 1;
+      margin-bottom: 3px;
       font-weight: bold;
       .fc-box {
         position: relative;
-        &:first-of-type {
-          margin-left: 14px;
-        }
-        &::before {
-          content: "";
-          position: absolute;
-          height: 10px;
-          width: 10px;
-          border-radius: 50%;
-          left: -14px;
-          top: 50%;
-          transform: translateY(-50%);
-        }
+        padding: 13px 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        
         &.total {
-          &::before {
-            background-color: $mainColor;
+          width: 100%;
+          @include center;
+          &.active{
+            color: #0f7cb3;
+            &::after{
+                content: "";
+                position: absolute;
+                height: 2px;
+                width: 100%;
+                background-color: #0f7cb3;
+                bottom: 0px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+          }
+          &:hover{
+            background-color: #eee;
           }
         }
         &.online {
+            width: 100%;
+            @include center;
+            &:hover{
+                background-color: #eee;
+              }
           &::before {
             background-color: $greenColor;
           }
@@ -115,7 +116,7 @@
       }
     }
     .fc-friends {
-      height: 248px;
+      height: 300px;
       overflow-y: auto;
       overflow-x: hidden;
     }

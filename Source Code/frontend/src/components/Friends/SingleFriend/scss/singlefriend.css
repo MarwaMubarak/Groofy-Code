@@ -2,12 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22px 13px 8px;
+  padding: 13px;
   position: relative;
   transition: 0.3s;
 }
 .singlefriend-container:hover {
-  background-color: rgba(238, 238, 238, 0.9333333333);
+  background-color: hsla(0, 0%, 93%, 0.933);
 }
 .singlefriend-container:not(:first-of-type)::before {
   content: "";
@@ -29,18 +29,11 @@
   flex-direction: column;
   position: relative;
   margin-right: 12px;
-  top: -10px;
 }
 .singlefriend-container .sf-info .sf-img img {
   border-radius: 50%;
   width: 36px;
   height: 36px;
-}
-.singlefriend-container .sf-info .sf-img span {
-  color: #ff8c00;
-  font-size: 12px;
-  margin-bottom: 2px;
-  font-weight: bold;
 }
 .singlefriend-container .sf-info .sf-details h3 {
   font-size: 16px;
