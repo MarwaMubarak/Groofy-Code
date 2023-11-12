@@ -221,32 +221,12 @@
           @include between;
           width: calc(100% - 50px);
           padding: 40px 0px 120px 0px;
-          // background-color: rgb(21, 35, 56);
           position: relative;
-          // background-color: red;
           border-bottom: 2px solid white;
           border-left: 2px solid white;
           border-right: 2px solid white;
           padding: 10px 10px 50px 10px;
           border-radius: 0px 0px 0px 0px;
-            // &::after{
-            //   content: "";
-            //   position: absolute;
-            //   width: 2px;
-            //   height: 100%;
-            //   left: 10px;
-            //   background-color: white;
-            //   top: -20%;
-            // }
-            // &::before{
-            //   content: "";
-            //   position: absolute;
-            //   width: 2px;
-            //   height: 100%;
-            //   right: 10px;
-            //   background-color: white;
-            //   top: -20%;
-            // }
             img{
               width: 80px;
               height: 80px;
