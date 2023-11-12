@@ -4,7 +4,7 @@
 .singlefriend-container {
   @include between;
   padding: 13px;
-  position: relative;
+  // position: relative;
   transition: 0.3s;
   &:hover {
     background-color: hsla(0, 0%, 93%, 0.933);
@@ -56,6 +56,170 @@
     }
     img {
       width: 22px;
+    }
+  }
+  .sf-popup{
+    box-shadow: $headerShadow;
+    border: 1px solid gray;
+    position: absolute;
+    // width: 350px;
+    // height: 350px;
+    width: 350px;
+    left: -380px;
+    z-index: 2;
+    .sfp-section1{
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      // background-color: #F0F0F0;
+      // padding: 0px 60px;
+      width: 100%;
+      height: 100px;
+      // background: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0)), url('/public/Assets/patt.png');
+
+      background: url('/public/Assets/New Project.png') ;
+      background-size: repeat;
+      h3{
+        height: fit-content;
+        position: relative;
+        // margin-top: 20px;
+        left: -10px;
+        top: 30px;
+        font-size: 22px;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 0px 10px 0px 10px;
+        background-color: rgb(31, 31, 31);
+      }
+      .sfp-section1-box{
+        position: relative;
+        top: -30px;
+        left: 10px;
+        @include center;
+        flex-direction: column;
+        .sfp-section1-skin{
+          width: 147.5px;
+          height: 20px;
+        }
+        .sfp-section1-pic{
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
+      }
+      // &::after{
+      //   content: "";
+      //   position: absolute;
+      //   width: 100%;
+      //   height: 2px;
+      //   bottom: 15px;
+      //   background-color: #dddd;
+      // }
+    }
+    .sfp-section2{
+      display: flex;
+      background-color: #0f7cb3;
+      padding: 7px 0px;
+      position: relative;
+      overflow: hidden;
+
+      h3{
+        @include center;
+        color: white;
+        font-size: 16px;
+        width: 100%;
+      }
+      span{
+        @include center;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        width: 100%;
+      }
+      &::after{
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 40px;
+        left: 50%;
+        background-color: white;
+        transform: translateX(-50%) rotate(25deg);
+        top: -2px;
+      }
+    }
+    .sfp-section3{
+      background-color: #19283d;
+      display: flex;
+      padding: 5px 0px;
+
+      .sfp-section3-box{
+        @include center;
+        width: 100%;
+        img{
+          width: 60px;
+          height: 60px;
+        }
+        .sfp-section3-box-title{
+          margin-left: 10px;
+          margin-bottom: 10px;
+          h3{
+            color: white;
+          }
+          span{
+            color: #ddd;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .sfp-section4{
+        // background: linear-gradient(10deg, #eee, #eee);      ;
+        background-color: rgb(16, 25, 38);
+        // background: url('/public/Assets/patt.png') ;
+
+
+        padding: 0px 0px;
+        span{
+          @include center;
+          margin: auto;
+          padding: 5px 15px 5px;
+          width: fit-content;
+          margin-bottom: 15px;
+          border-bottom: 2px solid white;
+          border-right: 2px solid white;
+          border-left: 2px solid white;
+          border-radius: 0px 0px 10px 10px;
+          color: white;
+          position: relative;
+          &::after{
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            left: 100%;
+            background-color: white;
+            top: 50%;
+          }
+          &::before{
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            left: -100%;
+            background-color: white;
+            top: 50%;
+          }
+        }
+        .spf-section4-box{
+          display: flex;
+          justify-content: space-around;
+          width: 100%;
+          img{
+            width: 80px;
+            height: 80px;
+          }
+          padding-bottom: 40px;
+        }
     }
   }
 }

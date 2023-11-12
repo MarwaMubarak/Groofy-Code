@@ -30,10 +30,10 @@ const Friends = () => {
         </div>
         <div className="fc-friends">
           <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
+          {/* <SingleFriend /> */}
+          {/* <SingleFriend /> */}
+          {/* <SingleFriend /> */}
+          {/* <SingleFriend /> */}
         </div>
       </div>
     </div>

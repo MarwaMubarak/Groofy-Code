@@ -3,7 +3,6 @@
   justify-content: space-between;
   align-items: center;
   padding: 13px;
-  position: relative;
   transition: 0.3s;
 }
 .singlefriend-container:hover {
@@ -53,4 +52,159 @@
 }
 .singlefriend-container .sf-invite img {
   width: 22px;
+}
+.singlefriend-container .sf-popup {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid gray;
+  position: absolute;
+  width: 350px;
+  left: -380px;
+  z-index: 2;
+}
+.singlefriend-container .sf-popup .sfp-section1 {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  width: 100%;
+  height: 100px;
+  background: url("/public/Assets/New Project.png");
+  background-size: repeat;
+}
+.singlefriend-container .sf-popup .sfp-section1 h3 {
+  height: -moz-fit-content;
+  height: fit-content;
+  position: relative;
+  left: -10px;
+  top: 30px;
+  font-size: 22px;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 0px 10px 0px 10px;
+  background-color: rgb(31, 31, 31);
+}
+.singlefriend-container .sf-popup .sfp-section1 .sfp-section1-box {
+  position: relative;
+  top: -30px;
+  left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.singlefriend-container .sf-popup .sfp-section1 .sfp-section1-box .sfp-section1-skin {
+  width: 147.5px;
+  height: 20px;
+}
+.singlefriend-container .sf-popup .sfp-section1 .sfp-section1-box .sfp-section1-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+.singlefriend-container .sf-popup .sfp-section2 {
+  display: flex;
+  background-color: #0f7cb3;
+  padding: 7px 0px;
+  position: relative;
+  overflow: hidden;
+}
+.singlefriend-container .sf-popup .sfp-section2 h3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  width: 100%;
+}
+.singlefriend-container .sf-popup .sfp-section2 span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  width: 100%;
+}
+.singlefriend-container .sf-popup .sfp-section2::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 40px;
+  left: 50%;
+  background-color: white;
+  transform: translateX(-50%) rotate(25deg);
+  top: -2px;
+}
+.singlefriend-container .sf-popup .sfp-section3 {
+  background-color: #19283d;
+  display: flex;
+  padding: 5px 0px;
+}
+.singlefriend-container .sf-popup .sfp-section3 .sfp-section3-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.singlefriend-container .sf-popup .sfp-section3 .sfp-section3-box img {
+  width: 60px;
+  height: 60px;
+}
+.singlefriend-container .sf-popup .sfp-section3 .sfp-section3-box .sfp-section3-box-title {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.singlefriend-container .sf-popup .sfp-section3 .sfp-section3-box .sfp-section3-box-title h3 {
+  color: white;
+}
+.singlefriend-container .sf-popup .sfp-section3 .sfp-section3-box .sfp-section3-box-title span {
+  color: #ddd;
+  font-size: 12px;
+}
+.singlefriend-container .sf-popup .sfp-section4 {
+  background-color: rgb(16, 25, 38);
+  padding: 0px 0px;
+}
+.singlefriend-container .sf-popup .sfp-section4 span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  padding: 5px 15px 5px;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-bottom: 15px;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+  border-left: 2px solid white;
+  border-radius: 0px 0px 10px 10px;
+  color: white;
+  position: relative;
+}
+.singlefriend-container .sf-popup .sfp-section4 span::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  left: 100%;
+  background-color: white;
+  top: 50%;
+}
+.singlefriend-container .sf-popup .sfp-section4 span::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  left: -100%;
+  background-color: white;
+  top: 50%;
+}
+.singlefriend-container .sf-popup .sfp-section4 .spf-section4-box {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding-bottom: 40px;
+}
+.singlefriend-container .sf-popup .sfp-section4 .spf-section4-box img {
+  width: 80px;
+  height: 80px;
 }/*# sourceMappingURL=singlefriend.css.map */
