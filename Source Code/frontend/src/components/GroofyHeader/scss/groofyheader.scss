@@ -9,6 +9,106 @@
   @include between;
   padding: 0 20px;
   background-color: $mainColor;
+  position: relative;
+  .notify-area {
+    position: absolute;
+    top: 100%;
+    background-color: #fff;
+    box-shadow: $headerShadow;
+    width: 500px;
+    left: 990px;
+    border-radius: 0 0 10px 10px;
+    &.false {
+      display: none;
+    }
+    .notify-header {
+      font-size: 20px;
+      border-bottom: 1px solid #ddd;
+      padding: 15px 10px 10px 15px;
+    }
+    .na-content {
+      padding: 10px;
+      max-height: 350px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      @include scrollbar;
+      .na-box {
+        @include between;
+        &:not(:last-of-type) {
+          margin-bottom: 10px;
+          border-bottom: 1px solid #eee;
+          padding-bottom: 10px;
+        }
+        .na-info {
+          @include start;
+          .na-img {
+            margin-right: 10px;
+            img {
+              border-radius: 50%;
+              width: 70px;
+            }
+          }
+          .na-user {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+            span {
+              width: 250px;
+              margin-bottom: 5px;
+              span {
+                font-weight: bold;
+              }
+            }
+            p {
+              color: #005ed1;
+              font-size: 12px;
+              font-weight: bold;
+            }
+          }
+        }
+        .na-btns {
+          @include center;
+          margin-right: 10px;
+          img {
+            width: 25px;
+            cursor: pointer;
+            &:not(:last-of-type) {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+      .empty-box {
+        @include center;
+        flex-direction: column;
+        margin-bottom: 15px;
+        img {
+          width: 100px;
+        }
+        span {
+          color: #777;
+          font-size: 16px;
+        }
+      }
+    }
+    .notify-clear {
+      @include center;
+      border-top: 1px solid #ddd;
+      padding: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      background-color: #eee;
+      transition: 0.2s;
+      border-radius: 0 0 10px 10px;
+      user-select: none;
+      cursor: pointer;
+      &:hover {
+        background-color: $mainColor;
+        color: #fff;
+      }
+    }
+  }
   .header-logo {
     width: 130px;
     height: auto;
@@ -34,27 +134,44 @@
   }
   .header-nav-items {
     @include center;
-    li {
-      img {
-        width: 36px;
-        height: 36px;
+    a {
+      abbr {
+        background-color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+      li {
+        img {
+          width: 36px;
+          height: 36px;
+          transition: 0.3s;
+        }
+        &.active {
+          border-bottom: 4px solid $blueColor;
+        }
+        padding: 9px 40px;
+        cursor: pointer;
         transition: 0.3s;
+        &:hover {
+          background-color: rgb(22, 30, 46);
+          border-radius: 10px;
+        }
       }
-      &.active {
-        border-bottom: 4px solid $blueColor;
-      }
-      padding: 9px 40px;
-      cursor: pointer;
-      transition: 0.3s;
-      &:hover {
-        background-color: rgb(22, 30, 46);
-        border-radius: 10px;
+      &:nth-child(4) {
+        li {
+          padding: 6px 40px;
+          img {
+            width: 42px;
+            height: 42px;
+          }
+        }
       }
     }
   }
   .header-user-area {
     @include center;
     user-select: none;
+    position: relative;
     .header-h-usn {
       color: #fff;
       font-weight: 400;
@@ -65,42 +182,54 @@
       @include center;
       position: relative;
       margin-right: 10px;
-      .header-pr-ph {
+      .notify {
+        @include center;
+        padding: 8px;
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        box-shadow: $headerShadow;
-        transition: 0.3s;
-        &:hover {
-          box-shadow: none;
-        }
+        background-color: rgb(30, 41, 61);
+        margin-right: 15px;
         cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        .notify-cnt {
+          @include center;
+          position: absolute;
+          background-color: #e41e3f;
+          border-radius: 50%;
+          top: -7px;
+          right: -9px;
+          padding: 3px 5px;
+          min-width: 22px;
+          height: 20px;
+          span {
+            line-height: 1;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #fff;
+            margin-top: 2px;
+          }
+        }
+        &:hover {
+          background-color: rgb(42, 58, 88);
+        }
+        .header-pr-notify {
+          width: 26px;
+        }
+      }
+      .pr-ph {
+        @include center;
+        .header-pr-ph {
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          box-shadow: $headerShadow;
+          transition: 0.3s;
+          &:hover {
+            box-shadow: none;
+          }
+          cursor: pointer;
+        }
       }
     }
-    // .exit-btn {
-    //   @include center;
-    //   width: 32px;
-    //   height: 32px;
-    //   gap: 0 5px;
-    //   border: none;
-    //   border-radius: 50%;
-    //   background-color: $redColor;
-    //   padding: 4px 12px;
-    //   user-select: none;
-    //   color: #fff;
-    //   box-shadow: $headerShadow;
-    //   transition: 0.3s;
-    //   &:hover {
-    //     box-shadow: none;
-    //   }
-    //   cursor: pointer;
-    //   img {
-    //     width: 22px;
-    //   }
-    //   span {
-    //     font-family: "Roboto", sans-serif;
-    //     font-size: 18px;
-    //   }
-    // }
   }
 }

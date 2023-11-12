@@ -124,6 +124,5 @@
 }
 .friends-container .friends-content .fc-friends {
   height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: auto;
 }/*# sourceMappingURL=friends.css.map */

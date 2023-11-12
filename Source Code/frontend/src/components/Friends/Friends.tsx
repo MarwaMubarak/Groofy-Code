@@ -43,8 +43,6 @@ const Friends = () => {
           <SingleFriend />
           <SingleFriend />
           <SingleFriend />
-
-
         </div>
       </div>
     </div>

@@ -8,11 +8,13 @@ const SingleFriend = () => {
         <div className="sfp-section1">
           <h3>tourist</h3>
           <div className="sfp-section1-box">
-            <img
-              className="sfp-section1-pic"
-              src="/Assets/Images/tourist.jpg"
-              alt="ProfilePicture"
-            />
+            <Link to="/profile/1">
+              <img
+                className="sfp-section1-pic"
+                src="/Assets/Images/tourist.jpg"
+                alt="ProfilePicture"
+              />
+            </Link>
           </div>
         </div>
         <div className="sfp-section2">
