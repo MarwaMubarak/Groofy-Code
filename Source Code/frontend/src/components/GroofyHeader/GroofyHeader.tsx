@@ -75,7 +75,7 @@ const GroofyHeader = (probs: { idx: number }) => {
         <div className="header-h-imgbox">
           <img
             className="header-pr-ph"
-            src="/Assets/Images/profile_picture.jpg"
+            src="/Assets/Images/Hazem Adel.jpg"
             alt="ProfilePhoto"
           />
         </div>

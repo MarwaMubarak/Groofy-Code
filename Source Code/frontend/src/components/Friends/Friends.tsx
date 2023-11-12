@@ -10,7 +10,7 @@ const Friends = () => {
         onClick={() => setFriendsActive((prev) => !prev)}
       >
         <div className="fh-img">
-          <img src="/Assets/Images/profile_picture.jpg" alt="ProfilePhoto" />
+          <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePhoto" />
           <h3>Friends</h3>
         </div>
         <img
