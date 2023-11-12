@@ -55,9 +55,10 @@
 }
 .singlefriend-container .sf-popup {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  border: 1px solid gray;
+  border: 4px solid white;
   position: absolute;
-  width: 350px;
+  background-color: white;
+  width: 360px;
   left: -380px;
   z-index: 2;
 }
@@ -65,6 +66,7 @@
   display: flex;
   justify-content: space-around;
   position: relative;
+  border-radius: 4px;
   width: 100%;
   height: 100px;
   background: url("/public/Assets/New Project.png");
@@ -106,6 +108,7 @@
   padding: 7px 0px;
   position: relative;
   overflow: hidden;
+  border: 1px solid white;
 }
 .singlefriend-container .sf-popup .sfp-section2 h3 {
   display: flex;
@@ -135,6 +138,7 @@
   top: -2px;
 }
 .singlefriend-container .sf-popup .sfp-section3 {
+  border: 1px solid white;
   background-color: #19283d;
   display: flex;
   padding: 5px 0px;
@@ -161,14 +165,21 @@
   font-size: 12px;
 }
 .singlefriend-container .sf-popup .sfp-section4 {
-  background-color: rgb(16, 25, 38);
-  padding: 0px 0px;
+  border: 1px solid white;
+  background: linear-gradient(15deg, #0d141e, rgb(28, 50, 83));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 40px;
 }
 .singlefriend-container .sf-popup .sfp-section4 span {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
+  top: 0;
+  z-index: 100;
   padding: 5px 15px 5px;
   width: -moz-fit-content;
   width: fit-content;
@@ -183,7 +194,7 @@
 .singlefriend-container .sf-popup .sfp-section4 span::after {
   content: "";
   position: absolute;
-  width: 100%;
+  width: 120%;
   height: 2px;
   left: 100%;
   background-color: white;
@@ -192,19 +203,26 @@
 .singlefriend-container .sf-popup .sfp-section4 span::before {
   content: "";
   position: absolute;
-  width: 100%;
+  width: 120%;
   height: 2px;
-  left: -100%;
+  right: 100%;
   background-color: white;
   top: 50%;
 }
-.singlefriend-container .sf-popup .sfp-section4 .spf-section4-box {
+.singlefriend-container .sf-popup .sfp-section4 .sfp-section4-box {
   display: flex;
-  justify-content: space-around;
-  width: 100%;
-  padding-bottom: 40px;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 50px);
+  padding: 40px 0px 120px 0px;
+  position: relative;
+  border-bottom: 2px solid white;
+  border-left: 2px solid white;
+  border-right: 2px solid white;
+  padding: 10px 10px 50px 10px;
+  border-radius: 0px 0px 0px 0px;
 }
-.singlefriend-container .sf-popup .sfp-section4 .spf-section4-box img {
+.singlefriend-container .sf-popup .sfp-section4 .sfp-section4-box img {
   width: 80px;
   height: 80px;
 }/*# sourceMappingURL=singlefriend.css.map */

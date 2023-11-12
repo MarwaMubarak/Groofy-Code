@@ -45,18 +45,18 @@ const SingleFriend = () => {
         </div>
         <div className="sfp-section4">
           <span>Badges</span>
-          <div className="spf-section4-box">
+          <div className="sfp-section4-box">
               <img 
                 src="/Assets/Images/apex-predator-rank.png"
                 alt="Badge1"
               />
               <img 
-                src="/Assets/Images/attackbadge.png"
-                alt="Badge2"
+                  src="/Assets/Images/attackbadge.png"
+                  alt="Badge2"
               />
               <img 
-                src="/Assets/Images/win20badge.png"
-                alt="Badge3"
+                  src="/Assets/Images/win20badge.png"
+                  alt="Badge3"
               />
           </div>
         </div>
