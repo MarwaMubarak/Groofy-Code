@@ -5,29 +5,31 @@
   @include between;
   padding: 13px;
   transition: 0.3s;
+  border-bottom: 2px solid #eee;
   &:hover {
-    background-color: hsla(0, 0%, 93%, 0.933);
+    background-color: #ececec;
     .sf-popup {
       display: block;
       opacity: 1;
     }
   }
-  &:not(:first-of-type)::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    top: 0;
-    background-color: #dddd;
-  }
+  // &:not(:first-of-type)::before {
+  //   content: "";
+  //   position: absolute;
+  //   width: 100%;
+  //   height: 1px;
+  //   top: 0;
+  //   background-color: #dddd;
+  // }
   .sf-info {
     @include center;
     .sf-img {
       @include center;
       flex-direction: column;
-      position: relative;
       margin-right: 12px;
+      position: relative;
       cursor: pointer;
+      overflow: visible;
       img {
         border-radius: 50%;
         width: 36px;
@@ -61,6 +63,7 @@
     border: 4px solid white;
     position: absolute;
     background-color: white;
+    bottom: 0;
     width: 360px;
     left: -380px;
     z-index: 2;
@@ -73,15 +76,6 @@
       height: 100%;
       width: 100%;
       right: -33px;
-    }
-    &::after {
-      content: "";
-      position: absolute;
-      border: 15px solid;
-      border-color: transparent transparent transparent #fff;
-      right: -33px;
-      top: 50%;
-      transform: translateY(-50%);
     }
     .sfp-section1 {
       display: flex;
