@@ -8,6 +8,10 @@
 .singlefriend-container:hover {
   background-color: hsla(0, 0%, 93%, 0.933);
 }
+.singlefriend-container:hover .sf-popup {
+  display: block;
+  opacity: 1;
+}
 .singlefriend-container:not(:first-of-type)::before {
   content: "";
   position: absolute;
@@ -28,6 +32,7 @@
   flex-direction: column;
   position: relative;
   margin-right: 12px;
+  cursor: pointer;
 }
 .singlefriend-container .sf-info .sf-img img {
   border-radius: 50%;
@@ -61,6 +66,25 @@
   width: 360px;
   left: -380px;
   z-index: 2;
+  display: none;
+  transition: 0.3s;
+  opacity: 0;
+}
+.singlefriend-container .sf-popup::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  right: -33px;
+}
+.singlefriend-container .sf-popup::after {
+  content: "";
+  position: absolute;
+  border: 15px solid;
+  border-color: transparent transparent transparent #fff;
+  right: -33px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .singlefriend-container .sf-popup .sfp-section1 {
   display: flex;
@@ -93,14 +117,11 @@
   align-items: center;
   flex-direction: column;
 }
-.singlefriend-container .sf-popup .sfp-section1 .sfp-section1-box .sfp-section1-skin {
-  width: 147.5px;
-  height: 20px;
-}
 .singlefriend-container .sf-popup .sfp-section1 .sfp-section1-box .sfp-section1-pic {
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  cursor: pointer;
 }
 .singlefriend-container .sf-popup .sfp-section2 {
   display: flex;
@@ -240,8 +261,6 @@
   height: 3px;
   background-color: #f93535;
   bottom: -2px;
-}
-.singlefriend-container .sf-popup .sfp-section4 .sfp-section4-box .sfp-section4-box-badge:hover::after {
   border-radius: 10px;
 }
 .singlefriend-container .sf-popup .sfp-section4 .sfp-section4-box h3 {

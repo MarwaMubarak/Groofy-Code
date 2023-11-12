@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./scss/singlefriend.css";
 
 const SingleFriend = () => {
@@ -7,72 +8,56 @@ const SingleFriend = () => {
         <div className="sfp-section1">
           <h3>tourist</h3>
           <div className="sfp-section1-box">
-            {/* <img className="sfp-section1-skin"
-              src="/Assets/Images/TagSkin.png"
-              alt="Skin"
-            /> */}
-            <img className="sfp-section1-pic"
+            <img
+              className="sfp-section1-pic"
               src="/Assets/Images/tourist.jpg"
               alt="ProfilePicture"
             />
           </div>
         </div>
         <div className="sfp-section2">
-            <h3>In Game</h3>
-            <span>Ranked Match</span>
+          <h3>In Game</h3>
+          <span>Ranked Match</span>
         </div>
         <div className="sfp-section3">
-            <div className="sfp-section3-box">
-              <img 
-                src="/Assets/Images/elite-rank.png"
-                alt="RankPicture"
-              />
-              <div className="sfp-section3-box-title">
-                <span>Rank</span>
-                <h3>Elite</h3>
-              </div>
+          <div className="sfp-section3-box">
+            <img src="/Assets/Images/elite-rank.png" alt="RankPicture" />
+            <div className="sfp-section3-box-title">
+              <span>Rank</span>
+              <h3>Elite</h3>
             </div>
-            <div className="sfp-section3-box">
-              <img 
-                src="/Assets/Images/clan1.png"
-                alt="ClanPicture"
-              />
-              <div className="sfp-section3-box-title">
-                <span>Clan</span>
-                <h3>Ghosts</h3>
-              </div>
+          </div>
+          <div className="sfp-section3-box">
+            <img src="/Assets/Images/clan1.png" alt="ClanPicture" />
+            <div className="sfp-section3-box-title">
+              <span>Clan</span>
+              <h3>Ghosts</h3>
             </div>
+          </div>
         </div>
         <div className="sfp-section4">
           <span>Badges</span>
           <div className="sfp-section4-box">
-              <div className="sfp-section4-box-badge">
-                <img 
-                  src="/Assets/Images/apex-predator-rank.png"
-                  alt="Badge1"
-                />
-                <h3>Groofy Predator</h3>
-              </div>
-              <div className="sfp-section4-box-badge">
-                <img 
-                    src="/Assets/Images/attackbadge.png"
-                    alt="Badge2"
-                />
-                <h3>High Accurecy</h3>
-              </div>
-              <div className="sfp-section4-box-badge">
-                <img 
-                    src="/Assets/Images/win20badge.png"
-                    alt="Badge3"
-                />
-                <h3>Master Wins</h3>
-              </div>
+            <div className="sfp-section4-box-badge">
+              <img src="/Assets/Images/apex-predator-rank.png" alt="Badge1" />
+              <h3>Groofy Predator</h3>
+            </div>
+            <div className="sfp-section4-box-badge">
+              <img src="/Assets/Images/attackbadge.png" alt="Badge2" />
+              <h3>High Accurecy</h3>
+            </div>
+            <div className="sfp-section4-box-badge">
+              <img src="/Assets/Images/win20badge.png" alt="Badge3" />
+              <h3>Master Wins</h3>
+            </div>
           </div>
         </div>
       </div>
       <div className="sf-info">
         <div className="sf-img">
-          <img src="/Assets/Images/tourist.jpg" alt="FriendPhoto" />
+          <Link to="/profile/1">
+            <img src="/Assets/Images/tourist.jpg" alt="FriendPhoto" />
+          </Link>
         </div>
         <div className="sf-details">
           <h3>tourist</h3>
