@@ -29,20 +29,9 @@ const Friends = () => {
           <span className="fc-box online">Requests (5)</span>
         </div>
         <div className="fc-friends">
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
-          <SingleFriend />
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(() => (
+            <SingleFriend />
+          ))}
         </div>
       </div>
     </div>

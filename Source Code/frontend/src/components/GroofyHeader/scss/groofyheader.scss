@@ -16,7 +16,7 @@
     background-color: #fff;
     box-shadow: $headerShadow;
     width: 500px;
-    left: 990px;
+    right: 55px;
     border-radius: 0 0 10px 10px;
     &.false {
       display: none;
@@ -32,53 +32,6 @@
       overflow-x: hidden;
       overflow-y: auto;
       @include scrollbar;
-      .na-box {
-        @include between;
-        &:not(:last-of-type) {
-          margin-bottom: 10px;
-          border-bottom: 1px solid #eee;
-          padding-bottom: 10px;
-        }
-        .na-info {
-          @include start;
-          .na-img {
-            margin-right: 10px;
-            img {
-              border-radius: 50%;
-              width: 70px;
-            }
-          }
-          .na-user {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            flex-direction: column;
-            span {
-              width: 250px;
-              margin-bottom: 5px;
-              span {
-                font-weight: bold;
-              }
-            }
-            p {
-              color: #005ed1;
-              font-size: 12px;
-              font-weight: bold;
-            }
-          }
-        }
-        .na-btns {
-          @include center;
-          margin-right: 10px;
-          img {
-            width: 25px;
-            cursor: pointer;
-            &:not(:last-of-type) {
-              margin-right: 10px;
-            }
-          }
-        }
-      }
       .empty-box {
         @include center;
         flex-direction: column;
@@ -111,7 +64,6 @@
   }
   .header-logo {
     width: 130px;
-    height: auto;
     position: relative;
     span {
       color: white;
@@ -189,8 +141,10 @@
         background-color: rgb(30, 41, 61);
         margin-right: 15px;
         cursor: pointer;
-        transition: 0.3s;
         position: relative;
+        &:active {
+          transform: scale(0.95);
+        }
         .notify-cnt {
           @include center;
           position: absolute;
@@ -222,12 +176,10 @@
           border-radius: 50%;
           width: 40px;
           height: 40px;
-          box-shadow: $headerShadow;
-          transition: 0.3s;
-          &:hover {
-            box-shadow: none;
-          }
           cursor: pointer;
+          &:active {
+            transform: scale(0.95);
+          }
         }
       }
     }

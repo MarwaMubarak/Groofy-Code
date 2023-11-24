@@ -45,3 +45,11 @@ export interface GroofyInputProps {
   giPlaceholder: string;
   giType: string;
 }
+
+// Notify Box Props
+
+export interface NotifyBoxProps {
+  nuImg: string;
+  nusn: string;
+  ntime: string;
+}

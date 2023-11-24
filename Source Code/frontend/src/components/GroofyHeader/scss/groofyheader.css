@@ -17,7 +17,7 @@
   background-color: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   width: 500px;
-  left: 990px;
+  right: 55px;
   border-radius: 0 0 10px 10px;
 }
 .header-container .notify-area.false {
@@ -44,59 +44,6 @@
 .header-container .notify-area .na-content::-webkit-scrollbar-thumb {
   background-color: #0e141e;
   border-radius: 10px;
-}
-.header-container .notify-area .na-content .na-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.header-container .notify-area .na-content .na-box:not(:last-of-type) {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-.header-container .notify-area .na-content .na-box .na-info {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.header-container .notify-area .na-content .na-box .na-info .na-img {
-  margin-right: 10px;
-}
-.header-container .notify-area .na-content .na-box .na-info .na-img img {
-  border-radius: 50%;
-  width: 70px;
-}
-.header-container .notify-area .na-content .na-box .na-info .na-user {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-direction: column;
-}
-.header-container .notify-area .na-content .na-box .na-info .na-user span {
-  width: 250px;
-  margin-bottom: 5px;
-}
-.header-container .notify-area .na-content .na-box .na-info .na-user span span {
-  font-weight: bold;
-}
-.header-container .notify-area .na-content .na-box .na-info .na-user p {
-  color: #005ed1;
-  font-size: 12px;
-  font-weight: bold;
-}
-.header-container .notify-area .na-content .na-box .na-btns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-}
-.header-container .notify-area .na-content .na-box .na-btns img {
-  width: 25px;
-  cursor: pointer;
-}
-.header-container .notify-area .na-content .na-box .na-btns img:not(:last-of-type) {
-  margin-right: 10px;
 }
 .header-container .notify-area .na-content .empty-box {
   display: flex;
@@ -134,7 +81,6 @@
 }
 .header-container .header-logo {
   width: 130px;
-  height: auto;
   position: relative;
 }
 .header-container .header-logo span {
@@ -222,8 +168,10 @@
   background-color: rgb(30, 41, 61);
   margin-right: 15px;
   cursor: pointer;
-  transition: 0.3s;
   position: relative;
+}
+.header-container .header-user-area .header-h-imgbox .notify:active {
+  transform: scale(0.95);
 }
 .header-container .header-user-area .header-h-imgbox .notify .notify-cnt {
   display: flex;
@@ -260,10 +208,8 @@
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  transition: 0.3s;
   cursor: pointer;
 }
-.header-container .header-user-area .header-h-imgbox .pr-ph .header-pr-ph:hover {
-  box-shadow: none;
+.header-container .header-user-area .header-h-imgbox .pr-ph .header-pr-ph:active {
+  transform: scale(0.95);
 }/*# sourceMappingURL=groofyheader.css.map */

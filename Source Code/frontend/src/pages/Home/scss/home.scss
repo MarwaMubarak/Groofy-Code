@@ -2,7 +2,6 @@
 @use "../../../shared/styles/mixins" as *;
 
 .play-container {
-
   @include center;
   background-color: #fff;
   .gamemode {
@@ -14,7 +13,7 @@
       flex-direction: row-reverse;
       background-color: $redColor;
       .gm-info {
-        &::before{
+        &::before {
           left: -30px;
         }
         h3 {
@@ -25,9 +24,9 @@
       }
     }
     &:last-of-type {
-      background-color:  #2992d8;
-      .gm-info{
-        &::before{
+      background-color: #2992d8;
+      .gm-info {
+        &::before {
           right: -30px;
         }
       }
@@ -56,7 +55,7 @@
         font-size: 70px;
         color: #fff;
         margin-bottom: 30px;
-        span{
+        span {
           margin-top: 10px;
         }
       }
@@ -65,11 +64,10 @@
         line-height: 1.6;
       }
     }
-    .gm-details{
-      // margin-bottom: 65px;
+    .gm-details {
       @include center;
       flex-direction: column;
-      p{
+      p {
         width: 400px;
         font-size: 22px;
         line-height: 1.6;

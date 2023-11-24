@@ -16,6 +16,7 @@ import GroofyFooter from "./GroofyFooter/GroofyFooter";
 import GroofyField from "./Auth/GroofyField/GroofyField";
 import Friends from "./Friends/Friends";
 import SingleFriend from "./Friends/SingleFriend/SingleFriend";
+import NotifyBox from "./GroofyHeader/NotifyBox/NotifyBox";
 
 export {
   MatchHeader,
@@ -35,5 +36,6 @@ export {
   GroofyFooter,
   GroofyField,
   Friends,
-  SingleFriend
+  SingleFriend,
+  NotifyBox,
 };

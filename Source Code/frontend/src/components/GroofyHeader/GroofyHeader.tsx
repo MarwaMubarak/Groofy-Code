@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import NotifyBox from "./NotifyBox/NotifyBox";
 import "./scss/groofyheader.css";
 
 const GroofyHeader = (probs: { idx: number }) => {
@@ -14,32 +15,11 @@ const GroofyHeader = (probs: { idx: number }) => {
         </div>
         <div className="na-content">
           {notifyCnt > 0 ? (
-            <div className="na-box">
-              <div className="na-info">
-                <div className="na-img">
-                  <img src="/Assets/Images/tourist.jpg" alt="user" />
-                </div>
-                <div className="na-user">
-                  <span>
-                    <span>tourist</span> invited you to play a 1 vs 1 custom
-                    match.
-                  </span>
-                  <p>3 Minutes ago.</p>
-                </div>
-              </div>
-              <div className="na-btns">
-                <img
-                  className="acc-btn"
-                  src="/Assets/SVG/acceptIcon.svg"
-                  alt="accept"
-                />
-                <img
-                  className="cancel-btn"
-                  src="/Assets/SVG/cancelIcon.svg"
-                  alt="cancel"
-                />
-              </div>
-            </div>
+            <NotifyBox
+              nuImg="/Assets/Images/tourist.jpg"
+              nusn="tourist"
+              ntime="3 Minutes ago."
+            />
           ) : (
             <div className="empty-box">
               <img
