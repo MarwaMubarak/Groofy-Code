@@ -35,9 +35,11 @@ const GroofyHeader = (probs: { idx: number }) => {
         </div>
       </div>
       <div className="header-logo">
-        <span>
-          Groofy<span>Code</span>
-        </span>
+        <Link to="/">
+          <span>
+            Groofy<span>Code</span>
+          </span>
+        </Link>
       </div>
       <ul className="header-nav-items">
         <Link to="/">

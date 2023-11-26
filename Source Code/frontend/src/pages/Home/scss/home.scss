@@ -1,6 +1,6 @@
 @use "../../../shared/styles/colors" as *;
 @use "../../../shared/styles/mixins" as *;
-.home-container{
+.home-container {
   display: flex;
   flex-direction: column;
   .play-container {
@@ -86,20 +86,22 @@
       }
     }
   }
-  .activity-section{
-    @include center;
-    .status-container{
+  .activity-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    .status-container {
       @include center;
       flex-direction: column;
     }
-    .blogs-container{
+    .blogs-container {
       @include center;
       flex-direction: column;
       // width: calc(100% - 40px);
-
     }
-    .events-container{
+    .events-container {
       @include center;
+      flex: 2;
       flex-direction: column;
     }
   }

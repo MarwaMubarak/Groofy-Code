@@ -1,4 +1,10 @@
-import { GBtn, GroofyHeader, Friends, Blog } from "../../components";
+import {
+  GBtn,
+  GroofyHeader,
+  Friends,
+  Blog,
+  ProfileCard,
+} from "../../components";
 import "./scss/home.css";
 
 const Home = () => {
@@ -39,15 +45,32 @@ const Home = () => {
         </div>
         <div className="activity-section align">
           <div className="status-container">
-              <h1>status</h1>
+            <ProfileCard
+              username="Hazem Adel"
+              bio="Student at FCAI - Cairo University | ECPC’23 Champion - Candidate Master @Codeforces"
+              worldRank={5}
+              followers={5}
+              level={5}
+              percentage={30}
+              userImg="/Assets/Images/Hazem Adel.jpg"
+              clanImg="/Assets/Images/clan1.png"
+              clanName="Ghosts"
+              rankImg="/Assets/Images/elite-rank.png"
+              rankName="Elite"
+              badges={[
+                ["Groofy Predator", "/Assets/Images/apex-predator-rank.png"],
+                ["High Accuracy", "/Assets/Images/attackbadge.png"],
+                ["Master Wins", "/Assets/Images/win20badge.png"],
+              ]}
+            />
           </div>
           <div className="blogs-container">
             {[1, 2, 3, 4, 5].map(() => (
-            <Blog/>
+              <Blog />
             ))}
           </div>
           <div className="events-container">
-              <h1>hgash</h1>
+            <h1>hgash</h1>
           </div>
         </div>
       </div>

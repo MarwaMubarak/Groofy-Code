@@ -88,7 +88,7 @@
 .home-container .activity-section {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 .home-container .activity-section .status-container {
   display: flex;
@@ -106,5 +106,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 2;
   flex-direction: column;
 }/*# sourceMappingURL=home.css.map */

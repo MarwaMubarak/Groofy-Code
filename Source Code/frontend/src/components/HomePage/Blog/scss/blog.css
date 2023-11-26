@@ -111,40 +111,6 @@
   border-block: 2px solid #f2f2f2;
   position: relative;
 }
-.blog-box .b-box-background .reactions-section .reactions-popup {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 330px;
-  top: -70px;
-  background-color: white;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
-  padding: 2px 10px 8px;
-  border-radius: 25px;
-}
-.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box span {
-  position: absolute;
-  background-color: black;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 14px;
-  top: -30px;
-  display: none;
-}
-.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box img {
-  width: 55px;
-  height: 55px;
-  margin-top: 5px;
-  cursor: pointer;
-}
 .blog-box .b-box-background .reactions-section .react-button {
   padding: 6px 0px;
   display: flex;
@@ -165,4 +131,54 @@
 }
 .blog-box .b-box-background .reactions-section .react-button span {
   font-weight: bold;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 300px;
+  top: -70px;
+  background-color: white;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  padding: 2px 10px 8px;
+  border-radius: 25px;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup.false {
+  display: none;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup.true {
+  display: flex;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box img {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  margin-top: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  top: 0;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box img:hover {
+  transform: scale(1.1);
+  top: -10px;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box img:hover + span {
+  display: block;
+}
+.blog-box .b-box-background .reactions-section .reactions-popup .r-p-box span {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  top: -42px;
+  display: none;
 }/*# sourceMappingURL=blog.css.map */

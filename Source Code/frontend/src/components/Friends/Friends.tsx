@@ -30,7 +30,11 @@ const Friends = () => {
         </div>
         <div className="fc-friends">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(() => (
-            <SingleFriend />
+            <SingleFriend
+              username="tourist"
+              userImg="/Assets/Images/tourist.jpg"
+              status="In Game"
+            />
           ))}
         </div>
       </div>
