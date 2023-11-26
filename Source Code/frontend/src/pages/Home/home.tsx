@@ -1,4 +1,4 @@
-import { GBtn, GroofyHeader, Friends } from "../../components";
+import { GBtn, GroofyHeader, Friends, Blog } from "../../components";
 import "./scss/home.css";
 
 const Home = () => {
@@ -35,6 +35,19 @@ const Home = () => {
               </p>
               <GBtn btnText="Battle" clickEvent={() => {}} />
             </div>
+          </div>
+        </div>
+        <div className="activity-section align">
+          <div className="status-container">
+              <h1>status</h1>
+          </div>
+          <div className="blogs-container">
+            {[1, 2, 3, 4, 5].map(() => (
+            <Blog/>
+            ))}
+          </div>
+          <div className="events-container">
+              <h1>hgash</h1>
           </div>
         </div>
       </div>

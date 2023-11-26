@@ -1,0 +1,193 @@
+
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+.sf-popup {
+    box-shadow: $headerShadow;
+    border: 4px solid white;
+    position: absolute;
+    background-color: white;
+    width: 360px;
+    left: -380px;
+    display: none;
+    transition: 0.3s;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 100%;
+    }
+    .sfp-section1 {
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      border-radius: 4px;
+      width: 100%;
+      height: 100px;
+      background: url("/public/Assets/New Project.png");
+      background-size: repeat;
+      h3 {
+        height: fit-content;
+        position: relative;
+        left: -10px;
+        top: 30px;
+        font-size: 22px;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 0px 10px 0px 10px;
+        background-color: rgb(31, 31, 31);
+      }
+      .sfp-section1-box {
+        position: relative;
+        top: -30px;
+        left: 10px;
+        @include center;
+        flex-direction: column;
+        .sfp-section1-pic {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+      }
+    }
+    .sfp-section2 {
+      display: flex;
+      background-color: #0f7cb3;
+      padding: 7px 0px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid white;
+      h3 {
+        @include center;
+        color: white;
+        font-size: 16px;
+        width: 100%;
+      }
+      span {
+        @include center;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        width: 100%;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 40px;
+        left: 50%;
+        background-color: white;
+        transform: translateX(-50%) rotate(25deg);
+        top: -2px;
+      }
+    }
+    .sfp-section3 {
+      border: 1px solid white;
+      background-color: $mainColor;
+      display: flex;
+      padding: 5px 0px;
+      .sfp-section3-box {
+        @include center;
+        width: 100%;
+        img {
+          width: 60px;
+          height: 60px;
+        }
+        .sfp-section3-box-title {
+          margin-left: 10px;
+          margin-bottom: 10px;
+          h3 {
+            color: white;
+          }
+          span {
+            color: #ddd;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .sfp-section4 {
+      border: 1px solid white;
+      background: linear-gradient(
+        0deg,
+        $mainColor,
+        rgb(20, 49, 94),
+        rgb(31, 75, 141)
+      );
+      @include center;
+      flex-direction: column;
+      span {
+        @include center;
+        margin: auto;
+        top: 0;
+        z-index: 100;
+        padding: 5px 15px 5px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid white;
+        border-right: 2px solid white;
+        border-left: 2px solid white;
+        background-color: $redColor;
+        border-radius: 0px 0px 10px 10px;
+        color: white;
+        position: relative;
+        &::after {
+          content: "";
+          position: absolute;
+          width: 120%;
+          height: 2px;
+          left: 100%;
+          background-color: white;
+          top: 50%;
+        }
+        &::before {
+          content: "";
+          position: absolute;
+          width: 120%;
+          height: 2px;
+          right: 100%;
+          background-color: white;
+          top: 50%;
+        }
+      }
+      .sfp-section4-box {
+        @include between;
+        width: 100%;
+        position: relative;
+        padding: 10px 20px 50px 20px;
+        border-radius: 0px 0px 0px 0px;
+        left: -5px;
+
+        img {
+          width: 75px;
+          height: 75px;
+          box-shadow: $headerShadow;
+          background: rgba($color: #000000, $alpha: 0.4);
+          padding: 3px;
+          border-radius: 10%;
+        }
+        .sfp-section4-box-badge {
+          @include center;
+          flex-direction: column;
+          position: relative;
+          transition: 0.3s;
+          &::after {
+            content: "";
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background-color: #f93535;
+            bottom: -2px;
+            border-radius: 10px;
+          }
+        }
+        h3 {
+          font-size: 11px;
+          width: calc(100% - 22px);
+          text-align: center;
+          color: white;
+          margin-top: 10px;
+          padding: 5px;
+        }
+      }
+    }
+  }

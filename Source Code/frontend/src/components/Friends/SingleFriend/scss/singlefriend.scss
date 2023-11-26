@@ -1,18 +1,19 @@
 @use "../../../../shared/styles/colors" as *;
 @use "../../../../shared/styles/mixins" as *;
-@use "./popup/sfpopup" as *;
 
 .singlefriend-container {
   @include between;
   padding: 13px;
   transition: 0.3s;
   border-bottom: 2px solid #eee;
-  @include sfPopUp;
   &:hover {
     background-color: #ececec;
     .sf-popup {
       display: block;
-      opacity: 1;
+      bottom: 0px;
+      &::before{
+        right: -33px;
+      }
     }
     .sf-info {
       &::before {

@@ -1,10 +1,14 @@
-.play-container {
+.home-container {
+  display: flex;
+  flex-direction: column;
+}
+.home-container .play-container {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #fff;
 }
-.play-container .gamemode {
+.home-container .play-container .gamemode {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,26 +16,26 @@
   height: 350px;
   padding: 10px 35px;
 }
-.play-container .gamemode:first-of-type {
+.home-container .play-container .gamemode:first-of-type {
   flex-direction: row-reverse;
   background-color: #f55353;
 }
-.play-container .gamemode:first-of-type .gm-info::before {
+.home-container .play-container .gamemode:first-of-type .gm-info::before {
   left: -30px;
 }
-.play-container .gamemode:first-of-type .gm-info h3::after {
+.home-container .play-container .gamemode:first-of-type .gm-info h3::after {
   right: 0;
 }
-.play-container .gamemode:last-of-type {
+.home-container .play-container .gamemode:last-of-type {
   background-color: #2992d8;
 }
-.play-container .gamemode:last-of-type .gm-info::before {
+.home-container .play-container .gamemode:last-of-type .gm-info::before {
   right: -30px;
 }
-.play-container .gamemode:last-of-type h3::after {
+.home-container .play-container .gamemode:last-of-type h3::after {
   left: 0;
 }
-.play-container .gamemode .gm-info {
+.home-container .play-container .gamemode .gm-info {
   position: relative;
   display: flex;
   justify-content: center;
@@ -39,7 +43,7 @@
   flex-direction: column;
   text-align: center;
 }
-.play-container .gamemode .gm-info::before {
+.home-container .play-container .gamemode .gm-info::before {
   content: "";
   position: absolute;
   top: -0.1px;
@@ -47,27 +51,27 @@
   width: 2px;
   background-color: rgba(238, 238, 238, 0.9333333333);
 }
-.play-container .gamemode .gm-info h3 {
+.home-container .play-container .gamemode .gm-info h3 {
   display: flex;
   flex-direction: column;
   font-size: 70px;
   color: #fff;
   margin-bottom: 30px;
 }
-.play-container .gamemode .gm-info h3 span {
+.home-container .play-container .gamemode .gm-info h3 span {
   margin-top: 10px;
 }
-.play-container .gamemode .gm-info p {
+.home-container .play-container .gamemode .gm-info p {
   width: 300px;
   line-height: 1.6;
 }
-.play-container .gamemode .gm-details {
+.home-container .play-container .gamemode .gm-details {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-.play-container .gamemode .gm-details p {
+.home-container .play-container .gamemode .gm-details p {
   width: 400px;
   font-size: 22px;
   line-height: 1.6;
@@ -75,9 +79,32 @@
   text-align: center;
   margin-bottom: 20px;
 }
-.play-container .gamemode .groofybtn {
+.home-container .play-container .gamemode .groofybtn {
   background-color: #0e141e;
   color: #fff;
   width: 100px;
   padding: 10px;
+}
+.home-container .activity-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home-container .activity-section .status-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.home-container .activity-section .blogs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.home-container .activity-section .events-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }/*# sourceMappingURL=home.css.map */

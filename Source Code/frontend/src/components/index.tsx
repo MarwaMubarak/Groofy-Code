@@ -17,6 +17,8 @@ import GroofyField from "./Auth/GroofyField/GroofyField";
 import Friends from "./Friends/Friends";
 import SingleFriend from "./Friends/SingleFriend/SingleFriend";
 import NotifyBox from "./GroofyHeader/NotifyBox/NotifyBox";
+import Blog from "./HomePage/Blog/Blog";
+import UserPopUp from "./UserPopUP/UserPopUp";
 
 export {
   MatchHeader,
@@ -38,4 +40,6 @@ export {
   Friends,
   SingleFriend,
   NotifyBox,
+  Blog,
+  UserPopUp
 };
