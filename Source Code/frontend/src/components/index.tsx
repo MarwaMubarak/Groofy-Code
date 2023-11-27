@@ -20,6 +20,9 @@ import NotifyBox from "./GroofyHeader/NotifyBox/NotifyBox";
 import Blog from "./HomePage/Blog/Blog";
 import UserPopUp from "./UserPopUP/UserPopUp";
 import ProfileCard from "./HomePage/ProfileCard/ProfileCard";
+import EventCard from "./HomePage/EventCard/EventCard";
+import FollowCard from "./HomePage/FollowCard/FollowCard";
+import SingleFollowCard from "./HomePage/FollowCard/SingleFollowCard/SingleFollowCard";
 
 export {
   MatchHeader,
@@ -44,4 +47,7 @@ export {
   Blog,
   UserPopUp,
   ProfileCard,
+  EventCard,
+  FollowCard,
+  SingleFollowCard
 };

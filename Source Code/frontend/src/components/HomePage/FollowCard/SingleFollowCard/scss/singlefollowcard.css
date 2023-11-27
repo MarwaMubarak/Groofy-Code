@@ -1,0 +1,39 @@
+.single-follow-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 10px;
+  border-radius: 12px;
+}
+.single-follow-card .sfcard-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.single-follow-card .sfcard-info img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.single-follow-card .sfcard-info h3 {
+  margin-left: 10px;
+}
+.single-follow-card span {
+  font-size: 16px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  background-color: #0e141e;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+.single-follow-card span:hover {
+  background-color: white;
+  color: #0e141e;
+}
+.single-follow-card:hover {
+  background-color: #f2f2f2;
+}/*# sourceMappingURL=singlefollowcard.css.map */

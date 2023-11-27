@@ -97,11 +97,9 @@
     .blogs-container {
       @include center;
       flex-direction: column;
-      // width: calc(100% - 40px);
     }
     .events-container {
       @include center;
-      flex: 2;
       flex-direction: column;
     }
   }

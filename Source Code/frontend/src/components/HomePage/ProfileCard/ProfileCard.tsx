@@ -20,21 +20,22 @@ const ProfileCard = (props: ProfileCardProps) => {
         <p>{props.bio}</p>
       </div>
       <div className="pc-section2">
-        <span className="pc-header">Exp</span>
+        <span className="pc-header">16500 / 25000 XP</span>
         <div className="progress">
+          <span className="progress-level">15</span>
           <div className="progress-box" style={{ width: "70%" }}></div>
         </div>
         <div className="pc-stats">
           <span className="pcs-box">
-            <span className="pcsb-total">#12345</span>
+            <span className="pcsb-total">#219</span>
             <span className="pcsb-title">Rank</span>
           </span>
-          <div className="pcs-num">
+          {/* <div className="pcs-num">
             <span className="pcsn-total">15</span>
             <span className="pcsn-title">Level</span>
-          </div>
+          </div> */}
           <span className="pcs-box">
-            <span className="pcsb-total">50000</span>
+            <span className="pcsb-total">1217</span>
             <span className="pcsb-title">Followers</span>
           </span>
         </div>

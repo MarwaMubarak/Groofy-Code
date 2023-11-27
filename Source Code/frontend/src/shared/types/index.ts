@@ -91,3 +91,9 @@ export interface ProfileCardProps {
   rankImg: string;
   badges: [string, string][];
 }
+
+// Single Follow Card Props
+export interface SingleFollowCardProps{
+  username: string;
+  userImg: string;
+}

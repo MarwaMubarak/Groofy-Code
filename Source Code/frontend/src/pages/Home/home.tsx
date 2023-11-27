@@ -4,6 +4,8 @@ import {
   Friends,
   Blog,
   ProfileCard,
+  EventCard,
+  FollowCard
 } from "../../components";
 import "./scss/home.css";
 
@@ -70,7 +72,7 @@ const Home = () => {
             ))}
           </div>
           <div className="events-container">
-            <h1>hgash</h1>
+             <FollowCard/>
           </div>
         </div>
       </div>

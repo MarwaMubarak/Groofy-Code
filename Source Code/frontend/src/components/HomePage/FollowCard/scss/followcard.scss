@@ -1,0 +1,18 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.follow-card {
+    box-shadow: $lightShadow;
+    border: 4px solid white;
+    background-color: white;
+    width: 380px;
+    border-radius: 12px;
+    margin-top: 20px;
+    margin-left: 40px;
+    padding: 10px;
+    .fc-header{
+        font-size: 24px;
+        color: $mainColor;
+        margin-bottom: 10px;
+    }
+}
