@@ -26,20 +26,35 @@
       background-color: #ddd;
     }
     span {
-      color: $redColor;
+      color: $blueColor;
     }
   }
   .auth-form {
     @include center;
     flex-direction: column;
     padding: 30px 45px 100px;
+    .groofybtn {
+      margin-top: 10px;
+      background-color: #008ed6;
+      color: white;
+      width: 90px;
+      padding: 7px;
+      border-radius: 12px;
+      &:hover{
+          background-color:$mainColor ;
+          color: white;
+      }
+      .btn-text{
+          font-size: 12px;
+      }
+    }
     .f-sbmt {
       @include center;
       flex-direction: column;
       .frg-pass {
         margin-top: 20px;
         margin-bottom: 25px;
-        color: $redColor;
+        color: $blueColor;
         transition: 0.3s;
         &:hover {
           text-decoration: underline;
@@ -59,7 +74,7 @@
         }
         a {
           margin-left: 5px;
-          color: $redColor;
+          color: $blueColor;
           transition: 0.3s;
           &:hover {
             text-decoration: underline;

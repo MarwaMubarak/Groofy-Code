@@ -9,7 +9,7 @@
     margin-bottom: 25px;
   }
   .gi-text {
-    font-weight: 500;
+    font-weight: bold;
     margin-bottom: 5px;
   }
   input {
@@ -24,10 +24,11 @@
     outline: 2px solid transparent;
     &:focus,
     &:hover {
-      outline-color: $redColor;
+      outline-color: $blueColor;
     }
     &::placeholder {
       opacity: 0.5;
+      font-size: 14px;
     }
   }
 }

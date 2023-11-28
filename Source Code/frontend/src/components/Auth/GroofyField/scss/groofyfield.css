@@ -7,7 +7,7 @@
   margin-bottom: 25px;
 }
 .groofy-input .gi-text {
-  font-weight: 500;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 .groofy-input input {
@@ -22,11 +22,13 @@
   outline: 2px solid transparent;
 }
 .groofy-input input:focus, .groofy-input input:hover {
-  outline-color: #f55353;
+  outline-color: #00A9FF;
 }
 .groofy-input input::-moz-placeholder {
   opacity: 0.5;
+  font-size: 14px;
 }
 .groofy-input input::placeholder {
   opacity: 0.5;
+  font-size: 14px;
 }/*# sourceMappingURL=groofyfield.css.map */

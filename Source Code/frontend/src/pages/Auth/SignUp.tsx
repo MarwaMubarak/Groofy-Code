@@ -58,22 +58,22 @@ const SignUp = () => {
           <form className="auth-form">
             <GroofyField
               giText="Username"
-              giPlaceholder="Type your username"
+              giPlaceholder="Enter your username"
               giType="text"
             />
             <GroofyField
               giText="Email"
-              giPlaceholder="Type your email"
+              giPlaceholder="Enter your email"
               giType="email"
             />
             <GroofyField
               giText="Password"
-              giPlaceholder="Type your password"
+              giPlaceholder="Enter your password"
               giType="password"
             />
             <GroofyField
-              giText="Re-Password"
-              giPlaceholder="Re-Type your password"
+              giText="Confirm Password"
+              giPlaceholder="Confirm your password"
               giType="password"
             />
             <div className="f-sbmt">
