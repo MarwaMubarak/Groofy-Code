@@ -120,7 +120,8 @@ const Blog = () => {
             onMouseLeave={() => setReactions(false)}
           >
             <div className="r-p-box">
-              <img
+              <div className="r-p-box-img">
+                <img
                 src="/Assets/SVG/reaction-like.svg"
                 alt="Reaction"
                 onClick={() => {
@@ -129,52 +130,55 @@ const Blog = () => {
                   setReactions(false);
                 }}
               />
+              </div>
               <span>Like</span>
             </div>
             <div className="r-p-box">
-              <img
-                src="/Assets/SVG/reaction-love.svg"
-                alt="Reaction"
-                onClick={() => {
-                  setLikeActive(true);
-                  setCurrReact("love");
-                  setReactions(false);
-                }}
-              />
+              <div className="r-p-box-img">
+                <img
+                  src="/Assets/SVG/reaction-love.svg"
+                  alt="Reaction"
+                  onClick={() => {
+                    setLikeActive(true);
+                    setCurrReact("love");
+                    setReactions(false);
+                  }}
+                />
+              </div>
               <span>Love</span>
             </div>
             <div className="r-p-box">
-              <img
-                src="/Assets/SVG/reaction-laugh.svg"
-                alt="Reaction"
-                onClick={() => {
-                  setLikeActive(true);
-                  setCurrReact("haha");
-                  setReactions(false);
-                }}
-              />
+              <div className="r-p-box-img">
+                <img
+                  src="/Assets/SVG/reaction-laugh.svg"
+                  alt="Reaction"
+                  onClick={() => {
+                    setLikeActive(true);
+                    setCurrReact("haha");
+                    setReactions(false);
+                  }}
+                />
+              </div>
               <span>Haha</span>
             </div>
             <div className="r-p-box">
-              <img
-                src="/Assets/SVG/reaction-angry.svg"
-                alt="Reaction"
-                onClick={() => {
-                  setLikeActive(true);
-                  setCurrReact("angry");
-                  setReactions(false);
-                }}
-              />
+              <div className="r-p-box-img">
+                <img
+                  src="/Assets/SVG/reaction-angry.svg"
+                  alt="Reaction"
+                  onClick={() => {
+                    setLikeActive(true);
+                    setCurrReact("angry");
+                    setReactions(false);
+                  }}
+                />
+              </div>
               <span>Angry</span>
             </div>
           </div>
           <div className="react-button">
             <img src="/Assets/SVG/comment.svg" alt="Comment"></img>
             <span>Comment</span>
-          </div>
-          <div className="react-button">
-            <img src="/Assets/SVG/share.svg" alt="Share"></img>
-            <span>Share</span>
           </div>
         </div>
       </div>

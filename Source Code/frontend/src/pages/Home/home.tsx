@@ -5,7 +5,8 @@ import {
   Blog,
   ProfileCard,
   EventCard,
-  FollowCard
+  FollowCard,
+  GroofyFooter
 } from "../../components";
 import "./scss/home.css";
 
@@ -15,7 +16,7 @@ const Home = () => {
       <GroofyHeader idx={0} />
       <Friends />
       <div className="home-container">
-        <div className="play-container">
+        {/* <div className="play-container">
           <div className="gamemode">
             <div className="gm-info">
               <h3>
@@ -44,7 +45,7 @@ const Home = () => {
               <GBtn btnText="Battle" clickEvent={() => {}} />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="activity-section align">
           <div className="status-container">
             <ProfileCard
@@ -72,10 +73,14 @@ const Home = () => {
             ))}
           </div>
           <div className="events-container">
+             <EventCard title="Ranked Match" btn_title="Battle" details="Challenge your skills and climb the ranks with the option to
+                play in a competitive ranked match." img="/Assets/Images/battle.png"/>
+                <EventCard title="Casual Match" btn_title="Battle" details="Empower players to create their perfect match by allowing them to customize every aspect." img="/Assets/Images/battle.png"/>
              <FollowCard/>
           </div>
         </div>
       </div>
+      <GroofyFooter/>
     </>
   );
 };

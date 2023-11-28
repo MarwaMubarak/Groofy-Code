@@ -4,10 +4,10 @@
   box-shadow: $lightShadow;
   border: 4px solid white;
   background-color: white;
-  width: 330px;
+  width: 270px;
   border-radius: 12px;
   margin-top: 20px;
-  margin-right: 40px;
+  margin-right: 100px;
   .pc-section1 {
     @include center;
     flex-direction: column;
@@ -23,6 +23,7 @@
       height: 80px;
       position: absolute;
       top: 0;
+      border-radius: 12px;
     }
     p {
       margin-top: 15px;
@@ -31,13 +32,14 @@
       width: 250px;
       line-height: 1.4;
       color: #898989;
+      font-size: 12px;
     }
     h3 {
       height: fit-content;
       //   position: relative;
       //   left: -10px;
       //   top: 30px;
-      font-size: 22px;
+      font-size: 16px;
       color: white;
       padding: 5px 12px;
       border-radius: 0px 10px 0px 10px;
@@ -66,7 +68,7 @@
     color: #fff;
     .pc-header {
       margin-left: 70px;
-      font-size: 16px;
+      font-size: 13px;
       font-weight: bold;
     }
     .progress {
@@ -74,22 +76,22 @@
       margin: 5px 15px;
       position: relative;
       border-radius: 0 12px 12px 0;
-      height: 20PX;
+      height: 18px;
       width: calc(100% - 90px);
       left: 50px;
       margin-bottom: 25px;
       @include start;
       .progress-level{
         position: absolute;
-        left: -40px;
+        left: -31px;
         z-index: 100;
         @include center;
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           background-color: $redColor;
           font-weight: bold;
           color: #fff;
-          font-size: 24px;
+          font-size: 18px;
           text-align: center;
           clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
       }
@@ -118,33 +120,16 @@
           background-color: #143F6B;
           color: #fff;
           font-weight: bold;
-          padding: 12px;
+          padding: 8px;
           box-shadow: $lightShadow;
           border-radius: 6px;
           box-shadow: $headerShadow;
-          font-size: 18px;
+          font-size: 14px;
         }
         .pcsb-title {
           margin-top: 10px;
           font-weight: bold;
-        }
-      }
-      .pcs-num {
-        @include center;
-        flex-direction: column;
-        .pcsn-total {
-          @include center;
-          width: 70px;
-          height: 70px;
-          background-color: $btnColor;
-          color: #fff;
-          font-size: 35px;
-          text-align: center;
-          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
-        }
-        .pcsn-title {
-          margin-top: 10px;
-          font-weight: bold;
+          font-size: 13px;
         }
       }
     }
@@ -158,18 +143,19 @@
       @include center;
       width: 100%;
       img {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
       }
       .pc-section3-box-title {
         margin-left: 10px;
         margin-bottom: 10px;
         h3 {
           color: white;
+          font-size: 14px;
         }
         span {
           color: #ddd;
-          font-size: 12px;
+          font-size: 10px;
           
         }
       }
@@ -192,7 +178,7 @@
       margin: auto;
       top: 0;
       z-index: 100;
-      padding: 5px 15px 5px;
+      padding: 5px 10px 5px;
       margin-bottom: 15px;
       border-bottom: 2px solid white;
       border-right: 2px solid white;
@@ -201,10 +187,11 @@
       border-radius: 0px 0px 10px 10px;
       color: white;
       position: relative;
+      font-size: 14px;
       &::after {
         content: "";
         position: absolute;
-        width: 120%;
+        width: 100%;
         height: 2px;
         left: 100%;
         background-color: white;
@@ -213,7 +200,7 @@
       &::before {
         content: "";
         position: absolute;
-        width: 120%;
+        width: 100%;
         height: 2px;
         right: 100%;
         background-color: white;
@@ -229,8 +216,8 @@
       left: -5px;
 
       img {
-        width: 75px;
-        height: 75px;
+        width: 55px;
+        height: 55px;
         box-shadow: $headerShadow;
         background: rgba($color: #1b2435, $alpha: 0.8);
         padding: 3px;
@@ -244,15 +231,15 @@
         &::after {
           content: "";
           position: absolute;
-          width: 60px;
-          height: 3px;
+          width: 50px;
+          height: 2px;
           background-color: #f93535;
           bottom: -2px;
           border-radius: 10px;
         }
       }
       h3 {
-        font-size: 11px;
+        font-size: 10px;
         width: calc(100% - 22px);
         text-align: center;
         color: white;

@@ -1,3 +1,5 @@
+import { title } from "process";
+
 // button props
 export interface btnProps {
   btnText: string;
@@ -97,3 +99,12 @@ export interface SingleFollowCardProps{
   username: string;
   userImg: string;
 }
+
+// Single Follow Card Props
+export interface EventCardProps{
+  title: string;
+  img: string;
+  details: string;
+  btn_title: string;
+}
+
