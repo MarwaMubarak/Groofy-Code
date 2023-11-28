@@ -7,6 +7,7 @@ const GroofyHeader = (probs: { idx: number }) => {
   const [notifyActive, setNotifyActive] = useState(false);
   const [notifyNewCnt, setNotifyNewCnt] = useState(15);
   const [notifyCnt, setNotifyCnt] = useState(4);
+  const [profileActive, setProfileActive] = useState(false);
   return (
     <div className="header-container">
       <div className={`notify-area ${notifyActive}`}>
@@ -32,6 +33,18 @@ const GroofyHeader = (probs: { idx: number }) => {
         </div>
         <div className="notify-clear" onClick={() => setNotifyCnt(0)}>
           Clear all notifications
+        </div>
+      </div>
+      <div className={`profile-area ${profileActive}`}>
+        <Link to="/profile/1">
+          <div className="pa-info">
+            <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
+            <span>Hazem Adel</span>
+          </div>
+        </Link>
+        <div className="logout">
+          <img src="/Assets/SVG/logout.svg" alt="ProfilePicture" />
+          <span>Logout</span>
         </div>
       </div>
       <div className="header-logo">
@@ -121,6 +134,7 @@ const GroofyHeader = (probs: { idx: number }) => {
             className="notify"
             onClick={() => {
               setNotifyActive((prev) => !prev);
+              setProfileActive(false);
               setNotifyNewCnt(0);
             }}
           >
@@ -135,7 +149,13 @@ const GroofyHeader = (probs: { idx: number }) => {
               alt="notify"
             />
           </div>
-          <div className="pr-ph">
+          <div
+            className="pr-ph"
+            onClick={() => {
+              setProfileActive((state) => !state);
+              setNotifyActive(false);
+            }}
+          >
             <img
               className="header-pr-ph"
               src="/Assets/Images/Hazem Adel.jpg"

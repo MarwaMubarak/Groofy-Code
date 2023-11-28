@@ -61,6 +61,73 @@
       }
     }
   }
+  .profile-area {
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    background-color: #fff;
+    border-radius: 0 0 6px 6px;
+    box-shadow: $headerShadow;
+    padding: 15px 10px;
+    &.false {
+      display: none;
+    }
+    .pa-info {
+      @include start;
+      position: relative;
+      width: 300px;
+      margin-bottom: 30px;
+      padding: 10px;
+      border-radius: 6px;
+      transition: 0.3s;
+      box-shadow: $cardShadow;
+      cursor: pointer;
+      &::after {
+        content: "";
+        position: absolute;
+        height: 2px;
+        width: calc(100% - 60px);
+        left: 50%;
+        bottom: -17px;
+        transform: translateX(-50%);
+        background-color: #ddd;
+      }
+      img {
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      span {
+        font-weight: bold;
+        color: #191919;
+      }
+      &:hover {
+        background-color: #eee;
+      }
+    }
+    .logout {
+      @include center;
+      padding: 6px 12px;
+      background-color: #eee;
+      width: fit-content;
+      margin: auto;
+      border-radius: 6px;
+      transition: 0.3s;
+      cursor: pointer;
+      user-select: none;
+      &:hover {
+        background-color: $redColor;
+        color: #fff;
+      }
+      img {
+        width: 25px;
+        margin-right: 5px;
+      }
+      span {
+        font-weight: bold;
+      }
+    }
+  }
   .header-logo {
     width: 130px;
     position: relative;
