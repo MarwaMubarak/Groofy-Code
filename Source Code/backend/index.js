@@ -15,7 +15,11 @@ const index = express();
 index.use(express.json());
 
 // Routes
-index.use('/user',require('./routes/User'))
+index.use('/', require('./routes/userRoute'))
+index.use('/', require('./routes/clanRoute'))
+index.use('/', require('./routes/blogRoute'))
+
+
 
 // Security Measures
 index.use(helmet());
@@ -24,14 +28,14 @@ index.use(hpp());
 
 // Allowing cors policy
 index.use(
-  cors({
-    origin: "*",
-  })
+    cors({
+        origin: "*",
+    })
 );
 
 
 // Starting up the server
 const Port = process.env.PORT;
 index.listen(Port, () => {
-  console.log("Server is running successfully");
+    console.log("Server is running successfully");
 });
