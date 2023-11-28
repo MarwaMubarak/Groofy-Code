@@ -36,16 +36,30 @@ const GroofyHeader = (probs: { idx: number }) => {
         </div>
       </div>
       <div className={`profile-area ${profileActive}`}>
-        <Link to="/profile/1">
+        <Link to="/profile">
           <div className="pa-info">
             <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
             <span>Hazem Adel</span>
           </div>
         </Link>
+        <Link to="/profile">
+          <div className="logout">
+            <img src="/Assets/SVG/ProfileIconBlack.svg" alt="ProfilePicture" />
+            <span>Profile</span>
+          </div>
+        </Link>
+        <Link to="/settings">
+        <div className="logout">
+          <img src="/Assets/SVG/settings.svg" alt="ProfilePicture" />
+          <span>Settings</span>
+        </div>
+        </Link>
+        <Link to="/login">
         <div className="logout">
           <img src="/Assets/SVG/logout.svg" alt="ProfilePicture" />
           <span>Logout</span>
         </div>
+        </Link>
       </div>
       <div className="header-logo">
         <Link to="/">

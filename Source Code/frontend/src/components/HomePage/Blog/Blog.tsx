@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./scss/blog.css";
 import UserPopUp from "../../UserPopUP/UserPopUp";
 
@@ -9,6 +10,7 @@ const Blog = () => {
   return (
     <div className="blog-box">
       <div className="b-box-background">
+        <Link to="/profile">
         <div className="b-user-info">
           <div className="b-user-img">
             <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
@@ -33,6 +35,7 @@ const Blog = () => {
             ]}
           />
         </div>
+        </Link>
         <div className="b-details">
           <h3> Exciting Milestone Unlocked: 20 Consecutive Wins!</h3>
           <p>

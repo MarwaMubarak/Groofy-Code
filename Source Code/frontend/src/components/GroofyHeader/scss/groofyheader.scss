@@ -69,6 +69,7 @@
     border-radius: 0 0 6px 6px;
     box-shadow: $headerShadow;
     padding: 15px 10px;
+    border-top: 4px solid $redColor;
     &.false {
       display: none;
     }
@@ -77,18 +78,17 @@
       position: relative;
       width: 300px;
       margin-bottom: 30px;
-      padding: 10px;
       border-radius: 6px;
       transition: 0.3s;
-      box-shadow: $cardShadow;
+      padding: 5px 0px;
       cursor: pointer;
       &::after {
         content: "";
         position: absolute;
-        height: 2px;
-        width: calc(100% - 60px);
+        height: 1px;
+        width: 100%;
         left: 50%;
-        bottom: -17px;
+        bottom: -10px;
         transform: translateX(-50%);
         background-color: #ddd;
       }
@@ -106,25 +106,27 @@
       }
     }
     .logout {
-      @include center;
-      padding: 6px 12px;
-      background-color: #eee;
+      @include start;
       width: fit-content;
-      margin: auto;
       border-radius: 6px;
       transition: 0.3s;
       cursor: pointer;
       user-select: none;
+      width: calc(100% - 10px);
+      margin-left: 10px;
+      padding: 10px;
+      color: $mainColor;
       &:hover {
         background-color: $redColor;
         color: #fff;
       }
       img {
-        width: 25px;
+        width: 24px;
         margin-right: 5px;
       }
       span {
         font-weight: bold;
+        margin-left: 10px;
       }
     }
   }

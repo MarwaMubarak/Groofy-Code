@@ -37,6 +37,9 @@
   flex-direction: column;
   padding: 30px 45px 100px;
 }
+.login-div .auth-form .groofy-input input:focus, .login-div .auth-form .groofy-input input:hover {
+  outline-color: #00A9FF;
+}
 .login-div .auth-form .groofybtn {
   margin-top: 10px;
   background-color: #008ed6;

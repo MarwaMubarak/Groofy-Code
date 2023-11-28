@@ -33,6 +33,13 @@
     @include center;
     flex-direction: column;
     padding: 30px 45px 100px;
+    .groofy-input{
+      input{
+        &:focus, &:hover{
+          outline-color: $blueColor;
+        }
+      }
+    }
     .groofybtn {
       margin-top: 10px;
       background-color: #008ed6;
@@ -41,7 +48,7 @@
       padding: 7px;
       border-radius: 12px;
       &:hover{
-          background-color:$mainColor ;
+          background-color: $mainColor ;
           color: white;
       }
       .btn-text{
