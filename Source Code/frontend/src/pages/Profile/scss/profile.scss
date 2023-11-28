@@ -1,0 +1,14 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.profile-page-style {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  .profile-main {
+    display: flex;
+    position: relative;
+    margin: auto;
+  }
+}

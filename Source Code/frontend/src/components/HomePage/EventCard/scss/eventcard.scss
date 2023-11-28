@@ -1,0 +1,12 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.event-card {
+    box-shadow: $lightShadow;
+    border: 4px solid white;
+    background-color: white;
+    width: 330px;
+    border-radius: 12px;
+    margin-top: 20px;
+    margin-left: 40px;
+}

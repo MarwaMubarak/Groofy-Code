@@ -1,0 +1,264 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+.profile-card {
+  box-shadow: $lightShadow;
+  border: 4px solid white;
+  background-color: white;
+  width: 330px;
+  border-radius: 12px;
+  margin-top: 20px;
+  margin-right: 40px;
+  .pc-section1 {
+    @include center;
+    flex-direction: column;
+    position: relative;
+    border-radius: 4px;
+    // width: 100%;
+    // height: 100px;
+    background-color: #fff;
+    .pc-skin {
+      background: url("/public/Assets/New Project.png");
+      background-size: repeat;
+      width: 100%;
+      height: 80px;
+      position: absolute;
+      top: 0;
+    }
+    p {
+      margin-top: 15px;
+      margin-bottom: 15px;
+      text-align: center;
+      width: 250px;
+      line-height: 1.4;
+      color: #898989;
+    }
+    h3 {
+      height: fit-content;
+      //   position: relative;
+      //   left: -10px;
+      //   top: 30px;
+      font-size: 22px;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 0px 10px 0px 10px;
+      background-color: rgb(31, 31, 31);
+      margin-top: 20px;
+    }
+    .pc-section1-box {
+      //   position: relative;
+      //   top: -30px;
+      //   left: 10px;
+      @include center;
+      flex-direction: column;
+      margin-top: 28px;
+      .pc-section1-pic {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+      }
+    }
+  }
+  .pc-section2 {
+    padding: 15px 0;
+    background-color: $mainColor;
+    color: #fff;
+    .pc-header {
+      margin-left: 70px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .progress {
+      background-color: #ececec;
+      margin: 5px 15px;
+      position: relative;
+      border-radius: 0 12px 12px 0;
+      height: 20PX;
+      width: calc(100% - 90px);
+      left: 50px;
+      margin-bottom: 25px;
+      @include start;
+      .progress-level{
+        position: absolute;
+        left: -40px;
+        z-index: 100;
+        @include center;
+          width: 40px;
+          height: 40px;
+          background-color: $redColor;
+          font-weight: bold;
+          color: #fff;
+          font-size: 24px;
+          text-align: center;
+          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
+      }
+      .progress-box {
+        position: absolute;
+        height: 100%;
+        // background-color: $blueColor;
+        background: linear-gradient(
+          90deg,
+          #00A9FF,
+          #87C4FF
+        );
+        border-radius: 0 12px 12px 0;
+      }
+    }
+    .pc-stats {
+      @include around;
+      margin-top: 10px;
+
+      //   margin-bottom: 10px;
+      .pcs-box {
+        @include center;
+        flex-direction: column;
+        .pcsb-total {
+          @include center;
+          background-color: #143F6B;
+          color: #fff;
+          font-weight: bold;
+          padding: 12px;
+          box-shadow: $lightShadow;
+          border-radius: 6px;
+          box-shadow: $headerShadow;
+          font-size: 18px;
+        }
+        .pcsb-title {
+          margin-top: 10px;
+          font-weight: bold;
+        }
+      }
+      .pcs-num {
+        @include center;
+        flex-direction: column;
+        .pcsn-total {
+          @include center;
+          width: 70px;
+          height: 70px;
+          background-color: $btnColor;
+          color: #fff;
+          font-size: 35px;
+          text-align: center;
+          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
+        }
+        .pcsn-title {
+          margin-top: 10px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  .pc-section3 {
+    border-top: 2px solid white;
+    background-color: $mainColor;
+    display: flex;
+    padding: 5px 0px;
+    .pc-section3-box {
+      @include center;
+      width: 100%;
+      img {
+        width: 60px;
+        height: 60px;
+      }
+      .pc-section3-box-title {
+        margin-left: 10px;
+        margin-bottom: 10px;
+        h3 {
+          color: white;
+        }
+        span {
+          color: #ddd;
+          font-size: 12px;
+          
+        }
+      }
+    }
+  }
+  .pc-section4 {
+    border-top: 2px solid white;
+    // background: linear-gradient(
+    //   0deg,
+    //   $mainColor,
+    //   rgb(20, 49, 94),
+    //   rgb(31, 75, 141)
+    // );
+    background-color: $mainColor;
+    @include center;
+    flex-direction: column;
+    border-radius: 0 0 12px 12px;
+    span {
+      @include center;
+      margin: auto;
+      top: 0;
+      z-index: 100;
+      padding: 5px 15px 5px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid white;
+      border-right: 2px solid white;
+      border-left: 2px solid white;
+      background-color: $redColor;
+      border-radius: 0px 0px 10px 10px;
+      color: white;
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        width: 120%;
+        height: 2px;
+        left: 100%;
+        background-color: white;
+        top: 50%;
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        width: 120%;
+        height: 2px;
+        right: 100%;
+        background-color: white;
+        top: 50%;
+      }
+    }
+    .pc-section4-box {
+      @include between;
+      width: 100%;
+      position: relative;
+      padding: 10px 20px 50px 20px;
+      border-radius: 0px 0px 0px 0px;
+      left: -5px;
+
+      img {
+        width: 75px;
+        height: 75px;
+        box-shadow: $headerShadow;
+        background: rgba($color: #1b2435, $alpha: 0.8);
+        padding: 3px;
+        border-radius: 10%;
+      }
+      .pc-section4-box-badge {
+        @include center;
+        flex-direction: column;
+        position: relative;
+        transition: 0.3s;
+        &::after {
+          content: "";
+          position: absolute;
+          width: 60px;
+          height: 3px;
+          background-color: #f93535;
+          bottom: -2px;
+          border-radius: 10px;
+        }
+      }
+      h3 {
+        font-size: 11px;
+        width: calc(100% - 22px);
+        text-align: center;
+        color: white;
+        margin-top: 10px;
+        padding: 5px;
+      }
+    }
+  }
+}

@@ -7,14 +7,22 @@ import CodingSection from "./Match/CodingSection/CodingSection";
 import TcR from "./Match/TcR/TcR";
 import GBtn from "./GBtn/GBtn";
 import NavBar from "./NavBar/NavBar";
-import MainHome from "./HomePage/MainHome/MainHome";
-import FriendsSection from "./HomePage/FriendsSection/FriendsSection";
-import EventSection from "./HomePage/EventSection/EventSection";
-import GameModeCard from "./HomePage/MainHome/GameModeCard/GameModeCard";
 import MainProfile from "./Profile/MainProfile/MainProfile";
-import InformationSection from "./Profile/InformationSection/InformationSection"
-import ProfileAchievemnts from "./Profile/Achievement/Achievement"
+import InformationSection from "./Profile/InformationSection/InformationSection";
+import ProfileAchievemnts from "./Profile/Achievement/Achievement";
 import ProfilePicture from "./Profile/ProfilePicture/ProfilePicture";
+import GroofyHeader from "./GroofyHeader/GroofyHeader";
+import GroofyFooter from "./GroofyFooter/GroofyFooter";
+import GroofyField from "./Auth/GroofyField/GroofyField";
+import Friends from "./Friends/Friends";
+import SingleFriend from "./Friends/SingleFriend/SingleFriend";
+import NotifyBox from "./GroofyHeader/NotifyBox/NotifyBox";
+import Blog from "./HomePage/Blog/Blog";
+import UserPopUp from "./UserPopUP/UserPopUp";
+import ProfileCard from "./HomePage/ProfileCard/ProfileCard";
+import EventCard from "./HomePage/EventCard/EventCard";
+import FollowCard from "./HomePage/FollowCard/FollowCard";
+import SingleFollowCard from "./HomePage/FollowCard/SingleFollowCard/SingleFollowCard";
 
 export {
   MatchHeader,
@@ -26,12 +34,20 @@ export {
   TcR,
   GBtn,
   NavBar,
-  MainHome,
-  FriendsSection,
-  EventSection,
-  GameModeCard,
   MainProfile,
   InformationSection,
   ProfileAchievemnts,
-  ProfilePicture
+  ProfilePicture,
+  GroofyHeader,
+  GroofyFooter,
+  GroofyField,
+  Friends,
+  SingleFriend,
+  NotifyBox,
+  Blog,
+  UserPopUp,
+  ProfileCard,
+  EventCard,
+  FollowCard,
+  SingleFollowCard
 };

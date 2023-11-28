@@ -10,7 +10,7 @@ const Match = () => {
   return (
     <>
       <MatchHeader />
-      <div className="match-div">
+      <div className="match-div align">
         <button className="exit-btn">
           <img src="/Assets/SVG/exit.svg" alt="Exit" />
           <span>Leave</span>

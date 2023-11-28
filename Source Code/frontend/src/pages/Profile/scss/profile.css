@@ -1,9 +1,11 @@
-.mainprofile {
-  margin-left: 250px;
-  margin-right: 90px;
-  margin-top: 50px;
-  /* gap: 100px; */
+.profile-page-style {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-.backgroundProfile {
-  margin-right: 80px;
-}
+.profile-page-style .profile-main {
+  display: flex;
+  position: relative;
+  margin: auto;
+}/*# sourceMappingURL=profile.css.map */

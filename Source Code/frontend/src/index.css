@@ -5,15 +5,50 @@
   box-sizing: border-box;
 }
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: OpenSans, Arial, Helvetica, sans-serif;
   /* background-color: #eaedf2;
   background-color: #e4e9ee; */
-  background-image: url("../public/Assets/tile_background.png");
-  background-repeat: repeat;
+  /* background-image: url("../public/Assets/tile_background.png"); */
+  /* background-repeat: repeat; */
+  background-color: #f0f2f5;
 }
 ul {
   list-style: none;
 }
 a {
   text-decoration: none;
+}
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(0, 25, 52);
+  border-radius: 5px;
+}
+@media (min-width: 768px) {
+  .align {
+    width: 750px;
+    margin: auto;
+  }
+}
+@media (min-width: 992px) {
+  .align {
+    width: 970px;
+    margin: auto;
+  }
+}
+@media (min-width: 1200px) {
+  .align {
+    width: 100%;
+  }
+}
+@media (min-width: 1800px) {
+  .align {
+    width: 1510px;
+    margin: auto;
+  }
 }

@@ -28,7 +28,7 @@ export interface achievementProps {
   achievementName: string;
   achievementScore: number;
   achievementTrophy: string;
-  scoreColor: string
+  scoreColor: string;
   clickEvent: () => void;
 }
 
@@ -37,4 +37,63 @@ export interface profileImageProps {
   profileImg: string;
   tagSkinImg: string;
   clickEvent: () => void;
+}
+
+// Groofy Input props
+export interface GroofyInputProps {
+  giText: string;
+  giPlaceholder: string;
+  giType: string;
+}
+
+// Notify Box Props
+
+export interface NotifyBoxProps {
+  nuImg: string;
+  nusn: string;
+  ntime: string;
+}
+
+// Single Friend Props
+export interface SingleFriendProps {
+  username: string;
+  status: string;
+  userImg: string;
+}
+
+// User Pop Up Props
+export interface UserPopUpProps {
+  username: string;
+  skin?: string;
+  status: string;
+  gameType: string;
+  userImg: string;
+  clanName: string;
+  clanImg: string;
+  rankName: string;
+  rankImg: string;
+  badges: [string, string][];
+}
+
+// Profile Card Props
+export interface ProfileCardProps {
+  username: string;
+  bio: string;
+  followers: number;
+  worldRank: number;
+  level: number;
+  percentage: number;
+  skin?: string;
+  userImg: string;
+  clanName: string;
+  clanImg: string;
+  rankName: string;
+  rankImg: string;
+  badges: [string, string][];
+}
+
+// Single Follow Card Props
+export interface SingleFollowCardProps{
+  username: string;
+  userImg: string;
 }

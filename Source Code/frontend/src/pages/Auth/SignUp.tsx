@@ -1,21 +1,89 @@
-import "./scss/auth.css";
+import { Link } from "react-router-dom";
+import { GBtn, GroofyField } from "../../components";
+import "./scss/signup/signup.css";
 
 const SignUp = () => {
   return (
-    <div className="auth-main">
-      <div className="cut"></div>
-      <div className="ainfo">
-        <span className="atitle">Create a new account</span>
-        <form>
-          <input type="text" placeholder="Username" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <input type="password" placeholder="Re-enter your password" />
-          <button type="submit">Sign Up</button>
-        </form>
-      </div>
-      <div className="auth-img">
-        <img src="/Assets/Images/authPic.png" alt="AuthPic" />
+    <div className="align">
+      <div className="signup-div">
+        <div className="features">
+          <div className="ft-title">
+            Groofy<span>Code</span>
+          </div>
+          <div className="ft-container">
+            <div className="ft-box">
+              <div className="ftb-icn">
+                <img src="/Assets/SVG/badgeIcon.svg" alt="BadgeIcon" />
+              </div>
+              <div className="ftb-info">
+                <h4>Achieve, Earn, and Thrive</h4>
+                <p>
+                  Earn badges and achievements as you tackle coding challenges,
+                  participate in matches, and contribute to the community.
+                </p>
+              </div>
+            </div>
+            <div className="ft-box">
+              <div className="ftb-icn">
+                <img src="/Assets/SVG/codeIcon.svg" alt="BadgeIcon" />
+              </div>
+              <div className="ftb-info">
+                <h4>Challenge Your Skills</h4>
+                <p>
+                  Dive into a world of coding challenges suited for all levels,
+                  from beginners to experts. Prove your prowess, learn, and
+                  compete with fellow enthusiasts.
+                </p>
+              </div>
+            </div>
+            <div className="ft-box">
+              <div className="ftb-icn">
+                <img src="/Assets/SVG/shieldIcon.svg" alt="ShieldIcon" />
+              </div>
+              <div className="ftb-info">
+                <h4>Unite with Coding Clans</h4>
+                <p>
+                  Create your own or become part of a community that shares your
+                  interests. Collaborate, discuss, solve problems, and compete
+                  as a team.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="auth">
+          <div className="auth-title">
+            Sign up as a <span>Groofy</span>
+          </div>
+          <form className="auth-form">
+            <GroofyField
+              giText="Username"
+              giPlaceholder="Type your username"
+              giType="text"
+            />
+            <GroofyField
+              giText="Email"
+              giPlaceholder="Type your email"
+              giType="email"
+            />
+            <GroofyField
+              giText="Password"
+              giPlaceholder="Type your password"
+              giType="password"
+            />
+            <GroofyField
+              giText="Re-Password"
+              giPlaceholder="Re-Type your password"
+              giType="password"
+            />
+            <div className="f-sbmt">
+              <GBtn btnText="Create new account" clickEvent={() => {}} />
+              <span className="alrg">
+                Already have an account?<Link to="/login">Login</Link>
+              </span>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

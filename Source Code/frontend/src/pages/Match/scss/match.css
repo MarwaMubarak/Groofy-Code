@@ -5,7 +5,7 @@
 }
 .match-div .exit-btn {
   position: absolute;
-  left: 210px;
+  left: 200px;
   top: 50px;
   display: flex;
   justify-content: space-between;
@@ -33,21 +33,6 @@
   font-family: "Roboto", sans-serif;
   font-size: 25px;
 }
-@media (min-width: 768px) {
-  .match-div {
-    width: 750px;
-  }
-}
-@media (min-width: 992px) {
-  .match-div {
-    width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  .match-div {
-    width: 1510px;
-  }
-}
 .match-div .match-sections {
   display: flex;
   margin-top: 25px;
@@ -70,6 +55,6 @@
 }
 .match-div .match-sections .psec::-webkit-scrollbar-thumb,
 .match-div .match-sections .esec::-webkit-scrollbar-thumb {
-  background-color: #143f6b;
+  background-color: #0e141e;
   border-radius: 10px;
 }/*# sourceMappingURL=match.css.map */

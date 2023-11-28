@@ -3,7 +3,9 @@ const MatchHeader = () => {
   return (
     <div className="header-div">
       <div className="logo">
-        <img src="/Assets/Images/GroofyCodeLogo.png" alt="Logo" />
+        <span>
+          Groofy<span>Code</span>
+        </span>
       </div>
       <div className="m-dur">
         <span>19:36</span> left

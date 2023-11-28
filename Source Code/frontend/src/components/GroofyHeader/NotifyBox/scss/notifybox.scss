@@ -1,0 +1,49 @@
+@use "../../../../shared/styles/mixins" as *;
+
+.notify-box {
+  @include between;
+  &:not(:last-of-type) {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  .notify-info {
+    @include start;
+    .notify-img {
+      margin-right: 10px;
+      img {
+        border-radius: 50%;
+        width: 70px;
+      }
+    }
+    .notify-user {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+      span {
+        width: 250px;
+        margin-bottom: 5px;
+        span {
+          font-weight: bold;
+        }
+      }
+      p {
+        color: #005ed1;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+  }
+  .notify-btns {
+    @include center;
+    margin-right: 10px;
+    img {
+      width: 25px;
+      cursor: pointer;
+      &:not(:last-of-type) {
+        margin-right: 10px;
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+.singlefriend-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px;
+  transition: 0.3s;
+  border-bottom: 2px solid #eee;
+}
+.singlefriend-container:hover {
+  background-color: #ececec;
+}
+.singlefriend-container:hover .sf-popup {
+  display: block;
+  bottom: 0px;
+}
+.singlefriend-container:hover .sf-popup::before {
+  right: -33px;
+}
+.singlefriend-container:hover .sf-info::before {
+  display: block;
+}
+.singlefriend-container .sf-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.singlefriend-container .sf-info::before {
+  content: "";
+  position: absolute;
+  border: 10px solid;
+  border-color: transparent transparent transparent #0e141e;
+  left: -13px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+}
+.singlefriend-container .sf-info .sf-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 12px;
+  cursor: pointer;
+}
+.singlefriend-container .sf-info .sf-img img {
+  border-radius: 50%;
+  width: 40px;
+}
+.singlefriend-container .sf-info .sf-details {
+  position: relative;
+}
+.singlefriend-container .sf-info .sf-details h3 {
+  font-size: 16px;
+}
+.singlefriend-container .sf-info .sf-details p {
+  color: #005ed1;
+  font-size: 12px;
+}
+.singlefriend-container .sf-invite {
+  transition: 0.3s;
+  padding: 8px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.singlefriend-container .sf-invite:hover {
+  background-color: rgba(221, 221, 221, 0.8666666667);
+}
+.singlefriend-container .sf-invite img {
+  width: 22px;
+}/*# sourceMappingURL=singlefriend.css.map */

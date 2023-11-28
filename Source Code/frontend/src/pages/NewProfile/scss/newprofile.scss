@@ -1,0 +1,163 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.profile-div {
+  @include center;
+  flex-direction: column;
+  .p-wrapper {
+    @include start;
+    width: 100%;
+    margin-top: 25px;
+    .p-content {
+      @include center;
+      background-color: #fff;
+      padding: 25px;
+      .p-info {
+        @include center;
+        flex-direction: column;
+        .p-bio {
+          @include between;
+          .bio-box {
+            @include center;
+            flex-direction: column;
+            .bio {
+              @include center;
+              flex-direction: column;
+              .bb {
+                @include start;
+                flex-direction: column;
+                p {
+                  color: #777;
+                  font-weight: bold;
+                  font-size: 15px;
+                }
+                .bb-info {
+                  @include center;
+                  .wr,
+                  .ls,
+                  .ms {
+                    font-weight: bold;
+                  }
+                  .ls {
+                    color: $greenColor;
+                  }
+                }
+              }
+            }
+          }
+          .rec-wrapper {
+            @include between;
+            .rec-box {
+              @include center;
+              flex-direction: column;
+              .rc-i {
+                @include center;
+                flex-direction: column;
+                p {
+                  color: #bcbcbc;
+                  font-weight: bold;
+                  font-size: 14px;
+                }
+              }
+              .rec-circle {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background-color: #4c4b4b;
+              }
+              .rec-cups {
+                position: relative;
+                background-color: #ddd;
+                border-radius: 12px;
+                padding: 2px 16px;
+                font-size: 13px;
+                font-weight: bold;
+                &.rank {
+                  color: $btnColor;
+                }
+                &.clan {
+                  color: rgb(98, 0, 255);
+                }
+                img {
+                  width: 20px;
+                  position: absolute;
+                  left: -10px;
+                  top: 0;
+                }
+              }
+            }
+          }
+        }
+        .stats {
+          @include center;
+          flex-direction: column;
+          background-color: #eee;
+          border-radius: 25px;
+          padding: 35px 20px;
+          .st-row {
+            @include start;
+            &:not(:last-of-type) {
+              margin-bottom: 20px;
+            }
+            .st-item {
+              display: flex;
+              align-items: flex-start;
+              justify-content: center;
+              flex-direction: column;
+              &:not(:last-of-type) {
+                margin-right: 15px;
+              }
+              .sti-text {
+                margin-bottom: 5px;
+              }
+              .sti-num {
+                background-color: #d4d4d4;
+                padding: 10px;
+                border-radius: 8px;
+                font-weight: bold;
+                width: 200px;
+              }
+            }
+          }
+        }
+      }
+      .p-pic {
+        @include center;
+        flex-direction: column;
+        .pic-holder {
+          width: 400px;
+          height: 400px;
+          position: relative;
+          background-color: #4c4b4b;
+          .pic-skin {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%);
+          }
+        }
+        .badges-holder {
+          position: relative;
+          padding: 20px;
+          @include center;
+          img {
+            position: absolute;
+            width: 24px;
+            right: -5px;
+            top: 5px;
+            cursor: pointer;
+          }
+          .badge {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            background-color: #4c4b4b;
+            &:not(:last-of-type) {
+              margin-right: 15px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

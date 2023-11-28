@@ -1,12 +1,14 @@
 .backgroundProfile {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    background-color: white;
-    align-items: center;
-    width: 100%;
-    height: 1200px;
-    clip-path: polygon(0 0, 100% 0, 100% 95%, 97% 100%, 3% 100%, 0 95%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: white;
+  align-items: flex-start;
+  margin-left: 10px;
+  height: 1200px;
+  clip-path: polygon(0 0, 100% 0, 100% 95%, 97% 100%, 3% 100%, 0 95%);
+  transform: scale(0.9);
+  padding-right: 80px;
 }
 .backgroundProfile::before,
 .backgroundProfile::after {
@@ -22,42 +24,29 @@
 .backgroundProfile::after {
   bottom: 80px;
 }
-.profile-settings-buttons{
-    width: 100%;
-    display: flex;
-    position: relative;
-    left: 75px;
+.profile-settings-buttons {
+  padding-left: 60px;
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
 }
-.groofybtn {
-    color: white;
-    margin-top: 20px;
-    width: 80px;
-    margin-right: 25px;
+.profile-nav-btn-container {
+  margin-top: 20px;
+  margin-right: 25px;
+  width: fit-content;
 }
-.btn-containerProfile .groofybtn {
-    width: 80px;
-    background-color: #FF9B00;
+.profile-nav-btn-container .groofybtn {
+  color: white;
+  background-color: #ff9b00;
 }
-.btn-containerSettings .groofybtn {
-    width: 90px;
-    background-color: #FFBF5C;
+.profile-nav-btn-container:not(.active) .groofybtn {
+  color: white;
+  background-color: #ffbf5c;
 }
-.btn-containerFriends .groofybtn {
-    width: 120px;
-    background-color: #FFBF5C;
-}
-.btn-containerClan .groofybtn {
-    width: 70px;
-    background-color: #FFBF5C;
-}
-.btn-containerHistory .groofybtn {
-    width: 85px;
-    background-color: #FFBF5C;
-}
-.profile-info{
-    width: 100%;
-    display: flex;
-    position: relative;
-    top: 70px;
-    left: 75px;
+.profile-info {
+  /* width: 100%; */
+  display: flex;
+  position: relative;
+  top: 70px;
+  padding-left: 60px;
 }

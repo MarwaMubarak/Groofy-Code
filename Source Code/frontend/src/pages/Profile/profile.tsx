@@ -1,4 +1,6 @@
 import {
+  GroofyFooter,
+  GroofyHeader,
   MainProfile,
   NavBar,
 } from "../../components";
@@ -6,12 +8,13 @@ import "./scss/profile.css";
 
 const Profile = () => {
   return (
-    <>
-      <NavBar idx={1} />
-      <div className="mainprofile">
-        <MainProfile/>
+    <div className="profile-page-style">
+      <GroofyHeader idx={1}/>
+      <div className="profile-main">
+        <MainProfile />
       </div>
-    </>
+      <GroofyFooter />
+    </div>
   );
 };
 
