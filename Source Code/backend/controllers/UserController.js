@@ -2,6 +2,7 @@ const { User, validateSignUp } = require('../models/User');
 const bcrypt = require('bcryptjs'); 
 const asyncHandler = require('express-async-handler');
 
+
 module.exports.regiseterUser = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
 
