@@ -35,7 +35,7 @@
           @include center;
           margin-right: 15px;
           padding: 25px;
-          background-color: $blueColor;
+          background-color: $redColor;
           border-radius: 12px;
           img {
             width: 50px;
@@ -85,9 +85,25 @@
       flex-direction: column;
       padding: 30px 30px 50px;
       width: 100%;
+      .groofy-input input:hover{
+        outline-color: $redColor;
+      }
       .f-sbmt {
         @include center;
         flex-direction: column;
+        .groofybtn {
+          background-color: $redColor;
+          color: white;
+          width: 140px;
+          border-radius: 12px;
+          &:hover{
+              background-color:$mainColor ;
+              color: white;
+          }
+          .btn-text{
+              font-size: 12px;
+          }
+        }
         .groofybtn {
           margin-bottom: 35px;
         }

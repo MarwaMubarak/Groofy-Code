@@ -101,6 +101,8 @@
     .events-container {
       @include center;
       flex-direction: column;
+      position: sticky;
+      top: 60px;
     }
   }
 }

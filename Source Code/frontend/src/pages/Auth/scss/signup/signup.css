@@ -44,7 +44,7 @@
   align-items: center;
   margin-right: 15px;
   padding: 25px;
-  background-color: #00A9FF;
+  background-color: #f55353;
   border-radius: 12px;
 }
 .signup-div .features .ft-container .ft-box .ftb-icn img {
@@ -93,11 +93,27 @@
   padding: 30px 30px 50px;
   width: 100%;
 }
+.signup-div .auth .auth-form .groofy-input input:hover {
+  outline-color: #f55353;
+}
 .signup-div .auth .auth-form .f-sbmt {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+.signup-div .auth .auth-form .f-sbmt .groofybtn {
+  background-color: #f55353;
+  color: white;
+  width: 140px;
+  border-radius: 12px;
+}
+.signup-div .auth .auth-form .f-sbmt .groofybtn:hover {
+  background-color: #0e141e;
+  color: white;
+}
+.signup-div .auth .auth-form .f-sbmt .groofybtn .btn-text {
+  font-size: 12px;
 }
 .signup-div .auth .auth-form .f-sbmt .groofybtn {
   margin-bottom: 35px;

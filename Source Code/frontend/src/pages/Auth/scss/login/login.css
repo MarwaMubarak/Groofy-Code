@@ -28,7 +28,7 @@
   background-color: #ddd;
 }
 .login-div .auth-title span {
-  color: #f55353;
+  color: #00A9FF;
 }
 .login-div .auth-form {
   display: flex;
@@ -36,6 +36,21 @@
   align-items: center;
   flex-direction: column;
   padding: 30px 45px 100px;
+}
+.login-div .auth-form .groofybtn {
+  margin-top: 10px;
+  background-color: #008ed6;
+  color: white;
+  width: 90px;
+  padding: 7px;
+  border-radius: 12px;
+}
+.login-div .auth-form .groofybtn:hover {
+  background-color: #0e141e;
+  color: white;
+}
+.login-div .auth-form .groofybtn .btn-text {
+  font-size: 12px;
 }
 .login-div .auth-form .f-sbmt {
   display: flex;
@@ -46,7 +61,7 @@
 .login-div .auth-form .f-sbmt .frg-pass {
   margin-top: 20px;
   margin-bottom: 25px;
-  color: #f55353;
+  color: #00A9FF;
   transition: 0.3s;
 }
 .login-div .auth-form .f-sbmt .frg-pass:hover {
@@ -67,7 +82,7 @@
 }
 .login-div .auth-form .f-sbmt .alrg a {
   margin-left: 5px;
-  color: #f55353;
+  color: #00A9FF;
   transition: 0.3s;
 }
 .login-div .auth-form .f-sbmt .alrg a:hover {
