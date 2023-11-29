@@ -8,7 +8,7 @@ const ProfileCard = (props: ProfileCardProps) => {
       <div className="pc-section1">
         <div className="pc-skin"></div>
         <div className="pc-section1-box">
-          <Link to="/profile/1">
+          <Link to="/profile">
             <img
               className="pc-section1-pic"
               src={props.userImg}
@@ -19,7 +19,7 @@ const ProfileCard = (props: ProfileCardProps) => {
         <h3>{props.username}</h3>
         <p>{props.bio}</p>
       </div>
-      <div className="pc-section2">
+      {/* <div className="pc-section2">
         <span className="pc-header">16500 / 25000 XP</span>
         <div className="progress">
           <span className="progress-level">15</span>
@@ -30,16 +30,12 @@ const ProfileCard = (props: ProfileCardProps) => {
             <span className="pcsb-total">#219</span>
             <span className="pcsb-title">Rank</span>
           </span>
-          {/* <div className="pcs-num">
-            <span className="pcsn-total">15</span>
-            <span className="pcsn-title">Level</span>
-          </div> */}
           <span className="pcs-box">
             <span className="pcsb-total">1217</span>
             <span className="pcsb-title">Followers</span>
           </span>
         </div>
-      </div>
+      </div> */}
       <div className="pc-section3">
         <div className="pc-section3-box">
           <img src={props.rankImg} alt="RankPicture" />

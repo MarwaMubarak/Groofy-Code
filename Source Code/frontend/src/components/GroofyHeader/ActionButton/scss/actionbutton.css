@@ -1,0 +1,40 @@
+.action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border-radius: 50%;
+  background-color: #0e141e;
+  margin-right: 15px;
+  cursor: pointer;
+  position: relative;
+}
+.action:active {
+  transform: scale(0.95);
+}
+.action .action-cnt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: #e41e3f;
+  border-radius: 50%;
+  top: -7px;
+  right: -9px;
+  padding: 3px 5px;
+  min-width: 22px;
+  height: 20px;
+}
+.action .action-cnt span {
+  line-height: 1;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #fff;
+  margin-top: 2px;
+}
+.action:hover {
+  background-color: rgb(30, 41, 61);
+}
+.action .header-pr-action {
+  width: 26px;
+}/*# sourceMappingURL=actionbutton.css.map */

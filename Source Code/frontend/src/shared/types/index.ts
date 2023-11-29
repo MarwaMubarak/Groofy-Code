@@ -1,5 +1,3 @@
-import { title } from "process";
-
 // button props
 export interface btnProps {
   btnText: string;
@@ -95,16 +93,30 @@ export interface ProfileCardProps {
 }
 
 // Single Follow Card Props
-export interface SingleFollowCardProps{
+export interface SingleFollowCardProps {
   username: string;
   userImg: string;
 }
 
 // Single Follow Card Props
-export interface EventCardProps{
+export interface EventCardProps {
   title: string;
   img: string;
   details: string;
   btn_title: string;
 }
 
+// Single Follow Card Props
+export interface ActionButtonProps {
+  img: string;
+  count: number;
+  clickEvent: () => void;
+}
+
+// Gamemode Props
+export interface GamemodeProps {
+  title: string;
+  description?: string;
+  img: string;
+  clickEvent: () => void;
+}

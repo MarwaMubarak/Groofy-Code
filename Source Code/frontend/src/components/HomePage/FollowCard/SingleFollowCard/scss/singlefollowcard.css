@@ -26,7 +26,6 @@
   padding: 8px 15px;
   border-radius: 20px;
   background-color: #0e141e;
-  color: white;
   outline: 2px solid transparent;
   cursor: pointer;
   transition: 0.3s;
@@ -34,9 +33,20 @@
   font-size: 12px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
-.single-follow-card span:hover {
+.single-follow-card .follow {
+  color: white;
+}
+.single-follow-card .follow:hover {
   background-color: white;
   color: #0e141e;
+}
+.single-follow-card .unfollow {
+  color: #0e141e;
+  background-color: white;
+}
+.single-follow-card .unfollow:hover {
+  background-color: #0e141e;
+  color: white;
 }
 .single-follow-card:hover {
   background-color: #f2f2f2;
