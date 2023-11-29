@@ -99,7 +99,6 @@
   border-radius: 6px;
   transition: 0.3s;
   padding: 5px 0px;
-  cursor: pointer;
 }
 .header-container .profile-area .pa-info::after {
   content: "";
@@ -119,9 +118,6 @@
 .header-container .profile-area .pa-info span {
   font-weight: bold;
   color: #191919;
-}
-.header-container .profile-area .pa-info:hover {
-  background-color: #eee;
 }
 .header-container .profile-area .logout {
   display: flex;

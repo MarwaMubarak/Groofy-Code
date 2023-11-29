@@ -80,7 +80,6 @@
       border-radius: 6px;
       transition: 0.3s;
       padding: 5px 0px;
-      cursor: pointer;
       &::after {
         content: "";
         position: absolute;
@@ -99,9 +98,6 @@
       span {
         font-weight: bold;
         color: #191919;
-      }
-      &:hover {
-        background-color: #eee;
       }
     }
     .logout {

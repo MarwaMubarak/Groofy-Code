@@ -44,12 +44,10 @@ const GroofyHeader = () => {
         </div>
       </div>
       <div className={`profile-area ${profileActive}`}>
-        <Link to="/profile">
-          <div className="pa-info">
-            <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
-            <span>Hazem Adel</span>
-          </div>
-        </Link>
+        <div className="pa-info">
+          <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
+          <span>Hazem Adel</span>
+        </div>
         <Link to="/profile">
           <div className="logout">
             <img src="/Assets/SVG/ProfileIconBlack.svg" alt="ProfilePicture" />

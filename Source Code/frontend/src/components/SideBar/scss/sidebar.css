@@ -7,6 +7,37 @@
   padding: 0 20px;
   background-color: #0e141e;
   flex-direction: column;
+  position: sticky;
+  top: 0;
+}
+.sidebar-container.false {
+  width: 65px;
+}
+.sidebar-container.false span {
+  display: none !important;
+}
+.sidebar-container.false .sidebar-up img {
+  margin-right: 0 !important;
+}
+.sidebar-container.false .sidebar-up .sidebar-header::after {
+  width: 30px;
+}
+.sidebar-container.false .sidebar-up a li {
+  width: 65px !important;
+  justify-content: center !important;
+}
+.sidebar-container.false .sidebar-up a li img {
+  margin-right: 0 !important;
+}
+.sidebar-container.false .sidebar-up a:nth-child(4) img {
+  left: -2px !important;
+}
+.sidebar-container.false .sidebar-down {
+  margin-right: 5px;
+}
+.sidebar-container.false .sidebar-down img {
+  transform: rotate(0);
+  margin-right: 0;
 }
 .sidebar-container .sidebar-up {
   display: flex;
@@ -14,30 +45,36 @@
   align-items: center;
   flex-direction: column;
 }
-.sidebar-container .sidebar-up .sidebar-logo {
+.sidebar-container .sidebar-up .sidebar-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 130px;
   position: relative;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+.sidebar-container .sidebar-up .sidebar-header::after {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 2px;
+  background-color: rgb(59, 67, 85);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -8px;
+}
+.sidebar-container .sidebar-up .sidebar-header img {
+  width: 22px;
+  margin-right: 5px;
+}
+.sidebar-container .sidebar-up .sidebar-header .sidebar-logo {
   color: white;
   font-size: 24px;
   font-weight: bold;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  margin-top: 10px;
-  margin-bottom: 25px;
-}
-.sidebar-container .sidebar-up .sidebar-logo::after {
-  content: "";
-  position: absolute;
-  width: 35px;
-  height: 2px;
-  background-color: rgb(59, 67, 85);
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -5px;
 }
 .sidebar-container .sidebar-up .sidebar-nav-items {
   display: flex;

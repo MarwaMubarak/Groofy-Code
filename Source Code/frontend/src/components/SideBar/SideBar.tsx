@@ -3,10 +3,14 @@ import { Link } from "react-router-dom";
 import "./scss/sidebar.css";
 
 const SideBar = (probs: { idx: number }) => {
+  const [sbActive, setSBActive] = useState(true);
   return (
-    <div className="sidebar-container">
+    <div className={`sidebar-container ${sbActive}`}>
       <div className="sidebar-up">
-        <span className="sidebar-logo">Menu</span>
+        <div className="sidebar-header">
+          <img src="/Assets/SVG/menu.svg" alt="Menu" />
+          <span className="sidebar-logo">Menu</span>
+        </div>
         <ul className="sidebar-nav-items">
           <Link to="/">
             <li className={`${!probs.idx ? "active" : ""}`}>
@@ -76,8 +80,11 @@ const SideBar = (probs: { idx: number }) => {
           </Link>
         </ul>
       </div>
-      <div className="sidebar-down">
-        <img src="/Assets/SVG/collapse.svg" />
+      <div
+        className="sidebar-down"
+        onClick={() => setSBActive((state) => !state)}
+      >
+        <img src="/Assets/SVG/collapse.svg" alt="Collapse" />
         <span>Collapse</span>
       </div>
     </div>

@@ -54,75 +54,75 @@
       }
     }
   }
-  .pc-section2 {
-    padding: 15px 0;
-    background-color: $mainColor;
-    color: #fff;
-    .pc-header {
-      margin-left: 70px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-    .progress {
-      background-color: #ececec;
-      margin: 5px 15px;
-      position: relative;
-      border-radius: 0 12px 12px 0;
-      height: 18px;
-      width: calc(100% - 90px);
-      left: 50px;
-      margin-bottom: 25px;
-      @include start;
-      .progress-level{
-        position: absolute;
-        left: -31px;
-        z-index: 100;
-        @include center;
-          width: 32px;
-          height: 32px;
-          background-color: $redColor;
-          font-weight: bold;
-          color: #fff;
-          font-size: 18px;
-          text-align: center;
-          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
-      }
-      .progress-box {
-        position: absolute;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          #00A9FF,
-          #87C4FF
-        );
-        border-radius: 0 12px 12px 0;
-      }
-    }
-    .pc-stats {
-      @include around;
-      margin-top: 10px;
-      .pcs-box {
-        @include center;
-        flex-direction: column;
-        .pcsb-total {
-          @include center;
-          background-color: #143F6B;
-          color: #fff;
-          font-weight: bold;
-          padding: 8px;
-          box-shadow: $lightShadow;
-          border-radius: 6px;
-          box-shadow: $headerShadow;
-          font-size: 14px;
-        }
-        .pcsb-title {
-          margin-top: 10px;
-          font-weight: bold;
-          font-size: 13px;
-        }
-      }
-    }
-  }
+  // .pc-section2 {
+  //   padding: 15px 0;
+  //   background-color: $mainColor;
+  //   color: #fff;
+  //   .pc-header {
+  //     margin-left: 70px;
+  //     font-size: 13px;
+  //     font-weight: bold;
+  //   }
+  //   .progress {
+  //     background-color: #ececec;
+  //     margin: 5px 15px;
+  //     position: relative;
+  //     border-radius: 0 12px 12px 0;
+  //     height: 18px;
+  //     width: calc(100% - 90px);
+  //     left: 50px;
+  //     margin-bottom: 25px;
+  //     @include start;
+  //     .progress-level{
+  //       position: absolute;
+  //       left: -31px;
+  //       z-index: 100;
+  //       @include center;
+  //         width: 32px;
+  //         height: 32px;
+  //         background-color: $redColor;
+  //         font-weight: bold;
+  //         color: #fff;
+  //         font-size: 18px;
+  //         text-align: center;
+  //         clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
+  //     }
+  //     .progress-box {
+  //       position: absolute;
+  //       height: 100%;
+  //       background: linear-gradient(
+  //         90deg,
+  //         #00A9FF,
+  //         #87C4FF
+  //       );
+  //       border-radius: 0 12px 12px 0;
+  //     }
+  //   }
+  //   .pc-stats {
+  //     @include around;
+  //     margin-top: 10px;
+  //     .pcs-box {
+  //       @include center;
+  //       flex-direction: column;
+  //       .pcsb-total {
+  //         @include center;
+  //         background-color: #143F6B;
+  //         color: #fff;
+  //         font-weight: bold;
+  //         padding: 8px;
+  //         box-shadow: $lightShadow;
+  //         border-radius: 6px;
+  //         box-shadow: $headerShadow;
+  //         font-size: 14px;
+  //       }
+  //       .pcsb-title {
+  //         margin-top: 10px;
+  //         font-weight: bold;
+  //         font-size: 13px;
+  //       }
+  //     }
+  //   }
+  // }
   .pc-section3 {
     border-top: 2px solid white;
     background-color: $mainColor;
@@ -145,7 +145,6 @@
         span {
           color: #ddd;
           font-size: 10px;
-          
         }
       }
     }
