@@ -63,11 +63,11 @@ module.exports.regiseterUser = asyncHandler(async(req, res) => {
     const user = await User.findOne({ email });
   
     if (!User) {
-        return res.status(400).json({ error: 'User already registered.' });
+        return res.status(400).json({ error: 'Invalid Email or password.' });
     }  
     const isPasswordMatch = await bcrypt.compare( password , user.password)  
     if (!isPasswordMatch) {
-      return res.status(400).json({ error: 'User already registered.' });
+      return res.status(400).json({ error: 'Invalid Email or password.' });
     }  
     const token = user.generateAuthToken(); 
 
