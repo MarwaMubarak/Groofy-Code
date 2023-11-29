@@ -2,11 +2,19 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import NotifyBox from "./NotifyBox/NotifyBox";
 import "./scss/groofyheader.css";
+import ActionButton from "./ActionButton/ActionButton";
 
-const GroofyHeader = (probs: { idx: number }) => {
+const GroofyHeader = () => {
   const [notifyActive, setNotifyActive] = useState(false);
   const [notifyNewCnt, setNotifyNewCnt] = useState(15);
   const [notifyCnt, setNotifyCnt] = useState(4);
+
+  const [messageActive, setMessageActive] = useState(false);
+  const [messageNewCnt, setMessageNewCnt] = useState(3);
+
+  const [friendsActive, setFriendsActive] = useState(false);
+  const [friendsNewCnt, setFriendsNewCnt] = useState(7);
+
   const [profileActive, setProfileActive] = useState(false);
   return (
     <div className="header-container">
@@ -49,16 +57,16 @@ const GroofyHeader = (probs: { idx: number }) => {
           </div>
         </Link>
         <Link to="/settings">
-        <div className="logout">
-          <img src="/Assets/SVG/settings.svg" alt="ProfilePicture" />
-          <span>Settings</span>
-        </div>
+          <div className="logout">
+            <img src="/Assets/SVG/settings.svg" alt="ProfilePicture" />
+            <span>Settings</span>
+          </div>
         </Link>
         <Link to="/login">
-        <div className="logout">
-          <img src="/Assets/SVG/logout.svg" alt="ProfilePicture" />
-          <span>Logout</span>
-        </div>
+          <div className="logout">
+            <img src="/Assets/SVG/logout.svg" alt="ProfilePicture" />
+            <span>Logout</span>
+          </div>
         </Link>
       </div>
       <div className="header-logo">
@@ -67,102 +75,44 @@ const GroofyHeader = (probs: { idx: number }) => {
             Groofy<span>Code</span>
           </span>
         </Link>
+        <div className="level-container">
+          <span className="pc-header">16500 / 25000 XP</span>
+          <div className="progress">
+            <span className="progress-level">15</span>
+            <div className="progress-box" style={{ width: "70%" }}></div>
+          </div>
+        </div>
       </div>
-      <ul className="header-nav-items">
-        <Link to="/">
-          <abbr title="Home">
-            <li className={`${!probs.idx ? "active" : ""}`}>
-              <img
-                src={`/Assets/SVG/${
-                  !probs.idx ? "HomeIconColored" : "HomeIcon"
-                }.svg`}
-                alt=""
-              />
-            </li>
-          </abbr>
-        </Link>
-        <Link to="/profile">
-          <abbr title="Profile">
-            <li className={`${probs.idx === 1 ? "active" : ""}`}>
-              <img
-                src={`/Assets/SVG/${
-                  probs.idx === 1 ? "ProfileIconColored" : "ProfileIcon"
-                }.svg`}
-                alt=""
-              />
-            </li>
-          </abbr>
-        </Link>
-        <Link to="/play">
-          <abbr title="Play">
-            <li className={`${probs.idx === 2 ? "active" : ""}`}>
-              <img
-                src={`/Assets/SVG/${
-                  probs.idx === 2 ? "BattleIconColored" : "BattleIcon"
-                }.svg`}
-                alt=""
-              />
-            </li>
-          </abbr>
-        </Link>
-        <Link to="/clan">
-          <abbr title="Clan">
-            <li className={`${probs.idx === 3 ? "active" : ""}`}>
-              <img
-                src={`/Assets/SVG/${
-                  probs.idx === 3 ? "ClanIconColored" : "ClanIcon"
-                }.svg`}
-                alt=""
-              />
-            </li>
-          </abbr>
-        </Link>
-        <Link to="/news">
-          <abbr title="News">
-            <li className={`${probs.idx === 4 ? "active" : ""}`}>
-              <img
-                src={`/Assets/SVG/${
-                  probs.idx === 4 ? "NewsIconColored" : "NewsIcon"
-                }.svg`}
-                alt=""
-              />
-            </li>
-          </abbr>
-        </Link>
-        <Link to="/help">
-          <abbr title="Help">
-            <li className={`${probs.idx === 5 ? "active" : ""}`}>
-              <img
-                src={`/Assets/SVG/${
-                  probs.idx === 5 ? "HelpIconColored" : "HelpIcon"
-                }.svg`}
-                alt=""
-              />
-            </li>
-          </abbr>
-        </Link>
-      </ul>
       <div className="header-user-area">
         <div className="header-h-imgbox">
-          <div
-            className="notify"
-            onClick={() => {
+          <ActionButton
+            count={friendsNewCnt}
+            img="/Assets/SVG/people.svg"
+            clickEvent={() => {
+              setFriendsActive((prev) => !prev);
+              setProfileActive(false);
+              setFriendsNewCnt(0);
+            }}
+          />
+          <ActionButton
+            count={messageNewCnt}
+            img="/Assets/SVG/message.svg"
+            clickEvent={() => {
+              setMessageActive((prev) => !prev);
+              setProfileActive(false);
+              setMessageNewCnt(0);
+            }}
+          />
+          <ActionButton
+            count={notifyNewCnt}
+            img="/Assets/SVG/notificationsIcon.svg"
+            clickEvent={() => {
               setNotifyActive((prev) => !prev);
               setProfileActive(false);
               setNotifyNewCnt(0);
             }}
-          >
-            {notifyNewCnt > 0 && (
-              <div className="notify-cnt">
-                <span>{notifyNewCnt}</span>
-              </div>
-            )}
-            <img
-              className="header-pr-notify"
-              src="/Assets/SVG/notificationsIcon.svg"
-              alt="notify"
-            />
-          </div>
+          />
+
           <div
             className="pr-ph"
             onClick={() => {

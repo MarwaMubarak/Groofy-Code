@@ -1,6 +1,5 @@
 .home-container {
   display: flex;
-  flex-direction: column;
 }
 .home-container .play-container {
   display: flex;
@@ -86,9 +85,10 @@
   padding: 10px;
 }
 .home-container .activity-section {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  height: 100vh;
+  width: 1000px;
+  overflow-y: auto;
 }
 .home-container .activity-section .status-container {
   display: flex;

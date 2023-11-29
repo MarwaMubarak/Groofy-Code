@@ -1,14 +1,12 @@
 .header-container {
   height: 60px;
   width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  background-color: #0e141e;
+  margin-top: 20px;
+  position: relative;
 }
 .header-container .notify-area {
   position: absolute;
@@ -155,6 +153,7 @@
   margin-left: 10px;
 }
 .header-container .header-logo {
+  display: flex;
   width: 130px;
   position: relative;
 }
@@ -178,39 +177,53 @@
   right: -30px;
   top: 4px;
 }
-.header-container .header-nav-items {
+.header-container .header-logo .level-container {
+  position: relative;
+}
+.header-container .header-logo .level-container .pc-header {
+  position: absolute;
+  margin-left: 70px;
+  font-size: 13px;
+  z-index: 1;
+  top: 6px;
+  left: 35px;
+  color: #0e141e;
+}
+.header-container .header-logo .level-container .progress {
+  background-color: white;
+  margin: 5px 15px;
+  position: relative;
+  border-radius: 0 12px 12px 0;
+  height: 18px;
+  width: 200px;
+  left: 50px;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.header-container .header-logo .level-container .progress .progress-level {
+  position: absolute;
+  left: -31px;
+  z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 32px;
+  height: 32px;
+  background-color: #f55353;
+  font-weight: bold;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  -webkit-clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
+          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
 }
-.header-container .header-nav-items a abbr {
-  background-color: #fff;
-  border-radius: 5px;
-  text-decoration: none;
-}
-.header-container .header-nav-items a li {
-  padding: 9px 40px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.header-container .header-nav-items a li img {
-  width: 36px;
-  height: 36px;
-  transition: 0.3s;
-}
-.header-container .header-nav-items a li.active {
-  border-bottom: 4px solid #00A9FF;
-}
-.header-container .header-nav-items a li:hover {
-  background-color: rgb(22, 30, 46);
-  border-radius: 10px;
-}
-.header-container .header-nav-items a:nth-child(4) li {
-  padding: 6px 40px;
-}
-.header-container .header-nav-items a:nth-child(4) li img {
-  width: 42px;
-  height: 42px;
+.header-container .header-logo .level-container .progress .progress-box {
+  position: absolute;
+  height: 100%;
+  background: linear-gradient(90deg, #00a9ff, #87c4ff);
+  border-radius: 0 12px 12px 0;
 }
 .header-container .header-user-area {
   display: flex;
@@ -233,46 +246,6 @@
   align-items: center;
   position: relative;
   margin-right: 10px;
-}
-.header-container .header-user-area .header-h-imgbox .notify {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-  border-radius: 50%;
-  background-color: rgb(30, 41, 61);
-  margin-right: 15px;
-  cursor: pointer;
-  position: relative;
-}
-.header-container .header-user-area .header-h-imgbox .notify:active {
-  transform: scale(0.95);
-}
-.header-container .header-user-area .header-h-imgbox .notify .notify-cnt {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  background-color: #e41e3f;
-  border-radius: 50%;
-  top: -7px;
-  right: -9px;
-  padding: 3px 5px;
-  min-width: 22px;
-  height: 20px;
-}
-.header-container .header-user-area .header-h-imgbox .notify .notify-cnt span {
-  line-height: 1;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #fff;
-  margin-top: 2px;
-}
-.header-container .header-user-area .header-h-imgbox .notify:hover {
-  background-color: rgb(42, 58, 88);
-}
-.header-container .header-user-area .header-h-imgbox .notify .header-pr-notify {
-  width: 26px;
 }
 .header-container .header-user-area .header-h-imgbox .pr-ph {
   display: flex;

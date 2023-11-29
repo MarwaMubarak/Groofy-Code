@@ -108,3 +108,12 @@ export interface EventCardProps{
   btn_title: string;
 }
 
+
+
+
+// Single Follow Card Props
+export interface ActionButtonProps{
+  img: string;
+  count: number;
+  clickEvent: ()=>void;
+}

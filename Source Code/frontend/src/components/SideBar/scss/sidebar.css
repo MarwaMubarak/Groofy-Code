@@ -1,0 +1,119 @@
+.sidebar-container {
+  height: 100vh;
+  width: 130px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #0e141e;
+  flex-direction: column;
+}
+.sidebar-container .sidebar-up {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+.sidebar-container .sidebar-up .sidebar-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 130px;
+  position: relative;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+.sidebar-container .sidebar-up .sidebar-logo::after {
+  content: "";
+  position: absolute;
+  width: 35px;
+  height: 2px;
+  background-color: rgb(59, 67, 85);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -5px;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a:not(:last-child) {
+  margin-bottom: 10px;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 9px 20px;
+  width: 130px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a li.active {
+  border-left: 4px solid #00A9FF;
+  background-color: rgb(22, 30, 46);
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a li:not(.active):hover {
+  background-color: rgb(22, 30, 46);
+  border-radius: 10px;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a li img {
+  width: 32px;
+  height: 32px;
+  transition: 0.3s;
+  margin-right: 10px;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a li span {
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a:nth-child(4) li {
+  position: relative;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a:nth-child(4) li img {
+  position: relative;
+  left: -7px;
+  top: -3px;
+  width: 42px;
+  height: 35px;
+}
+.sidebar-container .sidebar-up .sidebar-nav-items a:nth-child(4) li span {
+  position: relative;
+  left: -12px;
+}
+.sidebar-container .sidebar-down {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-right: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.sidebar-container .sidebar-down img {
+  width: 16px;
+  height: 16px;
+  transition: 0.3s;
+  margin-right: 10px;
+  transform: rotate(180deg);
+}
+.sidebar-container .sidebar-down span {
+  color: #ddd;
+  font-weight: bold;
+  font-size: 11px;
+}
+.sidebar-container .sidebar-down:hover {
+  background-color: rgb(22, 30, 46);
+  border-radius: 10px;
+}/*# sourceMappingURL=sidebar.css.map */

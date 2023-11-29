@@ -9,7 +9,7 @@ import "./scss/profile.css";
 const Profile = () => {
   return (
     <div className="profile-page-style">
-      <GroofyHeader idx={1}/>
+      <GroofyHeader />
       <div className="profile-main">
         <MainProfile />
       </div>

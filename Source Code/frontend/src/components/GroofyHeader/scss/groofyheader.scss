@@ -3,12 +3,11 @@
 .header-container {
   height: 60px;
   width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
   @include between;
   padding: 0 20px;
-  background-color: $mainColor;
+  margin-top: 20px;
+  position: relative;
+  // background-color: $mainColor;
   .notify-area {
     position: absolute;
     top: 100%;
@@ -131,6 +130,7 @@
     }
   }
   .header-logo {
+    display: flex;
     width: 130px;
     position: relative;
     span {
@@ -151,39 +151,47 @@
       right: -30px;
       top: 4px;
     }
-  }
-  .header-nav-items {
-    @include center;
-    a {
-      abbr {
-        background-color: #fff;
-        border-radius: 5px;
-        text-decoration: none;
+    .level-container {
+      position: relative;
+      .pc-header {
+        position: absolute;
+        margin-left: 70px;
+        font-size: 13px;
+        z-index: 1;
+        top: 6px;
+        left: 35px;
+        color: $mainColor;
       }
-      li {
-        img {
-          width: 36px;
-          height: 36px;
-          transition: 0.3s;
+      .progress {
+        background-color: white;
+        margin: 5px 15px;
+        position: relative;
+        border-radius: 0 12px 12px 0;
+        height: 18px;
+        // width: calc(100% - 90px);
+        width: 200px;
+        left: 50px;
+        margin-bottom: 25px;
+        @include start;
+        .progress-level {
+          position: absolute;
+          left: -31px;
+          z-index: 100;
+          @include center;
+          width: 32px;
+          height: 32px;
+          background-color: $redColor;
+          font-weight: bold;
+          color: #fff;
+          font-size: 18px;
+          text-align: center;
+          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
         }
-        &.active {
-          border-bottom: 4px solid $blueColor;
-        }
-        padding: 9px 40px;
-        cursor: pointer;
-        transition: 0.3s;
-        &:hover {
-          background-color: rgb(22, 30, 46);
-          border-radius: 10px;
-        }
-      }
-      &:nth-child(4) {
-        li {
-          padding: 6px 40px;
-          img {
-            width: 42px;
-            height: 42px;
-          }
+        .progress-box {
+          position: absolute;
+          height: 100%;
+          background: linear-gradient(90deg, #00a9ff, #87c4ff);
+          border-radius: 0 12px 12px 0;
         }
       }
     }
@@ -202,42 +210,6 @@
       @include center;
       position: relative;
       margin-right: 10px;
-      .notify {
-        @include center;
-        padding: 8px;
-        border-radius: 50%;
-        background-color: rgb(30, 41, 61);
-        margin-right: 15px;
-        cursor: pointer;
-        position: relative;
-        &:active {
-          transform: scale(0.95);
-        }
-        .notify-cnt {
-          @include center;
-          position: absolute;
-          background-color: #e41e3f;
-          border-radius: 50%;
-          top: -7px;
-          right: -9px;
-          padding: 3px 5px;
-          min-width: 22px;
-          height: 20px;
-          span {
-            line-height: 1;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: #fff;
-            margin-top: 2px;
-          }
-        }
-        &:hover {
-          background-color: rgb(42, 58, 88);
-        }
-        .header-pr-notify {
-          width: 26px;
-        }
-      }
       .pr-ph {
         @include center;
         .header-pr-ph {

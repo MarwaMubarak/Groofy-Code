@@ -6,17 +6,21 @@ import {
   ProfileCard,
   EventCard,
   FollowCard,
-  GroofyFooter
+  GroofyFooter,
+  SideBar,
 } from "../../components";
 import "./scss/home.css";
 
 const Home = () => {
   return (
     <>
-      <GroofyHeader idx={0} />
       <Friends />
       <div className="home-container">
+        <SideBar idx={0} />
         <div className="activity-section align">
+          <GroofyHeader />
+        </div>
+        {/* <div className="activity-section align">
           <div className="status-container">
             <ProfileCard
               username="Hazem Adel"
@@ -48,9 +52,9 @@ const Home = () => {
                 <EventCard title="Casual Match" btn_title="Battle" details="Empower players to create their perfect match by allowing them to customize every aspect." img="/Assets/Images/battle.png"/>
              <FollowCard/>
           </div>
-        </div>
+        </div> */}
       </div>
-      <GroofyFooter/>
+      {/* <GroofyFooter/> */}
     </>
   );
 };

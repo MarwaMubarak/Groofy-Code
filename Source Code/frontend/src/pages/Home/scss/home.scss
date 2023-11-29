@@ -2,7 +2,6 @@
 @use "../../../shared/styles/mixins" as *;
 .home-container {
   display: flex;
-  flex-direction: column;
   .play-container {
     @include center;
     background-color: #fff;
@@ -87,9 +86,10 @@
     }
   }
   .activity-section {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    height: 100vh;
+    width: 1000px;
+    overflow-y: auto;
     .status-container {
       @include center;
       flex-direction: column;
