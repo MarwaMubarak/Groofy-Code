@@ -25,6 +25,7 @@ import FollowCard from "./HomePage/FollowCard/FollowCard";
 import SingleFollowCard from "./HomePage/FollowCard/SingleFollowCard/SingleFollowCard";
 import SideBar from "./SideBar/SideBar";
 import Gamemode from "./HomePage/Gamemode/Gamemode";
+import SinglePost from "./HomePage/SinglePost/SinglePost";
 
 export {
   MatchHeader,
@@ -54,4 +55,5 @@ export {
   SingleFollowCard,
   SideBar,
   Gamemode,
+  SinglePost,
 };

@@ -9,14 +9,11 @@ import {
   GroofyFooter,
   SideBar,
   Gamemode,
+  SinglePost,
 } from "../../components";
 import "./scss/home.css";
-import { useState } from "react";
 
 const Home = () => {
-  const [likeActive, setLikeActive] = useState(false);
-  const [currReact, setCurrReact] = useState("like");
-  const [reactions, setReactions] = useState(false);
   return (
     <div className="home-container">
       <SideBar idx={0} />
@@ -82,157 +79,57 @@ const Home = () => {
                   clickEvent={() => {}}
                 />
               </div>
-              <div className="single-post">
-                <div className="single-post-info">
-                  <div className="single-post-info-div">
-                    <img
-                      className="s-p-img"
-                      src="/Assets/Images/Hazem Adel.jpg"
-                    ></img>
-                    <div className="s-p-details">
-                      <h3>Hazem Adel</h3>
-                      <p>Hello world! this is my first post</p>
-                    </div>
-                  </div>
-                  <div className="s-p-reactbtn">
-                    <div
-                      className="react-button like"
-                      onClick={() => {
-                        setLikeActive((state) => !state);
-                        setCurrReact("like");
-                      }}
-                      onMouseEnter={() => setReactions(true)}
-                      onMouseLeave={() => setReactions(false)}
-                    >
-                      {likeActive === false ? (
-                        <>
-                          <img
-                            src="/Assets/SVG/Like white.svg"
-                            alt="Reaction"
-                          ></img>
-                          <span>3.2k</span>
-                        </>
-                      ) : currReact === "like" ? (
-                        <>
-                          <img
-                            src="/Assets/SVG/Like blue.svg"
-                            alt="Reaction"
-                          ></img>
-                          <span>3.2k</span>
-                        </>
-                      ) : currReact === "love" ? (
-                        <>
-                          <img src="/Assets/SVG/Love Icon.svg" alt="Reaction" />
-                          <span>3.2k</span>
-                        </>
-                      ) : currReact === "haha" ? (
-                        <>
-                          <img
-                            src="/Assets/SVG/Laugh Icon.svg"
-                            alt="Reaction"
-                          />
-                          <span>3.2k</span>
-                        </>
-                      ) : (
-                        <>
-                          <img
-                            src="/Assets/SVG/Angry Icon.svg"
-                            alt="Reaction"
-                          />
-                          <span>3.2k</span>
-                        </>
-                      )}
-                    </div>
-                    <div
-                      className={`reactions-popup ${reactions}`}
-                      onMouseEnter={() => setReactions(true)}
-                      onMouseLeave={() => setReactions(false)}
-                    >
-                      <div className="r-p-box">
-                        <div className="r-p-box-img">
-                          <img
-                            src="/Assets/SVG/reaction-like.svg"
-                            alt="Reaction"
-                            onClick={() => {
-                              setLikeActive(true);
-                              setCurrReact("like");
-                              setReactions(false);
-                            }}
-                          />
-                        </div>
-                        <span>Like</span>
-                      </div>
-                      <div className="r-p-box">
-                        <div className="r-p-box-img">
-                          <img
-                            src="/Assets/SVG/reaction-love.svg"
-                            alt="Reaction"
-                            onClick={() => {
-                              setLikeActive(true);
-                              setCurrReact("love");
-                              setReactions(false);
-                            }}
-                          />
-                        </div>
-                        <span>Love</span>
-                      </div>
-                      <div className="r-p-box">
-                        <div className="r-p-box-img">
-                          <img
-                            src="/Assets/SVG/reaction-laugh.svg"
-                            alt="Reaction"
-                            onClick={() => {
-                              setLikeActive(true);
-                              setCurrReact("haha");
-                              setReactions(false);
-                            }}
-                          />
-                        </div>
-                        <span>Haha</span>
-                      </div>
-                      <div className="r-p-box">
-                        <div className="r-p-box-img">
-                          <img
-                            src="/Assets/SVG/reaction-angry.svg"
-                            alt="Reaction"
-                            onClick={() => {
-                              setLikeActive(true);
-                              setCurrReact("angry");
-                              setReactions(false);
-                            }}
-                          />
-                        </div>
-                        <span>Angry</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="s-p-reactions-cnt">
-                  <img
-                    className="single-reaction"
-                    src="/Assets/SVG/reaction-like.svg"
-                    alt="Reaction"
-                  />
-                  <img
-                    className="single-reaction"
-                    src="/Assets/SVG/reaction-love.svg"
-                    alt="Reaction"
-                  />
-                  <img
-                    className="single-reaction"
-                    src="/Assets/SVG/reaction-laugh.svg"
-                    alt="Reaction"
-                  />
-                  {/* <img
-                    className="single-reaction"
-                    src="/Assets/SVG/reaction-angry.svg"
-                    alt="Reaction"
-                  /> */}
-                </div>
+              <div className="posts">
+                <SinglePost
+                  postUser="Hazem Adel"
+                  postUserImg="/Assets/Images/Hazem Adel.jpg"
+                  postContent="Hello world! this is my first post"
+                />
               </div>
             </div>
           </form>
-          <ProfileCard
+          <div className="profile-section">
+            <div className="ps-info">
+              <div className="ps-header">Your Info</div>
+              <div className="ps-container">
+                <div className="psi-box">
+                  <img src="/Assets/Images/elite-rank.png" alt="RankImg" />
+                  <div className="wrapper">
+                    <span>Rank</span>
+                    <h3>Elite</h3>
+                  </div>
+                </div>
+                <div className="psi-box">
+                  <img src="/Assets/Images/clan1.png" alt="ClanImg" />
+                  <div className="wrapper">
+                    <span>Clan</span>
+                    <h3>Ghosts</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="ps-info">
+              <div className="ps-header">Your Badges</div>
+              <div className="ps-container">
+                <div className="psi-badge">
+                  <img
+                    src="/Assets/Images/apex-predator-rank.png"
+                    alt="Badge"
+                  />
+                  <span>Groofy Predator</span>
+                </div>
+                <div className="psi-badge">
+                  <img src="/Assets/Images/attackbadge.png" alt="Badge" />
+                  <span>High Accuracy</span>
+                </div>
+                <div className="psi-badge">
+                  <img src="/Assets/Images/win20badge.png" alt="Badge" />
+                  <span>Master Wins</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* <ProfileCard
             username="Hazem Adel"
             bio="Student at FCAI - Cairo University | ECPC’23 Champion - Candidate Master @Codeforces"
             worldRank={5}
@@ -249,11 +146,7 @@ const Home = () => {
               ["High Accuracy", "/Assets/Images/attackbadge.png"],
               ["Master Wins", "/Assets/Images/win20badge.png"],
             ]}
-          />
-        </div>
-        <div className="last-section">
-          <div className="empty-section"></div>
-          <FollowCard />
+          /> */}
         </div>
       </div>
       {/* <div className="activity-section align">

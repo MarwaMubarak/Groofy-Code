@@ -120,3 +120,10 @@ export interface GamemodeProps {
   img: string;
   clickEvent: () => void;
 }
+
+// Single Post props
+export interface SinglePostProps {
+  postUser: string;
+  postUserImg: string;
+  postContent: string;
+}

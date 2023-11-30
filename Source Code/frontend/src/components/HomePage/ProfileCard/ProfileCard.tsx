@@ -5,7 +5,7 @@ import "./scss/profilecard.css";
 const ProfileCard = (props: ProfileCardProps) => {
   return (
     <div className="profile-card">
-      <div className="pc-section1">
+      {/* <div className="pc-section1">
         <div className="pc-skin"></div>
         <div className="pc-section1-box">
           <Link to="/profile">
@@ -19,7 +19,7 @@ const ProfileCard = (props: ProfileCardProps) => {
         <h3>{props.username}</h3>
         <p>{props.bio}</p>
       </div>
-      {/* <div className="pc-section2">
+      <div className="pc-section2">
         <span className="pc-header">16500 / 25000 XP</span>
         <div className="progress">
           <span className="progress-level">15</span>
