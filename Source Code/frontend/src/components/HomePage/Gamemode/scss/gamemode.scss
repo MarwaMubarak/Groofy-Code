@@ -20,7 +20,7 @@
     background-color: rgb(20, 27, 40);
   }
   img {
-    width: 120px;
+    width: 100px;
     margin-bottom: 20px;
   }
   .gm-info {
@@ -44,14 +44,12 @@
   background-color: $mainColor;
   box-shadow: $headerShadow;
   transition: 0.3s;
-  width: 270px;
+  width: 290px;
+  height: 70px;
   border-radius: 6px;
   padding: 10px;
   cursor: pointer;
   user-select: none;
-  &:not(:last-of-type) {
-    margin-bottom: 30px;
-  }
   &:hover {
     background-color: rgb(20, 27, 40);
   }
