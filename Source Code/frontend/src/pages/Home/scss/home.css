@@ -13,12 +13,33 @@
   justify-content: space-between;
   align-items: center;
 }
-.home-container .activity-section .play-section .gamemode-box {
+.home-container .activity-section .play-section .play-section-features .p-s-f-header {
+  color: #f2f2f2;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  font-size: 20px;
+  width: 100%;
+}
+.home-container .activity-section .play-section .play-section-features .play-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home-container .activity-section .play-section .play-section-gamemode .p-s-g-header {
+  color: #f2f2f2;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  font-size: 20px;
+  width: 100%;
+}
+.home-container .activity-section .play-section .play-section-gamemode .gamemode-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  height: 340px;
+  height: 310px;
 }
 .home-container .activity-section .media-section {
   display: flex;
@@ -34,21 +55,23 @@
   margin-bottom: 20px;
   border-bottom: 1px solid #eee;
   padding-bottom: 15px;
-  font-size: 25px;
-  width: calc(100% - 58px);
+  font-size: 20px;
+  width: calc(100% - 70px);
 }
 .home-container .activity-section .media-section .posts-container .post-box {
   background-color: #0e141e;
-  padding: 10px;
+  padding: 15px 25px 20px 25px;
   width: -moz-fit-content;
   width: fit-content;
   border-radius: 6px;
   margin-right: 20px;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
 }
 .home-container .activity-section .media-section .posts-container .post-box .post-row {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
 }
 .home-container .activity-section .media-section .posts-container .post-box .post-row img {
   width: 40px;
@@ -56,7 +79,7 @@
   margin-right: 10px;
 }
 .home-container .activity-section .media-section .posts-container .post-box .post-row input {
-  width: 350px;
+  width: 310px;
   height: 45px;
   max-height: 70px;
   border: none;
@@ -71,49 +94,146 @@
   outline: none;
 }
 .home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn {
-  background-color: #00a393;
+  background-color: #008ace;
   box-shadow: none;
+  color: white;
+  margin-left: 30px;
 }
 .home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn:hover {
-  background-color: #00cab6;
+  background-color: #00A9FF;
 }
 .home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn img {
   width: 24px;
   margin-right: 0;
 }
 .home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn span {
-  font-size: 15px;
+  font-size: 12px;
 }
-.home-container .activity-section .media-section .posts-container .post-box .extra {
+.home-container .activity-section .media-section .posts-container .post-box .single-post {
+  border-block: 1px solid white;
+  padding-top: 10px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .single-post-info-div {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: -moz-fit-content;
-  width: fit-content;
-  padding: 7px;
-  margin-left: 50px;
-  margin-top: 10px;
-  background-color: #161e2e;
-  border-radius: 6px;
-  transition: 0.3s;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .single-post-info-div .s-p-img {
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .single-post-info-div .s-p-details h3 {
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .single-post-info-div .s-p-details p {
+  font-size: 12px;
+  color: #ddd;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-right: 40px;
+  background-color: #161e2e;
+  border-radius: 50%;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .react-button {
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex: 1;
+  transition: 0.3s;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .react-button img {
+  width: 25px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .react-button:hover {
+  background-color: #f2f2f2;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .react-button span {
+  position: absolute;
+  right: -35px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 180px;
+  bottom: -50px;
+  left: -70px;
+  background-color: #06090d;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  padding: 4px 8px;
+  border-radius: 25px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup.false {
+  display: none;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup.true {
+  display: flex;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup .r-p-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup .r-p-box .r-p-box-img {
+  position: relative;
+  transition: 0.2s;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup .r-p-box .r-p-box-img:hover {
+  transform: scale(1.2);
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup .r-p-box .r-p-box-img:hover + span {
+  display: block;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup .r-p-box .r-p-box-img img {
+  width: 35px;
+  height: 35px;
+  margin-top: 5px;
   cursor: pointer;
 }
-.home-container .activity-section .media-section .posts-container .post-box .extra:hover {
-  background-color: rgb(30, 41, 61);
-}
-.home-container .activity-section .media-section .posts-container .post-box .extra:not(:last-of-type) {
-  margin-right: 15px;
-}
-.home-container .activity-section .media-section .posts-container .post-box .extra img {
-  width: 18px;
-  margin-right: 8px;
-}
-.home-container .activity-section .media-section .posts-container .post-box .extra span {
-  color: #f2f2f2;
+.home-container .activity-section .media-section .posts-container .post-box .single-post .single-post-info .s-p-reactbtn .reactions-popup .r-p-box span {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 20px;
   font-size: 14px;
+  top: -32px;
+  display: none;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .s-p-reactions-cnt {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 10px 15px;
+  margin-left: 40px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .s-p-reactions-cnt .single-reaction {
+  width: 18px;
+}
+.home-container .activity-section .media-section .posts-container .post-box .single-post .s-p-reactions-cnt span {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 5px;
+  color: white;
 }
 .home-container .activity-section .media-section .profile-card {
   width: 290px;

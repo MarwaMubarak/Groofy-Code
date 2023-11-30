@@ -73,13 +73,6 @@ const GroofyHeader = () => {
             Groofy<span>Code</span>
           </span>
         </Link>
-        <div className="level-container">
-          <span className="pc-header">16500 / 25000 XP</span>
-          <div className="progress">
-            <span className="progress-level">15</span>
-            <div className="progress-box" style={{ width: "70%" }}></div>
-          </div>
-        </div>
       </div>
       <div className="header-user-area">
         <div className="header-h-imgbox">

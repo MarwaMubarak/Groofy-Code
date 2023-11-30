@@ -4,11 +4,9 @@
   height: 60px;
   width: 100%;
   @include between;
-  // padding: 0 20px;
   margin-top: 20px;
-  margin-bottom: 15px;
   position: relative;
-  // background-color: $mainColor;
+  margin-bottom: 15px;
   .notify-area {
     position: absolute;
     top: 100%;
@@ -81,6 +79,7 @@
       border-radius: 6px;
       transition: 0.3s;
       padding: 5px 0px;
+      cursor: pointer;
       &::after {
         content: "";
         position: absolute;
@@ -99,6 +98,9 @@
       span {
         font-weight: bold;
         color: #191919;
+      }
+      &:hover {
+        background-color: #eee;
       }
     }
     .logout {
@@ -128,8 +130,8 @@
   }
   .header-logo {
     display: flex;
+    align-items: center;
     width: 130px;
-    height: 20px;
     position: relative;
     span {
       color: white;
@@ -149,50 +151,6 @@
       right: -30px;
       top: 4px;
     }
-    .level-container {
-      position: relative;
-      .pc-header {
-        position: absolute;
-        margin-left: 70px;
-        font-size: 13px;
-        z-index: 1;
-        top: 6px;
-        left: 35px;
-        color: $mainColor;
-      }
-      .progress {
-        background-color: white;
-        margin: 5px 15px;
-        position: relative;
-        border-radius: 0 12px 12px 0;
-        height: 18px;
-        // width: calc(100% - 90px);
-        width: 200px;
-        left: 50px;
-        margin-bottom: 25px;
-        @include start;
-        .progress-level {
-          position: absolute;
-          left: -31px;
-          z-index: 100;
-          @include center;
-          width: 32px;
-          height: 32px;
-          background-color: $redColor;
-          font-weight: bold;
-          color: #fff;
-          font-size: 18px;
-          text-align: center;
-          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
-        }
-        .progress-box {
-          position: absolute;
-          height: 100%;
-          background: linear-gradient(90deg, #00a9ff, #87c4ff);
-          border-radius: 0 12px 12px 0;
-        }
-      }
-    }
   }
   .header-user-area {
     @include center;
@@ -207,6 +165,7 @@
     .header-h-imgbox {
       @include center;
       position: relative;
+      margin-right: 10px;
       .pr-ph {
         @include center;
         .header-pr-ph {

@@ -5,8 +5,8 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
-  margin-bottom: 15px;
   position: relative;
+  margin-bottom: 15px;
 }
 .header-container .notify-area {
   position: absolute;
@@ -99,6 +99,7 @@
   border-radius: 6px;
   transition: 0.3s;
   padding: 5px 0px;
+  cursor: pointer;
 }
 .header-container .profile-area .pa-info::after {
   content: "";
@@ -118,6 +119,9 @@
 .header-container .profile-area .pa-info span {
   font-weight: bold;
   color: #191919;
+}
+.header-container .profile-area .pa-info:hover {
+  background-color: #eee;
 }
 .header-container .profile-area .logout {
   display: flex;
@@ -150,8 +154,8 @@
 }
 .header-container .header-logo {
   display: flex;
+  align-items: center;
   width: 130px;
-  height: 20px;
   position: relative;
 }
 .header-container .header-logo span {
@@ -174,54 +178,6 @@
   right: -30px;
   top: 4px;
 }
-.header-container .header-logo .level-container {
-  position: relative;
-}
-.header-container .header-logo .level-container .pc-header {
-  position: absolute;
-  margin-left: 70px;
-  font-size: 13px;
-  z-index: 1;
-  top: 6px;
-  left: 35px;
-  color: #0e141e;
-}
-.header-container .header-logo .level-container .progress {
-  background-color: white;
-  margin: 5px 15px;
-  position: relative;
-  border-radius: 0 12px 12px 0;
-  height: 18px;
-  width: 200px;
-  left: 50px;
-  margin-bottom: 25px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.header-container .header-logo .level-container .progress .progress-level {
-  position: absolute;
-  left: -31px;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  background-color: #f55353;
-  font-weight: bold;
-  color: #fff;
-  font-size: 18px;
-  text-align: center;
-  -webkit-clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
-          clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
-}
-.header-container .header-logo .level-container .progress .progress-box {
-  position: absolute;
-  height: 100%;
-  background: linear-gradient(90deg, #00a9ff, #87c4ff);
-  border-radius: 0 12px 12px 0;
-}
 .header-container .header-user-area {
   display: flex;
   justify-content: center;
@@ -242,6 +198,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  margin-right: 10px;
 }
 .header-container .header-user-area .header-h-imgbox .pr-ph {
   display: flex;
