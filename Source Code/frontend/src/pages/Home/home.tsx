@@ -93,7 +93,22 @@ const Home = () => {
                 <SinglePost
                   postUser="Hazem Adel"
                   postUserImg="/Assets/Images/Hazem Adel.jpg"
-                  postContent="Hello world! this is my first post abcdefghasdkaasasdasd abcdefghasdkaasasdasd abcdefghasdkaasasdasd abcdefghasdkaasasdasd"
+                  postContent="Hello world! this is my first post"
+                />
+                <SinglePost
+                  postUser="Hazem Adel"
+                  postUserImg="/Assets/Images/Hazem Adel.jpg"
+                  postContent="I wanna to beat someone now!!"
+                />
+                <SinglePost
+                  postUser="Hazem Adel"
+                  postUserImg="/Assets/Images/Hazem Adel.jpg"
+                  postContent="Ez"
+                />
+                <SinglePost
+                  postUser="Hazem Adel"
+                  postUserImg="/Assets/Images/Hazem Adel.jpg"
+                  postContent="Hakona Matata XD."
                 />
               </div>
             </div>

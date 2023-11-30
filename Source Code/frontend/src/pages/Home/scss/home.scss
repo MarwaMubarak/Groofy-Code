@@ -59,7 +59,7 @@
         }
         .post-box {
           background-color: $mainColor;
-          padding: 15px 25px 20px 25px;
+          padding: 15px 25px 0px 25px;
           // width: fit-content;
           width: calc(100% - 38px);
           border-radius: 6px;
@@ -154,7 +154,7 @@
                 margin-right: 60px;
               }
               img {
-                width: 95px;
+                width: 85px;
               }
               .wrapper {
                 @include center;
@@ -182,14 +182,14 @@
                 position: absolute;
                 height: 3px;
                 width: 60px;
-                bottom: 15px;
+                bottom: 17px;
                 left: 50%;
                 transform: translateX(-50%);
                 background-color: #f93535;
                 border-radius: 12px;
               }
               img {
-                width: 70px;
+                width: 60px;
                 margin-bottom: 10px;
               }
               span {
