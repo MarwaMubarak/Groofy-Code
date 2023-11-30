@@ -3,21 +3,22 @@
 
 .single-post {
   border-block: 2px solid #161e2e;
-  padding-top: 10px;
+  padding: 20px 0 15px;
   .single-post-info {
     @include between;
     color: white;
+    position: relative;
     .single-post-info-div {
       @include center;
       .s-p-img {
-        width: 40px;
+        width: 50px;
         border-radius: 50%;
         margin-right: 10px;
       }
       .s-p-details {
         h3 {
           font-size: 14px;
-          margin-bottom: 3px;
+          margin-bottom: 5px;
         }
         p {
           font-size: 12px;
@@ -26,39 +27,76 @@
       }
     }
     .single-post-controls {
-      img {
-        width: 35px;
-        padding: 6px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: 0.3s;
-        user-select: none;
-        &:hover {
-          background-color: #161e2e;
+      position: absolute;
+      top: -10px;
+      right: 0;
+      span {
+        font-size: 13px;
+        color: #596b8e;
+        font-weight: bold;
+      }
+      .controls {
+        display: none;
+        position: relative;
+        top: -5px;
+        img {
+          width: 35px;
+          padding: 6px;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: 0.3s;
+          user-select: none;
+          &:hover {
+            background-color: #161e2e;
+          }
         }
       }
     }
   }
   .s-p-reactbtn {
     @include start;
-    // position: relative;
-    margin-left: 38px;
-    // margin-top: 3px;
+    position: relative;
+    margin-left: 52px;
+    width: fit-content;
+    &:hover {
+      img {
+        background-color: #161e2e;
+      }
+      .react-info {
+        display: block;
+      }
+    }
     img {
       padding: 6px;
-      width: 38px;
+      width: 30px;
       border-radius: 50%;
       cursor: pointer;
       transition: 0.3s;
       user-select: none;
-      &:hover {
-        background-color: #161e2e;
-      }
     }
-    span {
-      color: #cbcbcb;
-      margin-left: 2px;
-      margin-top: 5px;
+    .react-info {
+      position: absolute;
+      bottom: -30px;
+      left: -7px;
+      display: none;
+      background-color: #161e2e;
+      color: #fff;
+      border-radius: 12px;
+      padding: 5px 10px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .react-cnt {
+      // margin-left: 2px;
+      margin-top: 2px;
+      font-size: 14px;
+      cursor: pointer;
+      &.false {
+        color: #cbcbcb;
+      }
+      &.true {
+        color: $redColor;
+      }
     }
     // .react-button {
     //   padding: 6px;
@@ -127,6 +165,18 @@
     //     }
     //   }
     // }
+  }
+  &:hover {
+    .single-post-controls {
+      span {
+        display: none;
+      }
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+    }
   }
   //   .s-p-reactions-cnt {
   //     display: flex;

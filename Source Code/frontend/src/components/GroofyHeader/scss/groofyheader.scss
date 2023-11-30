@@ -67,7 +67,7 @@
     border-radius: 0 0 6px 6px;
     box-shadow: $headerShadow;
     padding: 15px 10px;
-    border-top: 4px solid $redColor;
+    border-top: 4px solid $blueColor;
     &.false {
       display: none;
     }
@@ -115,7 +115,7 @@
       padding: 10px;
       color: $mainColor;
       &:hover {
-        background-color: $redColor;
+        background-color: $blueColor;
         color: #fff;
       }
       img {

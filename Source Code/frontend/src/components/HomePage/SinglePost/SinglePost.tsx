@@ -19,30 +19,28 @@ const SinglePost = (props: SinglePostProps) => {
           </div>
         </div>
         <div className="single-post-controls">
-          <img src="/Assets/SVG/edit.svg" alt="Edit" />
-          <img src="/Assets/SVG/delete.svg" alt="Delete" />
+          <span>3 hours ago</span>
+          <div className="controls">
+            <img src="/Assets/SVG/edit.svg" alt="Edit" />
+            <img src="/Assets/SVG/delete.svg" alt="Delete" />
+          </div>
         </div>
       </div>
-      <div className="s-p-reactbtn">
+      <div
+        className="s-p-reactbtn"
+        onClick={() => setLikeActive((state) => !state)}
+      >
         {likeActive === false ? (
           <>
-            <img
-              src="/Assets/SVG/Like white.svg"
-              alt="Reaction"
-              onClick={() => setLikeActive((state) => !state)}
-            ></img>
-            <span>3.2k</span>
+            <img src="/Assets/SVG/Love Icon white.svg" alt="Reaction"></img>
           </>
         ) : (
           <>
-            <img
-              src="/Assets/SVG/Like blue.svg"
-              alt="Reaction"
-              onClick={() => setLikeActive((state) => !state)}
-            ></img>
-            <span>3.2k</span>
+            <img src="/Assets/SVG/Love Icon.svg" alt="Reaction"></img>
           </>
         )}
+        <span className="react-info">Like</span>
+        <span className={`react-cnt ${likeActive}`}>3.2k</span>
       </div>
       {/* <div
           className={`reactions-popup ${reactions}`}

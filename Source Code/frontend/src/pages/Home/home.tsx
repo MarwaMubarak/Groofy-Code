@@ -11,9 +11,18 @@ import {
   Gamemode,
   SinglePost,
 } from "../../components";
+import { ChangeEvent } from "react";
 import "./scss/home.css";
 
 const Home = () => {
+  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    autoExpand(e.target);
+  };
+
+  const autoExpand = (textarea: HTMLTextAreaElement) => {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  };
   return (
     <div className="home-container">
       <SideBar idx={0} />
@@ -69,10 +78,11 @@ const Home = () => {
             <div className="post-box">
               <div className="post-row">
                 <img src="/Assets/Images/Hazem Adel.jpg" alt="" />
-                <input
-                  type="text"
+                <textarea
                   placeholder="Share your coding insights and experiences"
-                />
+                  onChange={handleExpanding}
+                  maxLength={500}
+                ></textarea>
                 <GBtn
                   btnText="Quick Post"
                   icnSrc="/Assets/SVG/quick.svg"
@@ -83,14 +93,23 @@ const Home = () => {
                 <SinglePost
                   postUser="Hazem Adel"
                   postUserImg="/Assets/Images/Hazem Adel.jpg"
-                  postContent="Hello world! this is my first post"
+                  postContent="Hello world! this is my first post abcdefghasdkaasasdasd abcdefghasdkaasasdasd abcdefghasdkaasasdasd abcdefghasdkaasasdasd"
                 />
               </div>
             </div>
           </form>
           <div className="profile-section">
             <div className="ps-info">
-              <div className="ps-header">Your Info</div>
+              <div className="ps-header">
+                <h3>Info</h3>
+                <abbr title="Info">
+                  <img
+                    src="/Assets/SVG/info.svg"
+                    className="info-btn"
+                    alt="Info"
+                  />
+                </abbr>
+              </div>
               <div className="ps-container">
                 <div className="psi-box">
                   <img src="/Assets/Images/elite-rank.png" alt="RankImg" />
@@ -100,7 +119,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="psi-box">
-                  <img src="/Assets/Images/clan1.png" alt="ClanImg" />
+                  <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
                   <div className="wrapper">
                     <span>Clan</span>
                     <h3>Ghosts</h3>
@@ -109,7 +128,16 @@ const Home = () => {
               </div>
             </div>
             <div className="ps-info">
-              <div className="ps-header">Your Badges</div>
+              <div className="ps-header">
+                <h3>Badges</h3>
+                <abbr title="Info">
+                  <img
+                    src="/Assets/SVG/info.svg"
+                    className="info-btn"
+                    alt="Info"
+                  />
+                </abbr>
+              </div>
               <div className="ps-container">
                 <div className="psi-badge">
                   <img
