@@ -12,14 +12,14 @@
     top: 100%;
     background-color: #fff;
     box-shadow: $headerShadow;
-    width: 500px;
-    right: 55px;
+    width: 400px;
+    right: 30px;
     border-radius: 0 0 10px 10px;
     &.false {
       display: none;
     }
     .notify-header {
-      font-size: 20px;
+      font-size: 14px;
       border-bottom: 1px solid #ddd;
       padding: 15px 10px 10px 15px;
     }
@@ -32,13 +32,13 @@
       .empty-box {
         @include center;
         flex-direction: column;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         img {
-          width: 100px;
+          width: 60px;
         }
         span {
           color: #777;
-          font-size: 16px;
+          font-size: 12px;
         }
       }
     }
@@ -46,7 +46,7 @@
       @include center;
       border-top: 1px solid #ddd;
       padding: 15px;
-      font-size: 17px;
+      font-size: 12px;
       font-weight: bold;
       background-color: #eee;
       transition: 0.2s;
