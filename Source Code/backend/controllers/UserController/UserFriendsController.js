@@ -10,10 +10,10 @@ const { User } = require('../../models/userModel');
 
  module.exports.addFriend = asyncHandler(async (req, res) => {
     // 1. Identify the user making the request
-    const userId = req.user.id; // Assuming you are using middleware to get the user from the token
+    const userId = req.user.id; 
   
     // 2. Find the user to be added as a friend
-    const friendId = req.body.friendId; // Assuming friendId is sent in the request body
+    const { friendId } = req.body;
     const friend = await User.findById(friendId);
   
     if (!friend) {
@@ -36,13 +36,13 @@ const { User } = require('../../models/userModel');
     await user.save();
   
     // 5. Return a response indicating the success or failure of the operation
-    res.status(200).json({ success: true, message: "Friend added successfully", friend });
+    res.status(200).json({ success: true, message: "Friend added successfully" });
   });
 
 
   /**----------------------------------------
  *  @description  remove friend 
- *  @route        /api/auth/removefriend 
+ *  @route        /api/removefriend 
  *  @method       POST
  *  @access       private (users only)
  -----------------------------------------*/
@@ -52,7 +52,7 @@ module.exports.removeFriend = asyncHandler(async (req, res) => {
     const userId = req.user.id;
   
     // 2. Find the user to be removed as a friend
-    const friendId = req.body.friendId; // Assuming friendId is sent in the request body
+    const friendId = req.body.friendId; 
     const friend = await User.findById(friendId);
   
     if (!friend) {
@@ -76,12 +76,12 @@ module.exports.removeFriend = asyncHandler(async (req, res) => {
     await user.save();
   
     // 5. Return a response indicating the success or failure of the operation
-    res.status(200).json({ success: true, message: "Friend removed successfully", friend });
+    res.status(200).json({ success: true, message: "Friend removed successfully"});
 });
 
 /**----------------------------------------
  *  @description  get all friends 
- *  @route        /api/auth/allfriends 
+ *  @route        /api/allfriends 
  *  @method       GET
  *  @access       private (users only)
  -----------------------------------------*/

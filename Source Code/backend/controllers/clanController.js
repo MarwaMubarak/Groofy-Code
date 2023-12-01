@@ -2,6 +2,7 @@ const { Clan, createClanValidation, editClanValidation } = require("../models/cl
 
 
 const createClan = async(req, res) => {
+    console.log(req.body);
     try {
         const { errors } = createClanValidation(req.body);
         if (errors)
