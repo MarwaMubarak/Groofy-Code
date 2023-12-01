@@ -22,7 +22,7 @@
   outline: 2px solid transparent;
 }
 .groofy-input input:focus, .groofy-input input:hover {
-  outline-color: #f55353;
+  outline-color: #00A9FF;
 }
 .groofy-input input::-moz-placeholder {
   opacity: 0.5;

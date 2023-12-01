@@ -24,7 +24,7 @@
     outline: 2px solid transparent;
     &:focus,
     &:hover {
-      outline-color: $redColor;
+      outline-color: $blueColor;
     }
     &::placeholder {
       opacity: 0.5;

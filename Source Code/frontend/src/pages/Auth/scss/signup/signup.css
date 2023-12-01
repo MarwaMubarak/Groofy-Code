@@ -20,7 +20,7 @@
   margin: 15px 0 30px 20px;
 }
 .signup-div .features .ft-title span {
-  color: #f55353;
+  color: #00A9FF;
 }
 .signup-div .features .ft-container {
   padding: 30px 30px 100px;
@@ -44,7 +44,7 @@
   align-items: center;
   margin-right: 15px;
   padding: 25px;
-  background-color: #f55353;
+  background-color: #00A9FF;
   border-radius: 12px;
 }
 .signup-div .features .ft-container .ft-box .ftb-icn img {
@@ -83,7 +83,7 @@
   background-color: #ddd;
 }
 .signup-div .auth .auth-title span {
-  color: #f55353;
+  color: #00A9FF;
 }
 .signup-div .auth .auth-form {
   display: flex;
@@ -94,7 +94,7 @@
   width: 100%;
 }
 .signup-div .auth .auth-form .groofy-input input:hover {
-  outline-color: #f55353;
+  outline-color: #00A9FF;
 }
 .signup-div .auth .auth-form .f-sbmt {
   display: flex;
@@ -103,7 +103,7 @@
   flex-direction: column;
 }
 .signup-div .auth .auth-form .f-sbmt .groofybtn {
-  background-color: #f55353;
+  background-color: #00A9FF;
   color: white;
   width: 140px;
   border-radius: 12px;
@@ -133,7 +133,7 @@
 }
 .signup-div .auth .auth-form .f-sbmt .alrg a {
   margin-left: 5px;
-  color: #f55353;
+  color: #00A9FF;
   transition: 0.3s;
 }
 .signup-div .auth .auth-form .f-sbmt .alrg a:hover {

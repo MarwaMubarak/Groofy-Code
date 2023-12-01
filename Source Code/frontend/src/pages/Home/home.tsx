@@ -34,7 +34,7 @@ const Home = () => {
             <div className="play-container">
               <Gamemode
                 title="Velocity Code"
-                description="Face off in a 10-minute coding duel. Strategize, code swiftly, and emerge victorious in this high-stakes test of programming prowess."
+                description="Face off in a 15-minute coding duel. Strategize, code swiftly, and emerge victorious in this high-stakes test of programming prowess."
                 img="/Assets/Images/clock.png"
                 clickEvent={() => {}}
               />
