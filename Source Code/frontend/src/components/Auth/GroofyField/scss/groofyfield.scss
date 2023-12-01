@@ -15,7 +15,7 @@
   input {
     background-color: #eee;
     border-radius: 6px;
-    padding: 10px 5px;
+    padding: 10px;
     border: none;
     caret-color: $btnColor;
     font-size: 16px;
@@ -24,7 +24,7 @@
     outline: 2px solid transparent;
     &:focus,
     &:hover {
-      outline-color: $blueColor;
+      outline-color: $redColor;
     }
     &::placeholder {
       opacity: 0.5;

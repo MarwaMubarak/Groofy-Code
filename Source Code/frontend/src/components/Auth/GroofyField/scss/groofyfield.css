@@ -13,7 +13,7 @@
 .groofy-input input {
   background-color: #eee;
   border-radius: 6px;
-  padding: 10px 5px;
+  padding: 10px;
   border: none;
   caret-color: #feb139;
   font-size: 16px;
@@ -22,7 +22,7 @@
   outline: 2px solid transparent;
 }
 .groofy-input input:focus, .groofy-input input:hover {
-  outline-color: #00A9FF;
+  outline-color: #f55353;
 }
 .groofy-input input::-moz-placeholder {
   opacity: 0.5;

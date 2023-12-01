@@ -2,107 +2,235 @@
 @use "../../../shared/styles/mixins" as *;
 .home-container {
   display: flex;
-  flex-direction: column;
-  .play-container {
-    @include center;
-    background-color: #fff;
-    .gamemode {
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+  .activity-section {
+    width: 900px;
+    height: 100%;
+    .play-section {
       @include between;
-      flex: 1;
-      height: 350px;
-      padding: 10px 35px;
-      &:first-of-type {
-        flex-direction: row-reverse;
-        background-color: $redColor;
-        .gm-info {
-          &::before {
-            left: -30px;
-          }
-          h3 {
-            &::after {
-              right: 0;
+      .play-section-features {
+        // @include start;
+        // flex-direction: column;
+        .p-s-f-header {
+          color: $hoverColor;
+          margin-bottom: 20px;
+          border-bottom: 1px solid #eee;
+          padding-bottom: 15px;
+          font-size: 20px;
+          width: 100%;
+        }
+        .play-container {
+          @include center;
+        }
+      }
+      .play-section-gamemode {
+        .p-s-g-header {
+          color: $hoverColor;
+          margin-bottom: 20px;
+          border-bottom: 1px solid #eee;
+          padding-bottom: 15px;
+          font-size: 20px;
+          width: 100%;
+        }
+        .gamemode-box {
+          @include between;
+          flex-direction: column;
+          height: 310px;
+        }
+      }
+    }
+    .media-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 50px;
+      margin-bottom: 200px;
+      .posts-container {
+        flex: 2;
+        .post-header {
+          color: $hoverColor;
+          margin-bottom: 20px;
+          border-bottom: 1px solid #eee;
+          padding-bottom: 15px;
+          font-size: 20px;
+          width: calc(100% - 50px);
+        }
+        .post-box {
+          background-color: $mainColor;
+          padding: 15px 25px 0px 25px;
+          // width: fit-content;
+          width: calc(100% - 38px);
+          border-radius: 6px;
+          margin-right: 20px;
+          box-shadow: $lightShadow;
+          .post-row {
+            @include center;
+            margin-bottom: 20px;
+            img {
+              width: 50px;
+              border-radius: 50%;
+              margin-right: 10px;
+            }
+            textarea {
+              font-family: OpenSans, Arial, Helvetica, sans-serif;
+              width: 330px;
+              // min-height: 40px;
+              // overflow-wrap: break-word;\
+              overflow-y: hidden;
+              border: none;
+              padding: 12.2px 15px 5px;
+              border-radius: 6px;
+              background-color: #161e2e;
+              caret-color: $hoverColor;
+              color: $hoverColor;
+              margin-right: 20px;
+              resize: none;
+              &:focus {
+                outline: none;
+              }
+            }
+            .groofybtn {
+              background-color: #008ace;
+              box-shadow: none;
+              color: white;
+              // margin-left: 30px;
+              &:hover {
+                background-color: $blueColor;
+              }
+              img {
+                width: 24px;
+                margin-right: 0;
+              }
+              span {
+                font-size: 12px;
+              }
             }
           }
         }
       }
-      &:last-of-type {
-        background-color: #2992d8;
-        .gm-info {
-          &::before {
-            right: -30px;
-          }
-        }
-        h3 {
-          &::after {
-            left: 0;
-          }
-        }
-      }
-      .gm-info {
-        position: relative;
+      .profile-section {
         @include center;
         flex-direction: column;
-        text-align: center;
-        &::before {
-          content: "";
-          position: absolute;
-          top: -0.1px;
-          height: calc(100% - 18px);
-          width: 2px;
-          background-color: #eeee;
-        }
-        h3 {
-          display: flex;
+        .ps-info {
+          @include center;
           flex-direction: column;
-          font-size: 70px;
-          color: #fff;
-          margin-bottom: 30px;
-          span {
-            margin-top: 10px;
+          background-color: $mainColor;
+          border-radius: 6px;
+          padding: 20px;
+          width: 290px;
+          &:not(:last-of-type) {
+            margin-bottom: 30px;
+          }
+          .ps-header {
+            width: 100%;
+            @include between;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #161e2e;
+            h3 {
+              color: $hoverColor;
+              font-size: 18px;
+              font-weight: bold;
+            }
+            .info-btn {
+              width: 18px;
+              cursor: pointer;
+            }
+          }
+          .ps-container {
+            @include center;
+            .psi-box {
+              @include center;
+              flex-direction: column;
+              position: relative;
+              height: 150px;
+              // background-color: #161e2e;
+              padding: 10px 15px;
+              margin: 0 -40px;
+              border-radius: 12px;
+              &:not(:last-of-type) {
+                margin-right: 60px;
+              }
+              img {
+                width: 85px;
+              }
+              .wrapper {
+                @include center;
+                flex-direction: column;
+                span {
+                  color: #ddd;
+                  font-size: 12px;
+                }
+                h3 {
+                  color: #fff;
+                  font-size: 20px;
+                }
+              }
+            }
+            .psi-badge {
+              @include center;
+              flex-direction: column;
+              position: relative;
+              height: 150px;
+              &:not(:last-of-type) {
+                margin-right: 20px;
+              }
+              &::after {
+                content: "";
+                position: absolute;
+                height: 3px;
+                width: 60px;
+                bottom: 17px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #f93535;
+                border-radius: 12px;
+              }
+              img {
+                width: 60px;
+                margin-bottom: 10px;
+              }
+              span {
+                text-align: center;
+                font-weight: bold;
+                color: #fff;
+                font-size: 11px;
+              }
+            }
           }
         }
-        p {
-          width: 300px;
-          line-height: 1.6;
-        }
       }
-      .gm-details {
-        @include center;
-        flex-direction: column;
-        p {
-          width: 400px;
-          font-size: 22px;
-          line-height: 1.6;
-          color: white;
-          text-align: center;
-          margin-bottom: 20px;
-        }
+      // .profile-card {
+      //   width: 290px;
+      //   margin-right: 0;
+      // }
+    }
+    .last-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      .empty-section {
+        flex: 2;
       }
-      .groofybtn {
-        background-color: $mainColor;
-        color: #fff;
-        width: 100px;
-        padding: 10px;
+      .follow-card {
+        width: 290px;
       }
     }
-  }
-  .activity-section {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    .status-container {
-      @include center;
-      flex-direction: column;
-    }
-    .blogs-container {
-      @include center;
-      flex-direction: column;
-    }
-    .events-container {
-      @include center;
-      flex-direction: column;
-      position: sticky;
-      top: 60px;
-    }
+    // .status-container {
+    //   @include center;
+    //   flex-direction: column;
+    // }
+    // .blogs-container {
+    //   @include center;
+    //   flex-direction: column;
+    // }
+    // .events-container {
+    //   @include center;
+    //   flex-direction: column;
+    //   position: sticky;
+    //   top: 60px;
+    // }
   }
 }

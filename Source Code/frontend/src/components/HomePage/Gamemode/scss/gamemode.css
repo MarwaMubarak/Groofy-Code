@@ -1,0 +1,71 @@
+.gamemode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #0e141e;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px;
+  height: 310px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  box-shadow: 0px 4px 0px 0px #06090d;
+}
+.gamemode:not(:last-of-type) {
+  margin-right: 30px;
+}
+.gamemode:hover {
+  background-color: rgb(20, 27, 40);
+}
+.gamemode img {
+  width: 70px;
+  margin-bottom: 20px;
+}
+.gamemode .gm-info {
+  text-align: center;
+}
+.gamemode .gm-info h3 {
+  color: #f2f2f2;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.gamemode .gm-info p {
+  color: #999999;
+  width: 230px;
+  line-height: 1.4;
+  font-size: 12px;
+}
+
+.mini-gamemode {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #0e141e;
+  box-shadow: 0px 4px 0px 0px #06090d;
+  transition: 0.3s;
+  width: 290px;
+  height: 70px;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.mini-gamemode:hover {
+  background-color: rgb(20, 27, 40);
+}
+.mini-gamemode img {
+  width: 34px;
+  margin-right: 15px;
+  margin-left: 15px;
+}
+.mini-gamemode h3 {
+  color: #f2f2f2;
+  font-size: 16px;
+}/*# sourceMappingURL=gamemode.css.map */

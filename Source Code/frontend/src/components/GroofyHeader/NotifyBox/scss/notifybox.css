@@ -18,7 +18,7 @@
 }
 .notify-box .notify-info .notify-img img {
   border-radius: 50%;
-  width: 70px;
+  width: 40px;
 }
 .notify-box .notify-info .notify-user {
   display: flex;
@@ -27,15 +27,16 @@
   flex-direction: column;
 }
 .notify-box .notify-info .notify-user span {
-  width: 250px;
+  width: 200px;
   margin-bottom: 5px;
+  font-size: 13px;
 }
 .notify-box .notify-info .notify-user span span {
   font-weight: bold;
 }
 .notify-box .notify-info .notify-user p {
   color: #005ed1;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
 }
 .notify-box .notify-btns {
@@ -45,7 +46,7 @@
   margin-right: 10px;
 }
 .notify-box .notify-btns img {
-  width: 25px;
+  width: 20px;
   cursor: pointer;
 }
 .notify-box .notify-btns img:not(:last-of-type) {
