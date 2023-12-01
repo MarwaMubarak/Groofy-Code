@@ -12,4 +12,10 @@ router.post('/login', userController.loginUser);
 // friend
 router.route('/addfriend').post(verifyToken, userFriendController.addFriend);
 
+
+router.route('/removefriend').post(verifyToken, userFriendController.removeFriend);
+
+router.route('/allfriends').get(verifyToken, userFriendController.getAllFriends);
+
+
 module.exports = router;
