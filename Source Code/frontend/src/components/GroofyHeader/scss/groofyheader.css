@@ -159,6 +159,9 @@
   width: 130px;
   position: relative;
 }
+.header-container .header-logo img {
+  width: 190px;
+}
 .header-container .header-logo span {
   color: white;
   font-size: 26px;
@@ -174,10 +177,10 @@
   content: "";
   position: absolute;
   width: 2px;
-  height: 20px;
+  height: 25px;
   background-color: rgb(59, 67, 85);
-  right: -30px;
-  top: 4px;
+  right: -80px;
+  top: 17px;
 }
 .header-container .header-user-area {
   display: flex;

@@ -69,9 +69,10 @@ const GroofyHeader = () => {
       </div>
       <div className="header-logo">
         <Link to="/">
-          <span>
+          <img src="/Assets/Images/GroofyLogoCover.png" />
+          {/* <span>
             Groofy<span>Code</span>
-          </span>
+          </span> */}
         </Link>
       </div>
       <div className="header-user-area">
