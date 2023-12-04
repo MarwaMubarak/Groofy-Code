@@ -16,6 +16,7 @@
   width: 400px;
   right: 30px;
   border-radius: 0 0 10px 10px;
+  z-index: 1;
 }
 .header-container .notify-area.false {
   display: none;
