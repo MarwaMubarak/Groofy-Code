@@ -116,7 +116,7 @@ const Home = () => {
           <div className="profile-section">
             <div className="ps-info">
               <div className="ps-header">
-                <h3>Info</h3>
+                <h3>Division</h3>
                 <abbr title="Info">
                   <img
                     src="/Assets/SVG/info.svg"

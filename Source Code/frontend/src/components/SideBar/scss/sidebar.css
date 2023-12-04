@@ -96,7 +96,7 @@
   transition: 0.3s;
 }
 .sidebar-container .sidebar-up .sidebar-nav-items a li.active {
-  border-left: 4px solid #00A9FF;
+  border-left: 4px solid #00a9ff;
   background-color: rgb(22, 30, 46);
 }
 .sidebar-container .sidebar-up .sidebar-nav-items a li:not(.active):hover {
