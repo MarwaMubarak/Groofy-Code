@@ -17,53 +17,53 @@ const Profile = () => {
       <SideBar idx={1} />
       <div className="userprofile align">
         <GroofyHeader />
-        <div className="userprofile-side">
-          <div className="up-side-left">
-            <div className="up-info">
-              <div className="up-info-img">
-                <img src="/Assets/Images/Hazem Adel.jpg" />
-              </div>
-              <div className="up-info-details">
-                <div className="up-info-d-box">
-                  <h3>Rokba</h3>
-                  <div className="up-info-d-box-edit">
-                    <img src="/Assets/SVG/edit.svg" />
-                    <span>Edit</span>
-                  </div>
-                </div>
-                <h4>
-                  Hazem Adel, Giza, Egypt
-                  <ReactCountryFlag
-                    countryCode="EG"
-                    svg
-                    style={{
-                      width: "1em",
-                      height: "1em",
-                      marginLeft: "8px",
-                    }}
-                    title="Egypt"
-                  />
-                </h4>
-                <p>
-                  Dedicated competitive programmer excelling in algorithmic
-                  mastery and problem-solving. Consistently achieving top ranks
-                  in coding competitions. Driven by a passion for code
-                  optimization and continuous improvement.
-                </p>
-                <div className="up-info-details-controls">
-                  <GBtn
-                    btnText="Add Friend"
-                    icnSrc="/Assets/SVG/addfriend.svg"
-                    clickEvent={() => {}}
-                  />
-                  <GBtn
-                    btnText="Message"
-                    icnSrc="/Assets/SVG/message.svg"
-                    clickEvent={() => {}}
-                  />
-                </div>
+        <div className="up-info">
+          <div className="up-info-img">
+            <img src="/Assets/Images/Hazem Adel.jpg" />
+          </div>
+          <div className="up-info-details">
+            <div className="up-info-d-box">
+              <h3>Rokba</h3>
+              <div className="up-info-d-box-edit">
+                <img src="/Assets/SVG/edit.svg" />
+                <span>Edit</span>
               </div>
             </div>
+            <h4>
+              Hazem Adel, Giza, Egypt
+              <ReactCountryFlag
+                countryCode="EG"
+                svg
+                style={{
+                  width: "1em",
+                  height: "1em",
+                  marginLeft: "8px",
+                }}
+                title="Egypt"
+              />
+            </h4>
+            <p>
+              Dedicated competitive programmer excelling in algorithmic mastery
+              and problem-solving. Consistently achieving top ranks in coding
+              competitions. Driven by a passion for code optimization and
+              continuous improvement.
+            </p>
+            <div className="up-info-details-controls">
+              <GBtn
+                btnText="Message"
+                icnSrc="/Assets/SVG/message.svg"
+                clickEvent={() => {}}
+              />
+              <GBtn
+                btnText="Add Friend"
+                icnSrc="/Assets/SVG/addfriend.svg"
+                clickEvent={() => {}}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="userprofile-side">
+          <div className="up-side-left">
             <div className="media-section">
               <form className="posts-container">
                 <div className="post-header">
