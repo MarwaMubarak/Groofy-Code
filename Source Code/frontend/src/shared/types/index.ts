@@ -117,6 +117,7 @@ export interface ActionButtonProps {
 export interface GamemodeProps {
   title: string;
   description?: string;
+  type?: string;
   img: string;
   clickEvent: () => void;
 }

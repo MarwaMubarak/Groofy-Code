@@ -1,12 +1,6 @@
 import {
   GBtn,
   GroofyHeader,
-  Friends,
-  Blog,
-  ProfileCard,
-  EventCard,
-  FollowCard,
-  GroofyFooter,
   SideBar,
   Gamemode,
   SinglePost,
