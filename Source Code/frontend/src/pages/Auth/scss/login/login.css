@@ -28,7 +28,7 @@
   background-color: #ddd;
 }
 .login-div .auth-title span {
-  color: #00A9FF;
+  color: #00a9ff;
 }
 .login-div .auth-form {
   display: flex;
@@ -38,7 +38,7 @@
   padding: 30px 45px 100px;
 }
 .login-div .auth-form .groofy-input input:focus, .login-div .auth-form .groofy-input input:hover {
-  outline-color: #00A9FF;
+  outline-color: #00a9ff;
 }
 .login-div .auth-form .groofybtn {
   margin-top: 10px;
@@ -64,7 +64,7 @@
 .login-div .auth-form .f-sbmt .frg-pass {
   margin-top: 20px;
   margin-bottom: 25px;
-  color: #00A9FF;
+  color: #00a9ff;
   transition: 0.3s;
 }
 .login-div .auth-form .f-sbmt .frg-pass:hover {
@@ -85,7 +85,7 @@
 }
 .login-div .auth-form .f-sbmt .alrg a {
   margin-left: 5px;
-  color: #00A9FF;
+  color: #00a9ff;
   transition: 0.3s;
 }
 .login-div .auth-form .f-sbmt .alrg a:hover {

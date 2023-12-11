@@ -15,6 +15,7 @@
     width: 400px;
     right: 30px;
     border-radius: 0 0 10px 10px;
+    z-index: 1;
     &.false {
       display: none;
     }
@@ -134,6 +135,9 @@
     align-items: center;
     width: 130px;
     position: relative;
+    img {
+      width: 190px;
+    }
     span {
       color: white;
       font-size: 26px;
@@ -147,10 +151,10 @@
       content: "";
       position: absolute;
       width: 2px;
-      height: 20px;
+      height: 25px;
       background-color: rgb(59, 67, 85);
-      right: -30px;
-      top: 4px;
+      right: -80px;
+      top: 17px;
     }
   }
   .header-user-area {

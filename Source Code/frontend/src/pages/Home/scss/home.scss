@@ -6,13 +6,15 @@
   width: 100%;
   overflow: auto;
   .activity-section {
-    width: 900px;
+    width: 1000px;
     height: 100%;
     .play-section {
+      margin-top: 30px;
       @include between;
       .play-section-features {
         // @include start;
         // flex-direction: column;
+        width: 600px;
         .p-s-f-header {
           color: $hoverColor;
           margin-bottom: 20px;
@@ -48,7 +50,7 @@
       margin-top: 50px;
       margin-bottom: 200px;
       .posts-container {
-        flex: 2;
+        width: 100%;
         .post-header {
           color: $hoverColor;
           margin-bottom: 20px;
@@ -66,7 +68,7 @@
           margin-right: 20px;
           box-shadow: $lightShadow;
           .post-row {
-            @include center;
+            @include between;
             margin-bottom: 20px;
             img {
               width: 50px;
@@ -75,7 +77,7 @@
             }
             textarea {
               font-family: OpenSans, Arial, Helvetica, sans-serif;
-              width: 330px;
+              width: calc(100% - 192px);
               // min-height: 40px;
               // overflow-wrap: break-word;\
               overflow-y: hidden;
@@ -207,17 +209,7 @@
       //   margin-right: 0;
       // }
     }
-    .last-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      .empty-section {
-        flex: 2;
-      }
-      .follow-card {
-        width: 290px;
-      }
-    }
+
     // .status-container {
     //   @include center;
     //   flex-direction: column;

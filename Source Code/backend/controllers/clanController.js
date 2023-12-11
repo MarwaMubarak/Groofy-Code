@@ -1,6 +1,12 @@
 const { Clan, createClanValidation, editClanValidation } = require("../models/clanModel");
 
 
+/**----------------------------------------
+ *  @description  Create New Clan
+ *  @rounter      /api/clans/create
+ *  @method       POST
+ *  @access       Private (users only)
+------------------------------------------*/
 const createClan = async(req, res) => {
     try {
         const { errors } = createClanValidation(req.body);
@@ -20,6 +26,13 @@ const createClan = async(req, res) => {
 
 }
 
+
+/**----------------------------------------
+ *  @description  Get all Clans
+ *  @rounter      /api/clans
+ *  @method       GET
+ *  @access       public
+------------------------------------------*/
 const getAllClans = async(req, res) => {
     try {
         const clans = await Clan.find();
@@ -30,6 +43,13 @@ const getAllClans = async(req, res) => {
 
 }
 
+
+/**----------------------------------------
+ *  @description  Get Clan by ID
+ *  @rounter      /api/clans/:clanId
+ *  @method       GET
+ *  @access       public
+------------------------------------------*/
 const getClanById = async(req, res) => {
     try {
         const clan = await Clan.findById(req.params.clanId);
@@ -42,6 +62,13 @@ const getClanById = async(req, res) => {
     }
 }
 
+
+/**----------------------------------------
+ *  @description  Update Clan
+ *  @rounter      /api/clans/update/:clanId
+ *  @method       PUT
+ *  @access       Private (users only)
+------------------------------------------*/
 const updateClanById = async(req, res) => {
     try {
         const { errors } = editClanValidation(req.body);
@@ -61,6 +88,13 @@ const updateClanById = async(req, res) => {
     }
 }
 
+
+/**----------------------------------------
+ *  @description  Delete Clan
+ *  @rounter      /api/clans/delete/:clanId
+ *  @method       DELETE
+ *  @access       Private (users only)
+-----------------------------------------*/
 const deleteClanById = async(req, res) => {
     try {
         const clan = await Clan.findByIdAndDelete(req.params.clanId);

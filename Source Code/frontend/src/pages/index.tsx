@@ -3,6 +3,7 @@ import Match from "./Match/Match";
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 import Clan from "./Clan/Clan";
-import Profile from "./Profile/profile";
+import Profile from "./Profile/Profile";
+import Play from "./Play/Play";
 
-export { Home, Match, Login, SignUp, Clan, Profile };
+export { Home, Match, Login, SignUp, Clan, Profile, Play };

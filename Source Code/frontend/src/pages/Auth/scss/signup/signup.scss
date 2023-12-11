@@ -18,7 +18,7 @@
       font-size: 26px;
       margin: 15px 0 30px 20px;
       span {
-        color: $redColor;
+        color: $blueColor;
       }
     }
     .ft-container {
@@ -35,7 +35,7 @@
           @include center;
           margin-right: 15px;
           padding: 25px;
-          background-color: $redColor;
+          background-color: $blueColor;
           border-radius: 12px;
           img {
             width: 50px;
@@ -77,7 +77,7 @@
         background-color: #ddd;
       }
       span {
-        color: $redColor;
+        color: $blueColor;
       }
     }
     .auth-form {
@@ -85,23 +85,23 @@
       flex-direction: column;
       padding: 30px 30px 50px;
       width: 100%;
-      .groofy-input input:hover{
-        outline-color: $redColor;
+      .groofy-input input:hover {
+        outline-color: $blueColor;
       }
       .f-sbmt {
         @include center;
         flex-direction: column;
         .groofybtn {
-          background-color: $redColor;
+          background-color: $blueColor;
           color: white;
           width: 140px;
           border-radius: 12px;
-          &:hover{
-              background-color:$mainColor ;
-              color: white;
+          &:hover {
+            background-color: $mainColor;
+            color: white;
           }
-          .btn-text{
-              font-size: 12px;
+          .btn-text {
+            font-size: 12px;
           }
         }
         .groofybtn {
@@ -121,7 +121,7 @@
           }
           a {
             margin-left: 5px;
-            color: $redColor;
+            color: $blueColor;
             transition: 0.3s;
             &:hover {
               text-decoration: underline;

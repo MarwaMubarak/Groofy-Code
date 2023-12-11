@@ -19,7 +19,7 @@
           user-select: none;
 }
 .header-div .logo span span {
-  color: #00A9FF;
+  color: #00a9ff;
 }
 .header-div .logo::after {
   content: "";

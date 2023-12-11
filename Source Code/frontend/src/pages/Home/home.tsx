@@ -1,12 +1,6 @@
 import {
   GBtn,
   GroofyHeader,
-  Friends,
-  Blog,
-  ProfileCard,
-  EventCard,
-  FollowCard,
-  GroofyFooter,
   SideBar,
   Gamemode,
   SinglePost,
@@ -34,7 +28,7 @@ const Home = () => {
             <div className="play-container">
               <Gamemode
                 title="Velocity Code"
-                description="Face off in a 10-minute coding duel. Strategize, code swiftly, and emerge victorious in this high-stakes test of programming prowess."
+                description="Face off in a 15-minute coding duel. Strategize, code swiftly, and emerge victorious in this high-stakes test of programming prowess."
                 img="/Assets/Images/clock.png"
                 clickEvent={() => {}}
               />
@@ -116,7 +110,7 @@ const Home = () => {
           <div className="profile-section">
             <div className="ps-info">
               <div className="ps-header">
-                <h3>Info</h3>
+                <h3>Division</h3>
                 <abbr title="Info">
                   <img
                     src="/Assets/SVG/info.svg"
