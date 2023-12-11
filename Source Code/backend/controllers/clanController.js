@@ -2,7 +2,6 @@ const { Clan, createClanValidation, editClanValidation } = require("../models/cl
 
 
 const createClan = async(req, res) => {
-    console.log(req.body);
     try {
         const { errors } = createClanValidation(req.body);
         if (errors)
@@ -14,7 +13,7 @@ const createClan = async(req, res) => {
 
 
     } catch (err) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'Internal Server Error', body: req.body, err: err });
 
     }
 
