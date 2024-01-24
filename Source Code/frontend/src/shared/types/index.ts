@@ -2,7 +2,7 @@
 export interface btnProps {
   btnText: string;
   icnSrc?: string;
-  clickEvent: () => void;
+  clickEvent: any;
 }
 // testcase result props
 export interface tcrProps {
@@ -44,6 +44,7 @@ export interface GroofyInputProps {
   giText: string;
   giPlaceholder: string;
   giType: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 // Notify Box Props

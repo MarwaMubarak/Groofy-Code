@@ -8,34 +8,29 @@ require("dotenv").config();
 // Connect to MongoDB
 connectToDB();
 
-
-
 // Initializing express.js
 const index = express();
 index.use(express.json());
 
+// Allowing cors policy
+index.use(
+  cors({
+    origin: "*",
+    allowedHeaders: "Content-Type",
+  })
+);
+
 // Routes
-index.use('/', require('./routes/userRoute'))
-index.use('/', require('./routes/clanRoute'))
-index.use('/', require('./routes/blogRoute'))
-
-
+index.use("/", require("./routes/userRoute"));
+index.use("/", require("./routes/clanRoute"));
+index.use("/", require("./routes/blogRoute"));
 
 // Security Measures
 index.use(helmet());
 index.use(hpp());
 
-
-// Allowing cors policy
-index.use(
-    cors({
-        origin: "*",
-    })
-);
-
-
 // Starting up the server
 const Port = process.env.PORT;
 index.listen(Port, () => {
-    console.log("Server is running successfully");
+  console.log("Server is running successfully");
 });
