@@ -10,7 +10,7 @@ const PostSchema = new mongoose.Schema(
     content: {
       type: String,
       required: true,
-      minlength: 10,
+      minlength: 1,
     },
     like: [
       {
@@ -31,7 +31,7 @@ const Post = mongoose.model("Post", PostSchema);
 // Create Post
 const createPostValidation = (post) => {
   const schema = Joi.object({
-    content: Joi.string().min(10).required(),
+    content: Joi.string().min(1).required(),
     user: Joi.string(),
   });
   return schema.validate(post);
@@ -39,7 +39,7 @@ const createPostValidation = (post) => {
 // Edit Post
 const updatePostValidation = (post) => {
   const schema = Joi.object({
-    content: Joi.string().min(10),
+    content: Joi.string().min(1),
     user: Joi.string(),
     upvotes: Joi.array(),
     downvotes: Joi.array(),
