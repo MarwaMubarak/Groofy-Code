@@ -18,6 +18,7 @@ index.use(express.json());
 index.use('/', require('./routes/userRoute'))
 index.use('/', require('./routes/clanRoute'))
 index.use('/', require('./routes/blogRoute'))
+index.use('/', require('./routes/postRoute'))
 
 
 

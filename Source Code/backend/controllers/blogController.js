@@ -3,7 +3,7 @@ const { Blog, updateBlogValidation, createBlogValidation } = require("../models/
 
 /**----------------------------------------
  *  @description  Create New Blog
- *  @rounter      /api/blogs/create
+ *  @rounter      /api/blog/create
  *  @method       POST
  *  @access       Private (users only)
 ------------------------------------------*/
