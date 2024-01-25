@@ -69,6 +69,7 @@
     box-shadow: $headerShadow;
     padding: 15px 10px;
     border-top: 4px solid $blueColor;
+    z-index: 1;
     &.false {
       display: none;
     }

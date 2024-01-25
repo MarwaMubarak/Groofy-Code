@@ -86,6 +86,7 @@
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 15px 10px;
   border-top: 4px solid #00a9ff;
+  z-index: 1;
 }
 .header-container .profile-area.false {
   display: none;
