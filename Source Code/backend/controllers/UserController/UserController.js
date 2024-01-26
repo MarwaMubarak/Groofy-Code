@@ -19,7 +19,7 @@ const {
  -----------------------------------------*/
 
 module.exports.regiseterUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, firstname, lastname, country } = req.body;
 
   const { error } = validateSignUp({ username, email, password });
   if (error) {
@@ -41,6 +41,9 @@ module.exports.regiseterUser = asyncHandler(async (req, res) => {
     username,
     email,
     password: hashedPassword,
+    firstname: firstname,
+    lastname: lastname,
+    country: country,
   });
 
   await user.save();
@@ -77,13 +80,9 @@ module.exports.loginUser = asyncHandler(async (req, res) => {
   user.isOnline = true;
   await user.save();
 
-  res.status(200).json(
-    successfulRes("login successful", {
-      _id: user._id,
-      photo: user.photo,
-      token,
-    })
-  );
+  const userData = user.toJSON();
+  delete userData.password;
+  res.status(200).json(successfulRes("login successful", userData));
 });
 
 /**----------------------------------------

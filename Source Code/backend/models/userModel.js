@@ -130,6 +130,7 @@ const validateSignUp = (user) => {
     username: Joi.string().trim().min(4).max(100).required(),
     email: Joi.string().trim().min(4).max(256).required().email(),
     password: JoiPassComplex().required(),
+    country: Joi.string().trim().min(4).max(100),
   });
   return schema.validate(user);
 };
