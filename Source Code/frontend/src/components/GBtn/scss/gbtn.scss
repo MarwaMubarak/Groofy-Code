@@ -15,6 +15,10 @@
   &:hover {
     box-shadow: none;
   }
+  &:disabled {
+    background-color: $darkColor;
+    cursor: not-allowed;
+  }
   .btn-text {
     font-size: 17px;
     font-weight: 500;

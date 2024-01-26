@@ -1,9 +1,11 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { Home, Login, SignUp, Match, Clan, Profile, Play } from "./pages";
+import { ToastContainer } from "react-toastify";
 // import { GroofyFooter } from "./components";
 function App() {
   return (
     <BrowserRouter>
+      <ToastContainer position="top-center" />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

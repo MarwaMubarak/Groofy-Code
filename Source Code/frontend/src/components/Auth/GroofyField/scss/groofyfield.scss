@@ -22,13 +22,22 @@
     transition: 0.3s;
     width: 400px;
     outline: 2px solid transparent;
-    &:focus,
-    &:hover {
+    &.err {
+      outline-color: $redColor;
+    }
+    &:not(.err):focus,
+    &:not(.err):hover {
       outline-color: $blueColor;
     }
     &::placeholder {
       opacity: 0.5;
       font-size: 14px;
     }
+  }
+  .err-msg {
+    color: $redColor;
+    font-size: 14px;
+    margin-top: 5px;
+    width: 400px;
   }
 }

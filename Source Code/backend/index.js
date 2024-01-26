@@ -21,12 +21,10 @@ index.use(
 );
 
 // Routes
-index.use('/', require('./routes/userRoute'))
-index.use('/', require('./routes/clanRoute'))
-index.use('/', require('./routes/blogRoute'))
-index.use('/', require('./routes/postRoute'))
-
-
+index.use("/", require("./routes/userRoute"));
+index.use("/", require("./routes/clanRoute"));
+index.use("/", require("./routes/blogRoute"));
+index.use("/", require("./routes/postRoute"));
 
 // Security Measures
 index.use(helmet());

@@ -13,7 +13,7 @@
       margin-right: 10px;
       img {
         border-radius: 50%;
-        width: 40px;
+        width: 55px;
       }
     }
     .notify-user {
@@ -22,16 +22,16 @@
       justify-content: center;
       flex-direction: column;
       span {
-        width: 200px;
+        width: 250px;
         margin-bottom: 5px;
-        font-size: 13px;
+        font-size: 16px;
         span {
           font-weight: bold;
         }
       }
       p {
         color: #005ed1;
-        font-size: 10px;
+        font-size: 12px;
         font-weight: bold;
       }
     }
@@ -40,7 +40,7 @@
     @include center;
     margin-right: 10px;
     img {
-      width: 20px;
+      width: 24px;
       cursor: pointer;
       &:not(:last-of-type) {
         margin-right: 10px;

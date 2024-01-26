@@ -10,7 +10,7 @@ body {
   background-color: #e4e9ee; */
   /* background-image: url("../public/Assets/tile_background.png"); */
   /* background-repeat: repeat; */
-  background-color: rgb(22, 30, 46);
+  background-color: rgba(22, 30, 46, 0.96);
 }
 ul {
   list-style: none;
@@ -26,29 +26,31 @@ a {
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(0, 25, 52);
+  background-color: #0e141e;
   border-radius: 5px;
 }
 @media (min-width: 768px) {
   .align {
-    width: 750px;
     margin: auto;
+    width: 100%;
   }
 }
 @media (min-width: 992px) {
   .align {
-    width: 970px;
     margin: auto;
+    width: 100%;
   }
 }
 @media (min-width: 1200px) {
   .align {
+    margin: auto;
+
     width: 100%;
   }
 }
 @media (min-width: 1800px) {
   .align {
-    width: 1510px;
     margin: auto;
+    width: 100%;
   }
 }

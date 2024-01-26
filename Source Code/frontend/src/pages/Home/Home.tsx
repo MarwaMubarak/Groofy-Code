@@ -38,6 +38,18 @@ const Home = () => {
                 img="/Assets/Images/ranked.png"
                 clickEvent={() => {}}
               />
+              <Gamemode
+                title="Join Clan"
+                description="Level up your gamplay and form alliances as you become a part of a gaming community by joining a clan."
+                img="/Assets/Images/clan.png"
+                clickEvent={() => {}}
+              />
+              <Gamemode
+                title="Add a Friend"
+                description="Add a friend to your friend list and challenge him to a 1v1 match."
+                img="/Assets/SVG/people.svg"
+                clickEvent={() => {}}
+              />
             </div>
           </div>
           <div className="play-section-gamemode">

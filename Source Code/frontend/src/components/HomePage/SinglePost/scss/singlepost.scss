@@ -2,7 +2,7 @@
 @use "../../../../shared/styles/mixins" as *;
 
 .single-post {
-  border-top: 2px solid #161e2e;
+  border-top: 2px solid $mainColor2;
   padding: 20px 0 15px;
   .single-post-info {
     @include between;
@@ -11,27 +11,27 @@
     .single-post-info-div {
       @include center;
       .s-p-img {
-        width: 50px;
+        width: 55px;
         border-radius: 50%;
         margin-right: 10px;
       }
       .s-p-details {
         h3 {
-          font-size: 14px;
+          font-size: 18px;
           margin-bottom: 5px;
         }
         p {
-          font-size: 12px;
+          font-size: 16px;
           color: #ddd;
         }
       }
     }
     .single-post-controls {
       position: absolute;
-      top: -10px;
+      top: -5px;
       right: 0;
       span {
-        font-size: 13px;
+        font-size: 16px;
         color: #596b8e;
         font-weight: bold;
       }
@@ -47,7 +47,7 @@
           transition: 0.3s;
           user-select: none;
           &:hover {
-            background-color: #161e2e;
+            background-color: $mainColor2;
           }
         }
       }
@@ -60,7 +60,7 @@
     width: fit-content;
     &:hover {
       img {
-        background-color: #161e2e;
+        background-color: $mainColor2;
       }
       .react-info {
         display: block;
@@ -68,7 +68,7 @@
     }
     img {
       padding: 6px;
-      width: 30px;
+      width: 33px;
       border-radius: 50%;
       cursor: pointer;
       transition: 0.3s;
@@ -79,7 +79,7 @@
       bottom: -30px;
       left: -7px;
       display: none;
-      background-color: #161e2e;
+      background-color: $mainColor2;
       color: #fff;
       border-radius: 12px;
       padding: 5px 10px;
@@ -89,7 +89,7 @@
     .react-cnt {
       // margin-left: 2px;
       margin-top: 2px;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
       &.false {
         color: #cbcbcb;
@@ -100,7 +100,7 @@
     }
     // .react-button {
     //   padding: 6px;
-    //   background-color: #161e2e;
+    //   background-color: $mainColor2;
     //   border-radius: 50%;
     //   @include center;
     //   cursor: pointer;
