@@ -82,6 +82,7 @@ module.exports.loginUser = asyncHandler(async (req, res) => {
 
   const userData = user.toJSON();
   delete userData.password;
+  userData.token = token;
   res.status(200).json(successfulRes("login successful", userData));
 });
 

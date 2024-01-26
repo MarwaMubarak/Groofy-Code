@@ -2,7 +2,7 @@ function successfulRes(_massage, _data) {
   return {
     status: "success",
     message: _massage,
-    data: _data,
+    body: _data,
   };
 }
 
@@ -12,7 +12,7 @@ function unsuccessfulRes(_massage, { _data } = {}) {
   return {
     status: "failure",
     message: _massage,
-    data: _data,
+    body: _data,
   };
 }
 
