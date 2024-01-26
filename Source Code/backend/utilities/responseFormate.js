@@ -10,7 +10,7 @@ function unsuccessfulRes(_massage, { _data } = {}) {
   if (!_data) _data = "No data exist!";
 
   return {
-    status: "unsuccess",
+    status: "failure",
     message: _massage,
     data: _data,
   };
