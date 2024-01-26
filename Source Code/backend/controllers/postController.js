@@ -18,7 +18,12 @@ const createPost = async (req, res) => {
   try {
     const { error } = createPostValidation(req.body);
     if (error) {
-      return res.status(400).json({ error: error });
+      ret = {
+        status: "unsuccess",
+        message: error.message,
+        data: error._original,
+      };
+      return res.status(400).json(ret);
     }
 
     // Create a new post
@@ -47,22 +52,6 @@ const createPost = async (req, res) => {
 };
 
 /**----------------------------------------
- *  @description  Get all post
- *  @rounter      /api/posts
- *  @method       GET
- *  @access       public
-------------------------------------------*/
-const getAllBlogs = async (req, res) => {
-  try {
-    const blogs = await Blog.find();
-    res.json(blogs);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-/**----------------------------------------
  *  @description  Get bolg by ID
  *  @rounter      /api/blogs/:blogId
  *  @method       GET
@@ -87,33 +76,31 @@ const getBlogById = async (req, res) => {
  *  @method       PUT
  *  @access       Private (users only)
 ------------------------------------------*/
-const updateBlogById = async (req, res) => {
+const updatePostById = async (req, res) => {
   try {
-    const { error } = updateBlogValidation(req.body);
+    const { error } = updatePostValidation(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const blog = await Blog.findByIdAndUpdate(req.params.blogId, req.body, {
+    const post = await Post.findByIdAndUpdate(req.params.postId, req.body, {
       new: true,
     });
-    if (!blog) {
-      return res.status(404).json({ error: "Blog not found" });
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
     }
 
     // Check if the authenticated user has permission to update this blog
-    if (String(blog.user) !== String(req.user._id)) {
+    if (String(post.user) !== String(req.user._id)) {
       return res.status(403).json({
         error: "Unauthorized. You do not have permission to update this blog.",
       });
     }
 
     // Update the blog if the user has permission
-    blog.title = req.body.title || blog.title;
-    blog.content = req.body.content || blog.content;
-    const updatedBlog = await blog.save();
+    const updatedPost = await post.save();
 
-    res.json(updatedBlog);
+    res.json(updatedPost);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -126,23 +113,24 @@ const updateBlogById = async (req, res) => {
  *  @method       DELETE
  *  @access       Private (users only)
 -----------------------------------------*/
-const deleteBlogById = async (req, res) => {
+const deletePostById = async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndDelete(req.params.blogId);
-    if (!blog) {
-      console.log(blog);
-      return res.status(404).json({ error: "Blog not found" });
+    const post = await Post.findById(req.params.postId);
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
     }
+    console.log(post);
     // Check if the authenticated user has permission to delete this blog
-    if (String(blog.user) !== String(req.user._id)) {
+    if (String(post.user) !== String(req.user.id)) {
       return res.status(403).json({
         error: "Unauthorized. You do not have permission to delete this blog.",
       });
     }
 
     // If the user has permission, delete the blog
-    await blog.remove();
-    res.json({ message: "Blog deleted successfully" });
+    await post.deleteOne();
+
+    res.json({ message: "Post deleted successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -151,8 +139,7 @@ const deleteBlogById = async (req, res) => {
 
 module.exports = {
   createPost,
-  getAllBlogs,
   getBlogById,
-  updateBlogById,
-  deleteBlogById,
+  updatePostById,
+  deletePostById,
 };

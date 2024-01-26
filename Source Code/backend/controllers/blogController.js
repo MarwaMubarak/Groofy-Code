@@ -6,7 +6,7 @@ const {
 
 /**----------------------------------------
  *  @description  Create New Blog
- *  @rounter      /api/blog/create
+ *  @rounter      /api/blogs/create
  *  @method       POST
  *  @access       Private (users only)
 ------------------------------------------*/
@@ -93,20 +93,21 @@ const updateBlogById = async (req, res) => {
 
     // Check if the authenticated user has permission to update this blog
     if (String(blog.user) !== String(req.user._id)) {
-      return res
-        .status(403)
-        .json({
-          error:
-            "Unauthorized. You do not have permission to update this blog.",
-        });
+      return res.status(403).json({
+        error: "Unauthorized. You do not have permission to update this blog.",
+      });
     }
 
     // Update the blog if the user has permission
-    blog.title = req.body.title || blog.title;
-    blog.content = req.body.content || blog.content;
+    // blog.title = req.body.title || blog.title;
+    // blog.content = req.body.content || blog.content;
     const updatedBlog = await blog.save();
-
-    res.json(updatedBlog);
+    ret = {
+      status: "success",
+      message: error.message,
+      data: updatedBlog,
+    };
+    res.json(ret);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -121,23 +122,21 @@ const updateBlogById = async (req, res) => {
 -----------------------------------------*/
 const deleteBlogById = async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndDelete(req.params.blogId);
+    const blog = await Blog.findById(req.params.blogId);
     if (!blog) {
       console.log(blog);
       return res.status(404).json({ error: "Blog not found" });
     }
     // Check if the authenticated user has permission to delete this blog
-    if (String(blog.user) !== String(req.user._id)) {
-      return res
-        .status(403)
-        .json({
-          error:
-            "Unauthorized. You do not have permission to delete this blog.",
-        });
+    if (String(blog.user) !== String(req.user.id)) {
+      return res.status(403).json({
+        error: "Unauthorized. You do not have permission to delete this blog.",
+      });
     }
 
     // If the user has permission, delete the blog
-    await blog.remove();
+    await blog.deleteOne();
+
     res.json({ message: "Blog deleted successfully" });
   } catch (error) {
     console.error(error);
