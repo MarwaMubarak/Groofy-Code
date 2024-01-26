@@ -1,5 +1,5 @@
 .single-post {
-  border-top: 2px solid #161e2e;
+  border-top: 2px solid rgba(22, 30, 46, 0.96);
   padding: 20px 0 15px;
 }
 .single-post .single-post-info {
@@ -53,7 +53,7 @@
           user-select: none;
 }
 .single-post .single-post-info .single-post-controls .controls img:hover {
-  background-color: #161e2e;
+  background-color: rgba(22, 30, 46, 0.96);
 }
 .single-post .s-p-reactbtn {
   display: flex;
@@ -65,14 +65,14 @@
   width: fit-content;
 }
 .single-post .s-p-reactbtn:hover img {
-  background-color: #161e2e;
+  background-color: rgba(22, 30, 46, 0.96);
 }
 .single-post .s-p-reactbtn:hover .react-info {
   display: block;
 }
 .single-post .s-p-reactbtn img {
   padding: 6px;
-  width: 30px;
+  width: 33px;
   border-radius: 50%;
   cursor: pointer;
   transition: 0.3s;
@@ -85,7 +85,7 @@
   bottom: -30px;
   left: -7px;
   display: none;
-  background-color: #161e2e;
+  background-color: rgba(22, 30, 46, 0.96);
   color: #fff;
   border-radius: 12px;
   padding: 5px 10px;
@@ -94,7 +94,7 @@
 }
 .single-post .s-p-reactbtn .react-cnt {
   margin-top: 2px;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
 }
 .single-post .s-p-reactbtn .react-cnt.false {

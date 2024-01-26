@@ -44,7 +44,7 @@ const GroofyHeader = () => {
             </div>
           )}
         </div>
-        <div className="see-all">See All Notifications</div>
+        <div className="see-all">See more notifications</div>
       </div>
       <div className={`profile-area ${profileActive}`}>
         <div className="pa-info">

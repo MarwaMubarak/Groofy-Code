@@ -71,7 +71,7 @@
   transition: 0.3s;
 }
 .newprofile-container .userprofile .up-info .up-info-details .up-info-d-box .up-info-d-box-edit:hover {
-  background-color: #161e2e;
+  background-color: rgba(22, 30, 46, 0.96);
 }
 .newprofile-container .userprofile .up-info .up-info-details .up-info-d-box .up-info-d-box-edit img {
   width: 20px;
@@ -167,7 +167,7 @@
   transition: 0.3s;
 }
 .newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-header .post-header-single:hover {
-  background-color: #161e2e;
+  background-color: rgba(22, 30, 46, 0.96);
 }
 .newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-header .post-header-single h3 {
   font-size: 17px;
@@ -200,7 +200,7 @@
   border: none;
   padding: 12.2px 15px 5px;
   border-radius: 6px;
-  background-color: #161e2e;
+  background-color: rgba(22, 30, 46, 0.96);
   caret-color: #f2f2f2;
   color: #f2f2f2;
   margin-right: 20px;
@@ -299,7 +299,7 @@
   align-items: center;
   padding-bottom: 10px;
   margin-bottom: 5px;
-  border-bottom: 3px solid #161e2e;
+  border-bottom: 3px solid rgba(22, 30, 46, 0.96);
 }
 .newprofile-container .userprofile .userprofile-side .up-side-right .profile-section .ps-info .ps-header h3 {
   color: #f2f2f2;

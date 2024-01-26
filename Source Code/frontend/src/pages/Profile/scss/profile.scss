@@ -184,7 +184,7 @@
                   border: none;
                   padding: 12.2px 15px 5px;
                   border-radius: 6px;
-                  background-color: #161e2e;
+                  background-color: $mainColor2;
                   caret-color: $hoverColor;
                   color: $hoverColor;
                   margin-right: 20px;
@@ -277,7 +277,7 @@
               @include between;
               padding-bottom: 10px;
               margin-bottom: 5px;
-              border-bottom: 3px solid #161e2e;
+              border-bottom: 3px solid $mainColor2;
               h3 {
                 color: $hoverColor;
                 font-size: 18px;
@@ -297,7 +297,7 @@
                 flex-direction: column;
                 position: relative;
                 height: 150px;
-                // background-color: #161e2e;
+                // background-color: $mainColor2;
                 padding: 10px 15px;
                 margin: 0 -40px;
                 border-radius: 12px;
