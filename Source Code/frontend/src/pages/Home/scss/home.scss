@@ -7,7 +7,7 @@
   overflow: auto;
   .activity-section {
     // width: 1000px;
-    margin: 0 50px;
+    margin: 0 150px;
     height: 100%;
     .play-section {
       margin-top: 30px;
@@ -15,13 +15,13 @@
       .play-section-features {
         // @include start;
         // flex-direction: column;
-        width: 600px;
+        width: calc(100% - 340px);
         .p-s-f-header {
           color: $hoverColor;
           margin-bottom: 20px;
           border-bottom: 1px solid #eee;
           padding-bottom: 15px;
-          font-size: 20px;
+          font-size: 26px;
           width: 100%;
         }
         .play-container {
@@ -34,7 +34,7 @@
           margin-bottom: 20px;
           border-bottom: 1px solid #eee;
           padding-bottom: 15px;
-          font-size: 20px;
+          font-size: 26px;
           width: 100%;
         }
         .gamemode-box {
@@ -57,7 +57,7 @@
           margin-bottom: 20px;
           border-bottom: 1px solid #eee;
           padding-bottom: 15px;
-          font-size: 20px;
+          font-size: 26px;
           width: calc(100% - 50px);
         }
         .post-box {
@@ -98,6 +98,7 @@
               background-color: #008ace;
               box-shadow: none;
               color: white;
+              width: 140px;
               // margin-left: 30px;
               &:hover {
                 background-color: $blueColor;
@@ -107,10 +108,13 @@
                 margin-right: 0;
               }
               span {
-                font-size: 12px;
+                font-size: 16px;
               }
             }
           }
+        }
+        .posts {
+          margin-bottom: 40px;
         }
       }
       .profile-section {
@@ -134,7 +138,7 @@
             border-bottom: 3px solid #161e2e;
             h3 {
               color: $hoverColor;
-              font-size: 18px;
+              font-size: 20px;
               font-weight: bold;
             }
             .info-btn {
@@ -164,11 +168,11 @@
                 flex-direction: column;
                 span {
                   color: #ddd;
-                  font-size: 12px;
+                  font-size: 14px;
                 }
                 h3 {
                   color: #fff;
-                  font-size: 20px;
+                  font-size: 22px;
                 }
               }
             }
@@ -199,7 +203,7 @@
                 text-align: center;
                 font-weight: bold;
                 color: #fff;
-                font-size: 11px;
+                font-size: 14px;
               }
             }
           }

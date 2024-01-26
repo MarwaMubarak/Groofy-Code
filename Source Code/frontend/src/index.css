@@ -31,24 +31,26 @@ a {
 }
 @media (min-width: 768px) {
   .align {
-    width: 750px;
     margin: auto;
+    width: 100%;
   }
 }
 @media (min-width: 992px) {
   .align {
-    width: 970px;
     margin: auto;
+    width: 100%;
   }
 }
 @media (min-width: 1200px) {
   .align {
+    margin: auto;
+
     width: 100%;
   }
 }
 @media (min-width: 1800px) {
   .align {
-    width: 1510px;
     margin: auto;
+    width: 100%;
   }
 }

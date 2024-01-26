@@ -34,8 +34,20 @@ const Home = () => {
               />
               <Gamemode
                 title="Ranked Match"
-                description="Climb the coding ranks in intense head-to-head battles. Prove your skills, rise to the top, and become the coding champion."
+                description="Level up your gamplay and form alliances as you become a part of a gaming community by joining a clan."
                 img="/Assets/Images/ranked.png"
+                clickEvent={() => {}}
+              />
+              <Gamemode
+                title="Join Clan"
+                description="Climb the coding ranks in intense head-to-head battles. Prove your skills, rise to the top, and become the coding champion."
+                img="/Assets/Images/clan.png"
+                clickEvent={() => {}}
+              />
+              <Gamemode
+                title="Add a Friend"
+                description="Add a friend to your friend list and challenge him to a 1v1 match."
+                img="/Assets/SVG/people.svg"
                 clickEvent={() => {}}
               />
             </div>
