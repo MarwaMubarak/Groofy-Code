@@ -4,6 +4,11 @@ const {
   createPostValidation,
 } = require("../models/postModel");
 
+const {
+  successfulRes,
+  unsuccessfulRes,
+} = require("../utilities/responseFormate");
+
 /**----------------------------------------
  *  @description  Create New Post
  *  @rounter      /api/post/create
@@ -14,65 +19,35 @@ const {
 const createPost = async (req, res) => {
   // Access the authenticated user through req.user
   const user = req.user;
+  console.log(user);
 
   try {
     const { error } = createPostValidation(req.body);
     if (error) {
-      ret = {
-        status: "unsuccess",
-        message: error.message,
-        data: error._original,
-      };
-      return res.status(400).json(ret);
+      return res
+        .status(400)
+        .json(unsuccessfulRes(error.message, { _data: error._original }));
     }
 
     // Create a new post
     const { content } = req.body;
     const post = new Post({
       content,
-      user: user._id, // Associate the post with the logged-in user
+      user: user.id, // Associate the post with the logged-in user
     });
 
     await post.save();
-    ret = {
-      status: "success",
-      message: "Post created successfully",
-      data: {
-        post,
-      },
-    };
-    res.status(201).json(ret);
+
+    res.status(201).json(successfulRes("Post created successfully", post));
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      status: "unsuccess",
-      message: "Internal Server Error",
-    });
+    res.status(500).json(unsuccessfulRes(error));
   }
 };
 
 /**----------------------------------------
- *  @description  Get bolg by ID
- *  @rounter      /api/blogs/:blogId
- *  @method       GET
- *  @access       public
-------------------------------------------*/
-const getBlogById = async (req, res) => {
-  try {
-    const blog = await Blog.findById(req.params.blogId);
-    if (!blog) {
-      return res.status(404).json({ error: "Blog not found" });
-    }
-    res.json(blog);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-/**----------------------------------------
- *  @description  Update Blog
- *  @rounter      /api/blogs/update/:blogId
+ *  @description  Update Post
+ *  @rounter      /api/post/update/:postId
  *  @method       PUT
  *  @access       Private (users only)
 ------------------------------------------*/
@@ -80,36 +55,45 @@ const updatePostById = async (req, res) => {
   try {
     const { error } = updatePostValidation(req.body);
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      return res
+        .status(400)
+        .json(unsuccessfulRes(error.message, { _data: error._original }));
     }
 
     const post = await Post.findByIdAndUpdate(req.params.postId, req.body, {
       new: true,
     });
     if (!post) {
-      return res.status(404).json({ error: "Post not found" });
+      ret = {
+        status: "unsuccess",
+        message: "Post not found",
+        data: "No data exist!",
+      };
+      return res.status(404).json(ret);
     }
 
-    // Check if the authenticated user has permission to update this blog
-    if (String(post.user) !== String(req.user._id)) {
-      return res.status(403).json({
-        error: "Unauthorized. You do not have permission to update this blog.",
-      });
+    // Check if the authenticated user has permission to update this post
+    if (String(post.user) !== String(req.user.id)) {
+      return res
+        .status(403)
+        .json(
+          unsuccessfulRes(
+            "Unauthorized. You do not have permission to update this post."
+          )
+        );
     }
 
-    // Update the blog if the user has permission
+    // Update the post if the user has permission
     const updatedPost = await post.save();
-
-    res.json(updatedPost);
+    res.json(successfulRes("Post updated successfully", updatedPost));
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json(unsuccessfulRes(error));
   }
 };
 
 /**----------------------------------------
- *  @description  Delete Blog
- *  @rounter      /api/blogs/delete/:blogId
+ *  @description  Delete Post
+ *  @rounter      /api/post/delete/:postId
  *  @method       DELETE
  *  @access       Private (users only)
 -----------------------------------------*/
@@ -119,27 +103,52 @@ const deletePostById = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
-    console.log(post);
-    // Check if the authenticated user has permission to delete this blog
+    console.log(post.user);
+    console.log(req.user.id);
+    // Check if the authenticated user has permission to delete this post
     if (String(post.user) !== String(req.user.id)) {
-      return res.status(403).json({
-        error: "Unauthorized. You do not have permission to delete this blog.",
-      });
+      return res
+        .status(403)
+        .json(
+          unsuccessfulRes(
+            "Unauthorized. You do not have permission to delete this post."
+          )
+        );
     }
 
-    // If the user has permission, delete the blog
+    // If the user has permission, delete the post
     await post.deleteOne();
+    res.json(successfulRes("Post deleted successfully", "No data exist!"));
+  } catch (error) {
+    res.status(500).json(unsuccessfulRes(error));
+  }
+};
 
-    res.json({ message: "Post deleted successfully" });
+/**----------------------------------------
+ *  @description  get Posts
+ *  @rounter      /api/posts/:userId
+ *  @method       get
+ *  @access       public 
+-----------------------------------------*/
+const getUserPosts = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Fetch posts for the specified user
+    const userPosts = await Post.find({ user: userId })
+      .populate("user", "username") // Populate user field with username only
+      .populate("like", "username"); // Populate like field with username only
+
+    res.json(successfulRes("All posts returned.", userPosts));
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json(unsuccessfulRes(error));
   }
 };
 
 module.exports = {
   createPost,
-  getBlogById,
   updatePostById,
   deletePostById,
+  getUserPosts,
 };

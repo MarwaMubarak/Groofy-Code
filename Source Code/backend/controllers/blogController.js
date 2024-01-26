@@ -25,7 +25,7 @@ const createBlog = async (req, res) => {
     const blog = new Blog({
       title,
       content,
-      user: user._id, // Associate the blog with the logged-in user
+      user: user.id, // Associate the blog with the logged-in user
     });
 
     await blog.save();
@@ -92,7 +92,7 @@ const updateBlogById = async (req, res) => {
     }
 
     // Check if the authenticated user has permission to update this blog
-    if (String(blog.user) !== String(req.user._id)) {
+    if (String(blog.user) !== String(req.user.id)) {
       return res.status(403).json({
         error: "Unauthorized. You do not have permission to update this blog.",
       });
