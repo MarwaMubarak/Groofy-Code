@@ -3,6 +3,8 @@ export interface btnProps {
   btnText: string;
   icnSrc?: string;
   clickEvent: any;
+  btnType?: boolean;
+  btnState?: boolean;
 }
 // testcase result props
 export interface tcrProps {
@@ -44,7 +46,11 @@ export interface GroofyInputProps {
   giText: string;
   giPlaceholder: string;
   giType: string;
+  giValue: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  errState: boolean;
+  errMsg?: string;
 }
 
 // Notify Box Props
@@ -128,4 +134,15 @@ export interface SinglePostProps {
   postUser: string;
   postUserImg: string;
   postContent: string;
+}
+
+// User Props
+export interface UserProps {
+  username?: string;
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  firstname?: string;
+  lastname?: string;
+  country?: string;
 }

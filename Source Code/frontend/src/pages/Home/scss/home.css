@@ -5,7 +5,7 @@
   overflow: auto;
 }
 .home-container .activity-section {
-  width: 1000px;
+  margin: 0 50px;
   height: 100%;
 }
 .home-container .activity-section .play-section {

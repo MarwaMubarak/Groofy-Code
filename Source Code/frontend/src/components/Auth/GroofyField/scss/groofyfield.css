@@ -21,7 +21,10 @@
   width: 400px;
   outline: 2px solid transparent;
 }
-.groofy-input input:focus, .groofy-input input:hover {
+.groofy-input input.err {
+  outline-color: #f55353;
+}
+.groofy-input input:not(.err):focus, .groofy-input input:not(.err):hover {
   outline-color: #00a9ff;
 }
 .groofy-input input::-moz-placeholder {
@@ -31,4 +34,10 @@
 .groofy-input input::placeholder {
   opacity: 0.5;
   font-size: 14px;
+}
+.groofy-input .err-msg {
+  color: #f55353;
+  font-size: 14px;
+  margin-top: 5px;
+  width: 400px;
 }/*# sourceMappingURL=groofyfield.css.map */

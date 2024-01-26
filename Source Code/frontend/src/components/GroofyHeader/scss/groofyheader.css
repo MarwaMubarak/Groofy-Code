@@ -16,15 +16,36 @@
   width: 400px;
   right: 30px;
   border-radius: 0 0 10px 10px;
-  z-index: 1;
+  z-index: 100000;
 }
 .header-container .notify-area.false {
   display: none;
 }
 .header-container .notify-area .notify-header {
-  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #ddd;
-  padding: 15px 10px 10px 15px;
+  padding: 10px 15px 5px;
+}
+.header-container .notify-area .notify-header h3 {
+  font-size: 14px;
+}
+.header-container .notify-area .notify-header .clear-notify {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  padding: 7px;
+  border-radius: 50%;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.header-container .notify-area .notify-header .clear-notify:hover {
+  background-color: #eee;
+}
+.header-container .notify-area .notify-header .clear-notify img {
+  width: 18px;
 }
 .header-container .notify-area .na-content {
   padding: 10px;
@@ -57,7 +78,7 @@
   color: #777;
   font-size: 12px;
 }
-.header-container .notify-area .notify-clear {
+.header-container .notify-area .see-all {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -73,7 +94,7 @@
           user-select: none;
   cursor: pointer;
 }
-.header-container .notify-area .notify-clear:hover {
+.header-container .notify-area .see-all:hover {
   background-color: #0e141e;
   color: #fff;
 }

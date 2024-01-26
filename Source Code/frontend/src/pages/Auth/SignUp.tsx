@@ -1,85 +1,45 @@
 import { Link } from "react-router-dom";
 import { GBtn, GroofyField } from "../../components";
 import "./scss/signup/signup.css";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { authThunks } from "../../store/actions";
+import { registerSchema } from "../../shared/schemas";
+import { useFormik } from "formik";
+// import { useInput } from "../../shared/hooks";
 
 const SignUp = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassowrd] = useState("");
-
-  const onUsernameChange = (e: any) => {
-    try {
-      setUsername(e);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const onEmailChange = (e: any) => {
-    try {
-      setEmail(e);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const onPasswordChange = (e: any) => {
-    try {
-      setPassword(e);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const onConfirmPasswordChange = (e: any) => {
-    try {
-      setConfirmPassowrd(e);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleSignUpClick = async (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    try {
-      console.log("SignUp Clicked");
-      console.log(username, email, password, confirmPassword);
-      if (
-        username == "" ||
-        email == "" ||
-        password == "" ||
-        confirmPassword == ""
-      ) {
-        alert("Please fill all the fields");
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        alert("Passwords do not match");
-        return;
-      }
-      const response = await fetch("http://localhost:8000/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: username,
-          email: email,
-          password: password,
-          firstname: "mero",
-          lastname: "mero",
-          country: "Eg",
-        }),
-      });
-
-      const data = await response.json();
-      if (data.error) {
-        alert(data.error);
-        return;
-      }
-      console.log("SignUp Successfull", data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const dispatch = useDispatch();
+  // const emailRE: RegExp = new RegExp("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+  // const passRE: RegExp = new RegExp(
+  //   "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
+  // );
+  // const usernameValidator = useInput(
+  //   (value) =>
+  //     value.trim() !== "" &&
+  //     value.trim().length >= 4 &&
+  //     value.trim().length <= 100
+  // );
+  // const emailValidator = useInput(
+  //   (value) =>
+  //     value.trim() !== "" &&
+  //     new RegExp(emailRE).test(value) &&
+  //     value.trim().length >= 4 &&
+  //     value.trim().length <= 255
+  // );
+  const formHandler = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: registerSchema,
+    onSubmit: (values, actions) => {
+      // @ts-ignore
+      dispatch(authThunks.signup(values));
+      actions.resetForm();
+    },
+  });
 
   return (
     <div className="align">
@@ -133,35 +93,65 @@ const SignUp = () => {
           <div className="auth-title">
             Sign up as a <span>Groofy</span>
           </div>
-          <form className="auth-form">
+          <form className="auth-form" onSubmit={formHandler.handleSubmit}>
             <GroofyField
               giText="Username"
               giPlaceholder="Enter your username"
               giType="text"
-              onChange={onUsernameChange}
+              giValue={formHandler.values.username}
+              onChange={formHandler.handleChange("username")}
+              onBlur={formHandler.handleBlur("username")}
+              errState={
+                (formHandler.errors.username && formHandler.touched.username) ||
+                false
+              }
+              errMsg={formHandler.errors.username}
             />
             <GroofyField
               giText="Email"
               giPlaceholder="Enter your email"
               giType="email"
-              onChange={onEmailChange}
+              giValue={formHandler.values.email}
+              onChange={formHandler.handleChange("email")}
+              onBlur={formHandler.handleBlur("email")}
+              errState={
+                (formHandler.errors.email && formHandler.touched.email) || false
+              }
+              errMsg={formHandler.errors.email}
             />
             <GroofyField
               giText="Password"
               giPlaceholder="Enter your password"
               giType="password"
-              onChange={onPasswordChange}
+              giValue={formHandler.values.password}
+              onChange={formHandler.handleChange("password")}
+              onBlur={formHandler.handleBlur("password")}
+              errState={
+                (formHandler.errors.password && formHandler.touched.password) ||
+                false
+              }
+              errMsg={formHandler.errors.password}
             />
             <GroofyField
               giText="Confirm Password"
               giPlaceholder="Confirm your password"
               giType="password"
-              onChange={onConfirmPasswordChange}
+              giValue={formHandler.values.confirmPassword}
+              onChange={formHandler.handleChange("confirmPassword")}
+              onBlur={formHandler.handleBlur("confirmPassword")}
+              errState={
+                (formHandler.errors.confirmPassword &&
+                  formHandler.touched.confirmPassword) ||
+                false
+              }
+              errMsg={formHandler.errors.confirmPassword}
             />
             <div className="f-sbmt">
               <GBtn
                 btnText="Create new account"
-                clickEvent={handleSignUpClick}
+                clickEvent={() => {}}
+                btnType={true}
+                btnState={formHandler.isSubmitting}
               />
               <span className="alrg">
                 Already have an account?<Link to="/login">Login</Link>
