@@ -17,6 +17,10 @@
 .groofybtn:hover {
   box-shadow: none;
 }
+.groofybtn:disabled {
+  background-color: #484848;
+  cursor: not-allowed;
+}
 .groofybtn .btn-text {
   font-size: 17px;
   font-weight: 500;

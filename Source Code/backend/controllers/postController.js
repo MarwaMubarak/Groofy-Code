@@ -52,7 +52,7 @@ const createPost = async (req, res) => {
  *  @method       GET
  *  @access       public
 ------------------------------------------*/
-const getAllPosts = async (req, res) => {
+const getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find();
     res.json(blogs);
