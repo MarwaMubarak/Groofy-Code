@@ -5,18 +5,38 @@ import {
   Gamemode,
   SinglePost,
 } from "../../components";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import "./scss/home.css";
+import { useDispatch, useSelector } from "react-redux";
+import postThunks from "../../store/actions/post-actions";
 
 const Home = () => {
+  const [newPostContent, setNewPostContent] = useState("");
+  const _id = localStorage.getItem("_id") as string;
+  const dispatch = useDispatch();
+  const posts = useSelector((state: any) => state.post.posts);
+
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
     autoExpand(e.target);
+    setNewPostContent(e.target.value);
   };
 
   const autoExpand = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = "auto";
     textarea.style.height = textarea.scrollHeight + "px";
   };
+
+  const postHandler = (event: any) => {
+    event.preventDefault();
+    dispatch(postThunks.addPost(newPostContent) as any).then(() => {
+      dispatch(postThunks.getPosts(_id) as any);
+    });
+    setNewPostContent("");
+  };
+  useEffect(() => {
+    dispatch(postThunks.getPosts(_id) as any);
+  }, []);
+
   return (
     <div className="home-container">
       <SideBar idx={0} />
@@ -45,9 +65,9 @@ const Home = () => {
                 clickEvent={() => {}}
               />
               <Gamemode
-                title="Add a Friend"
-                description="Add a friend to your friend list and challenge him to a 1v1 match."
-                img="/Assets/SVG/people.svg"
+                title="Solo Practice"
+                description="Sharpen your skills and prepare for battle by practicing against a computer opponent."
+                img="/Assets/Images/lightbulb.png"
                 clickEvent={() => {}}
               />
             </div>
@@ -85,6 +105,7 @@ const Home = () => {
               <div className="post-row">
                 <img src="/Assets/Images/Hazem Adel.jpg" alt="" />
                 <textarea
+                  value={newPostContent}
                   placeholder="Share your coding insights and experiences"
                   onChange={handleExpanding}
                   maxLength={500}
@@ -92,11 +113,30 @@ const Home = () => {
                 <GBtn
                   btnText="Quick Post"
                   icnSrc="/Assets/SVG/quick.svg"
-                  clickEvent={() => {}}
+                  clickEvent={postHandler}
                 />
               </div>
               <div className="posts">
-                <SinglePost
+                {Array.isArray(posts) && posts.length > 0 ? (
+                  posts.map(
+                    (post, key) => (
+                      console.log(post["id"]),
+                      (
+                        <SinglePost
+                          key={key}
+                          postUser={post["user"]["username"]}
+                          postUserImg="/Assets/Images/Hazem Adel.jpg"
+                          postContent={post["content"]}
+                          postTime={post["updatedAt"]}
+                          postID={post["id"]}
+                        />
+                      )
+                    )
+                  )
+                ) : (
+                  <div>No posts available</div>
+                )}
+                {/* <SinglePost
                   postUser="Hazem Adel"
                   postUserImg="/Assets/Images/Hazem Adel.jpg"
                   postContent="Hello world! this is my first post"
@@ -115,7 +155,7 @@ const Home = () => {
                   postUser="Hazem Adel"
                   postUserImg="/Assets/Images/Hazem Adel.jpg"
                   postContent="Hakona Matata XD."
-                />
+                /> */}
               </div>
             </div>
           </form>

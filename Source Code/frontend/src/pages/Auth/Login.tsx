@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authThunks } from "../../store/actions";
 import { loginSchema } from "../../shared/schemas";
 import { useFormik } from "formik";
+import { useEffect } from "react";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,12 @@ const Login = () => {
       }
     },
   });
+  useEffect(() => {
+    if (isAuth) {
+      navigate("/");
+    }
+  }, [isAuth, navigate]);
+
   return (
     <div className="align">
       <div className="login-div">

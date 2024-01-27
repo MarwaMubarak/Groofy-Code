@@ -16,7 +16,7 @@ index.use(express.json());
 index.use(
   cors({
     origin: "*",
-    allowedHeaders: "Content-Type",
+    allowedHeaders: ["Content-Type", "authorization"],
   })
 );
 

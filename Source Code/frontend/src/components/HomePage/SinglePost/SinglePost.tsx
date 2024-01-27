@@ -1,11 +1,43 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import "./scss/singlepost.css";
 import { SinglePostProps } from "../../../shared/types";
+import { useDispatch } from "react-redux";
+import postThunks from "../../../store/actions/post-actions";
+import useFormatDate from "../../../shared/hooks/formatDate";
 
 const SinglePost = (props: SinglePostProps) => {
   const [likeActive, setLikeActive] = useState(false);
+  const _id = localStorage.getItem("_id") as string;
+  const dispatch = useDispatch();
+  const [isEdit, setIsEdit] = useState(false);
+  const [editContent, setEditContent] = useState(props.postContent);
+
+  const handleDelete = (postID: string) => {
+    // @ts-ignore
+    dispatch(postThunks.deletePost(postID)).then(() => {
+      dispatch(postThunks.getPosts(_id) as any);
+    });
+  };
+
+  const handleUpdate = (postID: string, content: string) => {
+    if (content.trim() === "") return;
+    // @ts-ignore
+    dispatch(postThunks.updatePost(postID, content)).then(() => {
+      dispatch(postThunks.getPosts(_id) as any);
+    });
+  };
+
+  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    autoExpand(e.target);
+    setEditContent(e.target.value);
+  };
+  const autoExpand = (textarea: HTMLTextAreaElement) => {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  };
+
   return (
-    <div className="single-post">
+    <div className={`single-post ${isEdit}`}>
       <div className="single-post-info">
         <div className="single-post-info-div">
           <img
@@ -15,14 +47,60 @@ const SinglePost = (props: SinglePostProps) => {
           />
           <div className="s-p-details">
             <h3>{props.postUser}</h3>
-            <p>{props.postContent}</p>
+            {isEdit ? (
+              <textarea
+                value={editContent}
+                onChange={handleExpanding}
+                maxLength={500}
+              ></textarea>
+            ) : (
+              <p>{props.postContent}</p>
+            )}
           </div>
         </div>
         <div className="single-post-controls">
-          <span>3 hours ago</span>
+          <span>{useFormatDate(props.postTime)}</span>
           <div className="controls">
-            <img src="/Assets/SVG/edit.svg" alt="Edit" />
-            <img src="/Assets/SVG/delete.svg" alt="Delete" />
+            {isEdit ? (
+              <>
+                <img
+                  src="/Assets/Images/correctIcon.png"
+                  alt="Accept"
+                  onClick={() => {
+                    handleUpdate(props.postID, editContent);
+                    setIsEdit(false);
+                    setEditContent(props.postContent);
+                  }}
+                />
+                <img
+                  src="/Assets/Images/wrongIcon.png"
+                  alt="Cancel"
+                  onClick={() => {
+                    setIsEdit(false);
+                    setEditContent(props.postContent);
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                <img
+                  src="/Assets/SVG/edit.svg"
+                  alt="Edit"
+                  onClick={() => {
+                    setIsEdit(true);
+                    setEditContent(props.postContent);
+                  }}
+                />
+                <img
+                  src="/Assets/SVG/delete.svg"
+                  alt="Delete"
+                  onClick={() => {
+                    handleDelete(props.postID);
+                    setEditContent(props.postContent);
+                  }}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

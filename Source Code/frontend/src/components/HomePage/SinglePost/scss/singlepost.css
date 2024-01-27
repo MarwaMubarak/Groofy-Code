@@ -11,13 +11,17 @@
 }
 .single-post .single-post-info .single-post-info-div {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  width: 100%;
 }
 .single-post .single-post-info .single-post-info-div .s-p-img {
   width: 55px;
   border-radius: 50%;
   margin-right: 10px;
+}
+.single-post .single-post-info .single-post-info-div .s-p-details {
+  width: 100%;
 }
 .single-post .single-post-info .single-post-info-div .s-p-details h3 {
   font-size: 18px;
@@ -26,6 +30,23 @@
 .single-post .single-post-info .single-post-info-div .s-p-details p {
   font-size: 16px;
   color: #ddd;
+}
+.single-post .single-post-info .single-post-info-div .s-p-details textarea {
+  font-family: OpenSans, Arial, Helvetica, sans-serif;
+  width: 500px;
+  overflow-y: hidden;
+  border: none;
+  padding: 12.2px 15px 5px;
+  border-radius: 6px;
+  background-color: rgba(22, 30, 46, 0.96);
+  caret-color: #f2f2f2;
+  color: #f2f2f2;
+  margin-right: 20px;
+  font-size: 16px;
+  resize: none;
+}
+.single-post .single-post-info .single-post-info-div .s-p-details textarea:focus {
+  outline: none;
 }
 .single-post .single-post-info .single-post-controls {
   position: absolute;
@@ -103,10 +124,18 @@
 .single-post .s-p-reactbtn .react-cnt.true {
   color: #f55353;
 }
-.single-post:hover .single-post-controls span {
+.single-post.false:hover .single-post-controls span {
   display: none;
 }
-.single-post:hover .single-post-controls .controls {
+.single-post.false:hover .single-post-controls .controls {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.single-post.true .single-post-controls span {
+  display: none;
+}
+.single-post.true .single-post-controls .controls {
   display: flex;
   justify-content: center;
   align-items: flex-start;

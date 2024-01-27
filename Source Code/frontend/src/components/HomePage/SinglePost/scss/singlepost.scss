@@ -9,13 +9,16 @@
     color: white;
     position: relative;
     .single-post-info-div {
-      @include center;
+      @include start;
+      width: 100%;
+
       .s-p-img {
         width: 55px;
         border-radius: 50%;
         margin-right: 10px;
       }
       .s-p-details {
+        width: 100%;
         h3 {
           font-size: 18px;
           margin-bottom: 5px;
@@ -23,6 +26,25 @@
         p {
           font-size: 16px;
           color: #ddd;
+        }
+        textarea {
+          font-family: OpenSans, Arial, Helvetica, sans-serif;
+          width: 500px;
+          // min-height: 40px;
+          // overflow-wrap: break-word;\
+          overflow-y: hidden;
+          border: none;
+          padding: 12.2px 15px 5px;
+          border-radius: 6px;
+          background-color: $mainColor2;
+          caret-color: $hoverColor;
+          color: $hoverColor;
+          margin-right: 20px;
+          font-size: 16px;
+          resize: none;
+          &:focus {
+            outline: none;
+          }
         }
       }
     }
@@ -166,7 +188,19 @@
     //   }
     // }
   }
-  &:hover {
+  &.false:hover {
+    .single-post-controls {
+      span {
+        display: none;
+      }
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+    }
+  }
+  &.true {
     .single-post-controls {
       span {
         display: none;

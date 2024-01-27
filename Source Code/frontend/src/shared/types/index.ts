@@ -134,6 +134,8 @@ export interface SinglePostProps {
   postUser: string;
   postUserImg: string;
   postContent: string;
+  postTime: string;
+  postID: string;
 }
 
 // User Props

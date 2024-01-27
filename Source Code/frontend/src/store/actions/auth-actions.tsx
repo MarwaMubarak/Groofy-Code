@@ -10,8 +10,10 @@ const login = (userData: UserProps) => {
         email: userData.email,
         password: userData.password,
       });
-      console.log(response.data);
-      dispatch(authActions.login());
+      localStorage.setItem("token", response.data.body.token);
+      localStorage.setItem("_id", response.data.body._id);
+
+      dispatch(authActions.login(response.data.body));
       // toast.success("Login successful");
     } catch (error: any) {
       // toast.error(error.response.data.error);
@@ -19,7 +21,11 @@ const login = (userData: UserProps) => {
   };
 };
 
-const logout = () => {};
+const logout = () => {
+  return (dispatch: any) => {
+    dispatch(authActions.logout());
+  };
+};
 
 const signup = (userData: UserProps) => {
   return async (dispatch: any) => {

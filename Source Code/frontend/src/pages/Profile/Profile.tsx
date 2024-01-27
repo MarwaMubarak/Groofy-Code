@@ -94,7 +94,7 @@ const Profile = () => {
                       clickEvent={() => {}}
                     />
                   </div>
-                  <div className="posts">
+                  {/* <div className="posts">
                     <SinglePost
                       postUser="Hazem Adel"
                       postUserImg="/Assets/Images/Hazem Adel.jpg"
@@ -115,7 +115,7 @@ const Profile = () => {
                       postUserImg="/Assets/Images/Hazem Adel.jpg"
                       postContent="Hakona Matata XD."
                     />
-                  </div>
+                  </div> */}
                 </div>
               </form>
 

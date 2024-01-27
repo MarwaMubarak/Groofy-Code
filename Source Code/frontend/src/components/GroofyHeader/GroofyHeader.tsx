@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NotifyBox from "./NotifyBox/NotifyBox";
 import "./scss/groofyheader.css";
 import ActionButton from "./ActionButton/ActionButton";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { authThunks } from "../../store/actions";
 
 const GroofyHeader = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [notifyActive, setNotifyActive] = useState(false);
   const [notifyNewCnt, setNotifyNewCnt] = useState(15);
   const [notifyCnt, setNotifyCnt] = useState(4);
@@ -16,6 +21,12 @@ const GroofyHeader = () => {
   const [friendsNewCnt, setFriendsNewCnt] = useState(7);
 
   const [profileActive, setProfileActive] = useState(false);
+
+  const handleLogout = () => {
+    // @ts-ignore
+    dispatch(authThunks.logout());
+    navigate("/login");
+  };
   return (
     <div className="header-container">
       <div className={`notify-area ${notifyActive}`}>
@@ -63,12 +74,10 @@ const GroofyHeader = () => {
             <span>Settings</span>
           </div>
         </Link>
-        <Link to="/login">
-          <div className="logout">
-            <img src="/Assets/SVG/logout.svg" alt="ProfilePicture" />
-            <span>Logout</span>
-          </div>
-        </Link>
+        <div className="logout" onClick={handleLogout}>
+          <img src="/Assets/SVG/logout.svg" alt="ProfilePicture" />
+          <span>Logout</span>
+        </div>
       </div>
       <div className="header-logo">
         <Link to="/">
