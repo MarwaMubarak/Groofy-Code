@@ -7,7 +7,7 @@ import store from "./store";
 import "primereact/resources/themes/lara-dark-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { Button } from "primereact/button";
+import { PrimeReactProvider } from "primereact/api";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,8 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
-      {/* <Button label="Click" /> */}
+      <PrimeReactProvider>
+        <App />
+      </PrimeReactProvider>
     </Provider>
   </React.StrictMode>
 );

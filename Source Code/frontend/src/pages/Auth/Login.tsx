@@ -1,51 +1,52 @@
 import { Link, useNavigate } from "react-router-dom";
 import { GBtn, GroofyField } from "../../components";
 import "./scss/login/login.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authThunks } from "../../store/actions";
 import { loginSchema } from "../../shared/schemas";
 import { useFormik } from "formik";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Toast } from "primereact/toast";
+import { AxiosError } from "axios";
 
 const Login = () => {
   const toast = useRef<Toast>(null);
-  const error = useSelector((state: any) => state.auth.errorMessage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const formHandler = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: async (values, actions) => {
-      try {
-        await dispatch(authThunks.login(values) as any);
-
-        // Show success toast
-        (toast.current as any)?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Login successful",
-          life: 1500,
+    onSubmit: (values, actions) => {
+      const ret = dispatch(authThunks.login(values) as any);
+      if (ret instanceof Promise) {
+        ret.then((res: any) => {
+          if (res instanceof AxiosError) {
+            actions.resetForm({ values: { ...values, password: "" } });
+            (toast.current as any)?.show({
+              severity: "error",
+              summary: "Failed",
+              detail: res.response?.data?.message,
+              life: 1500,
+            });
+          } else {
+            console.log("Message", res);
+            (toast.current as any)?.show({
+              severity: "success",
+              summary: "Success",
+              detail: "Login successful",
+              life: 1500,
+            });
+            setTimeout(() => {
+              actions.resetForm();
+              localStorage.setItem("user", JSON.stringify(res.payload));
+              navigate("/");
+            }, 700);
+          }
         });
-
-        // Delay navigation after toast appears and disappears
-        setTimeout(() => {
-          actions.resetForm();
-          // navigate("/");
-        }, 2000); // Adjusted time to account for toast display time
-      } catch (error) {
-        // Show error toast
-        (toast.current as any)?.show({
-          severity: "error",
-          summary: "Failed",
-          detail: error, // Assuming error has a message property
-          life: 1500,
-        });
-        actions.resetForm({ values: { ...values, password: "" } });
-        dispatch(authThunks.setErrorMessage("") as any);
       }
     },
   });

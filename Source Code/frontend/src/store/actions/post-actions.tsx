@@ -7,9 +7,12 @@ const getPosts = (_id: string) => {
     try {
       const response = await reqInstance.get(`/posts/${_id}`);
       console.log(response.data.body);
+      dispatch(postActions.setStatus(response.data.status));
+      dispatch(postActions.setMessage(response.data.message));
       dispatch(postActions.setPosts(response.data.body));
     } catch (error: any) {
-      // toast.error(error.response.data.error);
+      dispatch(postActions.setStatus(error.response.data.status));
+      dispatch(postActions.setMessage(error.response.data.message));
     }
   };
 };
@@ -17,49 +20,62 @@ const getPosts = (_id: string) => {
 const addPost = (content: string) => {
   return async (dispatch: any) => {
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
+      const user = JSON.parse(localStorage.getItem("user")!);
+      if (user.token) {
         reqInstance.defaults.headers.common[
           "authorization"
-        ] = `Bearer ${token}`;
+        ] = `Bearer ${user.token}`;
         const response = await reqInstance.post("/post/create", {
           content,
         });
+        dispatch(postActions.setStatus(response.data.status));
+        dispatch(postActions.setMessage(response.data.message));
         dispatch(postActions.addPost(response.data.body));
       }
-    } catch (error: any) {}
+    } catch (error: any) {
+      dispatch(postActions.setStatus(error.response.data.status));
+      dispatch(postActions.setMessage(error.response.data.message));
+    }
   };
 };
 
 const updatePost = (postID: string, content: string) => {
   return async (dispatch: any) => {
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
+      const user = JSON.parse(localStorage.getItem("user")!);
+      if (user.token) {
         reqInstance.defaults.headers.common[
           "authorization"
-        ] = `Bearer ${token}`;
+        ] = `Bearer ${user.token}`;
         const response = await reqInstance.put(`/post/update/${postID}`, {
           content,
         });
         dispatch(postActions.updatePost(response.data.body));
       }
-    } catch (error: any) {}
+    } catch (error: any) {
+      dispatch(postActions.setStatus(error.response.data.status));
+      dispatch(postActions.setMessage(error.response.data.message));
+    }
   };
 };
 
 const deletePost = (postID: string) => {
   return async (dispatch: any) => {
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
+      const user = JSON.parse(localStorage.getItem("user")!);
+      if (user.token) {
         reqInstance.defaults.headers.common[
           "authorization"
-        ] = `Bearer ${token}`;
-        await reqInstance.delete(`/post/delete/${postID}`);
+        ] = `Bearer ${user.token}`;
+        const response = await reqInstance.delete(`/post/delete/${postID}`);
         dispatch(postActions.deletePost(postID));
+        dispatch(postActions.setStatus(response.data.status));
+        dispatch(postActions.setMessage(response.data.message));
       }
-    } catch (error: any) {}
+    } catch (error: any) {
+      dispatch(postActions.setStatus(error.response.data.status));
+      dispatch(postActions.setMessage(error.response.data.message));
+    }
   };
 };
 

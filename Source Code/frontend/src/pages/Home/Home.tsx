@@ -15,8 +15,10 @@ import { Button } from "primereact/button";
 const Home = () => {
   const dispatch = useDispatch();
   const [newPostContent, setNewPostContent] = useState("");
+  const resStatus = useSelector((state: any) => state.post.status);
+  const resMessage = useSelector((state: any) => state.post.message);
   const user = useSelector((state: any) => state.auth.user);
-  const allPosts: any[] = useSelector((state: any) => state.post.posts);
+  const allPosts: any[] = useSelector((state: any) => state.post.body);
   const toast = useRef<Toast>(null);
 
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -31,35 +33,19 @@ const Home = () => {
 
   const postHandler = (event: any) => {
     event.preventDefault();
-    try {
-      const addNewPost = async () => {
-        await dispatch(postThunks.addPost(newPostContent) as any);
-      };
-      if (newPostContent.trim() === "") {
-        (toast.current as any)?.show({
-          severity: "info",
-          summary: "Info",
-          detail: "The post is empty",
-          life: 1500,
-        });
-        return;
-      }
-      addNewPost();
-      setNewPostContent("");
+    const addNewPost = async () => {
+      await dispatch(postThunks.addPost(newPostContent) as any);
+    };
+    if (newPostContent.trim() === "") {
       (toast.current as any)?.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Post added successfully",
+        severity: "info",
+        summary: "Info",
+        detail: "The post is empty",
         life: 1500,
       });
-    } catch (error: any) {
-      (toast.current as any)?.show({
-        severity: "error",
-        summary: "Failed",
-        detail: "Error has occured",
-        life: 1500,
-      });
+      return;
     }
+    addNewPost();
   };
 
   useEffect(() => {
@@ -69,9 +55,34 @@ const Home = () => {
     fetchPosts();
   }, [dispatch, user]);
 
+  useEffect(() => {
+    if (
+      resStatus === "" ||
+      resMessage === "" ||
+      resMessage === "All posts returned."
+    )
+      return;
+    if (resStatus === "success") {
+      (toast.current as any)?.show({
+        severity: "success",
+        summary: "Success",
+        detail: resMessage,
+        life: 1500,
+      });
+      setNewPostContent("");
+    } else {
+      (toast.current as any)?.show({
+        severity: "error",
+        summary: "Failed",
+        detail: resMessage,
+        life: 1500,
+      });
+    }
+  }, [allPosts.length, resMessage, resStatus]);
+
   return (
     <div className="home-container">
-      <Toast ref={toast} />
+      <Toast ref={toast} style={{ padding: "0.75rem 1.25rem" }} />
       <SideBar idx={0} />
       <div className="activity-section align">
         <GroofyHeader />
@@ -162,11 +173,12 @@ const Home = () => {
                     />
                   ))
                 ) : (
-                  <div>No posts available.</div>
+                  <div className="empty-posts">No posts available.</div>
                 )}
               </div>
             </div>
           </form>
+          <Button label="asdasdasd" style={{ padding: "0.75rem 1.25rem" }} />
           <div className="profile-section">
             <div className="ps-info">
               <div className="ps-header">

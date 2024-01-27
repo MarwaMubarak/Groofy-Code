@@ -4,8 +4,12 @@
   width: 100%;
   overflow: auto;
 }
+.home-container .primeflex-container * {
+  margin: initial;
+  padding: initial;
+}
 .home-container .activity-section {
-  margin: 0 150px;
+  margin: 0 auto;
   height: 100%;
 }
 .home-container .activity-section .play-section {
@@ -20,7 +24,7 @@
 .home-container .activity-section .play-section .play-section-features .p-s-f-header {
   color: #f2f2f2;
   margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #fff;
   padding-bottom: 15px;
   font-size: 26px;
   width: 100%;
@@ -33,7 +37,7 @@
 .home-container .activity-section .play-section .play-section-gamemode .p-s-g-header {
   color: #f2f2f2;
   margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #fff;
   padding-bottom: 15px;
   font-size: 26px;
   width: 100%;
@@ -58,7 +62,7 @@
 .home-container .activity-section .media-section .posts-container .post-header {
   color: #f2f2f2;
   margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #fff;
   padding-bottom: 15px;
   font-size: 26px;
   width: calc(100% - 50px);
@@ -117,6 +121,17 @@
 }
 .home-container .activity-section .media-section .posts-container .posts {
   margin-bottom: 40px;
+}
+.home-container .activity-section .media-section .posts-container .posts .empty-posts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 10px;
+  width: 100%;
+  border-top: 2px solid rgba(22, 30, 46, 0.96);
+  margin: 0 auto;
+  color: #fff;
+  font-size: 16px;
 }
 .home-container .activity-section .media-section .profile-section {
   display: flex;

@@ -9,12 +9,13 @@ const login = (userData: UserProps) => {
         email: userData.email,
         password: userData.password,
       });
-      localStorage.setItem("user", JSON.stringify(response.data.body));
-      dispatch(authActions.login(response.data.body));
-      // toast.success("Login successful");
+      dispatch(authActions.setErrorMessage(""));
+      const dispatchResponse = await dispatch(
+        authActions.login(response.data.body)
+      );
+      return dispatchResponse;
     } catch (error: any) {
-      dispatch(authActions.setErrorMessage(error.response.data.message));
-      // throw error.response.data.message;
+      return error;
     }
   };
 };
@@ -38,20 +39,12 @@ const signup = (userData: UserProps) => {
         country: userData.country,
       });
       console.log(response.data);
-      // toast.success("Created account succesfully");
     } catch (error: any) {
       return error;
-      // toast.error(error.response.data.error);
     }
   };
 };
 
-const setErrorMessage = (message: string | null) => {
-  return (dispatch: any) => {
-    dispatch(authActions.setErrorMessage(message));
-  };
-};
-
-const authThunks = { login, logout, signup, setErrorMessage };
+const authThunks = { login, logout, signup };
 
 export default authThunks;

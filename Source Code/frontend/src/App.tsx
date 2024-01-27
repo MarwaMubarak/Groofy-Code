@@ -1,16 +1,14 @@
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import { Home, Login, SignUp, Match, Clan, Profile, Play } from "./pages";
 import { useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
 
 function App() {
   const user = useSelector((state: any) => state.auth.user);
   return (
     <BrowserRouter>
-      <ToastContainer position="top-right" />
       <Routes>
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/signup"
           element={user ? <Navigate to="/" /> : <SignUp />}

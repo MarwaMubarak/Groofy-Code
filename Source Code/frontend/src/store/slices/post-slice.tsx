@@ -1,14 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface Post {
-  _id: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 const postInitialState = {
-  posts: [] as Post[],
+  status: "",
+  message: "",
+  body: [] as any,
 };
 
 const postSlice = createSlice({
@@ -16,21 +11,28 @@ const postSlice = createSlice({
   initialState: postInitialState,
   reducers: {
     setPosts(state, action) {
-      state.posts = action.payload;
+      state.body = action.payload;
     },
     addPost(state, action) {
-      state.posts.push(action.payload);
+      state.body.push(action.payload);
     },
     updatePost(state, action) {
-      const postIdx = state.posts.findIndex(
-        (post: Post) => post._id === action.payload._id
+      const postIdx = state.body.findIndex(
+        (post: any) => post._id === action.payload._id
       );
-      state.posts[postIdx] = action.payload;
+      state.body[postIdx].content = action.payload.content;
+      state.body[postIdx].updatedAt = action.payload.updatedAt;
     },
     deletePost(state, action) {
-      state.posts = state.posts.filter(
-        (post: Post) => post._id !== action.payload
+      state.body = state.body.filter(
+        (post: any) => post._id !== action.payload
       );
+    },
+    setStatus(state, action) {
+      state.status = action.payload;
+    },
+    setMessage(state, action) {
+      state.message = action.payload;
     },
   },
 });
