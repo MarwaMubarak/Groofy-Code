@@ -7,14 +7,16 @@ import {
 } from "../../components";
 import { ChangeEvent, useEffect, useState } from "react";
 import "./scss/home.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import postThunks from "../../store/actions/post-actions";
 
 const Home = () => {
   const [newPostContent, setNewPostContent] = useState("");
-  const _id = localStorage.getItem("_id") as string;
+  const user = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user")!)
+    : null;
   const dispatch = useDispatch();
-  const posts = useSelector((state: any) => state.post.posts);
+  const [dummyposts, setDummyPosts] = useState<any[]>([]);
 
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
     autoExpand(e.target);
@@ -28,13 +30,26 @@ const Home = () => {
 
   const postHandler = (event: any) => {
     event.preventDefault();
-    dispatch(postThunks.addPost(newPostContent) as any).then(() => {
-      dispatch(postThunks.getPosts(_id) as any);
-    });
-    setNewPostContent("");
+    const ret = dispatch(postThunks.addPost(newPostContent) as any);
+    if (ret instanceof Promise) {
+      ret.then((res: any) => {
+        setDummyPosts([res, ...dummyposts]);
+        setNewPostContent("");
+      });
+    }
   };
+
   useEffect(() => {
-    dispatch(postThunks.getPosts(_id) as any);
+    const ret = dispatch(postThunks.getPosts(user["_id"]) as any);
+    if (ret instanceof Promise) {
+      ret.then((res: any) => {
+        const tempPosts: any[] = [];
+        res?.forEach((post: any) => {
+          tempPosts.push(post);
+        });
+        setDummyPosts(tempPosts);
+      });
+    }
   }, []);
 
   return (
@@ -117,25 +132,21 @@ const Home = () => {
                 />
               </div>
               <div className="posts">
-                {Array.isArray(posts) && posts.length > 0 ? (
-                  posts.map(
-                    (post, key) => (
-                      console.log(post["id"]),
-                      (
-                        <SinglePost
-                          key={key}
-                          postUser={post["user"]["username"]}
-                          postUserImg="/Assets/Images/Hazem Adel.jpg"
-                          postContent={post["content"]}
-                          postTime={post["updatedAt"]}
-                          postID={post["id"]}
-                        />
-                      )
-                    )
-                  )
-                ) : (
-                  <div>No posts available</div>
-                )}
+                {Array.isArray(dummyposts) && dummyposts.length > 0
+                  ? dummyposts.map((post, key) => (
+                      <SinglePost
+                        key={key}
+                        postUser={user["username"]}
+                        postUserImg="/Assets/Images/Hazem Adel.jpg"
+                        postContent={post["content"]}
+                        postTime={post["updatedAt"]}
+                        postID={post["id"]}
+                        posts={dummyposts}
+                        setPosts={setDummyPosts}
+                      />
+                    ))
+                  : null}
+
                 {/* <SinglePost
                   postUser="Hazem Adel"
                   postUserImg="/Assets/Images/Hazem Adel.jpg"

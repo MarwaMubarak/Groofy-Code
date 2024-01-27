@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import "./scss/singlepost.css";
 import { SinglePostProps } from "../../../shared/types";
 import { useDispatch } from "react-redux";
@@ -11,20 +11,84 @@ const SinglePost = (props: SinglePostProps) => {
   const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
+  const [time, setTime] = useState(useFormatDate(props.postTime));
+
+  const FormatDate = (curDate: string) => {
+    const currentDate = new Date();
+    const date = new Date(curDate);
+
+    const diffTime = Math.abs(currentDate.getTime() - date.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    const diffMinutes = Math.floor(diffTime / (1000 * 60));
+    const diffSeconds = Math.floor(diffTime / 1000);
+
+    if (diffSeconds < 60) return `${diffSeconds} seconds ago`;
+    if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
+    if (diffHours < 24) return `${diffHours} hours ago`;
+
+    if (diffDays == 0) {
+      return `Today`;
+    }
+    if (diffDays == 1) {
+      return `Yesterday`;
+    }
+    if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    }
+    if (diffDays < 30) {
+      return `${Math.floor(diffDays / 7)} weeks ago`;
+    }
+    if (diffDays < 365) {
+      return `${Math.floor(diffDays / 30)} months ago`;
+    }
+    if (diffDays >= 365) {
+      return `${Math.floor(diffDays / 365)} years ago`;
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime(FormatDate(props.postTime));
+    }, 1000);
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [props.postTime]);
 
   const handleDelete = (postID: string) => {
     // @ts-ignore
-    dispatch(postThunks.deletePost(postID)).then(() => {
-      dispatch(postThunks.getPosts(_id) as any);
-    });
+    const ret = dispatch(postThunks.deletePost(postID));
+    if (ret instanceof Promise) {
+      ret.then((res) => {
+        let newPosts = props.posts.filter((post: any) => post._id !== postID);
+        props.setPosts(newPosts);
+        // props.posts = props.posts.filter((post: any) => post._id !== postID);
+      });
+    }
   };
 
   const handleUpdate = (postID: string, content: string) => {
     if (content.trim() === "") return;
     // @ts-ignore
-    dispatch(postThunks.updatePost(postID, content)).then(() => {
-      dispatch(postThunks.getPosts(_id) as any);
-    });
+    const ret = dispatch(postThunks.updatePost(postID, content));
+    if (ret instanceof Promise) {
+      ret.then((res) => {
+        let newPosts: any[] = [];
+        props.posts.forEach((post: any) => {
+          const curPost = { ...post };
+          if (post._id === postID) {
+            curPost["content"] = content;
+            const currentDate = new Date();
+            curPost["updatedAt"] = currentDate.toISOString();
+          }
+          newPosts.push(curPost);
+        });
+        props.setPosts(newPosts);
+      });
+    }
   };
 
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {

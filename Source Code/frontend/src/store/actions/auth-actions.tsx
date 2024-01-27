@@ -12,6 +12,7 @@ const login = (userData: UserProps) => {
       });
       localStorage.setItem("token", response.data.body.token);
       localStorage.setItem("_id", response.data.body._id);
+      localStorage.setItem("user", JSON.stringify(response.data.body));
 
       dispatch(authActions.login(response.data.body));
       // toast.success("Login successful");
