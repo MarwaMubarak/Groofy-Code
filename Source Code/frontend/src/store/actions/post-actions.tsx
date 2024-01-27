@@ -6,11 +6,8 @@ const getPosts = (_id: string) => {
   return async (dispatch: any) => {
     try {
       const response = await reqInstance.get(`/posts/${_id}`);
-
-      const dispatchResponse = await dispatch(
-        postActions.setPost(response.data.body)
-      );
-      return dispatchResponse["payload"];
+      console.log(response.data.body);
+      dispatch(postActions.setPosts(response.data.body));
     } catch (error: any) {
       // toast.error(error.response.data.error);
     }
@@ -26,31 +23,9 @@ const addPost = (content: string) => {
           "authorization"
         ] = `Bearer ${token}`;
         const response = await reqInstance.post("/post/create", {
-          content: content,
+          content,
         });
-        const dispatchResponse = await dispatch(
-          postActions.setPost(response.data.body)
-        );
-        return dispatchResponse["payload"];
-      }
-    } catch (error: any) {}
-  };
-};
-
-const deletePost = (postID: string) => {
-  return async (dispatch: any) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        reqInstance.defaults.headers.common[
-          "authorization"
-        ] = `Bearer ${token}`;
-        const response = await reqInstance.delete(`/post/delete/${postID}`);
-
-        const dispatchResponse = await dispatch(
-          postActions.setPost(response.data.body)
-        );
-        return dispatchResponse["payload"];
+        dispatch(postActions.addPost(response.data.body));
       }
     } catch (error: any) {}
   };
@@ -65,12 +40,24 @@ const updatePost = (postID: string, content: string) => {
           "authorization"
         ] = `Bearer ${token}`;
         const response = await reqInstance.put(`/post/update/${postID}`, {
-          content: content,
+          content,
         });
-        const dispatchResponse = await dispatch(
-          postActions.setPost(response.data.body)
-        );
-        return dispatchResponse;
+        dispatch(postActions.updatePost(response.data.body));
+      }
+    } catch (error: any) {}
+  };
+};
+
+const deletePost = (postID: string) => {
+  return async (dispatch: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        reqInstance.defaults.headers.common[
+          "authorization"
+        ] = `Bearer ${token}`;
+        await reqInstance.delete(`/post/delete/${postID}`);
+        dispatch(postActions.deletePost(postID));
       }
     } catch (error: any) {}
   };

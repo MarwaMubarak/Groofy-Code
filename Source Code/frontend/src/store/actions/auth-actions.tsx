@@ -10,10 +10,7 @@ const login = (userData: UserProps) => {
         email: userData.email,
         password: userData.password,
       });
-      localStorage.setItem("token", response.data.body.token);
-      localStorage.setItem("_id", response.data.body._id);
       localStorage.setItem("user", JSON.stringify(response.data.body));
-
       dispatch(authActions.login(response.data.body));
       // toast.success("Login successful");
     } catch (error: any) {
@@ -25,6 +22,7 @@ const login = (userData: UserProps) => {
 const logout = () => {
   return (dispatch: any) => {
     dispatch(authActions.logout());
+    localStorage.removeItem("user");
   };
 };
 

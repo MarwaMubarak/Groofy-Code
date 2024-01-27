@@ -3,92 +3,37 @@ import "./scss/singlepost.css";
 import { SinglePostProps } from "../../../shared/types";
 import { useDispatch } from "react-redux";
 import postThunks from "../../../store/actions/post-actions";
-import useFormatDate from "../../../shared/hooks/formatDate";
+import FormatDate from "../../../shared/functions/format-date";
 
 const SinglePost = (props: SinglePostProps) => {
-  const [likeActive, setLikeActive] = useState(false);
-  const _id = localStorage.getItem("_id") as string;
   const dispatch = useDispatch();
+  const [likeActive, setLikeActive] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
-  const [time, setTime] = useState(useFormatDate(props.postTime));
-
-  const FormatDate = (curDate: string) => {
-    const currentDate = new Date();
-    const date = new Date(curDate);
-
-    const diffTime = Math.abs(currentDate.getTime() - date.getTime());
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-    const diffMinutes = Math.floor(diffTime / (1000 * 60));
-    const diffSeconds = Math.floor(diffTime / 1000);
-
-    if (diffSeconds < 60) return `${diffSeconds} seconds ago`;
-    if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
-    if (diffHours < 24) return `${diffHours} hours ago`;
-
-    if (diffDays == 0) {
-      return `Today`;
-    }
-    if (diffDays == 1) {
-      return `Yesterday`;
-    }
-    if (diffDays < 7) {
-      return `${diffDays} days ago`;
-    }
-    if (diffDays < 30) {
-      return `${Math.floor(diffDays / 7)} weeks ago`;
-    }
-    if (diffDays < 365) {
-      return `${Math.floor(diffDays / 30)} months ago`;
-    }
-    if (diffDays >= 365) {
-      return `${Math.floor(diffDays / 365)} years ago`;
-    }
-  };
+  const [time, setTime] = useState(FormatDate(props.postTime));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTime(FormatDate(props.postTime));
     }, 1000);
-
-    // Cleanup function to clear the interval when component unmounts
     return () => {
       clearInterval(intervalId);
     };
   }, [props.postTime]);
 
-  const handleDelete = (postID: string) => {
-    // @ts-ignore
-    const ret = dispatch(postThunks.deletePost(postID));
-    if (ret instanceof Promise) {
-      ret.then((res) => {
-        let newPosts = props.posts.filter((post: any) => post._id !== postID);
-        props.setPosts(newPosts);
-        // props.posts = props.posts.filter((post: any) => post._id !== postID);
-      });
-    }
+  const handleUpdate = (postID: string, content: string) => {
+    const updatePost = async () => {
+      await dispatch(postThunks.updatePost(postID, content) as any);
+    };
+    if (content.trim() === "") return;
+    updatePost();
   };
 
-  const handleUpdate = (postID: string, content: string) => {
-    if (content.trim() === "") return;
-    // @ts-ignore
-    const ret = dispatch(postThunks.updatePost(postID, content));
-    if (ret instanceof Promise) {
-      ret.then((res) => {
-        let newPosts: any[] = [];
-        props.posts.forEach((post: any) => {
-          const curPost = { ...post };
-          if (post._id === postID) {
-            curPost["content"] = content;
-            const currentDate = new Date();
-            curPost["updatedAt"] = currentDate.toISOString();
-          }
-          newPosts.push(curPost);
-        });
-        props.setPosts(newPosts);
-      });
-    }
+  const handleDelete = (postID: string) => {
+    const deletePost = async () => {
+      await dispatch(postThunks.deletePost(postID) as any);
+    };
+    deletePost();
   };
 
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -123,7 +68,7 @@ const SinglePost = (props: SinglePostProps) => {
           </div>
         </div>
         <div className="single-post-controls">
-          <span>{useFormatDate(props.postTime)}</span>
+          <span>{time}</span>
           <div className="controls">
             {isEdit ? (
               <>
