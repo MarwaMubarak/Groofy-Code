@@ -136,6 +136,7 @@ const getUserPosts = async (req, res) => {
 
     // Fetch posts for the specified user
     const userPosts = await Post.find({ user: userId })
+      .sort({ createdAt: -1 }) // Sort by createdDate in descending order
       .populate("user", "username") // Populate user field with username only
       .populate("like", "username"); // Populate like field with username only
 
