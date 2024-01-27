@@ -5,37 +5,54 @@ import { useDispatch, useSelector } from "react-redux";
 import { authThunks } from "../../store/actions";
 import { loginSchema } from "../../shared/schemas";
 import { useFormik } from "formik";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { Toast } from "primereact/toast";
 
 const Login = () => {
+  const toast = useRef<Toast>(null);
+  const error = useSelector((state: any) => state.auth.errorMessage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
   const formHandler = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: (values, actions) => {
-      // @ts-ignore
-      dispatch(authThunks.login(values));
-      if (isAuth) {
-        actions.resetForm();
-        navigate("/");
-      } else {
+    onSubmit: async (values, actions) => {
+      try {
+        await dispatch(authThunks.login(values) as any);
+
+        // Show success toast
+        (toast.current as any)?.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Login successful",
+          life: 1500,
+        });
+
+        // Delay navigation after toast appears and disappears
+        setTimeout(() => {
+          actions.resetForm();
+          // navigate("/");
+        }, 2000); // Adjusted time to account for toast display time
+      } catch (error) {
+        // Show error toast
+        (toast.current as any)?.show({
+          severity: "error",
+          summary: "Failed",
+          detail: error, // Assuming error has a message property
+          life: 1500,
+        });
         actions.resetForm({ values: { ...values, password: "" } });
+        dispatch(authThunks.setErrorMessage("") as any);
       }
     },
   });
-  useEffect(() => {
-    if (isAuth) {
-      navigate("/");
-    }
-  }, [isAuth, navigate]);
 
   return (
     <div className="align">
+      <Toast ref={toast} />
       <div className="login-div">
         <div className="auth-title">
           Login as a <span>Groofy</span>

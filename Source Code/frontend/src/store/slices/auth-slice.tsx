@@ -4,6 +4,7 @@ const authInitialState = {
   user: localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user")!)
     : null,
+  errorMessage: "",
 };
 
 const authSlice = createSlice({
@@ -15,6 +16,9 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.user = null;
+    },
+    setErrorMessage(state, action) {
+      state.errorMessage = action.payload;
     },
   },
 });

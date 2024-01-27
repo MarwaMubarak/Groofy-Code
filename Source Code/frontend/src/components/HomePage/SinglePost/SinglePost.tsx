@@ -1,9 +1,10 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import "./scss/singlepost.css";
 import { SinglePostProps } from "../../../shared/types";
 import { useDispatch } from "react-redux";
 import postThunks from "../../../store/actions/post-actions";
 import FormatDate from "../../../shared/functions/format-date";
+import { Toast } from "primereact/toast";
 
 const SinglePost = (props: SinglePostProps) => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const SinglePost = (props: SinglePostProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
   const [time, setTime] = useState(FormatDate(props.postTime));
+  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -25,15 +27,53 @@ const SinglePost = (props: SinglePostProps) => {
     const updatePost = async () => {
       await dispatch(postThunks.updatePost(postID, content) as any);
     };
-    if (content.trim() === "") return;
-    updatePost();
+    if (content.trim() === "") {
+      (toast.current as any)?.show({
+        severity: "info",
+        summary: "Info",
+        detail: "Post cannot be empty",
+        life: 1500,
+      });
+      return;
+    }
+    try {
+      updatePost();
+      (toast.current as any)?.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Post updated succesfully",
+        life: 1500,
+      });
+    } catch (error: any) {
+      (toast.current as any)?.show({
+        severity: "error",
+        summary: "Failed",
+        detail: "Error has occured",
+        life: 1500,
+      });
+    }
   };
 
   const handleDelete = (postID: string) => {
     const deletePost = async () => {
       await dispatch(postThunks.deletePost(postID) as any);
     };
-    deletePost();
+    try {
+      deletePost();
+      (toast.current as any)?.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Post deleted succesfully",
+        life: 1500,
+      });
+    } catch (error: any) {
+      (toast.current as any)?.show({
+        severity: "error",
+        summary: "Failed",
+        detail: "Error has occured",
+        life: 1500,
+      });
+    }
   };
 
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -47,6 +87,7 @@ const SinglePost = (props: SinglePostProps) => {
 
   return (
     <div className={`single-post ${isEdit}`}>
+      <Toast ref={toast} />
       <div className="single-post-info">
         <div className="single-post-info-div">
           <img

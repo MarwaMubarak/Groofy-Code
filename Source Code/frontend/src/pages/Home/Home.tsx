@@ -5,16 +5,19 @@ import {
   Gamemode,
   SinglePost,
 } from "../../components";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import postThunks from "../../store/actions/post-actions";
 import "./scss/home.css";
+import { Toast } from "primereact/toast";
+import { Button } from "primereact/button";
 
 const Home = () => {
   const dispatch = useDispatch();
   const [newPostContent, setNewPostContent] = useState("");
   const user = useSelector((state: any) => state.auth.user);
   const allPosts: any[] = useSelector((state: any) => state.post.posts);
+  const toast = useRef<Toast>(null);
 
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
     autoExpand(e.target);
@@ -28,12 +31,35 @@ const Home = () => {
 
   const postHandler = (event: any) => {
     event.preventDefault();
-    const addNewPost = async () => {
-      await dispatch(postThunks.addPost(newPostContent) as any);
-    };
-    if (newPostContent.trim() === "") return;
-    addNewPost();
-    setNewPostContent("");
+    try {
+      const addNewPost = async () => {
+        await dispatch(postThunks.addPost(newPostContent) as any);
+      };
+      if (newPostContent.trim() === "") {
+        (toast.current as any)?.show({
+          severity: "info",
+          summary: "Info",
+          detail: "The post is empty",
+          life: 1500,
+        });
+        return;
+      }
+      addNewPost();
+      setNewPostContent("");
+      (toast.current as any)?.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Post added successfully",
+        life: 1500,
+      });
+    } catch (error: any) {
+      (toast.current as any)?.show({
+        severity: "error",
+        summary: "Failed",
+        detail: "Error has occured",
+        life: 1500,
+      });
+    }
   };
 
   useEffect(() => {
@@ -45,6 +71,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      <Toast ref={toast} />
       <SideBar idx={0} />
       <div className="activity-section align">
         <GroofyHeader />
@@ -137,27 +164,6 @@ const Home = () => {
                 ) : (
                   <div>No posts available.</div>
                 )}
-
-                {/* <SinglePost
-                  postUser="Hazem Adel"
-                  postUserImg="/Assets/Images/Hazem Adel.jpg"
-                  postContent="Hello world! this is my first post"
-                />
-                <SinglePost
-                  postUser="Hazem Adel"
-                  postUserImg="/Assets/Images/Hazem Adel.jpg"
-                  postContent="I wanna to beat someone now!!"
-                />
-                <SinglePost
-                  postUser="Hazem Adel"
-                  postUserImg="/Assets/Images/Hazem Adel.jpg"
-                  postContent="Ez"
-                />
-                <SinglePost
-                  postUser="Hazem Adel"
-                  postUserImg="/Assets/Images/Hazem Adel.jpg"
-                  postContent="Hakona Matata XD."
-                /> */}
               </div>
             </div>
           </form>

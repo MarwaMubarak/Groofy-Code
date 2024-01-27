@@ -1,7 +1,6 @@
 import { reqInstance } from "..";
 import { UserProps } from "../../shared/types";
 import { authActions } from "../slices/auth-slice";
-// import { toast } from "react-toastify";
 
 const login = (userData: UserProps) => {
   return async (dispatch: any) => {
@@ -14,7 +13,8 @@ const login = (userData: UserProps) => {
       dispatch(authActions.login(response.data.body));
       // toast.success("Login successful");
     } catch (error: any) {
-      // toast.error(error.response.data.error);
+      dispatch(authActions.setErrorMessage(error.response.data.message));
+      // throw error.response.data.message;
     }
   };
 };
@@ -40,11 +40,18 @@ const signup = (userData: UserProps) => {
       console.log(response.data);
       // toast.success("Created account succesfully");
     } catch (error: any) {
+      return error;
       // toast.error(error.response.data.error);
     }
   };
 };
 
-const authThunks = { login, logout, signup };
+const setErrorMessage = (message: string | null) => {
+  return (dispatch: any) => {
+    dispatch(authActions.setErrorMessage(message));
+  };
+};
+
+const authThunks = { login, logout, signup, setErrorMessage };
 
 export default authThunks;
