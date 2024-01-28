@@ -17,5 +17,7 @@ router.route('/removefriend').post(verifyToken, userFriendController.removeFrien
 
 router.route('/allfriends').get(verifyToken, userFriendController.getAllFriends);
 
+router.route('/user/update/:userId').put(verifyToken, userController.updateUser);
+
 
 module.exports = router;
