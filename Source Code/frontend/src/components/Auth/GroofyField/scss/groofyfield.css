@@ -20,6 +20,7 @@
   transition: 0.3s;
   width: 400px;
   outline: 2px solid transparent;
+  color: black;
 }
 .groofy-input input.err {
   outline-color: #f55353;

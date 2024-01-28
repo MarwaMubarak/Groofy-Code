@@ -1,31 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GBtn, GroofyField } from "../../components";
 import "./scss/signup/signup.css";
 import { useDispatch } from "react-redux";
 import { authThunks } from "../../store/actions";
 import { registerSchema } from "../../shared/schemas";
 import { useFormik } from "formik";
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
+import { AxiosError } from "axios";
 // import { useInput } from "../../shared/hooks";
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  // const emailRE: RegExp = new RegExp("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-  // const passRE: RegExp = new RegExp(
-  //   "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
-  // );
-  // const usernameValidator = useInput(
-  //   (value) =>
-  //     value.trim() !== "" &&
-  //     value.trim().length >= 4 &&
-  //     value.trim().length <= 100
-  // );
-  // const emailValidator = useInput(
-  //   (value) =>
-  //     value.trim() !== "" &&
-  //     new RegExp(emailRE).test(value) &&
-  //     value.trim().length >= 4 &&
-  //     value.trim().length <= 255
-  // );
+  const navigate = useNavigate();
+  const toast = useRef<Toast>(null);
+
   const formHandler = useFormik({
     initialValues: {
       username: "",
@@ -35,14 +24,40 @@ const SignUp = () => {
     },
     validationSchema: registerSchema,
     onSubmit: (values, actions) => {
-      // @ts-ignore
-      dispatch(authThunks.signup(values));
-      actions.resetForm();
+      const ret = dispatch(authThunks.signup(values) as any);
+      if (ret instanceof Promise) {
+        ret.then((res: any) => {
+          console.log("my res", res);
+          if (res instanceof AxiosError) {
+            actions.resetForm({ values: { ...values } });
+            (toast.current as any)?.show({
+              severity: "error",
+              summary: "Failed",
+              detail: res.response?.data?.message,
+              life: 1500,
+            });
+            return;
+          } else {
+            console.log("Message", res);
+            (toast.current as any)?.show({
+              severity: "success",
+              summary: "Success",
+              detail: "Login successful",
+              life: 1500,
+            });
+            setTimeout(() => {
+              actions.resetForm();
+              navigate("/login");
+            }, 700);
+          }
+        });
+      }
     },
   });
 
   return (
     <div className="align">
+      <Toast ref={toast} />
       <div className="signup-div">
         <div className="features">
           <div className="ft-title">

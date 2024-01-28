@@ -8,6 +8,7 @@ body ol {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
+  color: black;
 }
 
 @layer tailwind-base, primereact, tailwind-utilities;

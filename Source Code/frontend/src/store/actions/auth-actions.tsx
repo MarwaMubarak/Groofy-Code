@@ -38,7 +38,8 @@ const signup = (userData: UserProps) => {
         lastname: userData.lastname,
         country: userData.country,
       });
-      console.log(response.data);
+      console.log(response);
+      return response;
     } catch (error: any) {
       return error;
     }
