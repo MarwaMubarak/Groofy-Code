@@ -1,15 +1,17 @@
-@use "../../../../shared/styles/colors" as *;
-@use "../../../../shared/styles/mixins" as *;
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
 
 .posts-container {
   width: 100%;
   .post-box {
     background-color: $mainColor;
     padding-top: 15px;
-    width: calc(100% - 38px);
+    width: 100%;
     border-radius: 6px;
-    margin-right: 20px;
     box-shadow: $lightShadow;
+    &.false {
+      padding-top: 0px;
+    }
     .post-row {
       padding: 0 25px;
       @include between;

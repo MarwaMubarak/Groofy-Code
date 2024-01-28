@@ -1,10 +1,8 @@
-import { NavBar } from "../../components";
 import "./scss/clan.css";
 
 const Clan = () => {
   return (
     <>
-      <NavBar idx={3} />
       <div className="clan-div">
         <div className="c-info">
           <div className="c-box">

@@ -138,6 +138,9 @@
             background-color: $mainColor;
             border-radius: 6px;
             box-shadow: $lightShadow;
+            &.false {
+              margin-bottom: 0px;
+            }
             .ms {
               @include center;
               padding: 15px 0px;
@@ -184,15 +187,18 @@
                 @include between;
                 width: 100%;
                 margin-top: 10px;
+
                 span {
                   @include center;
+                  align-items: flex-end;
                   span {
                     margin-left: 5px;
                   }
                   img {
-                    width: 15px;
+                    width: 20px;
                     margin-right: 5px;
                   }
+
                   .ls {
                     color: rgb(0, 255, 0);
                     font-weight: bold;

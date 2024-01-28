@@ -6,8 +6,8 @@ import {
   PaginatorRowsPerPageDropdownOptions,
 } from "primereact/paginator";
 import { Dropdown } from "primereact/dropdown";
-import { SinglePost } from "../../..";
-import { PostsProps } from "../../../../shared/types";
+import { SinglePost } from "../..";
+import { PostsProps } from "../../../shared/types";
 import classes from "./scss/posts.module.css";
 
 const Posts = (props: PostsProps) => {

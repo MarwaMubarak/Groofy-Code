@@ -7,6 +7,8 @@ import { Image } from "primereact/image";
 import { postActions } from "../../store/slices/post-slice";
 import { useDispatch } from "react-redux";
 import "./scss/profile.css";
+import { useParams } from "react-router-dom";
+import FormatDate from "../../shared/functions/format-date";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -14,6 +16,8 @@ const Profile = () => {
   const user = useSelector((state: any) => state.auth.user);
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
+  const { username: userProfile } = useParams();
+
   return (
     <div className="newprofile-container">
       <Toast ref={toast} />
@@ -27,10 +31,12 @@ const Profile = () => {
           <div className="up-info-details">
             <div className="up-info-d-box">
               <h3>{user.username}</h3>
-              <div className="up-info-d-box-edit">
-                <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
-                <span>Edit</span>
-              </div>
+              {userProfile === user.username && (
+                <div className="up-info-d-box-edit">
+                  <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
+                  <span>Edit</span>
+                </div>
+              )}
             </div>
             <h4>
               Hazem Adel, Giza, Egypt
@@ -51,30 +57,37 @@ const Profile = () => {
               competitions. Driven by a passion for code optimization and
               continuous improvement.
             </p>
-            <div className="up-info-details-controls">
-              <GBtn
-                btnText="Message"
-                icnSrc="/Assets/SVG/message.svg"
-                clickEvent={() => {}}
-              />
-              <GBtn
-                btnText="Add Friend"
-                icnSrc="/Assets/SVG/addfriend.svg"
-                clickEvent={() => {}}
-              />
-            </div>
+            {userProfile !== user.username && (
+              <div className="up-info-details-controls">
+                <GBtn
+                  btnText="Message"
+                  icnSrc="/Assets/SVG/message.svg"
+                  clickEvent={() => {}}
+                />
+                <GBtn
+                  btnText="Add Friend"
+                  icnSrc="/Assets/SVG/addfriend.svg"
+                  clickEvent={() => {}}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="userprofile-side">
           <div className="up-side-left">
             <div className="media-section">
-              <div className="media-selectors">
+              <div
+                className={`media-selectors ${userProfile === user.username}`}
+              >
                 <div className="ms active">
                   <h3>Posts</h3>
                 </div>
-                <div className="ms">
-                  <h3>My Friends</h3>
-                </div>
+                {userProfile === user.username && (
+                  <div className="ms">
+                    <h3>Friends</h3>
+                  </div>
+                )}
+
                 <div className="ms">
                   <h3>Clan</h3>
                 </div>
@@ -99,6 +112,15 @@ const Profile = () => {
                   </abbr>
                 </div>
                 <div className="ps-container-box">
+                  <div className="psi-single-details">
+                    <span>
+                      <img src="/Assets/SVG/calendar.svg" alt="calender" />
+                      Joined
+                      <span className="beside">
+                        {FormatDate(user.createdAt)}
+                      </span>
+                    </span>
+                  </div>
                   <div className="psi-single-details">
                     <span>
                       World Rank: <span className="beside"> {user.rank}</span>

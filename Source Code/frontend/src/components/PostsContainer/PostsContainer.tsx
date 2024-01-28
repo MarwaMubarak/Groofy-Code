@@ -1,10 +1,11 @@
 import { ChangeEvent, RefObject, useEffect, useState } from "react";
-import { GBtn, Posts } from "../..";
+import { GBtn, Posts } from "..";
 import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "primereact/toast";
-import postThunks from "../../../store/actions/post-actions";
+import postThunks from "../../store/actions/post-actions";
 // import classes from "./scss/posts-container.module.css";
 import "./scss/posts-container.css";
+import { useParams } from "react-router-dom";
 
 const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
   const resMessage = useSelector((state: any) => state.post.message);
   const allPosts: any[] = useSelector((state: any) => state.post.body);
   const [newPostContent, setNewPostContent] = useState("");
+  const { username: userProfile } = useParams();
 
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
     autoExpand(e.target);
@@ -74,22 +76,25 @@ const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
 
   return (
     <form className="posts-container" onSubmit={postHandler}>
-      <div className="post-box">
-        <div className="post-row">
-          <img src={user.photo.url} alt="UserPhoto" />
-          <textarea
-            value={newPostContent}
-            placeholder="Share your coding insights and experiences"
-            onChange={handleExpanding}
-            maxLength={500}
-          ></textarea>
-          <GBtn
-            btnText="Quick Post"
-            icnSrc="/Assets/SVG/quick.svg"
-            clickEvent={() => {}}
-            btnType={true}
-          />
-        </div>
+      <div className={`post-box ${userProfile === user.username}`}>
+        {userProfile === user.username && (
+          <div className="post-row">
+            <img src={user.photo.url} alt="UserPhoto" />
+            <textarea
+              value={newPostContent}
+              placeholder="Share your coding insights and experiences"
+              onChange={handleExpanding}
+              maxLength={500}
+            ></textarea>
+            <GBtn
+              btnText="Quick Post"
+              icnSrc="/Assets/SVG/quick.svg"
+              clickEvent={() => {}}
+              btnType={true}
+            />
+          </div>
+        )}
+
         <Posts posts={allPosts} user={user} />
       </div>
     </form>

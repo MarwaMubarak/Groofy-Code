@@ -65,7 +65,7 @@ const GroofyHeader = () => {
           <img src={user.photo.url} alt="ProfilePicture" />
           <span>{user.username}</span>
         </div>
-        <Link to="/profile">
+        <Link to={`/profile/${user.username}`}>
           <div className="logout">
             <img src="/Assets/SVG/ProfileIconBlack.svg" alt="ProfilePicture" />
             <span>Profile</span>

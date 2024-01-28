@@ -6,7 +6,6 @@ import ProblemSection from "./Match/ProblemSection/ProblemSection";
 import CodingSection from "./Match/CodingSection/CodingSection";
 import TcR from "./Match/TcR/TcR";
 import GBtn from "./GBtn/GBtn";
-import NavBar from "./NavBar/NavBar";
 import MainProfile from "./Profile/MainProfile/MainProfile";
 import InformationSection from "./Profile/InformationSection/InformationSection";
 import ProfileAchievemnts from "./Profile/Achievement/Achievement";
@@ -26,8 +25,8 @@ import SingleFollowCard from "./HomePage/FollowCard/SingleFollowCard/SingleFollo
 import SideBar from "./SideBar/SideBar";
 import Gamemode from "./HomePage/Gamemode/Gamemode";
 import SinglePost from "./HomePage/SinglePost/SinglePost";
-import Posts from "./HomePage/PostsContainer/Posts/Posts";
-import PostsContainer from "./HomePage/PostsContainer/PostsContainer";
+import Posts from "./PostsContainer/Posts/Posts";
+import PostsContainer from "./PostsContainer/PostsContainer";
 
 export {
   MatchHeader,
@@ -38,7 +37,6 @@ export {
   CodingSection,
   TcR,
   GBtn,
-  NavBar,
   MainProfile,
   InformationSection,
   ProfileAchievemnts,

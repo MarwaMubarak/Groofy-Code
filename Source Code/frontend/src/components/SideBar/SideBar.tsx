@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./scss/sidebar.css";
+import { useSelector } from "react-redux";
 
 const SideBar = (probs: { idx: number }) => {
   const [sbActive, setSBActive] = useState(true);
+  const user = useSelector((state: any) => state.auth.user);
   return (
     <div className={`sidebar-container ${sbActive}`}>
       <div className="sidebar-up">
@@ -23,7 +25,7 @@ const SideBar = (probs: { idx: number }) => {
               <span>Home</span>
             </li>
           </Link>
-          <Link to="/profile">
+          <Link to={`/profile/${user.username}`}>
             <li className={`${probs.idx === 1 ? "active" : ""}`}>
               <img
                 src={`/Assets/SVG/${
