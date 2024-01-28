@@ -137,8 +137,8 @@ const getUserPosts = async (req, res) => {
     // Fetch posts for the specified user
     const userPosts = await Post.find({ user: userId })
       .sort({ createdAt: -1 }) // Sort by createdDate in descending order
-      .populate("user", "username") // Populate user field with username only
-      .populate("like", "username"); // Populate like field with username only
+      // .populate("user", "username") // Populate user field with username only
+      // .populate("like", "username"); // Populate like field with username only
 
     res.json(successfulRes("All posts returned.", userPosts));
   } catch (error) {
@@ -147,9 +147,44 @@ const getUserPosts = async (req, res) => {
   }
 };
 
+const addLike = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const currentUser = req.user;
+
+    // Check if the post exists
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json(unsuccessfulRes('Post not found'));
+    }
+
+    // Check if the user has already liked the post
+    const alreadyLikedIndex = post.like.indexOf(currentUser.id);
+
+    if (alreadyLikedIndex !== -1) {
+      // User has already liked the post, so unlike
+      post.like.splice(alreadyLikedIndex, 1);
+      await post.save();
+
+      return res.json(successfulRes('User removed from the like list'));
+    }
+
+    // User has not liked the post, so add to the like list
+    post.like.push(currentUser.id);
+    await post.save();
+
+    res.json(successfulRes('User added to the like list'));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(unsuccessfulRes('Internal Server Error'));
+  }
+};
+
 module.exports = {
   createPost,
   updatePostById,
   deletePostById,
   getUserPosts,
+  addLike,
 };
