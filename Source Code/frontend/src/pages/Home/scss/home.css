@@ -56,83 +56,20 @@
   margin-top: 50px;
   margin-bottom: 200px;
 }
-.home-container .activity-section .media-section .posts-container {
+.home-container .activity-section .media-section .home-posts-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
   width: 100%;
 }
-.home-container .activity-section .media-section .posts-container .post-header {
+.home-container .activity-section .media-section .home-posts-container .hpc-title {
   color: #f2f2f2;
   margin-bottom: 20px;
   border-bottom: 1px solid #fff;
   padding-bottom: 15px;
   font-size: 26px;
   width: calc(100% - 50px);
-}
-.home-container .activity-section .media-section .posts-container .post-box {
-  background-color: #0e141e;
-  padding-top: 15px;
-  width: calc(100% - 38px);
-  border-radius: 6px;
-  margin-right: 20px;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row {
-  padding: 0 25px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row img {
-  width: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row textarea {
-  font-family: OpenSans, Arial, Helvetica, sans-serif;
-  width: calc(100% - 192px);
-  overflow-y: hidden;
-  border: none;
-  padding: 12.2px 15px 5px;
-  border-radius: 6px;
-  background-color: rgba(22, 30, 46, 0.96);
-  caret-color: #f2f2f2;
-  color: #f2f2f2;
-  margin-right: 20px;
-  font-size: 16px;
-  resize: none;
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row textarea:focus {
-  outline: none;
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn {
-  background-color: #008ace;
-  box-shadow: none;
-  color: white;
-  width: 140px;
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn:hover {
-  background-color: #00a9ff;
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn img {
-  width: 24px;
-  margin-right: 0;
-}
-.home-container .activity-section .media-section .posts-container .post-box .post-row .groofybtn span {
-  font-size: 16px;
-}
-.home-container .activity-section .media-section .posts-container .posts {
-  margin-bottom: 40px;
-}
-.home-container .activity-section .media-section .posts-container .posts .empty-posts {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 30px 10px;
-  width: 100%;
-  border-top: 2px solid rgba(22, 30, 46, 0.96);
-  margin: 0 auto;
-  color: #fff;
-  font-size: 16px;
 }
 .home-container .activity-section .media-section .profile-section {
   display: flex;

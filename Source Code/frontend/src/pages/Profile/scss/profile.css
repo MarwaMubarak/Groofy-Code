@@ -138,25 +138,23 @@
 }
 .newprofile-container .userprofile .userprofile-side .up-side-left .media-section {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 200px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
 }
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container {
-  width: 100%;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-header {
+.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .media-selectors {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  width: 100%;
   color: #f2f2f2;
   margin-bottom: 20px;
   background-color: #0e141e;
   border-radius: 6px;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
 }
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-header .post-header-single {
+.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .media-selectors .ms {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -166,65 +164,15 @@
   cursor: pointer;
   transition: 0.3s;
 }
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-header .post-header-single:hover {
+.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .media-selectors .ms:hover {
   background-color: rgba(22, 30, 46, 0.96);
 }
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-header .post-header-single h3 {
+.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .media-selectors .ms h3 {
   font-size: 20px;
 }
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-header .post-header-single.active {
+.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .media-selectors .ms.active {
   background-color: #1a2335;
   border-bottom-color: #eee;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box {
-  background-color: #0e141e;
-  padding: 15px 25px 0px 25px;
-  border-radius: 6px;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row img {
-  width: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row textarea {
-  font-family: OpenSans, Arial, Helvetica, sans-serif;
-  width: calc(100% - 192px);
-  overflow-y: hidden;
-  border: none;
-  padding: 12.2px 15px 5px;
-  border-radius: 6px;
-  background-color: rgba(22, 30, 46, 0.96);
-  caret-color: #f2f2f2;
-  color: #f2f2f2;
-  margin-right: 20px;
-  font-size: 16px;
-  resize: none;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row textarea:focus {
-  outline: none;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row .groofybtn {
-  background-color: #008ace;
-  box-shadow: none;
-  color: white;
-  width: 140px;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row .groofybtn:hover {
-  background-color: #00a9ff;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row .groofybtn img {
-  width: 24px;
-  margin-right: 0;
-}
-.newprofile-container .userprofile .userprofile-side .up-side-left .media-section .posts-container .post-box .post-row .groofybtn span {
-  font-size: 16px;
 }
 .newprofile-container .userprofile .userprofile-side .up-side-right {
   display: flex;

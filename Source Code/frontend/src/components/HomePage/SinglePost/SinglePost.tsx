@@ -6,7 +6,6 @@ import postThunks from "../../../store/actions/post-actions";
 import FormatDate from "../../../shared/functions/format-date";
 import { Toast } from "primereact/toast";
 import { OverlayPanel } from "primereact/overlaypanel";
-import { Button } from "primereact/button";
 
 const SinglePost = (props: SinglePostProps) => {
   const dispatch = useDispatch();
@@ -148,20 +147,9 @@ const SinglePost = (props: SinglePostProps) => {
                     setEditContent(props.postContent);
                   }}
                 />
-                {/* <Button
-                  type="button"
-                  icon="pi pi-image"
-                  label="Image"
-                  onClick={(e) => op.current?.toggle(e)}
-                /> */}
-
                 <img
                   src="/Assets/SVG/delete.svg"
                   alt="Delete"
-                  // onClick={() => {
-                  //   handleDelete(props.postID);
-                  //   setEditContent(props.postContent);
-                  // }}
                   onClick={(event) => op.current.toggle(event)}
                 />
               </>
@@ -207,7 +195,7 @@ const SinglePost = (props: SinglePostProps) => {
           </>
         )}
         <span className="react-info">Like</span>
-        <span className={`react-cnt ${likeActive}`}>3.2k</span>
+        <span className={`react-cnt ${likeActive}`}>{props.postLikesCnt}</span>
       </div>
       {/* <div
           className={`reactions-popup ${reactions}`}

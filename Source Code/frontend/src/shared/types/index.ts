@@ -1,3 +1,6 @@
+import { Toast } from "primereact/toast";
+import { RefObject } from "react";
+
 // button props
 export interface btnProps {
   btnText: string;
@@ -136,6 +139,7 @@ export interface SinglePostProps {
   postContent: string;
   postTime: string;
   postID: string;
+  postLikesCnt: string;
   isEdited: boolean;
 }
 
@@ -148,4 +152,15 @@ export interface UserProps {
   firstname?: string;
   lastname?: string;
   country?: string;
+}
+
+// Posts Container Props
+export interface PostsContainerProps {
+  toast: RefObject<Toast>;
+}
+
+// Posts Props
+export interface PostsProps {
+  posts: any[];
+  user: any;
 }

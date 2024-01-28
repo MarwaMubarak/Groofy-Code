@@ -1,18 +1,14 @@
-import { SideBar, GroofyHeader, GBtn, SinglePost } from "../../components";
-import "./scss/profile.css";
-import { ChangeEvent } from "react";
+import { useRef } from "react";
+import { SideBar, GroofyHeader, GBtn, PostsContainer } from "../../components";
+import { useSelector } from "react-redux";
 import ReactCountryFlag from "react-country-flag";
+import { Toast } from "primereact/toast";
 import { Image } from "primereact/image";
+import "./scss/profile.css";
 
 const Profile = () => {
-  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    autoExpand(e.target);
-  };
-
-  const autoExpand = (textarea: HTMLTextAreaElement) => {
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
-  };
+  const toast = useRef<Toast>(null);
+  const user = useSelector((state: any) => state.auth.user);
   return (
     <div className="newprofile-container">
       <SideBar idx={1} />
@@ -20,18 +16,13 @@ const Profile = () => {
         <GroofyHeader />
         <div className="up-info">
           <div className="up-info-img">
-            <Image
-              src="/Assets/Images/Hazem Adel.jpg"
-              alt="Image"
-              width="160"
-              preview
-            />
+            <Image src={user.photo.url} alt="Image" width="160" preview />
           </div>
           <div className="up-info-details">
             <div className="up-info-d-box">
-              <h3>Rokba</h3>
+              <h3>{user.username}</h3>
               <div className="up-info-d-box-edit">
-                <img src="/Assets/SVG/edit.svg" />
+                <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
                 <span>Edit</span>
               </div>
             </div>
@@ -71,81 +62,22 @@ const Profile = () => {
         <div className="userprofile-side">
           <div className="up-side-left">
             <div className="media-section">
-              <form className="posts-container">
-                <div className="post-header">
-                  <div className="post-header-single active">
-                    <h3>Posts</h3>
-                  </div>
-                  <div className="post-header-single">
-                    <h3>My Friends</h3>
-                  </div>
-                  <div className="post-header-single">
-                    <h3>Clan</h3>
-                  </div>
-                  <div className="post-header-single">
-                    <h3>History</h3>
-                  </div>
+              <div className="media-selectors">
+                <div className="ms active">
+                  <h3>Posts</h3>
                 </div>
-                <div className="post-box">
-                  <div className="post-row">
-                    <img src="/Assets/Images/Hazem Adel.jpg" alt="" />
-                    <textarea
-                      placeholder="Share your coding insights and experiences"
-                      onChange={handleExpanding}
-                      maxLength={500}
-                    ></textarea>
-                    <GBtn
-                      btnText="Quick Post"
-                      icnSrc="/Assets/SVG/quick.svg"
-                      clickEvent={() => {}}
-                    />
-                  </div>
-                  {/* <div className="posts">
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="Hello world! this is my first post"
-                    />
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="I wanna to beat someone now!!"
-                    />
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="Ez"
-                    />
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="Hakona Matata XD."
-                    />
-                  </div> */}
+                <div className="ms">
+                  <h3>My Friends</h3>
                 </div>
-              </form>
-
-              {/* <ProfileCard
-            username="Hazem Adel"
-            bio="Student at FCAI - Cairo University | ECPC’23 Champion - Candidate Master @Codeforces"
-            worldRank={5}
-            followers={5}
-            level={5}
-            percentage={30}
-            userImg="/Assets/Images/Hazem Adel.jpg"
-            clanImg="/Assets/Images/clan1.png"
-            clanName="Ghosts"
-            rankImg="/Assets/Images/elite-rank.png"
-            rankName="Elite"
-            badges={[
-              ["Groofy Predator", "/Assets/Images/apex-predator-rank.png"],
-              ["High Accuracy", "/Assets/Images/attackbadge.png"],
-              ["Master Wins", "/Assets/Images/win20badge.png"],
-            ]}
-          /> */}
+                <div className="ms">
+                  <h3>Clan</h3>
+                </div>
+                <div className="ms">
+                  <h3>History</h3>
+                </div>
+              </div>
+              <PostsContainer toast={toast} />
             </div>
-            {/* <div className="up-achievement"></div>
-            <div className="up-history"></div> */}
           </div>
           <div className="up-side-right">
             <div className="profile-section">
@@ -163,17 +95,21 @@ const Profile = () => {
                 <div className="ps-container-box">
                   <div className="psi-single-details">
                     <span>
-                      World Rank: <span className="beside"> #4529</span>
+                      World Rank: <span className="beside"> {user.rank}</span>
                     </span>
                   </div>
                   <div className="psi-single-details">
                     <span>
-                      Last Seen: <span className="ls">Online</span>
+                      Last Seen:{" "}
+                      <span className="ls">
+                        {user.isOnline ? "Online" : "Offline"}
+                      </span>
                     </span>
                   </div>
                   <div className="psi-single-details">
                     <span>
-                      Friends: <span className="friends">42</span>
+                      Friends:{" "}
+                      <span className="friends">{user.friends.length}</span>
                     </span>
                   </div>
                 </div>
@@ -192,14 +128,20 @@ const Profile = () => {
                 <div className="ps-container-box">
                   <div className="psi-single-details">
                     <span>
-                      <img src="/Assets/Images/battleicon.png" />
+                      <img
+                        src="/Assets/Images/battleicon.png"
+                        alt="StatsIcon"
+                      />
                       Total Matches
                     </span>
                     <span className="any">800</span>
                   </div>
                   <div className="psi-single-details">
                     <span>
-                      <img src="/Assets/Images/Yellow_trophy.png" />
+                      <img
+                        src="/Assets/Images/Yellow_trophy.png"
+                        alt="StatsIcon"
+                      />
                       Highest Trophies
                     </span>
                     <span className="any">5030</span>
