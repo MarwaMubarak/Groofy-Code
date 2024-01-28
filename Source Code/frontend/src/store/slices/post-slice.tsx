@@ -14,7 +14,8 @@ const postSlice = createSlice({
       state.body = action.payload;
     },
     addPost(state, action) {
-      state.body.push(action.payload);
+      state.body = [action.payload, ...state.body];
+      // state.body.push(action.payload);
     },
     updatePost(state, action) {
       const postIdx = state.body.findIndex(

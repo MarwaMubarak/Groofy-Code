@@ -136,6 +136,7 @@ export interface SinglePostProps {
   postContent: string;
   postTime: string;
   postID: string;
+  isEdited: boolean;
 }
 
 // User Props

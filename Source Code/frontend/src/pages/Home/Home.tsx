@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import postThunks from "../../store/actions/post-actions";
 import "./scss/home.css";
 import { Toast } from "primereact/toast";
-import { Button } from "primereact/button";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -82,7 +81,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <Toast ref={toast} style={{ padding: "0.75rem 1.25rem" }} />
+      <Toast ref={toast} style={{ padding: "0.75rem" }} />
       <SideBar idx={0} />
       <div className="activity-section align">
         <GroofyHeader />
@@ -168,8 +167,9 @@ const Home = () => {
                       postUser={user["username"]}
                       postUserImg="/Assets/Images/Hazem Adel.jpg"
                       postContent={post["content"]}
-                      postTime={post["updatedAt"]}
+                      postTime={post["createdAt"]}
                       postID={post["id"]}
+                      isEdited={post["createdAt"] !== post["updatedAt"]}
                     />
                   ))
                 ) : (
@@ -178,7 +178,6 @@ const Home = () => {
               </div>
             </div>
           </form>
-          <Button label="asdasdasd" style={{ padding: "0.75rem 1.25rem" }} />
           <div className="profile-section">
             <div className="ps-info">
               <div className="ps-header">

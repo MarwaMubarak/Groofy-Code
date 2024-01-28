@@ -109,7 +109,11 @@ const SinglePost = (props: SinglePostProps) => {
           </div>
         </div>
         <div className="single-post-controls">
+          {props.isEdited && (
+            <span style={{ marginRight: "10px" }}>(Edited)</span>
+          )}
           <span>{time}</span>
+
           <div className="controls">
             {isEdit ? (
               <>
