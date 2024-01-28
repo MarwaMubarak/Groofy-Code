@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import postThunks from "../../../store/actions/post-actions";
 import FormatDate from "../../../shared/functions/format-date";
 import { Toast } from "primereact/toast";
+import { OverlayPanel } from "primereact/overlaypanel";
+import { Button } from "primereact/button";
 
 const SinglePost = (props: SinglePostProps) => {
   const dispatch = useDispatch();
@@ -13,6 +15,7 @@ const SinglePost = (props: SinglePostProps) => {
   const [editContent, setEditContent] = useState(props.postContent);
   const [time, setTime] = useState(FormatDate(props.postTime));
   const toast = useRef<Toast>(null);
+  const op = useRef<any>(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -145,16 +148,48 @@ const SinglePost = (props: SinglePostProps) => {
                     setEditContent(props.postContent);
                   }}
                 />
+                {/* <Button
+                  type="button"
+                  icon="pi pi-image"
+                  label="Image"
+                  onClick={(e) => op.current?.toggle(e)}
+                /> */}
+
                 <img
                   src="/Assets/SVG/delete.svg"
                   alt="Delete"
-                  onClick={() => {
-                    handleDelete(props.postID);
-                    setEditContent(props.postContent);
-                  }}
+                  // onClick={() => {
+                  //   handleDelete(props.postID);
+                  //   setEditContent(props.postContent);
+                  // }}
+                  onClick={(event) => op.current.toggle(event)}
                 />
               </>
             )}
+            <OverlayPanel ref={op}>
+              <div className="delete-panel">
+                <span>Are you sure you want to delete this post?</span>
+                <div className="delete-panel-btns">
+                  <button
+                    className="No-btn"
+                    onClick={(event) => {
+                      op.current.toggle(event);
+                    }}
+                  >
+                    No
+                  </button>
+                  <button
+                    className="Yes-btn"
+                    onClick={() => {
+                      handleDelete(props.postID);
+                      setEditContent(props.postContent);
+                    }}
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </OverlayPanel>
           </div>
         </div>
       </div>

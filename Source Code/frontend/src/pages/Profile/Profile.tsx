@@ -2,6 +2,7 @@ import { SideBar, GroofyHeader, GBtn, SinglePost } from "../../components";
 import "./scss/profile.css";
 import { ChangeEvent } from "react";
 import ReactCountryFlag from "react-country-flag";
+import { Image } from "primereact/image";
 
 const Profile = () => {
   const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -19,7 +20,12 @@ const Profile = () => {
         <GroofyHeader />
         <div className="up-info">
           <div className="up-info-img">
-            <img src="/Assets/Images/Hazem Adel.jpg" />
+            <Image
+              src="/Assets/Images/Hazem Adel.jpg"
+              alt="Image"
+              width="160"
+              preview
+            />
           </div>
           <div className="up-info-details">
             <div className="up-info-d-box">

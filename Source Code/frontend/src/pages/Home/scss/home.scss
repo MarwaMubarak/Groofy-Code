@@ -68,13 +68,14 @@
         }
         .post-box {
           background-color: $mainColor;
-          padding: 15px 25px 0px 25px;
+          padding-top: 15px;
           // width: fit-content;
           width: calc(100% - 38px);
           border-radius: 6px;
           margin-right: 20px;
           box-shadow: $lightShadow;
           .post-row {
+            padding: 0 25px;
             @include between;
             margin-bottom: 20px;
             img {

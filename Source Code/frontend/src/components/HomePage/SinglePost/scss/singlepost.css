@@ -1,6 +1,6 @@
 .single-post {
   border-top: 2px solid rgba(22, 30, 46, 0.96);
-  padding: 20px 0 15px;
+  padding: 20px 25px 15px;
 }
 .single-post .single-post-info {
   display: flex;
@@ -139,4 +139,46 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+.delete-panel {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 0 10px;
+}
+.delete-panel span {
+  margin-bottom: 10px;
+}
+.delete-panel .delete-panel-btns {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.delete-panel .delete-panel-btns .Yes-btn {
+  padding: 10px 50px;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: #00a9ff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+.delete-panel .delete-panel-btns .Yes-btn:hover {
+  background-color: #49c2ff;
+}
+.delete-panel .delete-panel-btns .No-btn {
+  padding: 10px 50px;
+  font-size: 15px;
+  font-weight: bold;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+.delete-panel .delete-panel-btns .No-btn:hover {
+  background-color: #919191;
 }/*# sourceMappingURL=singlepost.css.map */
