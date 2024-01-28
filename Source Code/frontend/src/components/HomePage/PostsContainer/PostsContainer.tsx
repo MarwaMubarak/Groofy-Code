@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "primereact/toast";
 import postThunks from "../../../store/actions/post-actions";
 // import classes from "./scss/posts-container.module.css";
-import classes from "./scss/posts-container.module.css";
+import "./scss/posts-container.css";
 
 const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
   const dispatch = useDispatch();
@@ -73,9 +73,9 @@ const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
   }, [allPosts.length, resMessage, resStatus, toast]);
 
   return (
-    <form className={classes.posts_container} onSubmit={postHandler}>
-      <div className={classes.post_box}>
-        <div className={classes.post_row}>
+    <form className="posts-container" onSubmit={postHandler}>
+      <div className="post-box">
+        <div className="post-row">
           <img src={user.photo.url} alt="UserPhoto" />
           <textarea
             value={newPostContent}

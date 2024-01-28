@@ -1,7 +1,7 @@
-.posts_container {
+.posts-container {
   width: 100%;
 }
-.posts_container .post_box {
+.posts-container .post-box {
   background-color: #0e141e;
   padding-top: 15px;
   width: calc(100% - 38px);
@@ -9,19 +9,19 @@
   margin-right: 20px;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
 }
-.posts_container .post_box .post_row {
+.posts-container .post-box .post-row {
   padding: 0 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
-.posts_container .post_box .post_row img {
+.posts-container .post-box .post-row img {
   width: 50px;
   border-radius: 50%;
   margin-right: 10px;
 }
-.posts_container .post_box .post_row textarea {
+.posts-container .post-box .post-row textarea {
   font-family: OpenSans, Arial, Helvetica, sans-serif;
   width: calc(100% - 192px);
   overflow-y: hidden;
@@ -35,22 +35,22 @@
   font-size: 16px;
   resize: none;
 }
-.posts_container .post_box .post_row textarea:focus {
+.posts-container .post-box .post-row textarea:focus {
   outline: none;
 }
-.posts_container .post_box .post_row .groofybtn {
+.posts-container .post-box .post-row .groofybtn {
   background-color: #008ace;
   box-shadow: none;
   color: white;
   width: 140px;
 }
-.posts_container .post_box .post_row .groofybtn:hover {
+.posts-container .post-box .post-row .groofybtn:hover {
   background-color: #00a9ff;
 }
-.posts_container .post_box .post_row .groofybtn img {
+.posts-container .post-box .post-row .groofybtn img {
   width: 24px;
   margin-right: 0;
 }
-.posts_container .post_box .post_row .groofybtn span {
+.posts-container .post-box .post-row .groofybtn span {
   font-size: 16px;
-}/*# sourceMappingURL=posts-container.module.css.map */
+}/*# sourceMappingURL=posts-container.css.map */
