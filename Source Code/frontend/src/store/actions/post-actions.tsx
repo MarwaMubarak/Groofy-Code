@@ -1,6 +1,5 @@
 import { reqInstance } from "..";
 import { postActions } from "../slices/post-slice";
-// import { toast } from "react-toastify";
 
 const getPosts = (_id: string) => {
   return async (dispatch: any) => {
@@ -79,6 +78,32 @@ const deletePost = (postID: string) => {
   };
 };
 
-const postThunks = { getPosts, addPost, deletePost, updatePost };
+const likePost = (postID: string) => {
+  return async (dispatch: any) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user")!);
+      if (user.token) {
+        const response = await reqInstance.post(
+          `/post/addLike/${postID}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        console.log("Response", response);
+        dispatch(postActions.likePost({ userID: user._id, postID }));
+        dispatch(postActions.setStatus(""));
+        dispatch(postActions.setMessage(""));
+      }
+    } catch (error: any) {
+      dispatch(postActions.setStatus(error.response.data.status));
+      dispatch(postActions.setMessage(error.response.data.message));
+    }
+  };
+};
+
+const postThunks = { getPosts, addPost, deletePost, updatePost, likePost };
 
 export default postThunks;

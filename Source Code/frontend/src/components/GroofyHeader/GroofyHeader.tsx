@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NotifyBox from "./NotifyBox/NotifyBox";
-import "./scss/groofyheader.css";
 import ActionButton from "./ActionButton/ActionButton";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { authThunks } from "../../store/actions";
+import { postActions } from "../../store/slices/post-slice";
+import "./scss/groofyheader.css";
 
 const GroofyHeader = () => {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ const GroofyHeader = () => {
 
   const handleLogout = () => {
     dispatch(authThunks.logout() as any);
+    dispatch(postActions.setStatus(""));
+    dispatch(postActions.setMessage(""));
     navigate("/login");
   };
   return (

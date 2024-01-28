@@ -15,12 +15,12 @@ const postSlice = createSlice({
     },
     addPost(state, action) {
       state.body = [action.payload, ...state.body];
-      // state.body.push(action.payload);
     },
     updatePost(state, action) {
       const postIdx = state.body.findIndex(
         (post: any) => post._id === action.payload._id
       );
+      console.log("Post Index", postIdx);
       state.body[postIdx].content = action.payload.content;
       state.body[postIdx].updatedAt = action.payload.updatedAt;
     },
@@ -28,6 +28,22 @@ const postSlice = createSlice({
       state.body = state.body.filter(
         (post: any) => post._id !== action.payload
       );
+    },
+
+    likePost(state, action) {
+      const postIdx = state.body.findIndex(
+        (post: any) => post._id === action.payload.postID
+      );
+      const userLiked = state.body[postIdx].like.includes(
+        action.payload.userID
+      );
+      if (!userLiked) {
+        state.body[postIdx].like.push(action.payload.userID);
+      } else {
+        state.body[postIdx].like = state.body[postIdx].like.filter(
+          (like: any) => like !== action.payload.userID
+        );
+      }
     },
     setStatus(state, action) {
       state.status = action.payload;

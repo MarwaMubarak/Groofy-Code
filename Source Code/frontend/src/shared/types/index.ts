@@ -134,6 +134,7 @@ export interface GamemodeProps {
 
 // Single Post props
 export interface SinglePostProps {
+  userid: string;
   postUser: string;
   postUserImg: string;
   postContent: string;

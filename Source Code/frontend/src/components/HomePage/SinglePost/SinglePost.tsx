@@ -1,20 +1,35 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import "./scss/singlepost.css";
-import { SinglePostProps } from "../../../shared/types";
-import { useDispatch } from "react-redux";
-import postThunks from "../../../store/actions/post-actions";
-import FormatDate from "../../../shared/functions/format-date";
+import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "primereact/toast";
 import { OverlayPanel } from "primereact/overlaypanel";
+import { SinglePostProps } from "../../../shared/types";
+import FormatDate from "../../../shared/functions/format-date";
+import postThunks from "../../../store/actions/post-actions";
+import "./scss/singlepost.css";
 
 const SinglePost = (props: SinglePostProps) => {
   const dispatch = useDispatch();
-  const [likeActive, setLikeActive] = useState(false);
+  const post = useSelector((state: any) =>
+    state.post.body.find((post: any) => post._id === props.postID)
+  );
+  const [likeActive, setLikeActive] = useState(
+    post?.like.includes(props.userid)
+  );
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
   const [time, setTime] = useState(FormatDate(props.postTime));
+  const [likes, setLikes] = useState(props.postLikesCnt);
   const toast = useRef<Toast>(null);
   const op = useRef<any>(null);
+
+  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    autoExpand(e.target);
+    setEditContent(e.target.value);
+  };
+  const autoExpand = (textarea: HTMLTextAreaElement) => {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -24,6 +39,11 @@ const SinglePost = (props: SinglePostProps) => {
       clearInterval(intervalId);
     };
   }, [props.postTime]);
+
+  useEffect(() => {
+    setLikes(post.like.length);
+    console.log(post.like.length);
+  }, [post.like.length]);
 
   const handleUpdate = (postID: string, content: string) => {
     const updatePost = async () => {
@@ -78,13 +98,16 @@ const SinglePost = (props: SinglePostProps) => {
     }
   };
 
-  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    autoExpand(e.target);
-    setEditContent(e.target.value);
-  };
-  const autoExpand = (textarea: HTMLTextAreaElement) => {
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
+  const handleLike = (postID: string) => {
+    const likePost = async () => {
+      await dispatch(postThunks.likePost(postID) as any);
+    };
+    try {
+      likePost();
+      setLikeActive(!likeActive);
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -115,7 +138,6 @@ const SinglePost = (props: SinglePostProps) => {
             <span style={{ marginRight: "10px" }}>(Edited)</span>
           )}
           <span>{time}</span>
-
           <div className="controls">
             {isEdit ? (
               <>
@@ -181,10 +203,7 @@ const SinglePost = (props: SinglePostProps) => {
           </div>
         </div>
       </div>
-      <div
-        className="s-p-reactbtn"
-        onClick={() => setLikeActive((state) => !state)}
-      >
+      <div className="s-p-reactbtn" onClick={() => handleLike(props.postID)}>
         {likeActive === false ? (
           <>
             <img src="/Assets/SVG/Love Icon white.svg" alt="Reaction"></img>
@@ -195,92 +214,8 @@ const SinglePost = (props: SinglePostProps) => {
           </>
         )}
         <span className="react-info">Like</span>
-        <span className={`react-cnt ${likeActive}`}>{props.postLikesCnt}</span>
+        <span className={`react-cnt ${likeActive}`}>{likes}</span>
       </div>
-      {/* <div
-          className={`reactions-popup ${reactions}`}
-          onMouseEnter={() => setReactions(true)}
-          onMouseLeave={() => setReactions(false)}
-        >
-          <div className="r-p-box">
-            <div className="r-p-box-img">
-              <img
-                src="/Assets/SVG/reaction-like.svg"
-                alt="Reaction"
-                onClick={() => {
-                  setLikeActive(true);
-                  setCurrReact("like");
-                  setReactions(false);
-                }}
-              />
-            </div>
-            <span>Like</span>
-          </div>
-          <div className="r-p-box">
-            <div className="r-p-box-img">
-              <img
-                src="/Assets/SVG/reaction-love.svg"
-                alt="Reaction"
-                onClick={() => {
-                  setLikeActive(true);
-                  setCurrReact("love");
-                  setReactions(false);
-                }}
-              />
-            </div>
-            <span>Love</span>
-          </div>
-          <div className="r-p-box">
-            <div className="r-p-box-img">
-              <img
-                src="/Assets/SVG/reaction-laugh.svg"
-                alt="Reaction"
-                onClick={() => {
-                  setLikeActive(true);
-                  setCurrReact("haha");
-                  setReactions(false);
-                }}
-              />
-            </div>
-            <span>Haha</span>
-          </div>
-          <div className="r-p-box">
-            <div className="r-p-box-img">
-              <img
-                src="/Assets/SVG/reaction-angry.svg"
-                alt="Reaction"
-                onClick={() => {
-                  setLikeActive(true);
-                  setCurrReact("angry");
-                  setReactions(false);
-                }}
-              />
-            </div>
-            <span>Angry</span>
-          </div>
-        </div> */}
-      {/* <div className="s-p-reactions-cnt">
-        <img
-          className="single-reaction"
-          src="/Assets/SVG/reaction-like.svg"
-          alt="Reaction"
-        />
-        <img
-          className="single-reaction"
-          src="/Assets/SVG/reaction-love.svg"
-          alt="Reaction"
-        />
-        <img
-          className="single-reaction"
-          src="/Assets/SVG/reaction-laugh.svg"
-          alt="Reaction"
-        />
-        <img
-        className="single-reaction"
-        src="/Assets/SVG/reaction-angry.svg"
-        alt="Reaction"
-      />
-      </div> */}
     </div>
   );
 };

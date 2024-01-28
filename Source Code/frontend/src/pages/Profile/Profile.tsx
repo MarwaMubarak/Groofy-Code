@@ -4,13 +4,19 @@ import { useSelector } from "react-redux";
 import ReactCountryFlag from "react-country-flag";
 import { Toast } from "primereact/toast";
 import { Image } from "primereact/image";
+import { postActions } from "../../store/slices/post-slice";
+import { useDispatch } from "react-redux";
 import "./scss/profile.css";
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const toast = useRef<Toast>(null);
   const user = useSelector((state: any) => state.auth.user);
+  dispatch(postActions.setStatus(""));
+  dispatch(postActions.setMessage(""));
   return (
     <div className="newprofile-container">
+      <Toast ref={toast} />
       <SideBar idx={1} />
       <div className="userprofile align">
         <GroofyHeader />

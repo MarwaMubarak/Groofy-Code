@@ -7,9 +7,14 @@ import {
   PostsContainer,
 } from "../../components";
 import "./scss/home.css";
+import { postActions } from "../../store/slices/post-slice";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
+  const dispatch = useDispatch();
   const toast = useRef<Toast>(null);
+  dispatch(postActions.setStatus(""));
+  dispatch(postActions.setMessage(""));
   return (
     <div className="home-container">
       <Toast ref={toast} style={{ padding: "0.75rem" }} />

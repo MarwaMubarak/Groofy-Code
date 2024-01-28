@@ -72,6 +72,7 @@ const Posts = (props: PostsProps) => {
             .map((post: any) => (
               <SinglePost
                 key={post.id}
+                userid={props.user._id}
                 postUser={props.user.username}
                 postUserImg={props.user.photo.url}
                 postContent={post.content}

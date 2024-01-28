@@ -1,6 +1,7 @@
 import { reqInstance } from "..";
 import { UserProps } from "../../shared/types";
 import { authActions } from "../slices/auth-slice";
+import { postActions } from "../slices/post-slice";
 
 const login = (userData: UserProps) => {
   return async (dispatch: any) => {
@@ -23,6 +24,8 @@ const login = (userData: UserProps) => {
 const logout = () => {
   return (dispatch: any) => {
     dispatch(authActions.logout());
+    dispatch(postActions.setStatus(""));
+    dispatch(postActions.setMessage(""));
     localStorage.removeItem("user");
   };
 };
