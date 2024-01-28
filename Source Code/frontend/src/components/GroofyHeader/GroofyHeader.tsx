@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import NotifyBox from "./NotifyBox/NotifyBox";
 import "./scss/groofyheader.css";
 import ActionButton from "./ActionButton/ActionButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { authThunks } from "../../store/actions";
 
 const GroofyHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.auth.user);
   const [notifyActive, setNotifyActive] = useState(false);
   const [notifyNewCnt, setNotifyNewCnt] = useState(15);
   const [notifyCnt, setNotifyCnt] = useState(4);
@@ -23,8 +24,7 @@ const GroofyHeader = () => {
   const [profileActive, setProfileActive] = useState(false);
 
   const handleLogout = () => {
-    // @ts-ignore
-    dispatch(authThunks.logout());
+    dispatch(authThunks.logout() as any);
     navigate("/login");
   };
   return (
@@ -59,8 +59,8 @@ const GroofyHeader = () => {
       </div>
       <div className={`profile-area ${profileActive}`}>
         <div className="pa-info">
-          <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
-          <span>Hazem Adel</span>
+          <img src={user.photo.url} alt="ProfilePicture" />
+          <span>{user.username}</span>
         </div>
         <Link to="/profile">
           <div className="logout">
@@ -81,10 +81,7 @@ const GroofyHeader = () => {
       </div>
       <div className="header-logo">
         <Link to="/">
-          <img src="/Assets/Images/GroofyLogoCover.png" />
-          {/* <span>
-            Groofy<span>Code</span>
-          </span> */}
+          <img src="/Assets/Images/GroofyLogoCover.png" alt="Logo" />
         </Link>
       </div>
       <div className="header-user-area">
@@ -126,7 +123,7 @@ const GroofyHeader = () => {
           >
             <img
               className="header-pr-ph"
-              src="/Assets/Images/Hazem Adel.jpg"
+              src={user.photo.url}
               alt="ProfilePhoto"
             />
           </div>

@@ -1,142 +1,15 @@
+import { useRef } from "react";
+import { Toast } from "primereact/toast";
 import {
-  GBtn,
   GroofyHeader,
   SideBar,
   Gamemode,
-  SinglePost,
+  PostsContainer,
 } from "../../components";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import postThunks from "../../store/actions/post-actions";
 import "./scss/home.css";
-import { Toast } from "primereact/toast";
-import {
-  Paginator,
-  PaginatorCurrentPageReportOptions,
-  PaginatorPageChangeEvent,
-  PaginatorRowsPerPageDropdownOptions,
-} from "primereact/paginator";
-import React from "react";
-import { Dropdown } from "primereact/dropdown";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const [newPostContent, setNewPostContent] = useState("");
-  const resStatus = useSelector((state: any) => state.post.status);
-  const resMessage = useSelector((state: any) => state.post.message);
-  const user = useSelector((state: any) => state.auth.user);
-  const allPosts: any[] = useSelector((state: any) => state.post.body);
   const toast = useRef<Toast>(null);
-  const [first, setFirst] = useState<number>(0);
-  const [rows, setRows] = useState<number>(5);
-
-  const onPageChange = (event: PaginatorPageChangeEvent) => {
-    setFirst(event.first);
-    setRows(event.rows);
-  };
-
-  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    autoExpand(e.target);
-    setNewPostContent(e.target.value);
-  };
-
-  const autoExpand = (textarea: HTMLTextAreaElement) => {
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
-  };
-
-  const postHandler = (event: any) => {
-    event.preventDefault();
-    const addNewPost = async () => {
-      await dispatch(postThunks.addPost(newPostContent) as any);
-    };
-    if (newPostContent.trim() === "") {
-      (toast.current as any)?.show({
-        severity: "info",
-        summary: "Info",
-        detail: "The post is empty",
-        life: 1500,
-      });
-      return;
-    }
-    addNewPost();
-  };
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      await dispatch(postThunks.getPosts(user["_id"]) as any);
-    };
-    fetchPosts();
-  }, [dispatch, user]);
-
-  useEffect(() => {
-    if (
-      resStatus === "" ||
-      resMessage === "" ||
-      resMessage === "All posts returned."
-    )
-      return;
-    if (resStatus === "success") {
-      (toast.current as any)?.show({
-        severity: "success",
-        summary: "Success",
-        detail: resMessage,
-        life: 1500,
-      });
-      setNewPostContent("");
-    } else {
-      (toast.current as any)?.show({
-        severity: "error",
-        summary: "Failed",
-        detail: resMessage,
-        life: 1500,
-      });
-    }
-  }, [allPosts.length, resMessage, resStatus]);
-
-  const PaginatorTemplate = {
-    layout:
-      "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown ",
-    RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
-      const dropdownOptions = [
-        { label: 5, value: 5 },
-        { label: 10, value: 10 },
-        { label: 20, value: 20 },
-        { label: 50, value: 50 },
-      ];
-
-      return (
-        <React.Fragment>
-          <span
-            className="mx-1"
-            style={{ color: "var(--text-color)", userSelect: "none" }}
-          >
-            Posts per page:{" "}
-          </span>
-          <Dropdown
-            value={options.value}
-            options={dropdownOptions}
-            onChange={options.onChange}
-          />
-        </React.Fragment>
-      );
-    },
-    CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
-      return (
-        <span
-          style={{
-            color: "var(--text-color)",
-            userSelect: "none",
-            width: "120px",
-            textAlign: "center",
-          }}
-        >
-          {options.first} - {options.last} of {options.totalRecords}
-        </span>
-      );
-    },
-  };
-
   return (
     <div className="home-container">
       <Toast ref={toast} style={{ padding: "0.75rem" }} />
@@ -200,58 +73,10 @@ const Home = () => {
           </div>
         </div>
         <div className="media-section">
-          <form className="posts-container">
-            <h3 className="post-header">Posts</h3>
-            <div className="post-box">
-              <div className="post-row">
-                <img src="/Assets/Images/Hazem Adel.jpg" alt="" />
-                <textarea
-                  value={newPostContent}
-                  placeholder="Share your coding insights and experiences"
-                  onChange={handleExpanding}
-                  maxLength={500}
-                ></textarea>
-                <GBtn
-                  btnText="Quick Post"
-                  icnSrc="/Assets/SVG/quick.svg"
-                  clickEvent={postHandler}
-                />
-              </div>
-              <div className="posts">
-                {allPosts && allPosts.length > 0 ? (
-                  <>
-                    {allPosts
-                      .slice(
-                        Math.min(first, allPosts.length),
-                        Math.min(first + rows, allPosts.length)
-                      )
-                      .map((post) => (
-                        <SinglePost
-                          key={post["id"]}
-                          postUser={user["username"]}
-                          postUserImg="/Assets/Images/Hazem Adel.jpg"
-                          postContent={post["content"]}
-                          postTime={post["createdAt"]}
-                          postID={post["id"]}
-                          isEdited={post["createdAt"] !== post["updatedAt"]}
-                        />
-                      ))}
-                    <Paginator
-                      first={first}
-                      rows={rows}
-                      totalRecords={allPosts.length}
-                      rowsPerPageOptions={[5, 10, 20]}
-                      onPageChange={onPageChange}
-                      template={PaginatorTemplate}
-                      // currentPageReportTemplate="{first} to {last} of {totalRecords} posts"
-                    />
-                  </>
-                ) : (
-                  <div className="empty-posts">No posts available.</div>
-                )}
-              </div>
-            </div>
-          </form>
+          <div className="home-posts-container">
+            <h3 className="hpc-title">Posts</h3>
+            <PostsContainer toast={toast} />
+          </div>
           <div className="profile-section">
             <div className="ps-info">
               <div className="ps-header">
@@ -311,59 +136,8 @@ const Home = () => {
               </div>
             </div>
           </div>
-          {/* <ProfileCard
-            username="Hazem Adel"
-            bio="Student at FCAI - Cairo University | ECPC’23 Champion - Candidate Master @Codeforces"
-            worldRank={5}
-            followers={5}
-            level={5}
-            percentage={30}
-            userImg="/Assets/Images/Hazem Adel.jpg"
-            clanImg="/Assets/Images/clan1.png"
-            clanName="Ghosts"
-            rankImg="/Assets/Images/elite-rank.png"
-            rankName="Elite"
-            badges={[
-              ["Groofy Predator", "/Assets/Images/apex-predator-rank.png"],
-              ["High Accuracy", "/Assets/Images/attackbadge.png"],
-              ["Master Wins", "/Assets/Images/win20badge.png"],
-            ]}
-          /> */}
         </div>
       </div>
-      {/* <div className="activity-section align">
-          <div className="status-container">
-            <ProfileCard
-              username="Hazem Adel"
-              bio="Student at FCAI - Cairo University | ECPC’23 Champion - Candidate Master @Codeforces"
-              worldRank={5}
-              followers={5}
-              level={5}
-              percentage={30}
-              userImg="/Assets/Images/Hazem Adel.jpg"
-              clanImg="/Assets/Images/clan1.png"
-              clanName="Ghosts"
-              rankImg="/Assets/Images/elite-rank.png"
-              rankName="Elite"
-              badges={[
-                ["Groofy Predator", "/Assets/Images/apex-predator-rank.png"],
-                ["High Accuracy", "/Assets/Images/attackbadge.png"],
-                ["Master Wins", "/Assets/Images/win20badge.png"],
-              ]}
-            />
-          </div>
-          <div className="blogs-container">
-            {[1, 2, 3, 4, 5].map(() => (
-              <Blog />
-            ))}
-          </div>
-          <div className="events-container">
-             <EventCard title="Ranked Match" btn_title="Battle" details="Challenge your skills and climb the ranks with the option to
-                play in a competitive ranked match." img="/Assets/Images/battle.png"/>
-                <EventCard title="Casual Match" btn_title="Battle" details="Empower players to create their perfect match by allowing them to customize every aspect." img="/Assets/Images/battle.png"/>
-             <FollowCard/>
-          </div>
-        </div> */}
     </div>
   );
 };

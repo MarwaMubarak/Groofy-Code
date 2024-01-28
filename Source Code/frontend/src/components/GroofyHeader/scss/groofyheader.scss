@@ -98,7 +98,7 @@
       border-radius: 6px;
       transition: 0.3s;
       padding: 5px 0px;
-      cursor: pointer;
+      user-select: none;
       &::after {
         content: "";
         position: absolute;
@@ -114,6 +114,7 @@
         height: 40px;
         border-radius: 50%;
         margin-right: 5px;
+        margin-left: 5px;
       }
       span {
         font-weight: bold;

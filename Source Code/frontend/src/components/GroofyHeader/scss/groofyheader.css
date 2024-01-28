@@ -122,7 +122,9 @@
   border-radius: 6px;
   transition: 0.3s;
   padding: 5px 0px;
-  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .header-container .profile-area .pa-info::after {
   content: "";
@@ -139,6 +141,7 @@
   height: 40px;
   border-radius: 50%;
   margin-right: 5px;
+  margin-left: 5px;
 }
 .header-container .profile-area .pa-info span {
   font-weight: bold;

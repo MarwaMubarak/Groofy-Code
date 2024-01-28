@@ -1,7 +1,9 @@
+import { useSelector } from "react-redux";
 import { Gamemode, GroofyHeader, SideBar } from "../../components";
 import "./scss/play.css";
 
 const Play = () => {
+  const user = useSelector((state: any) => state.auth.user);
   return (
     <div className="play-page">
       <SideBar idx={2} />
@@ -10,13 +12,13 @@ const Play = () => {
         <div className="play-mid-menu">
           <div className="play-left-menu">
             <div className="play-img-user">
-              <img src="/Assets/Images/profile_picture.jpg" />
+              <img src="/Assets/Images/profile_picture.jpg" alt="UserPhoto" />
             </div>
             <div className="play-versus-img">
-              <img src="/Assets/Images/versus.png" />
+              <img src="/Assets/Images/versus.png" alt="Versus" />
             </div>
             <div className="play-img-user">
-              <img src="/Assets/Images/Hazem Adel.jpg" />
+              <img src={user.photo.url} alt="UserPhoto" />
             </div>
           </div>
           <div className="play-menu">

@@ -1,0 +1,57 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.posts_container {
+  width: 100%;
+  .post_box {
+    background-color: $mainColor;
+    padding-top: 15px;
+    width: calc(100% - 38px);
+    border-radius: 6px;
+    margin-right: 20px;
+    box-shadow: $lightShadow;
+    .post_row {
+      padding: 0 25px;
+      @include between;
+      margin-bottom: 20px;
+      img {
+        width: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      textarea {
+        font-family: OpenSans, Arial, Helvetica, sans-serif;
+        width: calc(100% - 192px);
+        overflow-y: hidden;
+        border: none;
+        padding: 12.2px 15px 5px;
+        border-radius: 6px;
+        background-color: $mainColor2;
+        caret-color: $hoverColor;
+        color: $hoverColor;
+        margin-right: 20px;
+        font-size: 16px;
+        resize: none;
+        &:focus {
+          outline: none;
+        }
+      }
+      .groofybtn {
+        background-color: #008ace;
+        box-shadow: none;
+        color: white;
+        width: 140px;
+        &:hover {
+          background-color: $blueColor;
+        }
+        img {
+          width: 24px;
+          margin-right: 0;
+        }
+        span {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
