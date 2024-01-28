@@ -26,12 +26,19 @@ module.exports.regiseterUser = asyncHandler(async (req, res) => {
     return res.status(400).json(unsuccessfulRes(error.details[0].message));
   }
 
-  // Check if the user already exists in the database
-  const existingUser = await User.findOne({ email });
+  // Check if the email already exists in the database
+  const existingEmail = await User.findOne({ email });
+  // Check if the username already exists in the database
+  const existingUserName = await User.findOne({ username });
 
-  if (existingUser) {
-    return res.status(400).json(unsuccessfulRes("User already registered."));
+  if (existingUserName) {
+    return res.status(400).json(unsuccessfulRes("Username is already taken."));
   }
+
+  if (existingEmail) {
+    return res.status(400).json(unsuccessfulRes("Email is already registered."));
+  }
+
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
