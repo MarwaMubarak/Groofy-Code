@@ -7,7 +7,7 @@ import { Image } from "primereact/image";
 import { postActions } from "../../store/slices/post-slice";
 import { useDispatch } from "react-redux";
 import "./scss/profile.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FormatDate from "../../shared/functions/format-date";
 
 const Profile = () => {
@@ -32,10 +32,12 @@ const Profile = () => {
             <div className="up-info-d-box">
               <h3>{user.username}</h3>
               {userProfile === user.username && (
-                <div className="up-info-d-box-edit">
-                  <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
-                  <span>Edit</span>
-                </div>
+                <Link to="/profile/edit">
+                  <div className="up-info-d-box-edit">
+                    <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
+                    <span>Edit</span>
+                  </div>
+                </Link>
               )}
             </div>
             <h4>

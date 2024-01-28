@@ -1,5 +1,14 @@
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
-import { Home, Login, SignUp, Match, Clan, Profile, Play } from "./pages";
+import {
+  Home,
+  Login,
+  SignUp,
+  Match,
+  Clan,
+  Profile,
+  Play,
+  EditProfile,
+} from "./pages";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -16,6 +25,10 @@ function App() {
         <Route
           path="/profile/:username"
           element={user ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/profile/edit"
+          element={user ? <EditProfile /> : <Navigate to="/login" />}
         />
         <Route
           path="/play"

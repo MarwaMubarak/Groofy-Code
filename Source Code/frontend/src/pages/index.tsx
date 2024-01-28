@@ -5,5 +5,6 @@ import SignUp from "./Auth/SignUp";
 import Clan from "./Clan/Clan";
 import Profile from "./Profile/Profile";
 import Play from "./Play/Play";
+import EditProfile from "./EditProfile/EditProfile";
 
-export { Home, Match, Login, SignUp, Clan, Profile, Play };
+export { Home, Match, Login, SignUp, Clan, Profile, Play, EditProfile };
