@@ -19,7 +19,7 @@ router.route('/allfriends').get(verifyToken, userFriendController.getAllFriends)
 
 router.route('/user/update/:userId').put(verifyToken, userController.updateUser);
 
-router.get('/user/:username', userController.getUserByUsername)
+router.route('/user/:username').get(verifyToken, userController.getUserByUsername);
 
 router.route('/users/:userId').put(verifyToken, userController.changePassword);
 
