@@ -19,5 +19,7 @@ router.route('/allfriends').get(verifyToken, userFriendController.getAllFriends)
 
 router.route('/user/update/:userId').put(verifyToken, userController.updateUser);
 
+router.get('/user/:username', userController.getUserByUsername)
+
 
 module.exports = router;

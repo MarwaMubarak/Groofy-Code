@@ -164,4 +164,27 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
         res.status(500).json(unsuccessfulRes("Internal server error"))
     }
 
-})
+});
+
+/**----------------------------------------
+ *  @description  Get User Information by Username
+ *  @route        /api/user/:username
+ *  @method       GET
+ *  @access       public
+ -----------------------------------------*/
+ module.exports.getUserByUsername = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  // Find the user by the provided username
+  const user = await User.findOne({ username });
+ 
+  if (!user) {
+    return res.status(404).json(unsuccessfulRes("User not found"));
+  }
+ 
+  // Exclude sensitive information like password
+  const userData = user.toJSON();
+  delete userData.password;
+ 
+  res.status(200).json(successfulRes("User found", userData));
+});
+

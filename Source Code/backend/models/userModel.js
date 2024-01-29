@@ -87,11 +87,34 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    // clan: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Clan",
-    //   default: null,
-    // },
+    totalMatch: {
+      type: Number,
+      default: 0,
+    },
+    highestTrophies: {
+      type: Number,
+      default: 0,
+    },
+    wins: {
+      type: Number,
+      default: 0,
+    },
+    loses: {
+      type: Number,
+      default: 0,
+    },
+    draws: {
+      type: Number,
+      default: 0,
+    },
+    division: {
+      type: String, // will change
+      default: "",
+    },
+    history: {
+      type: String, // will change
+      default: "",
+    },
 }, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 /*******************
