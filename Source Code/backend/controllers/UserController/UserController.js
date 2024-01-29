@@ -11,7 +11,6 @@ const {
     successfulRes,
     unsuccessfulRes,
 } = require("../../utilities/responseFormate");
-const { use } = require("../../routes/userRoute");
 
 /**----------------------------------------
  *  @description  Register New User
@@ -130,7 +129,7 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
     try {
         const userId = req.params.userId;
         const newBody = req.body;
-        const { password, firstname, lastname, country, friends, bio, city } = req.body;
+        const { password, firstname, lastname, country, friends, bio, city, selectedBadges } = req.body;
 
         // check if the authentication
         if (String(userId) !== String(req.user.id)) {
@@ -138,7 +137,7 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
                 .status(403)
                 .json(
                     unsuccessfulRes(
-                        "Unauthorized. You do not have permission to update user information."
+                        "Unauthorized! You do not have permission to update user information."
                     )
                 );
         }
@@ -149,14 +148,16 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
             return res.status(400).json(unsuccessfulRes(error.details[0].message));
         }
         // update user 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newBody.password, salt);
-        newBody.password = hashedPassword;
+        if (newBody.password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newBody.password, salt);
+            newBody.password = hashedPassword;
+        }
         const updatedUser = await User.findByIdAndUpdate(userId, newBody, { new: true });
         if (!updatedUser) {
             return res.status(404).json(unsuccessfulRes("User Not Found!"))
         }
-        res.status(200).json(successfulRes("updated successfully", updatedUser));
+        res.status(200).json(successfulRes("Updated successfully!", updatedUser));
 
     } catch (error) {
         console.error(error);

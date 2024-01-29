@@ -58,10 +58,16 @@ const UserSchema = new mongoose.Schema({
         maxlength: 1000,
 
     },
-    rank: {
-        type: String,
-        default: "unranked",
-    },
+    badges: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Badge",
+    }],
+
+    selectedBadges: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Badge",
+    }],
+
     friends: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -151,6 +157,7 @@ const validateLogin = (user) => {
     });
     return schema.validate(user);
 };
+//Update User
 const validateUpdateUser = (user) => {
     const schema = Joi.object({
         firstname: Joi.string().trim().min(3).max(256),

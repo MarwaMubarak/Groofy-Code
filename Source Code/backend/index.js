@@ -14,10 +14,10 @@ index.use(express.json());
 
 // Allowing cors policy
 index.use(
-  cors({
-    origin: "*",
-    allowedHeaders: ["Content-Type", "authorization"],
-  })
+    cors({
+        origin: "*",
+        allowedHeaders: ["Content-Type", "authorization"],
+    })
 );
 
 // Routes
@@ -25,6 +25,8 @@ index.use("/", require("./routes/userRoute"));
 index.use("/", require("./routes/clanRoute"));
 index.use("/", require("./routes/blogRoute"));
 index.use("/", require("./routes/postRoute"));
+index.use("/", require("./routes/badgeRoute"));
+
 
 // Security Measures
 index.use(helmet());
@@ -33,5 +35,5 @@ index.use(hpp());
 // Starting up the server
 const Port = process.env.PORT;
 index.listen(Port, () => {
-  console.log("Server is running successfully");
+    console.log("Server is running successfully");
 });
