@@ -10,7 +10,7 @@ const SideBar = (probs: { idx: number }) => {
     <div className={`sidebar-container ${sbActive}`}>
       <div className="sidebar-up">
         <div className="sidebar-header">
-          <img src="/Assets/SVG/menu.svg" alt="Menu" />
+          <img src="/Assets/SVG/codeIcon2.svg" alt="Menu" />
           <span className="sidebar-logo">Menu</span>
         </div>
         <ul className="sidebar-nav-items">

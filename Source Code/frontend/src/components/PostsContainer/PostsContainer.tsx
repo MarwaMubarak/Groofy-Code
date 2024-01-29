@@ -85,7 +85,7 @@ const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
               placeholder="Share your coding insights and experiences"
               onChange={handleExpanding}
               maxLength={500}
-            ></textarea>
+            />
             <GBtn
               btnText="Quick Post"
               icnSrc="/Assets/SVG/quick.svg"

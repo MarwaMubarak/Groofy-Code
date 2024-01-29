@@ -27,7 +27,11 @@ import Gamemode from "./HomePage/Gamemode/Gamemode";
 import SinglePost from "./HomePage/SinglePost/SinglePost";
 import Posts from "./PostsContainer/Posts/Posts";
 import PostsContainer from "./PostsContainer/PostsContainer";
-
+import PersonalDetails from "./EditProfile/PersonalDetails/PersonalDetails";
+import Security from "./EditProfile/Security/Security";
+import Appearance from "./EditProfile/Appearance/Appearance";
+import Privacy from "./EditProfile/Privacy/Privacy";
+import Notifications from "./EditProfile/Notifications/Notifications";
 export {
   MatchHeader,
   Scoreboard,
@@ -58,4 +62,9 @@ export {
   SinglePost,
   Posts,
   PostsContainer,
+  PersonalDetails,
+  Security,
+  Appearance,
+  Privacy,
+  Notifications,
 };

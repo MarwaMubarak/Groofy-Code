@@ -1,0 +1,81 @@
+@use "../../../../../shared/styles/colors" as *;
+@use "../../../../../shared/styles/mixins" as *;
+
+.edit_info {
+  height: 100%;
+  width: 75%;
+  padding-left: 50px;
+  .edit_header {
+    font-size: 40px;
+    margin-bottom: 30px;
+    color: $hoverColor;
+  }
+  .edit_content {
+    .editprofile_photo {
+      @include center;
+      flex-direction: column;
+      position: absolute;
+      right: 150px;
+      img {
+        width: 170px;
+        border-radius: 50%;
+        margin-bottom: 25px;
+      }
+      label {
+        cursor: pointer;
+        color: $hoverColor;
+        font-size: 16px;
+        transition: 0.3s;
+        background-color: #008ace;
+        padding: 10px 15px;
+        border-radius: 6px;
+        font-weight: bold;
+        &:hover {
+          background-color: $blueColor;
+        }
+        i {
+          margin-right: 10px;
+        }
+      }
+    }
+    .bio_content {
+      h1 {
+        font-size: 16px;
+      }
+      textarea {
+        font-family: OpenSans, Arial, Helvetica, sans-serif;
+        width: 400px;
+        overflow-y: hidden;
+        border: none;
+        padding: 12.2px 15px 5px;
+        border-radius: 6px;
+        background-color: $mainColor;
+        caret-color: $hoverColor;
+        color: $hoverColor;
+        margin-right: 20px;
+        font-size: 16px;
+        resize: none;
+        &:focus {
+          outline: none;
+        }
+        margin-bottom: 10px;
+      }
+    }
+    .country_selector {
+      @include start;
+      margin-bottom: 30px;
+      .cs-title {
+        margin-right: 10px;
+        color: $hoverColor;
+      }
+    }
+    .ggb {
+      background-color: #ff352e;
+      width: 140px;
+      border-radius: 6px;
+      &:hover {
+        background-color: $blueColor;
+      }
+    }
+  }
+}

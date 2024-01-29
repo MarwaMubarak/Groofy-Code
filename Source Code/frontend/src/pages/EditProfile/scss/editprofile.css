@@ -2,82 +2,106 @@
   display: flex;
   height: 100vh;
   overflow: auto;
+  color: white;
 }
-.editprofile-container .edit-profile {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.editprofile-container .editprofile-page {
   margin: 0 150px;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-.editprofile-container .edit-profile .edit-menu {
+.editprofile-container .editprofile-page .edtiprofile-settings {
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  padding: 7px 10px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  position: relative;
+}
+.editprofile-container .editprofile-page .edtiprofile-settings::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(59, 67, 85);
+  bottom: -12px;
+}
+.editprofile-container .editprofile-page .edtiprofile-settings i {
+  font-size: 28px;
+  margin-right: 10px;
+  color: #c9c9c9;
+}
+.editprofile-container .editprofile-page .edtiprofile-settings h1 {
+  font-size: 22px;
+  color: #c9c9c9;
+  transition: 0.3s;
+}
+.editprofile-container .editprofile-page .edit-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.editprofile-container .editprofile-page .edit-profile .edit-menu {
   position: relative;
   height: 100%;
-  width: 30%;
+  width: 25%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  padding: 50px;
 }
-.editprofile-container .edit-profile .edit-menu::after {
+.editprofile-container .editprofile-page .edit-profile .edit-menu::after {
   content: "";
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
+  right: 0px;
   width: 1px;
   height: calc(100% - 100px);
-  background-color: #eee;
+  background-color: rgba(255, 255, 255, 0.1882352941);
 }
-.editprofile-container .edit-profile .edit-menu .edit-section {
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: calc(100% - 30px);
   padding: 7px 10px;
   border-radius: 6px;
-  transition: 0.3s;
   cursor: pointer;
 }
-.editprofile-container .edit-profile .edit-menu .edit-section.active {
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section.active {
   background-color: rgba(0, 169, 255, 0.1);
+  font-weight: bold;
 }
-.editprofile-container .edit-profile .edit-menu .edit-section.active .es-title {
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section.active .es-title {
   color: #f2f2f2;
 }
-.editprofile-container .edit-profile .edit-menu .edit-section:hover .es-title {
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section.active .es-img i {
+  color: white;
+}
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section:hover .es-title {
   color: #f2f2f2;
 }
-.editprofile-container .edit-profile .edit-menu .edit-section:not(:last-of-type) {
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section:not(:last-of-type) {
   margin-bottom: 25px;
 }
-.editprofile-container .edit-profile .edit-menu .edit-section .es-img img {
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section .es-img img {
   width: 32px;
   margin-right: 10px;
 }
-.editprofile-container .edit-profile .edit-menu .edit-section .es-title {
-  font-size: 18px;
-  color: #00a9ff;
-  transition: 0.3s;
-}
-.editprofile-container .edit-profile .edit-info {
-  height: 100%;
-  width: 70%;
-  padding: 30px 0 30px 70px;
-}
-.editprofile-container .edit-profile .edit-info .edit-header {
-  font-size: 40px;
-  margin-bottom: 30px;
-  color: #f2f2f2;
-}
-.editprofile-container .edit-profile .edit-info .edit-content .country-selector {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.editprofile-container .edit-profile .edit-info .edit-content .country-selector .cs-title {
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section .es-img i {
+  font-size: 28px;
   margin-right: 10px;
-  color: #f2f2f2;
+  color: #c9c9c9;
+}
+.editprofile-container .editprofile-page .edit-profile .edit-menu .edit-section .es-title {
+  font-size: 18px;
+  color: #c9c9c9;
+  transition: 0.3s;
 }/*# sourceMappingURL=editprofile.css.map */
