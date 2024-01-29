@@ -1,12 +1,12 @@
 const {
     Badge,
     validateBadge,
-} = require('../models/badgeModel');
+} = require('../../models/badgeModel');
 const asyncHandler = require("express-async-handler");
 const {
     successfulRes,
     unsuccessfulRes,
-} = require("../utilities/responseFormate");
+} = require("../../utilities/responseFormate");
 
 
 /**----------------------------------------

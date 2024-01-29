@@ -2,7 +2,7 @@ const {
   Blog,
   updateBlogValidation,
   createBlogValidation,
-} = require("../models/blogModel");
+} = require("../../models/blogModel");
 
 /**----------------------------------------
  *  @description  Create New Blog

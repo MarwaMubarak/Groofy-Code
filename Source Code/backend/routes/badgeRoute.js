@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const badgeController = require('../controllers/BadgeController')
+const badgeController = require('../controllers/BadgeController/BadgeController')
 
 router.post('/badge/create', badgeController.createBadge);
 router.get('/badge/all', badgeController.getAllBadges);

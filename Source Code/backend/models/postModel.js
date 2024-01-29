@@ -44,7 +44,6 @@ const PostSchema = new mongoose.Schema(
         user: like.user
       }));
 
-      // Optionally, remove other fields like '_id' from the top-level object
       delete ret.id;
       delete ret.__v;
 

@@ -143,7 +143,6 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
         }
         //validate changes
         const { error } = validateUpdateUser({ password, firstname, lastname, country, friends, bio, city });
-        console.log(error)
         if (error) {
             return res.status(400).json(unsuccessfulRes(error.details[0].message));
         }

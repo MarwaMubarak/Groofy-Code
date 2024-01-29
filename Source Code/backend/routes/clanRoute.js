@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const calnController = require("../controllers/clanController");
+const calnController = require("../controllers/ClanController/clanController");
 const { verifyToken } = require('../middleware/verifyToken');
 
 //create Clan

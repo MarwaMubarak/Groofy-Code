@@ -16,7 +16,14 @@ function unsuccessfulRes(_massage, { _data } = {}) {
   };
 }
 
+function isValidObjectId(id) {
+
+  const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+  return objectIdPattern.test(id);
+}
+
 module.exports = {
   successfulRes,
   unsuccessfulRes,
+  isValidObjectId
 };
