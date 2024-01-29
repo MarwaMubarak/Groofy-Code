@@ -235,3 +235,37 @@ module.exports.getUserByUsername = asyncHandler(async(req, res) => {
 
     res.status(200).json(successfulRes("User found", userData));
 });
+
+/**----------------------------------------
+ *  @description  Search Users by Username Prefix
+ *  @route        /api/user/search/:prefix
+ *  @method       GET
+ *  @access       public
+ -----------------------------------------*/
+ module.exports.searchUsersByPrefix = asyncHandler(async (req, res) => {
+    try {
+        const { prefix } = req.params;
+
+        // Validate if prefix is provided
+        if (!prefix) {
+            return res.status(400).json(unsuccessfulRes("Prefix parameter is required"));
+        }
+
+        // Perform case-insensitive search for usernames starting with the given prefix
+        const users = await User.find({ username: { $regex: `^${prefix}`, $options: 'i' } })
+            .sort({ Trophies: -1 }) // Sort by Trophies in descending order
+            .limit(5); // Limit the result to the top 5 users
+
+        // Extract usernames from the users array
+        const usernames = users.map(user => user.username);
+
+        if (usernames.length === 0) {
+            return res.status(404).json(unsuccessfulRes("No users found with the provided prefix"));
+        }
+
+        res.status(200).json(successfulRes("Usernames found", usernames));
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(unsuccessfulRes("Internal server error"));
+    }
+});

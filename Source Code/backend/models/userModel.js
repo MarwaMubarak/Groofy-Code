@@ -86,7 +86,7 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    highestTrophies: {
+    Trophies: {
         type: Number,
         default: 0,
     },

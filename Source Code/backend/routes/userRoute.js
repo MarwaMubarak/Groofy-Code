@@ -23,5 +23,7 @@ router.route('/user/:username').get(verifyToken, userController.getUserByUsernam
 
 router.route('/users/:userId').put(verifyToken, userController.changePassword);
 
+router.route('/user/search/:prefix').get(verifyToken, userController.searchUsersByPrefix);
+
 
 module.exports = router;
