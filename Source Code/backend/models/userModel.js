@@ -66,11 +66,7 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Badge",
     }, ],
-
-    friends: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }, ],
+    
     photo: {
         type: Object,
         default: {
