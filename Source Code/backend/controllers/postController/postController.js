@@ -148,6 +148,12 @@ const getUserPosts = async (req, res) => {
   }
 };
 
+/**----------------------------------------
+ *  @description  Add or remove like for a specific post
+ *  @router       /api/post/addLike/:postId
+ *  @method       post
+ *  @access       private 
+-----------------------------------------*/
 const addLike = async (req, res) => {
   try {
     const postId = req.params.postId;
