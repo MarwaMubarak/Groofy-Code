@@ -3,6 +3,7 @@ const {
     validateSignUp,
     validateLogin,
     validateUpdateUser,
+    validateChangePassword,
 } = require("../../models/userModel");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
@@ -129,7 +130,7 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
     try {
         const userId = req.params.userId;
         const newBody = req.body;
-        const { password, firstname, lastname, country, friends, bio, city, selectedBadges } = req.body;
+        const { firstname, lastname, country, friends, bio, city, selectedBadges } = req.body;
 
         // check if the authentication
         if (String(userId) !== String(req.user.id)) {
@@ -142,7 +143,7 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
                 );
         }
         //validate changes
-        const { error } = validateUpdateUser({ password, firstname, lastname, country, friends, bio, city });
+        const { error } = validateUpdateUser({ firstname, lastname, country, friends, bio, city, selectedBadges });
         if (error) {
             return res.status(400).json(unsuccessfulRes(error.details[0].message));
         }
@@ -165,25 +166,72 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
 
 });
 
+module.exports.changePassword = asyncHandler(async(req, res) => {
+    try {
+
+        const userId = req.params.userId;
+        const { currentPassword, password, confirmPassword } = req.body;
+        // check if the authentication
+        if (String(userId) !== String(req.user.id)) {
+            return res
+                .status(403)
+                .json(
+                    unsuccessfulRes(
+                        "Unauthorized! You do not have permission to update the password."
+                    )
+                );
+        }
+        const currentUser = await User.findOne(req.user.email);
+        const isPasswordMatch = await bcrypt.compare(currentPassword, currentUser.password);
+        if (!isPasswordMatch) {
+            return res.status(400).json(unsuccessfulRes("Invalid password!"));
+        }
+
+        //validate changes
+        const { error } = validateChangePassword({ password });
+        if (error) {
+            return res.status(400).json(unsuccessfulRes(error.details[0].message));
+        }
+
+        // update user 
+        console.log(password, confirmPassword);
+        if (password !== confirmPassword) {
+            return res.status(400).json(unsuccessfulRes("Password not matched!"));
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const updatedUser = await User.findByIdAndUpdate(userId, { "password": hashedPassword }, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json(unsuccessfulRes("User Not Found!"))
+        }
+        return res.status(200).json(successfulRes("Password Updated Successfully!", updatedUser));
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(unsuccessfulRes("Internal server error"))
+    }
+
+});
+
 /**----------------------------------------
  *  @description  Get User Information by Username
  *  @route        /api/user/:username
  *  @method       GET
  *  @access       public
  -----------------------------------------*/
- module.exports.getUserByUsername = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  // Find the user by the provided username
-  const user = await User.findOne({ username });
- 
-  if (!user) {
-    return res.status(404).json(unsuccessfulRes("User not found"));
-  }
- 
-  // Exclude sensitive information like password
-  const userData = user.toJSON();
-  delete userData.password;
- 
-  res.status(200).json(successfulRes("User found", userData));
-});
+module.exports.getUserByUsername = asyncHandler(async(req, res) => {
+    const { username } = req.params;
+    // Find the user by the provided username
+    const user = await User.findOne({ username });
 
+    if (!user) {
+        return res.status(404).json(unsuccessfulRes("User not found"));
+    }
+
+    // Exclude sensitive information like password
+    const userData = user.toJSON();
+    delete userData.password;
+
+    res.status(200).json(successfulRes("User found", userData));
+});

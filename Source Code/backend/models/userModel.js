@@ -189,18 +189,24 @@ const validateUpdateUser = (user) => {
     const schema = Joi.object({
         firstname: Joi.string().trim().min(3).max(256),
         lastname: Joi.string().trim().min(3).max(256),
-        password: JoiPassComplex(),
         country: Joi.string().trim().min(4).max(100),
         city: Joi.string().trim().min(4).max(100),
         bio: Joi.string().trim().min(4).max(1000),
-
         friends: Joi.array().items(Joi.string()), // Assuming friends is an array of strings
     });
     return schema.validate(user);
 };
+const validateChangePassword = (user) => {
+    const schema = Joi.object({
+        password: JoiPassComplex(),
+    });
+    return schema.validate(user);
+};
+
 module.exports = {
     User,
     validateSignUp,
     validateLogin,
     validateUpdateUser,
+    validateChangePassword,
 };
