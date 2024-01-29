@@ -12,14 +12,45 @@ const PostSchema = new mongoose.Schema(
       required: true,
       minlength: 1,
     },
-    like: [
+    createdAt:{
+      type: Date,
+      default:Date.now
+    },
+    updatedAt:{
+      type: Date,
+      default:Date.now
+
+    }
+    ,
+    likes: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },
-  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  {  toJSON: {
+    virtuals: true,
+    transform: function (doc, ret) {
+      // Transform the 'likes' array elements
+      ret.likes = ret.likes.map((like) => ({
+        date: like.date,
+        user: like.user
+      }));
+
+      // Optionally, remove other fields like '_id' from the top-level object
+      delete ret.id;
+      delete ret.__v;
+
+      return ret;
+    },
+  }, toObject: { virtuals: true } }
 );
 
 const Post = mongoose.model("Post", PostSchema);

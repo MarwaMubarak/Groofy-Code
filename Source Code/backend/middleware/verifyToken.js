@@ -7,8 +7,6 @@ function verifyToken(req, res, next) {
         try {
             const decodedPayload = jwt.verify(token, process.env.JWT_SECRETKEY);
             req.user = decodedPayload;
-            console.log(`in verfy token ${req.user.id}`);
-            console.log();
             next();
         } catch (error) {
             return res.status(401).json({ message: "Invalid token, access denied" });

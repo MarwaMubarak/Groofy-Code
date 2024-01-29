@@ -111,10 +111,6 @@ const UserSchema = new mongoose.Schema({
       type: String, // will change
       default: "",
     },
-    history: {
-      type: String, // will change
-      default: "",
-    },
 }, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 /*******************

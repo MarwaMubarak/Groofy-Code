@@ -20,7 +20,6 @@ const asyncHandler = require("express-async-handler");
 const createPost = async(req, res) => {
     // Access the authenticated user through req.user
     const user = req.user;
-    console.log(user);
 
     try {
         const { error } = createPostValidation(req.body);
@@ -83,7 +82,8 @@ const updatePostById = async(req, res) => {
                     )
                 );
         }
-
+        const currentDate = new Date();
+        post.updatedAt= currentDate
         // Update the post if the user has permission
         const updatedPost = await post.save();
         res.json(successfulRes("Post updated successfully", updatedPost));
@@ -148,31 +148,30 @@ const getUserPosts = async(req, res) => {
     }
 };
 
-const addLike = async(req, res) => {
+const addLike = async (req, res) => {
     try {
         const postId = req.params.postId;
         const currentUser = req.user;
 
         // Check if the post exists
         const post = await Post.findById(postId);
-
         if (!post) {
             return res.status(404).json(unsuccessfulRes('Post not found'));
         }
 
         // Check if the user has already liked the post
-        const alreadyLikedIndex = post.like.indexOf(currentUser.id);
+        const alreadyLikedIndex = post.likes.findIndex(like => like.user.equals(currentUser.id));
 
         if (alreadyLikedIndex !== -1) {
             // User has already liked the post, so unlike
-            post.like.splice(alreadyLikedIndex, 1);
+            post.likes.splice(alreadyLikedIndex, 1);
             await post.save();
 
             return res.json(successfulRes('User removed from the like list'));
         }
 
         // User has not liked the post, so add to the like list
-        post.like.push(currentUser.id);
+        post.likes.push({ user: currentUser.id });
         await post.save();
 
         res.json(successfulRes('User added to the like list'));
@@ -181,6 +180,7 @@ const addLike = async(req, res) => {
         res.status(500).json(unsuccessfulRes('Internal Server Error'));
     }
 };
+
 
 module.exports = {
     createPost,
