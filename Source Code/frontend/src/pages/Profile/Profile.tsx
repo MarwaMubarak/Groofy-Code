@@ -1,14 +1,15 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { SideBar, GroofyHeader, GBtn, PostsContainer } from "../../components";
 import { useSelector } from "react-redux";
 import ReactCountryFlag from "react-country-flag";
 import { Toast } from "primereact/toast";
 import { Image } from "primereact/image";
 import { postActions } from "../../store/slices/post-slice";
+import { userThunks } from "../../store/actions";
 import { useDispatch } from "react-redux";
-import "./scss/profile.css";
 import { Link, useParams } from "react-router-dom";
 import FormatDate from "../../shared/functions/format-date";
+import "./scss/profile.css";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,13 @@ const Profile = () => {
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
   const { username: userProfile } = useParams();
+
+  useEffect(() => {
+    const getUser = async () => {
+      await dispatch(userThunks.getUser(userProfile!) as any);
+    };
+    getUser();
+  }, [dispatch, userProfile]);
 
   return (
     <div className="newprofile-container">
