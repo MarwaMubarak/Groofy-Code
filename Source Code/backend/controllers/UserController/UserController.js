@@ -142,8 +142,19 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
                     )
                 );
         }
+        console.log(1);
         //validate changes
-        const { error } = validateUpdateUser({ firstname, lastname, country, friends, bio, city, selectedBadges });
+        const { error } = validateUpdateUser({ firstname, lastname, country, friends, bio, city });
+        const currUser = await User.findById(req.user.id);
+        console.log(currUser.badges);
+        console.log(selectedBadges);
+        if (selectedBadges) {
+            const validateSelectedBadges = selectedBadges.every(value => currUser.badges.includes(value));
+            if (!validateSelectedBadges) {
+                return res.status(400).json(unsuccessfulRes("Select Valid Badges!"));
+
+            }
+        }
         if (error) {
             return res.status(400).json(unsuccessfulRes(error.details[0].message));
         }
