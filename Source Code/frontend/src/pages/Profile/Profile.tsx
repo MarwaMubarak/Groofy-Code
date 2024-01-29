@@ -97,7 +97,7 @@ const Profile = () => {
                   <h3>History</h3>
                 </div>
               </div>
-              <PostsContainer toast={toast} />
+              <PostsContainer toast={toast} self={false} />
             </div>
           </div>
           <div className="up-side-right">

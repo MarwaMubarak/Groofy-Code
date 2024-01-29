@@ -1,8 +1,6 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Appearance,
-  GBtn,
-  GroofyField,
   Notifications,
   PersonalDetails,
   Privacy,
@@ -10,12 +8,7 @@ import {
   SideBar,
 } from "../../components";
 import "./scss/editprofile.css";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { userSchema } from "../../shared/schemas";
-import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
-import { useSelector } from "react-redux";
-import { Button } from "primereact/button";
 
 const EditProfile = () => {
   const toast = useRef<Toast>(null);

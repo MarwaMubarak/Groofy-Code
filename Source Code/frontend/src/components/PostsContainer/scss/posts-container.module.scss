@@ -1,9 +1,9 @@
 @use "../../../shared/styles/colors" as *;
 @use "../../../shared/styles/mixins" as *;
 
-.posts-container {
+.posts_container {
   width: 100%;
-  .post-box {
+  .post_box {
     background-color: $mainColor;
     padding-top: 15px;
     width: 100%;
@@ -12,7 +12,7 @@
     &.false {
       padding-top: 0px;
     }
-    .post-row {
+    .post_row {
       padding: 0 25px;
       @include between;
       margin-bottom: 20px;

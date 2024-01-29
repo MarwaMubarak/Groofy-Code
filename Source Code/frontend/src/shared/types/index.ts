@@ -158,10 +158,17 @@ export interface UserProps {
 // Posts Container Props
 export interface PostsContainerProps {
   toast: RefObject<Toast>;
+  self: boolean;
 }
 
 // Posts Props
 export interface PostsProps {
   posts: any[];
   user: any;
+}
+
+// Groofy Textarea Props
+export interface GroofyTAProps {
+  taValue: string;
+  changeHandler: (val: string) => void;
 }

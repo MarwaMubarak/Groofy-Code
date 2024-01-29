@@ -32,6 +32,8 @@ import Security from "./EditProfile/Security/Security";
 import Appearance from "./EditProfile/Appearance/Appearance";
 import Privacy from "./EditProfile/Privacy/Privacy";
 import Notifications from "./EditProfile/Notifications/Notifications";
+import GroofyTA from "./GroofyTA/GroofyTA";
+
 export {
   MatchHeader,
   Scoreboard,
@@ -67,4 +69,5 @@ export {
   Appearance,
   Privacy,
   Notifications,
+  GroofyTA,
 };

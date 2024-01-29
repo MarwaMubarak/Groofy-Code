@@ -80,7 +80,7 @@ const Home = () => {
         <div className="media-section">
           <div className="home-posts-container">
             <h3 className="hpc-title">Posts</h3>
-            <PostsContainer toast={toast} />
+            <PostsContainer toast={toast} self={true} />
           </div>
           <div className="profile-section">
             <div className="ps-info">

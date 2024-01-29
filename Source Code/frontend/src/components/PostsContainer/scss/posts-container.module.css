@@ -1,29 +1,29 @@
-.posts-container {
+.posts_container {
   width: 100%;
 }
-.posts-container .post-box {
+.posts_container .post_box {
   background-color: #0e141e;
   padding-top: 15px;
   width: 100%;
   border-radius: 6px;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
 }
-.posts-container .post-box.false {
+.posts_container .post_box.false {
   padding-top: 0px;
 }
-.posts-container .post-box .post-row {
+.posts_container .post_box .post_row {
   padding: 0 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
-.posts-container .post-box .post-row img {
+.posts_container .post_box .post_row img {
   width: 50px;
   border-radius: 50%;
   margin-right: 10px;
 }
-.posts-container .post-box .post-row textarea {
+.posts_container .post_box .post_row textarea {
   font-family: OpenSans, Arial, Helvetica, sans-serif;
   width: calc(100% - 192px);
   overflow-y: hidden;
@@ -37,22 +37,22 @@
   font-size: 16px;
   resize: none;
 }
-.posts-container .post-box .post-row textarea:focus {
+.posts_container .post_box .post_row textarea:focus {
   outline: none;
 }
-.posts-container .post-box .post-row .groofybtn {
+.posts_container .post_box .post_row .groofybtn {
   background-color: #008ace;
   box-shadow: none;
   color: white;
   width: 140px;
 }
-.posts-container .post-box .post-row .groofybtn:hover {
+.posts_container .post_box .post_row .groofybtn:hover {
   background-color: #00a9ff;
 }
-.posts-container .post-box .post-row .groofybtn img {
+.posts_container .post_box .post_row .groofybtn img {
   width: 24px;
   margin-right: 0;
 }
-.posts-container .post-box .post-row .groofybtn span {
+.posts_container .post_box .post_row .groofybtn span {
   font-size: 16px;
-}/*# sourceMappingURL=posts-container.css.map */
+}/*# sourceMappingURL=posts-container.module.css.map */

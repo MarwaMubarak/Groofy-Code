@@ -1,13 +1,12 @@
-import { ChangeEvent, RefObject, useEffect, useState } from "react";
-import { GBtn, Posts } from "..";
+import { useEffect, useState } from "react";
+import { GBtn, GroofyTA, Posts } from "..";
 import { useDispatch, useSelector } from "react-redux";
-import { Toast } from "primereact/toast";
 import postThunks from "../../store/actions/post-actions";
-// import classes from "./scss/posts-container.module.css";
-import "./scss/posts-container.css";
 import { useParams } from "react-router-dom";
+import { PostsContainerProps } from "../../shared/types";
+import classes from "./scss/posts-container.module.css";
 
-const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
+const PostsContainer = ({ toast, self }: PostsContainerProps) => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth.user);
   const resStatus = useSelector((state: any) => state.post.status);
@@ -15,15 +14,6 @@ const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
   const allPosts: any[] = useSelector((state: any) => state.post.body);
   const [newPostContent, setNewPostContent] = useState("");
   const { username: userProfile } = useParams();
-
-  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    autoExpand(e.target);
-    setNewPostContent(e.target.value);
-  };
-  const autoExpand = (textarea: HTMLTextAreaElement) => {
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
-  };
 
   const postHandler = (event: any) => {
     event.preventDefault();
@@ -75,16 +65,18 @@ const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
   }, [allPosts.length, resMessage, resStatus, toast]);
 
   return (
-    <form className="posts-container" onSubmit={postHandler}>
-      <div className={`post-box ${userProfile === user.username}`}>
-        {userProfile === user.username && (
-          <div className="post-row">
+    <form className={classes.posts_container} onSubmit={postHandler}>
+      <div
+        className={`${classes.post_box} ${
+          self ? "" : userProfile !== user.username && classes.false
+        }`}
+      >
+        {self && user && (
+          <div className={classes.post_row}>
             <img src={user.photo.url} alt="UserPhoto" />
-            <textarea
-              value={newPostContent}
-              placeholder="Share your coding insights and experiences"
-              onChange={handleExpanding}
-              maxLength={500}
+            <GroofyTA
+              taValue={newPostContent}
+              changeHandler={setNewPostContent}
             />
             <GBtn
               btnText="Quick Post"
@@ -94,7 +86,21 @@ const PostsContainer = ({ toast }: { toast: RefObject<Toast> }) => {
             />
           </div>
         )}
-
+        {!self && userProfile === user.username && (
+          <div className={classes.post_row}>
+            <img src={user.photo.url} alt="UserPhoto" />
+            <GroofyTA
+              taValue={newPostContent}
+              changeHandler={setNewPostContent}
+            />
+            <GBtn
+              btnText="Quick Post"
+              icnSrc="/Assets/SVG/quick.svg"
+              clickEvent={() => {}}
+              btnType={true}
+            />
+          </div>
+        )}
         <Posts posts={allPosts} user={user} />
       </div>
     </form>
