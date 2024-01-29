@@ -6,7 +6,7 @@ const { verifyToken } = require('../middleware/verifyToken');
 router.route('/post/create').post(verifyToken, postController.createPost);
 router.route('/post/update/:postId').put(verifyToken, postController.updatePostById);
 router.route('/post/delete/:postId').delete(verifyToken, postController.deletePostById);
-router.get('/posts/:userId', postController.getUserPosts);
+router.route('/posts/:userId').get(verifyToken, postController.getUserPosts);
 router.route('/post/addLike/:postId').post(verifyToken, postController.addLike);
 
 
