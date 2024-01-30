@@ -71,41 +71,52 @@ module.exports.regiseterUser = asyncHandler(async (req, res) => {
  -----------------------------------------*/
 
 module.exports.loginUser = asyncHandler(async (req, res) => {
-  const { emailOrUserName, password } = req.body;
+  try {
+    const { emailOrUserName, password } = req.body;
 
-  const { errorEmail } = validateLoginEmail({ emailOrUserName, password });
-  const { errorUserName } = validateLoginUserName({
-    emailOrUserName,
-    password,
-  });
-  if (errorEmail && errorUserName) {
-    return res.status(400).json(unsuccessfulRes("Invalid Email or password."));
+    const { errorEmail } = validateLoginEmail({ emailOrUserName, password });
+    const { errorUserName } = validateLoginUserName({
+      emailOrUserName,
+      password,
+    });
+    if (errorEmail && errorUserName) {
+      return res
+        .status(400)
+        .json(unsuccessfulRes("Invalid Email or password."));
+    }
+    // Check if the user already exists in the database
+    let userCan1, userCan2;
+    if (!errorEmail) userCan1 = await User.findOne({ email: emailOrUserName });
+
+    if (!errorUserName)
+      userCan2 = await User.findOne({ username: emailOrUserName });
+
+    let user = userCan1 || userCan2;
+    if (!user) {
+      return res
+        .status(400)
+        .json(unsuccessfulRes("Invalid Email or password."));
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res
+        .status(400)
+        .json(unsuccessfulRes("Invalid Email or password."));
+    }
+    const token = user.generateAuthToken();
+
+    user.isOnline = true;
+    await user.save();
+
+    const userData = user.toJSON();
+    delete userData.password;
+    userData.token = token;
+    res.status(200).json(successfulRes("login successful", userData));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(unsuccessfulRes("Internal server error"));
   }
-  // Check if the user already exists in the database
-  let userCan1, userCan2;
-  if (!errorEmail) userCan1 = await User.findOne({ email: emailOrUserName });
-
-  if (!errorUserName)
-    userCan2 = await User.findOne({ username: emailOrUserName });
-
-  let user = userCan1 || userCan2;
-  if (!user) {
-    return res.status(400).json(unsuccessfulRes("Invalid Email or password."));
-  }
-
-  const isPasswordMatch = await bcrypt.compare(password, user.password);
-  if (!isPasswordMatch) {
-    return res.status(400).json(unsuccessfulRes("Invalid Email or password."));
-  }
-  const token = user.generateAuthToken();
-
-  user.isOnline = true;
-  await user.save();
-
-  const userData = user.toJSON();
-  delete userData.password;
-  userData.token = token;
-  res.status(200).json(successfulRes("login successful", userData));
 });
 
 /**----------------------------------------
@@ -227,7 +238,7 @@ module.exports.changePassword = asyncHandler(async (req, res) => {
       req.user.id,
       { password: hashedPassword },
       { new: true }
-    ).select('-password');;
+    ).select("-password");
 
     if (!updatedUser) {
       return res.status(404).json(unsuccessfulRes("User Not Found!"));
