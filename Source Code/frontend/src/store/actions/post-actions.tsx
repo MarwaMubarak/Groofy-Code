@@ -4,11 +4,17 @@ import { postActions } from "../slices/post-slice";
 const getPosts = (_id: string) => {
   return async (dispatch: any) => {
     try {
-      const response = await reqInstance.get(`/posts/${_id}`);
-      console.log(response.data.body);
-      dispatch(postActions.setStatus(response.data.status));
-      dispatch(postActions.setMessage(response.data.message));
-      dispatch(postActions.setPosts(response.data.body));
+      const user = JSON.parse(localStorage.getItem("user")!);
+      if (user.token) {
+        reqInstance.defaults.headers.common[
+          "authorization"
+        ] = `Bearer ${user.token}`;
+        const response = await reqInstance.get(`/posts/${_id}`);
+        console.log(response.data.body);
+        dispatch(postActions.setStatus(response.data.status));
+        dispatch(postActions.setMessage(response.data.message));
+        dispatch(postActions.setPosts(response.data.body));
+      }
     } catch (error: any) {
       dispatch(postActions.setStatus(error.response.data.status));
       dispatch(postActions.setMessage(error.response.data.message));

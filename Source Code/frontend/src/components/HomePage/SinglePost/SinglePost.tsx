@@ -13,7 +13,7 @@ const SinglePost = (props: SinglePostProps) => {
     state.post.body.find((post: any) => post._id === props.postID)
   );
   const [likeActive, setLikeActive] = useState(
-    post?.like.includes(props.userid)
+    post?.likes.includes(props.userid)
   );
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
@@ -41,9 +41,9 @@ const SinglePost = (props: SinglePostProps) => {
   }, [props.postTime]);
 
   useEffect(() => {
-    setLikes(post.like.length);
-    console.log(post.like.length);
-  }, [post.like.length]);
+    setLikes(post.likes.length);
+    console.log(post.likes.length);
+  }, [post.likes.length]);
 
   const handleUpdate = (postID: string, content: string) => {
     const updatePost = async () => {

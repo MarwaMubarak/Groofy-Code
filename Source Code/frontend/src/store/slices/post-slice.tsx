@@ -34,13 +34,13 @@ const postSlice = createSlice({
       const postIdx = state.body.findIndex(
         (post: any) => post._id === action.payload.postID
       );
-      const userLiked = state.body[postIdx].like.includes(
+      const userLiked = state.body[postIdx].likes.includes(
         action.payload.userID
       );
       if (!userLiked) {
-        state.body[postIdx].like.push(action.payload.userID);
+        state.body[postIdx].likes.push(action.payload.userID);
       } else {
-        state.body[postIdx].like = state.body[postIdx].like.filter(
+        state.body[postIdx].likes = state.body[postIdx].likes.filter(
           (like: any) => like !== action.payload.userID
         );
       }

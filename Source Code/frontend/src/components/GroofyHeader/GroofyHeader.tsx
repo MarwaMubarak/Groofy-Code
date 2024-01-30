@@ -37,21 +37,21 @@ const GroofyHeader = () => {
           <h3 className="notify-title">Notifications</h3>
           <abbr title="Clear notifications">
             <div className="clear-notify" onClick={() => setNotifyCnt(0)}>
-              <img src="./Assets/SVG/clear.svg" alt="Clear" />
+              <img src="/Assets/SVG/clear.svg" alt="Clear" />
             </div>
           </abbr>
         </div>
         <div className="na-content">
           {notifyCnt > 0 ? (
             <NotifyBox
-              nuImg="./Assets/Images/tourist.jpg"
+              nuImg="/Assets/Images/tourist.jpg"
               nusn="tourist"
               ntime="3 Minutes ago."
             />
           ) : (
             <div className="empty-box">
               <img
-                src="./Assets/Images/empty_notify.png"
+                src="/Assets/Images/empty_notify.png"
                 alt="EmptyNotification"
               />
               <span>There are no notifications</span>

@@ -138,7 +138,7 @@ const Profile = () => {
                   </div>
                   <div className="psi-single-details">
                     <span>
-                      Last Seen:{" "}
+                      Last Seen:
                       <span className="ls">
                         {user.isOnline ? "Online" : "Offline"}
                       </span>
@@ -146,8 +146,10 @@ const Profile = () => {
                   </div>
                   <div className="psi-single-details">
                     <span>
-                      Friends:{" "}
-                      <span className="friends">{user.friends.length}</span>
+                      Friends:
+                      <span className="friends">
+                        {user.friends?.length || 0}
+                      </span>
                     </span>
                   </div>
                 </div>
