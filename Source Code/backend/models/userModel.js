@@ -7,10 +7,9 @@ const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,
       unique: true,
       trim: true,
-      minlength: 4,
+      minlength: 1,
       maxlength: 100,
     },
     email: {
@@ -31,31 +30,32 @@ const UserSchema = new mongoose.Schema(
     firstname: {
       type: String,
       trim: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 256,
     },
     lastname: {
       type: String,
+      required: true,
       trim: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 256,
     },
     country: {
       type: String,
       trim: true,
-      minlength: 4,
+      minlength: 1,
       maxlength: 100,
     },
     city: {
       type: String,
       trim: true,
-      minlength: 4,
+      minlength: 1,
       maxlength: 100,
     },
     bio: {
       type: String,
       trim: true,
-      minlength: 3,
+      minlength: 0,
       maxlength: 1000,
     },
     badges: [
@@ -175,10 +175,12 @@ const User = mongoose.model("User", UserSchema);
 // Sign Up
 const validateSignUp = (user) => {
   const schema = Joi.object({
-    username: Joi.string().trim().min(4).max(100).required(),
+    username: Joi.string().trim().min(1).max(100).required(),
     email: Joi.string().trim().min(4).max(256).required().email(),
     password: JoiPassComplex().required(),
-    country: Joi.string().trim().min(4).max(100),
+    country: Joi.string().trim().min(1).max(100),
+    firstname: Joi.string().trim().min(1).max(256),
+    lastname: Joi.string().trim().min(1).max(256),
   });
   return schema.validate(user);
 };
@@ -187,7 +189,7 @@ const validateSignUp = (user) => {
 const validateLoginEmail = (user) => {
   const schema = Joi.object({
     email: Joi.string().trim().min(4).max(256).required().email(),
-    password: Joi.string().trim().required(),
+    password: Joi.string().required(),
   });
   return schema.validate(user);
 };
@@ -195,7 +197,7 @@ const validateLoginEmail = (user) => {
 const validateLoginUserName = (user) => {
     const schema = Joi.object({
       email: Joi.string().trim().min(4).max(100).required(),
-      password: Joi.string().trim().required(),
+      password: Joi.string().required(),
     });
     return schema.validate(user);
   };
@@ -203,11 +205,11 @@ const validateLoginUserName = (user) => {
 const validateUpdateUser = (user) => {
   const badgeIds = (user.badges || []).map((badge) => badge._id.toString());
   const schema = Joi.object({
-    firstname: Joi.string().trim().min(3).max(256),
-    lastname: Joi.string().trim().min(3).max(256),
-    country: Joi.string().trim().min(4).max(100),
-    city: Joi.string().trim().min(4).max(100),
-    bio: Joi.string().trim().min(4).max(1000),
+    firstname: Joi.string().trim().min(1).max(256),
+    lastname: Joi.string().trim().min(1).max(256),
+    country: Joi.string().trim().min(1).max(100),
+    city: Joi.string().trim().min(1).max(100),
+    bio: Joi.string().trim().max(1000),
     friends: Joi.array().items(Joi.string()), // Assuming friends is an array of strings
   });
   return schema.validate(user);

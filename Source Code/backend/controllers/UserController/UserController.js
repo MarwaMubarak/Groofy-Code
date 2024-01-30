@@ -22,45 +22,61 @@ const {
  -----------------------------------------*/
 
 module.exports.regiseterUser = asyncHandler(async (req, res) => {
-  const { username, email, password, firstname, lastname, country } = req.body;
+  try {
+    const { username, email, password, firstname, lastname, country } =
+      req.body;
 
-  const { error } = validateSignUp({ username, email, password });
-  if (error) {
-    return res.status(400).json(unsuccessfulRes(error.details[0].message));
+    const { error } = validateSignUp({
+      username,
+      email,
+      password,
+      firstname,
+      lastname,
+      country,
+    });
+    
+    if (error) {
+      return res.status(400).json(unsuccessfulRes(error.details[0].message));
+    }
+
+    // Check if the email already exists in the database
+    const existingEmail = await User.findOne({ email });
+    // Check if the username already exists in the database
+    const existingUserName = await User.findOne({ username });
+
+    if (existingUserName) {
+      return res
+        .status(400)
+        .json(unsuccessfulRes("Username is already taken."));
+    }
+
+    if (existingEmail) {
+      return res
+        .status(400)
+        .json(unsuccessfulRes("Email is already registered."));
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create a new user document with the hashed password
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      firstname: firstname,
+      lastname: lastname,
+      country: country,
+    });
+
+    await user.save();
+    res
+      .status(201)
+      .json(successfulRes("Registration successful", "No data exist!"));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(unsuccessfulRes("Internal server error"));
   }
-
-  // Check if the email already exists in the database
-  const existingEmail = await User.findOne({ email });
-  // Check if the username already exists in the database
-  const existingUserName = await User.findOne({ username });
-
-  if (existingUserName) {
-    return res.status(400).json(unsuccessfulRes("Username is already taken."));
-  }
-
-  if (existingEmail) {
-    return res
-      .status(400)
-      .json(unsuccessfulRes("Email is already registered."));
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  // Create a new user document with the hashed password
-  const user = new User({
-    username,
-    email,
-    password: hashedPassword,
-    firstname: firstname,
-    lastname: lastname,
-    country: country,
-  });
-
-  await user.save();
-  res
-    .status(201)
-    .json(successfulRes("Registration successful", "No data exist!"));
 });
 
 /**----------------------------------------

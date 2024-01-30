@@ -13,16 +13,15 @@ To access the API, you need to include your API key in the `Authorization` heade
 
 - **Header**: `Authorization: Bearer YOUR_API_KEY`
 
-## Parameters
-
-- **`{id}`** (path parameter): ID of the item.
-
 ## Endpoints
 
-### 1. login
+### login
 
 - **URL**: `/login`
 - **Method**: `POST`
+- **Parameters**:
+    - **`emailOrUserName`** (string, required): The user's username or email.
+    - **`password`** (string, required): The user's password.
 
 ### Example Request
 
@@ -75,5 +74,5 @@ To access the API, you need to include your API key in the `Authorization` heade
 **## Error Handling**
 
 - **400 Bad Request**: wrong password or email/username.
-- **500 Not Found**: the backend crash contact us.
+- **500 server error**: the backend crash contact us.
 ```
