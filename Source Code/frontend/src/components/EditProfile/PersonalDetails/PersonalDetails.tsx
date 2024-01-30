@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
-import React, { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef } from "react";
 import { useSelector } from "react-redux";
 import { userSchema } from "../../../shared/schemas/user-schema";
 import GroofyField from "../../Auth/GroofyField/GroofyField";
@@ -8,7 +8,10 @@ import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import GBtn from "../../GBtn/GBtn";
 import "./scss/global/personaldetails.css";
 import classes from "./scss/private/personaldetails.module.css";
-import { Button } from "primereact/button";
+import { userThunks } from "../../../store/actions";
+import { AxiosError } from "axios";
+import { EditInfo } from "../../../store/actions/user-actions";
+import { useDispatch } from "react-redux";
 
 interface Country {
   name: string;
@@ -16,10 +19,9 @@ interface Country {
 }
 
 const PersonalDetails = () => {
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [bio, setBio] = useState("");
   const toast = useRef<Toast>(null);
   const user = useSelector((state: any) => state.auth.user);
+  const dispatch = useDispatch();
   const countries: Country[] = [
     { name: "Australia", code: "AU" },
     { name: "Brazil", code: "BR" },
@@ -39,15 +41,36 @@ const PersonalDetails = () => {
       lastName: "",
       city: "",
       bio: "",
-      country: "",
+      country: { name: "", code: "" },
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      toast.current?.show({
-        severity: "success",
-        summary: "Success Message",
-        detail: "User is updated",
-      });
+      console.log("VALUES", values);
+
+      const ret = dispatch(userThunks.updateUser(user._id, values) as any);
+      if (ret instanceof Promise) {
+        ret.then((res: any) => {
+          if (res instanceof AxiosError) {
+            (toast.current as any)?.show({
+              severity: "error",
+              summary: "Failed",
+              detail: res.response?.data?.message,
+              life: 1500,
+            });
+          } else {
+            (toast.current as any)?.show({
+              severity: "success",
+              summary: "Success",
+              detail: res.payload.message,
+              life: 1500,
+            });
+            // setTimeout(() => {
+            // actions.resetForm();
+            // localStorage.setItem("user", JSON.stringify(res.payload));
+            // }, 700);
+          }
+        });
+      }
     },
   });
   const selectedCountryTemplate = (option: Country, props: any) => {
@@ -67,9 +90,10 @@ const PersonalDetails = () => {
       </div>
     );
   };
-  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
+
+  const handleCombinedChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    formikHandle.handleChange(e);
     autoExpand(e.target);
-    setBio(e.target.value);
   };
   const autoExpand = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = "auto";
@@ -136,17 +160,22 @@ const PersonalDetails = () => {
         <div className={classes.bio_content}>
           <h1>Bio</h1>
           <textarea
-            value={bio}
+            id="bio"
+            value={formikHandle.values.bio}
             placeholder="Share your coding insights and experiences"
-            onChange={handleExpanding}
+            onChange={handleCombinedChange}
+            onBlur={formikHandle.handleBlur("bio")}
             maxLength={500}
           />
         </div>
         <div className={classes.country_selector}>
-          <div className="cs-title">Select your country:</div>
+          <div className={classes.cs_title}>Select your country:</div>
           <Dropdown
-            value={selectedCountry}
-            onChange={(e: DropdownChangeEvent) => setSelectedCountry(e.value)}
+            id="country"
+            value={formikHandle.values.country}
+            onChange={(e: DropdownChangeEvent) =>
+              formikHandle.setFieldValue("country", e.value)
+            }
             options={countries}
             optionLabel="name"
             placeholder="Select a Country"
@@ -156,7 +185,12 @@ const PersonalDetails = () => {
             className="w-full md:w-14rem"
           />
         </div>
-        <GBtn btnText="Save" btnType={true} clickEvent={() => {}} />
+        <GBtn
+          btnText="Save"
+          btnType={true}
+          clickEvent={() => {}}
+          btnState={formikHandle.isSubmitting}
+        />
       </form>
     </div>
   );

@@ -1,24 +1,28 @@
 import { reqInstance } from "..";
 import { userActions } from "../slices/user-slice";
 
-interface EditInfo {
-  firstname: string;
-  lastname: string;
-  country: string;
+export interface EditInfo {
+  firstName: string;
+  lastName: string;
+  city: string;
   bio: string;
+  country: { name: string; code: string };
 }
 
 const getUser = (username: string) => {
   return async (dispatch: any) => {
     try {
       const response = await reqInstance.get(`/user/${username}`);
-      dispatch(userActions.setUser(response.data.body));
+      const dispatchResponse = await dispatch(
+        userActions.setUser(response.data.body)
+      );
       dispatch(
         userActions.setRes({
           status: response.data.status,
           message: response.data.message,
         })
       );
+      return dispatchResponse;
     } catch (error: any) {
       dispatch(
         userActions.setRes({
@@ -26,6 +30,7 @@ const getUser = (username: string) => {
           message: error.response.data.message,
         })
       );
+      return error;
     }
   };
 };
@@ -33,19 +38,27 @@ const getUser = (username: string) => {
 const updateUser = (userId: string, editInfo: EditInfo) => {
   return async (dispatch: any) => {
     try {
+      console.log("MY INFO", editInfo);
       const userToken = JSON.parse(localStorage.getItem("user")!).token;
-      const response = await reqInstance.put(`/user/${userId}`, editInfo, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      });
-      dispatch(userActions.setUser(response.data.body));
+      const response = await reqInstance.put(
+        `/user/update/${userId}`,
+        editInfo,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      const dispatchResponse = dispatch(
+        userActions.setUser(response.data.body)
+      );
       dispatch(
         userActions.setRes({
           status: response.data.status,
           message: response.data.message,
         })
       );
+      return dispatchResponse;
     } catch (error: any) {
       dispatch(
         userActions.setRes({
@@ -53,6 +66,7 @@ const updateUser = (userId: string, editInfo: EditInfo) => {
           message: error.response.data.message,
         })
       );
+      return error;
     }
   };
 };

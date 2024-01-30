@@ -42,7 +42,7 @@ const SignUp = () => {
             (toast.current as any)?.show({
               severity: "success",
               summary: "Success",
-              detail: "Login successful",
+              detail: "Account created successfully",
               life: 1500,
             });
             setTimeout(() => {
