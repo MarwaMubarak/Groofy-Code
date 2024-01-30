@@ -8,7 +8,6 @@ const {
   unsuccessfulRes,
   isValidObjectId,
 } = require("../../utilities/responseFormate");
-
 /**----------------------------------------
  *  @description  Create New Clan
  *  @rounter      /api/clans/create
@@ -19,15 +18,13 @@ const createClan = async (req, res) => {
   try {
     const { errors } = createClanValidation(req.body);
     if (errors)
-      return res.status(400).json({ error: errors.details[0].message });
-
+      return res.status(400).json(unsuccessfulRes(errors.details[0].message));
+    req.leader = req.user.id;
     const clan = new Clan(req.body);
     await clan.save();
-    res.status(201).json(clan);
+    res.status(201).json(successfulRes("Clan created successfully!", clan));
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: "Internal Server Error", body: req.body, err: err });
+    res.status(500).json(unsuccessfulRes("Internal Server Error"));
   }
 };
 

@@ -23,6 +23,7 @@ const ClanSchema = new mongoose.Schema(
     rank: {
       type: String,
       required: true,
+      default: "Metal"
     },
   },
   {
