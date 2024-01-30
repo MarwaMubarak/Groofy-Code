@@ -26,6 +26,8 @@ index.use("/", require("./routes/clanRoute"));
 index.use("/", require("./routes/blogRoute"));
 index.use("/", require("./routes/postRoute"));
 index.use("/", require("./routes/badgeRoute"));
+index.use("/", require("./routes/friendshipRoute"));
+
 
 
 // Security Measures
