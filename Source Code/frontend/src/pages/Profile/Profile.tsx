@@ -11,6 +11,11 @@ import { Link, useParams } from "react-router-dom";
 import FormatDate from "../../shared/functions/format-date";
 import "./scss/profile.css";
 
+interface Country {
+  name: string;
+  code: string;
+}
+
 const Profile = () => {
   const dispatch = useDispatch();
   const toast = useRef<Toast>(null);
@@ -18,6 +23,18 @@ const Profile = () => {
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
   const { username: userProfile } = useParams();
+  const countries: Country[] = [
+    { name: "Australia", code: "AU" },
+    { name: "Brazil", code: "BR" },
+    { name: "China", code: "CN" },
+    { name: "Egypt", code: "EG" },
+    { name: "France", code: "FR" },
+    { name: "Germany", code: "DE" },
+    { name: "India", code: "IN" },
+    { name: "Japan", code: "JP" },
+    { name: "Spain", code: "ES" },
+    { name: "United States", code: "US" },
+  ];
 
   useEffect(() => {
     const getUser = async () => {
@@ -49,24 +66,23 @@ const Profile = () => {
               )}
             </div>
             <h4>
-              Hazem Adel, Giza, Egypt
+              {user.firstname + " " + user.lastname}, {user.city || ""},{" "}
+              {user.country || ""}
               <ReactCountryFlag
-                countryCode="EG"
+                countryCode={
+                  countries.find((country) => country.name === user.country)
+                    ?.code || " "
+                }
                 svg
                 style={{
                   width: "1em",
                   height: "1em",
                   marginLeft: "8px",
                 }}
-                title="Egypt"
+                title={user.country || ""}
               />
             </h4>
-            <p>
-              Dedicated competitive programmer excelling in algorithmic mastery
-              and problem-solving. Consistently achieving top ranks in coding
-              competitions. Driven by a passion for code optimization and
-              continuous improvement.
-            </p>
+            <p>{user.bio || ""}</p>
             {userProfile !== user.username && (
               <div className="up-info-details-controls">
                 <GBtn
@@ -174,7 +190,7 @@ const Profile = () => {
                       />
                       Total Matches
                     </span>
-                    <span className="any">800</span>
+                    <span className="any">{user.totalMatch}</span>
                   </div>
                   <div className="psi-single-details">
                     <span>
@@ -188,15 +204,15 @@ const Profile = () => {
                   </div>
                   <div className="psi-single-details">
                     <span>Wins</span>
-                    <span className="any">733</span>
+                    <span className="any">{user.wins}</span>
                   </div>
                   <div className="psi-single-details">
                     <span>Loses</span>
-                    <span className="any">52</span>
+                    <span className="any">{user.loses}</span>
                   </div>
                   <div className="psi-single-details">
                     <span>Draws</span>
-                    <span className="any">15</span>
+                    <span className="any">{user.draws}</span>
                   </div>
                 </div>
               </div>

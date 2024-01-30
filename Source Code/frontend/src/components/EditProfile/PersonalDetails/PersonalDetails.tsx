@@ -37,19 +37,28 @@ const PersonalDetails = () => {
 
   const formikHandle = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      city: "",
-      bio: "",
-      country: { name: "", code: "" },
+      firstname: user.firstname?.toString() || "",
+      lastname: user.lastname?.toString() || "",
+      city: user.city?.toString() || "",
+      bio: user.bio?.toString() || "",
+      country: countries.find((country) => country.name === user.country),
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
       console.log("VALUES", values);
 
-      const ret = dispatch(userThunks.updateUser(user._id, values) as any);
+      const ret = dispatch(
+        userThunks.updateUser(user._id, {
+          firstname: values.firstname,
+          lastname: values.lastname,
+          city: values.city,
+          bio: values.bio,
+          country: values.country?.name || "",
+        }) as any
+      );
       if (ret instanceof Promise) {
         ret.then((res: any) => {
+          console.log("RES", res);
           if (res instanceof AxiosError) {
             (toast.current as any)?.show({
               severity: "error",
@@ -61,7 +70,7 @@ const PersonalDetails = () => {
             (toast.current as any)?.show({
               severity: "success",
               summary: "Success",
-              detail: res.payload.message,
+              detail: res.data.message,
               life: 1500,
             });
             // setTimeout(() => {
@@ -101,6 +110,7 @@ const PersonalDetails = () => {
   };
   return (
     <div className={classes.edit_info}>
+      <Toast ref={toast} />
       <h3 className={classes.edit_header}>Personal Details</h3>
       <form
         className={classes.edit_content}
@@ -119,31 +129,29 @@ const PersonalDetails = () => {
         </div>
         <GroofyField
           giText="First name"
-          giValue={formikHandle.values.firstName}
+          giValue={formikHandle.values.firstname}
           giPlaceholder="Enter your first name"
           giType="text"
           errState={
-            formikHandle.touched.firstName && formikHandle.errors.firstName
+            formikHandle.touched.firstname && formikHandle.errors.firstname
               ? true
               : false
           }
-          onChange={formikHandle.handleChange("firstName")}
-          onBlur={formikHandle.handleBlur("firstName")}
-          errMsg={formikHandle.errors.firstName}
+          onChange={formikHandle.handleChange("firstname")}
+          onBlur={formikHandle.handleBlur("firstname")}
         />
         <GroofyField
           giText="Last name"
-          giValue={formikHandle.values.lastName}
+          giValue={formikHandle.values.lastname}
           giPlaceholder="Enter your last name"
           giType="text"
           errState={
-            formikHandle.touched.lastName && formikHandle.errors.lastName
+            formikHandle.touched.lastname && formikHandle.errors.lastname
               ? true
               : false
           }
-          onChange={formikHandle.handleChange("lastName")}
-          onBlur={formikHandle.handleBlur("lastName")}
-          errMsg={formikHandle.errors.lastName}
+          onChange={formikHandle.handleChange("lastname")}
+          onBlur={formikHandle.handleBlur("lastname")}
         />
         <GroofyField
           giText="City"
@@ -155,7 +163,6 @@ const PersonalDetails = () => {
           }
           onChange={formikHandle.handleChange("city")}
           onBlur={formikHandle.handleBlur("city")}
-          errMsg={formikHandle.errors.city}
         />
         <div className={classes.bio_content}>
           <h1>Bio</h1>
@@ -185,12 +192,7 @@ const PersonalDetails = () => {
             className="w-full md:w-14rem"
           />
         </div>
-        <GBtn
-          btnText="Save"
-          btnType={true}
-          clickEvent={() => {}}
-          btnState={formikHandle.isSubmitting}
-        />
+        <GBtn btnText="Save" btnType={true} clickEvent={() => {}} />
       </form>
     </div>
   );

@@ -1,12 +1,12 @@
 import * as yup from "yup";
 
 const userSchema = yup.object().shape({
-  firstName: yup
+  firstname: yup
     .string()
     .trim()
     .min(4, "First Name should be at least 4 characters")
     .max(100, "First Name shouldn't be more than 100 characters"),
-  lastName: yup
+  lastname: yup
     .string()
     .trim()
     .max(100, "Last Name shouldn't be more than 100 characters"),

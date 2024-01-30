@@ -2,11 +2,11 @@ import { reqInstance } from "..";
 import { userActions } from "../slices/user-slice";
 
 export interface EditInfo {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   city: string;
   bio: string;
-  country: { name: string; code: string };
+  country: string;
 }
 
 const getUser = (username: string) => {
@@ -49,16 +49,20 @@ const updateUser = (userId: string, editInfo: EditInfo) => {
           },
         }
       );
-      const dispatchResponse = dispatch(
-        userActions.setUser(response.data.body)
-      );
+      console.log("RESPONSE", response);
+      dispatch(userActions.setUser(response.data.body));
       dispatch(
         userActions.setRes({
           status: response.data.status,
           message: response.data.message,
         })
       );
-      return dispatchResponse;
+      const newUserInfo = {
+        ...JSON.parse(localStorage.getItem("user")!),
+        ...response.data.body,
+      };
+      localStorage.setItem("user", JSON.stringify(newUserInfo));
+      return response;
     } catch (error: any) {
       dispatch(
         userActions.setRes({
