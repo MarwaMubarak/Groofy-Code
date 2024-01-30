@@ -3,12 +3,17 @@ import { UserProps } from "../../shared/types";
 import { authActions } from "../slices/auth-slice";
 import { postActions } from "../slices/post-slice";
 
-const login = (userData: UserProps) => {
+interface LoginProps {
+  usernameOrEmail: string;
+  password: string;
+}
+
+const login = (loginInfo: LoginProps) => {
   return async (dispatch: any) => {
     try {
       const response = await reqInstance.post("/login", {
-        email: userData.email,
-        password: userData.password,
+        emailOrUserName: loginInfo.usernameOrEmail,
+        password: loginInfo.password,
       });
       dispatch(authActions.setErrorMessage(""));
       const dispatchResponse = await dispatch(

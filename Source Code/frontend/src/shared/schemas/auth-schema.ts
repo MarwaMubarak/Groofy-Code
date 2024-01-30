@@ -29,11 +29,16 @@ const registerSchema = yup.object().shape({
 });
 
 const loginSchema = yup.object().shape({
-  email: yup
+  usernameOrEmail: yup
     .string()
     .trim()
-    .email("Please enter a valid email")
-    .required("Email is required"),
+    .test("validateEmail", "Invalid email", (value) => {
+      if (value && value.includes("@")) {
+        return yup.string().trim().email().isValidSync(value);
+      }
+      return yup.string().trim().isValidSync(value);
+    })
+    .required("This field is required"),
   password: yup.string().trim().required("Password is required"),
 });
 

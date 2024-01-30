@@ -7,9 +7,9 @@
   width: 100%;
   overflow: auto;
   .userprofile {
-    // width: 1000px;
     margin: 0 150px;
     height: 100%;
+    width: 100%;
     .up-info {
       margin-top: 30px;
       @include start;
@@ -181,7 +181,7 @@
               width: 100%;
               @include start;
               flex-direction: column;
-              align-items: start;
+              align-items: flex-start;
               color: #f2f2f2;
               .psi-single-details {
                 @include between;

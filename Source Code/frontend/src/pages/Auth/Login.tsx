@@ -16,7 +16,7 @@ const Login = () => {
 
   const formHandler = useFormik({
     initialValues: {
-      email: "",
+      usernameOrEmail: "",
       password: "",
     },
     validationSchema: loginSchema,
@@ -60,16 +60,18 @@ const Login = () => {
         </div>
         <form className="auth-form" onSubmit={formHandler.handleSubmit}>
           <GroofyField
-            giText="Email"
-            giPlaceholder="Enter your username or email"
-            giType="email"
-            giValue={formHandler.values.email}
-            onChange={formHandler.handleChange("email")}
-            onBlur={formHandler.handleBlur("email")}
+            giText="Email/Username"
+            giPlaceholder="Enter your email or username"
+            giType="text"
+            giValue={formHandler.values.usernameOrEmail}
+            onChange={formHandler.handleChange("usernameOrEmail")}
+            onBlur={formHandler.handleBlur("usernameOrEmail")}
             errState={
-              (formHandler.errors.email && formHandler.touched.email) || false
+              (formHandler.errors.usernameOrEmail &&
+                formHandler.touched.usernameOrEmail) ||
+              false
             }
-            errMsg={formHandler.errors.email}
+            errMsg={formHandler.errors.usernameOrEmail}
           />
           <GroofyField
             giText="Password"

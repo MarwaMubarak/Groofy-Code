@@ -6,12 +6,12 @@ import { userSchema } from "../../../shared/schemas/user-schema";
 import GroofyField from "../../Auth/GroofyField/GroofyField";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import GBtn from "../../GBtn/GBtn";
-import "./scss/global/personaldetails.css";
 import classes from "./scss/private/personaldetails.module.css";
 import { userThunks } from "../../../store/actions";
 import { AxiosError } from "axios";
-import { EditInfo } from "../../../store/actions/user-actions";
 import { useDispatch } from "react-redux";
+import { EditInfo } from "../../../store/actions/user-actions";
+import "./scss/global/personaldetails.css";
 
 interface Country {
   name: string;
@@ -41,21 +41,22 @@ const PersonalDetails = () => {
       lastname: user.lastname?.toString() || "",
       city: user.city?.toString() || "",
       bio: user.bio?.toString() || "",
-      country: countries.find((country) => country.name === user.country),
+      country: countries.find((country) => country.name === user.country) || {
+        name: "",
+        code: "",
+      },
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
       console.log("VALUES", values);
-
-      const ret = dispatch(
-        userThunks.updateUser(user._id, {
-          firstname: values.firstname,
-          lastname: values.lastname,
-          city: values.city,
-          bio: values.bio,
-          country: values.country?.name || "",
-        }) as any
-      );
+      const editInfo: EditInfo = {
+        firstname: values.firstname,
+        lastname: values.lastname,
+        city: values.city,
+        bio: values.bio,
+        country: values.country.name,
+      };
+      const ret = dispatch(userThunks.updateUser(user._id, editInfo) as any);
       if (ret instanceof Promise) {
         ret.then((res: any) => {
           console.log("RES", res);

@@ -13,12 +13,14 @@ const SinglePost = (props: SinglePostProps) => {
     state.post.body.find((post: any) => post._id === props.postID)
   );
   const [likeActive, setLikeActive] = useState(
-    post?.likes.includes(props.userid)
+    post?.likes.some((like: any) => like.user === props.userid)
   );
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
   const [time, setTime] = useState(FormatDate(props.postTime));
-  const [likes, setLikes] = useState(props.postLikesCnt);
+  const [likesCnt, setLikesCnt] = useState(props.postLikesCnt);
+  console.log("Post", post);
+  console.log("Likes Counter = ", likesCnt);
   const toast = useRef<Toast>(null);
   const op = useRef<any>(null);
 
@@ -41,8 +43,7 @@ const SinglePost = (props: SinglePostProps) => {
   }, [props.postTime]);
 
   useEffect(() => {
-    setLikes(post.likes.length);
-    console.log(post.likes.length);
+    setLikesCnt(post.likes.length);
   }, [post.likes.length]);
 
   const handleUpdate = (postID: string, content: string) => {
@@ -103,11 +104,10 @@ const SinglePost = (props: SinglePostProps) => {
       await dispatch(postThunks.likePost(postID) as any);
     };
     try {
-      likePost();
-      setLikeActive(!likeActive);
-    } catch (error: any) {
-      console.log(error);
-    }
+      likePost().then(() => {
+        setLikeActive(!likeActive);
+      });
+    } catch (error: any) {}
   };
 
   return (
@@ -214,7 +214,7 @@ const SinglePost = (props: SinglePostProps) => {
           </>
         )}
         <span className="react-info">Like</span>
-        <span className={`react-cnt ${likeActive}`}>{likes}</span>
+        <span className={`react-cnt ${likeActive}`}>{likesCnt}</span>
       </div>
     </div>
   );

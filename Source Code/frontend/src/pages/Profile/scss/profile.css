@@ -7,6 +7,7 @@
 .newprofile-container .userprofile {
   margin: 0 150px;
   height: 100%;
+  width: 100%;
 }
 .newprofile-container .userprofile .up-info {
   margin-top: 30px;
@@ -207,7 +208,7 @@
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   color: #f2f2f2;
 }
 .newprofile-container .userprofile .userprofile-side .up-side-right .profile-section .ps-info .ps-container-box .psi-single-details {

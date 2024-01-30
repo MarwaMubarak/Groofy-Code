@@ -4,20 +4,13 @@ const userSchema = yup.object().shape({
   firstname: yup
     .string()
     .trim()
-    .min(4, "First Name should be at least 4 characters")
-    .max(100, "First Name shouldn't be more than 100 characters"),
+    .max(100, "First Name shouldn't exceed 100 characters"),
   lastname: yup
     .string()
     .trim()
-    .max(100, "Last Name shouldn't be more than 100 characters"),
-  city: yup
-    .string()
-    .trim()
-    .max(40, "City shouldn't be more than 40 characters"),
-  bio: yup
-    .string()
-    .trim()
-    .max(400, "Bio shouldn't be more than 400 characters"),
+    .max(100, "Last Name shouldn't exceed 100 characters"),
+  city: yup.string().trim().max(40, "City shouldn't exceed 40 characters"),
+  bio: yup.string().trim().max(400, "Bio shouldn't exceed 400 characters"),
 });
 
 const passwordSchema = yup.object().shape({

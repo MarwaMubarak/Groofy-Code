@@ -140,7 +140,7 @@ export interface SinglePostProps {
   postContent: string;
   postTime: string;
   postID: string;
-  postLikesCnt: string;
+  postLikesCnt: number;
   isEdited: boolean;
 }
 

@@ -34,8 +34,8 @@ const postSlice = createSlice({
       const postIdx = state.body.findIndex(
         (post: any) => post._id === action.payload.postID
       );
-      const userLiked = state.body[postIdx].likes.includes(
-        action.payload.userID
+      const userLiked = state.body[postIdx].likes.some(
+        (like: any) => like.user === action.payload.userID
       );
       if (!userLiked) {
         state.body[postIdx].likes.push(action.payload.userID);
