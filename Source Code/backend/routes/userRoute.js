@@ -13,7 +13,7 @@ router.route('/user/update/:userId').put(verifyToken, userController.updateUser)
 
 router.route('/user/:username').get(verifyToken, userController.getUserByUsername);
 
-router.route('/users/:userId').put(verifyToken, userController.changePassword);
+router.route('/users/password').put(verifyToken, userController.changePassword);
 
 router.route('/user/search/:prefix').get(verifyToken, userController.searchUsersByPrefix);
 
