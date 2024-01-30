@@ -1,18 +1,18 @@
 import { btnProps } from "../../shared/types";
-import "./scss/gbtn.css";
+import classes from "./scss/gbtn.module.css";
 
 const GBtn = (props: btnProps) => {
   return (
     <button
-      className="groofybtn"
+      className={classes.groofybtn}
       disabled={props.btnState}
       onClick={props.clickEvent}
       type={`${props.btnType ? "submit" : "button"}`}
     >
       {props.icnSrc && (
-        <img className="btn-icn" src={`${props.icnSrc}`} alt="Run" />
+        <img className={classes.btn_icn} src={`${props.icnSrc}`} alt="Run" />
       )}
-      <span className="btn-text">{props.btnText}</span>
+      <span className={classes.btn_text}>{props.btnText}</span>
     </button>
   );
 };

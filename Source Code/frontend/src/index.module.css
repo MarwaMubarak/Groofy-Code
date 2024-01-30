@@ -45,28 +45,3 @@ a {
   background-color: #0e141e;
   border-radius: 5px;
 }
-@media (min-width: 768px) {
-  .align {
-    margin: auto;
-    width: 100%;
-  }
-}
-@media (min-width: 992px) {
-  .align {
-    margin: auto;
-    width: 100%;
-  }
-}
-@media (min-width: 1200px) {
-  .align {
-    margin: auto;
-
-    width: 100%;
-  }
-}
-@media (min-width: 1800px) {
-  .align {
-    margin: auto;
-    width: 100%;
-  }
-}

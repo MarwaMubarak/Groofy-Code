@@ -1,0 +1,54 @@
+.notify_box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.notify_box:not(:last-of-type) {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.notify_box .notify_info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.notify_box .notify_info .notify_img {
+  margin-right: 10px;
+}
+.notify_box .notify_info .notify_img img {
+  border-radius: 50%;
+  width: 55px;
+}
+.notify_box .notify_info .notify_user {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+.notify_box .notify_info .notify_user span {
+  width: 250px;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+.notify_box .notify_info .notify_user span span {
+  font-weight: bold;
+}
+.notify_box .notify_info .notify_user p {
+  color: #005ed1;
+  font-size: 12px;
+  font-weight: bold;
+}
+.notify_box .notify_btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+.notify_box .notify_btns img {
+  width: 24px;
+  cursor: pointer;
+}
+.notify_box .notify_btns img:not(:last-of-type) {
+  margin-right: 10px;
+}/*# sourceMappingURL=notifybox.module.css.map */

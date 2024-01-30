@@ -1,29 +1,29 @@
 import { useSelector } from "react-redux";
 import { Gamemode, GroofyHeader, SideBar } from "../../components";
-import "./scss/play.css";
+import classes from "./scss/play.module.css";
 
 const Play = () => {
   const user = useSelector((state: any) => state.auth.user);
   return (
-    <div className="play-page">
+    <div className={classes.play_page}>
       <SideBar idx={2} />
-      <div className="play-div align">
+      <div className={classes.play_div}>
         <GroofyHeader />
-        <div className="play-mid-menu">
-          <div className="play-left-menu">
-            <div className="play-img-user">
+        <div className={classes.play_mid_menu}>
+          <div className={classes.play_left_menu}>
+            <div className={classes.play_img_user}>
               <img src="/Assets/Images/profile_picture.jpg" alt="UserPhoto" />
             </div>
-            <div className="play-versus-img">
+            <div className={classes.play_versus_img}>
               <img src="/Assets/Images/versus.png" alt="Versus" />
             </div>
-            <div className="play-img-user">
+            <div className={classes.play_img_user}>
               <img src={user.photo.url} alt="UserPhoto" />
             </div>
           </div>
-          <div className="play-menu">
-            <h3 className="play-title">Play a match</h3>
-            <div className="play-modes">
+          <div className={classes.play_menu}>
+            <h3 className={classes.play_title}>Play a match</h3>
+            <div className={classes.play_modes}>
               <Gamemode
                 title="Velocity Code"
                 img="/Assets/Images/clock.png"

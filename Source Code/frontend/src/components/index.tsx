@@ -33,6 +33,7 @@ import Appearance from "./EditProfile/Appearance/Appearance";
 import Privacy from "./EditProfile/Privacy/Privacy";
 import Notifications from "./EditProfile/Notifications/Notifications";
 import GroofyTA from "./GroofyTA/GroofyTA";
+import GroofyWrapper from "./GroofyWrapper/GroofyWrapper";
 
 export {
   MatchHeader,
@@ -70,4 +71,5 @@ export {
   Privacy,
   Notifications,
   GroofyTA,
+  GroofyWrapper,
 };

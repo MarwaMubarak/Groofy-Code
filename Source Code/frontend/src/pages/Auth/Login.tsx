@@ -1,13 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { GBtn, GroofyField } from "../../components";
-import "./scss/login/login.css";
+import { GBtn, GroofyField, GroofyWrapper } from "../../components";
 import { useDispatch } from "react-redux";
 import { authThunks } from "../../store/actions";
 import { loginSchema } from "../../shared/schemas";
 import { useFormik } from "formik";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
-import { AxiosError } from "axios";
+import classes from "./scss/login/login.module.css";
 
 const Login = () => {
   const toast = useRef<Toast>(null);
@@ -21,44 +20,42 @@ const Login = () => {
     },
     validationSchema: loginSchema,
     onSubmit: (values, actions) => {
-      const ret = dispatch(authThunks.login(values) as any);
-      if (ret instanceof Promise) {
-        ret.then((res: any) => {
-          if (res instanceof AxiosError) {
-            actions.resetForm({ values: { ...values, password: "" } });
-            (toast.current as any)?.show({
-              severity: "error",
-              summary: "Failed",
-              detail: res.response?.data?.message,
-              life: 1500,
-            });
-          } else {
-            console.log("Message", res);
-            (toast.current as any)?.show({
-              severity: "success",
-              summary: "Success",
-              detail: "Login successful",
-              life: 1500,
-            });
-            setTimeout(() => {
-              actions.resetForm();
-              localStorage.setItem("user", JSON.stringify(res.payload));
-              navigate("/");
-            }, 700);
-          }
+      const logUser = async () => {
+        await dispatch(authThunks.login(values) as any);
+      };
+      logUser()
+        .then(() => {
+          (toast.current as any)?.show({
+            severity: "success",
+            summary: "Success",
+            detail: "Login successful",
+            life: 1500,
+          });
+          setTimeout(() => {
+            actions.resetForm();
+            navigate("/");
+          }, 700);
+        })
+        .catch((error: any) => {
+          actions.resetForm({ values: { ...values, password: "" } });
+          (toast.current as any)?.show({
+            severity: "error",
+            summary: "Failed",
+            detail: error.response.data.message,
+            life: 1500,
+          });
         });
-      }
     },
   });
 
   return (
-    <div className="align">
+    <GroofyWrapper>
       <Toast ref={toast} />
-      <div className="login-div">
-        <div className="auth-title">
+      <div className={classes.login_div}>
+        <div className={classes.auth_title}>
           Login as a <span>Groofy</span>
         </div>
-        <form className="auth-form" onSubmit={formHandler.handleSubmit}>
+        <form className={classes.auth_form} onSubmit={formHandler.handleSubmit}>
           <GroofyField
             giText="Email/Username"
             giPlaceholder="Enter your email or username"
@@ -86,23 +83,23 @@ const Login = () => {
             }
             errMsg={formHandler.errors.password}
           />
-          <div className="f-sbmt">
+          <div className={classes.f_sbmt}>
             <GBtn
               btnText="Login"
               clickEvent={() => {}}
               btnType={true}
               btnState={formHandler.isSubmitting}
             />
-            <Link to="/forgetpass" className="frg-pass">
+            <Link to="/forgetpass" className={classes.frg_pass}>
               Forget Password?
             </Link>
-            <span className="alrg">
+            <span className={classes.alrg}>
               Don't an account?<Link to="/signup">Sign Up</Link>
             </span>
           </div>
         </form>
       </div>
-    </div>
+    </GroofyWrapper>
   );
 };
 

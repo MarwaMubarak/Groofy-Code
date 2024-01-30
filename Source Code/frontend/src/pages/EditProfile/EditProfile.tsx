@@ -7,67 +7,85 @@ import {
   Security,
   SideBar,
 } from "../../components";
-import "./scss/editprofile.css";
 import { Toast } from "primereact/toast";
+import classes from "./scss/editprofile.module.css";
 
 const EditProfile = () => {
   const toast = useRef<Toast>(null);
   const [activeSection, setActiveSection] = useState(0);
   return (
-    <div className="editprofile-container">
+    <div className={classes.editprofile_container}>
       <Toast ref={toast} />
       <SideBar idx={1} />
-      <div className="editprofile-page">
-        <div className="edtiprofile-settings">
+      <div className={classes.editprofile_page}>
+        <div className={classes.editprofile_settings}>
           <i className="pi pi-cog" />
           <h1>Settings</h1>
         </div>
-        <div className="edit-profile">
-          <div className="edit-menu">
+        <div className={classes.edit_profile}>
+          <div className={classes.edit_menu}>
             <div
-              className={`edit-section ${activeSection === 0 ? "active" : ""}`}
+              className={`${
+                classes.edit_section + " " + (!activeSection && classes.active)
+              }`}
               onClick={() => setActiveSection(0)}
             >
-              <div className="es-img">
+              <div className={classes.es_img}>
                 <i className="pi pi-id-card" />
               </div>
-              <span className="es-title">Personal Details</span>
+              <span className={classes.es_title}>Personal Details</span>
             </div>
             <div
-              className={`edit-section ${activeSection === 1 ? "active" : ""}`}
+              className={`${
+                classes.edit_section +
+                " " +
+                (activeSection === 1 && classes.active)
+              }`}
               onClick={() => setActiveSection(1)}
             >
-              <div className="es-img">
+              <div className={classes.es_img}>
                 <i className="pi pi-palette" />
               </div>
-              <span className="es-title">Appearance & Style</span>
+              <span className={classes.es_title}>Appearance & Style</span>
             </div>
             <div
-              className={`edit-section ${activeSection === 2 ? "active" : ""}`}
+              className={`${
+                classes.edit_section +
+                " " +
+                (activeSection === 2 && classes.active)
+              }`}
               onClick={() => setActiveSection(2)}
             >
-              <div className="es-img">
+              <div className={classes.es_img}>
                 <i className="pi pi-lock" />
               </div>
-              <span className="es-title">Privacy Preferences</span>
+              <span className={classes.es_title}>Privacy Preferences</span>
             </div>
             <div
-              className={`edit-section ${activeSection === 3 ? "active" : ""}`}
+              className={`${
+                classes.edit_section +
+                " " +
+                (activeSection === 3 && classes.active)
+              }`}
               onClick={() => setActiveSection(3)}
             >
-              <div className="es-img">
+              <div className={classes.es_img}>
                 <i className="pi pi-shield" />
               </div>
-              <span className="es-title">Security Settings</span>
+              <span className={classes.es_title}>Security Settings</span>
             </div>
             <div
-              className={`edit-section ${activeSection === 4 ? "active" : ""}`}
+              className={`${
+                classes.edit_section +
+                " " +
+                (activeSection === 4 && classes.active)
+              }`}
               onClick={() => setActiveSection(4)}
             >
-              <div className="es-img">
+              <div className={classes.es_img}>
                 <i className="pi pi-bell" />
               </div>
-              <span className="es-title">Notification Center</span>
+              <span className={classes.es_title}>Notification Center</span>
             </div>
           </div>
           {activeSection === 0 && <PersonalDetails />}

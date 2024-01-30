@@ -1,41 +1,42 @@
-import "./scss/scoreboard.css";
+import classes from "./scss/scoreboard.module.css";
+
 const Scoreboard = () => {
   return (
-    <div className="scoreboard">
-      <div className="m-infobox">
-        <div className="dot"></div>
-        <div className="match-info">Casual Match | 30 Min</div>
+    <div className={classes.scoreboard}>
+      <div className={classes.m_infobox}>
+        <div className={classes.dot}></div>
+        <div className={classes.match_info}>Casual Match | 30 Min</div>
       </div>
-      <div className="players">
-        <div className="player">
-          <div className="first-status"></div>
-          <div className="info">
-            <div className="usn">Username</div>
-            <div className="img">
+      <div className={classes.players}>
+        <div className={classes.player}>
+          <div className={classes.first_status}></div>
+          <div className={classes.info}>
+            <div className={classes.usn}>Username</div>
+            <div className={classes.img}>
               <img src="/Assets/Images/defAv.png" alt="ProfilePhoto" />
             </div>
           </div>
-          <div className="pr-st first">
-            <div className="pr y">1</div>
-            <div className="pr n">2</div>
-            <div className="pr p">3</div>
+          <div className={classes.pr_st + " " + classes.first}>
+            <div className={classes.pr + " " + classes.y}>1</div>
+            <div className={classes.pr + " " + classes.n}>2</div>
+            <div className={classes.pr + " " + classes.p}>3</div>
           </div>
         </div>
         <span>VS</span>
-        <div className="player">
-          <div className="pr-st second">
-            <div className="pr y">1</div>
-            <div className="pr n">2</div>
-            <div className="pr y">3</div>
+        <div className={classes.player}>
+          <div className={classes.pr_st + " " + classes.second}>
+            <div className={classes.pr + " " + classes.y}>1</div>
+            <div className={classes.pr + " " + classes.n}>2</div>
+            <div className={classes.pr + " " + classes.y}>3</div>
           </div>
-          <div className="info">
-            <div className="usn">Username</div>
-            <div className="img">
+          <div className={classes.info}>
+            <div className={classes.usn}>Username</div>
+            <div className={classes.img}>
               <img src="/Assets/Images/defAv2.png" alt="ProfilePhoto" />
             </div>
           </div>
-          <div className="second-status">
-            <div className="finished">
+          <div className={classes.second_status}>
+            <div className={classes.finished}>
               <img src="/Assets/Images/success.png" alt="Success" />
             </div>
           </div>

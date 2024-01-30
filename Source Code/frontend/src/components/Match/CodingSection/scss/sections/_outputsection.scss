@@ -2,15 +2,15 @@
 @use "../../../../../shared/styles/mixins" as *;
 
 @mixin outputSection {
-  .op-sec {
+  .op_sec {
     margin-top: 55px;
-    .op-title {
+    .op_title {
       display: block;
       margin-bottom: 10px;
       font-size: 20px;
       font-weight: 500;
     }
-    .op-info {
+    .op_info {
       @include center;
       flex-direction: column;
       background-color: #fff;
@@ -19,7 +19,7 @@
       padding: 15px;
       gap: 42px 0;
       margin-right: 10px;
-      .op-box {
+      .op_box {
         @include center;
         flex-direction: column;
         width: 100%;
@@ -27,13 +27,13 @@
         &:not(:last-of-type) {
           @include bottomSeparator(100%, 0, -31px, 0);
         }
-        .info-title {
+        .info_title {
           font-weight: bold;
           font-size: 20px;
           position: relative;
           @include bottomSeparator(200px, 0, -5px, 1);
         }
-        .op-info-container {
+        .op_info_container {
           display: flex;
           justify-content: flex-start;
           align-items: center;

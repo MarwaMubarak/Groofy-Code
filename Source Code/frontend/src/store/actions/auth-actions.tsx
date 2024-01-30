@@ -16,12 +16,10 @@ const login = (loginInfo: LoginProps) => {
         password: loginInfo.password,
       });
       dispatch(authActions.setErrorMessage(""));
-      const dispatchResponse = await dispatch(
-        authActions.login(response.data.body)
-      );
-      return dispatchResponse;
+      localStorage.setItem("user", JSON.stringify(response.data.body));
+      dispatch(authActions.login(response.data.body));
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 };
@@ -38,7 +36,7 @@ const logout = () => {
 const signup = (userData: UserProps) => {
   return async (dispatch: any) => {
     try {
-      const response = await reqInstance.post("/register", {
+      await reqInstance.post("/register", {
         username: userData.username,
         email: userData.email,
         password: userData.password,
@@ -46,10 +44,8 @@ const signup = (userData: UserProps) => {
         lastname: userData.lastname,
         country: userData.country,
       });
-      console.log(response);
-      return response;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 };

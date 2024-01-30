@@ -4,19 +4,19 @@ import {
   ProblemSection,
   Scoreboard,
 } from "../../components";
-import "./scss/match.css";
+import classes from "./scss/match.module.css";
 
 const Match = () => {
   return (
     <>
       <MatchHeader />
-      <div className="match-div align">
-        <button className="exit-btn">
+      <div className={classes.match_div}>
+        <button className={classes.exit_btn}>
           <img src="/Assets/SVG/exit.svg" alt="Exit" />
           <span>Leave</span>
         </button>
         <Scoreboard />
-        <div className="match-sections">
+        <div className={classes.match_sections}>
           <ProblemSection />
           <CodingSection />
         </div>

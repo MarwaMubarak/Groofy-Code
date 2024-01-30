@@ -1,20 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
-import { GBtn, GroofyField } from "../../components";
-import "./scss/signup/signup.css";
+import { GBtn, GroofyField, GroofyWrapper } from "../../components";
 import { useDispatch } from "react-redux";
 import { authThunks } from "../../store/actions";
 import { registerSchema } from "../../shared/schemas";
 import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
-import { AxiosError } from "axios";
-// import { useInput } from "../../shared/hooks";
+import classes from "./scss/signup/signup.module.css";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
-
   const formHandler = useFormik({
     initialValues: {
       username: "",
@@ -24,51 +21,48 @@ const SignUp = () => {
     },
     validationSchema: registerSchema,
     onSubmit: (values, actions) => {
-      const ret = dispatch(authThunks.signup(values) as any);
-      if (ret instanceof Promise) {
-        ret.then((res: any) => {
-          console.log("my res", res);
-          if (res instanceof AxiosError) {
-            actions.resetForm({ values: { ...values } });
-            (toast.current as any)?.show({
-              severity: "error",
-              summary: "Failed",
-              detail: res.response?.data?.message,
-              life: 1500,
-            });
-            return;
-          } else {
-            console.log("Message", res);
-            (toast.current as any)?.show({
-              severity: "success",
-              summary: "Success",
-              detail: "Account created successfully",
-              life: 1500,
-            });
-            setTimeout(() => {
-              actions.resetForm();
-              navigate("/login");
-            }, 700);
-          }
+      const signUser = async () => {
+        await dispatch(authThunks.signup(values) as any);
+      };
+      signUser()
+        .then(() => {
+          (toast.current as any)?.show({
+            severity: "success",
+            summary: "Success",
+            detail: "Account created successfully",
+            life: 1500,
+          });
+          setTimeout(() => {
+            actions.resetForm();
+            navigate("/login");
+          }, 700);
+        })
+        .catch((error: any) => {
+          actions.resetForm({ values: { ...values } });
+          (toast.current as any)?.show({
+            severity: "error",
+            summary: "Failed",
+            detail: error.response.data.message,
+            life: 1500,
+          });
         });
-      }
     },
   });
 
   return (
-    <div className="align">
+    <GroofyWrapper>
       <Toast ref={toast} />
-      <div className="signup-div">
-        <div className="features">
-          <div className="ft-title">
+      <div className={classes.signup_div}>
+        <div className={classes.features}>
+          <div className={classes.ft_title}>
             Groofy<span>Code</span>
           </div>
-          <div className="ft-container">
-            <div className="ft-box">
-              <div className="ftb-icn">
+          <div className={classes.ft_container}>
+            <div className={classes.ft_box}>
+              <div className={classes.ftb_icn}>
                 <img src="/Assets/SVG/badgeIcon.svg" alt="BadgeIcon" />
               </div>
-              <div className="ftb-info">
+              <div className={classes.ftb_info}>
                 <h4>Achieve, Earn, and Thrive</h4>
                 <p>
                   Earn badges and achievements as you tackle coding challenges,
@@ -76,11 +70,11 @@ const SignUp = () => {
                 </p>
               </div>
             </div>
-            <div className="ft-box">
-              <div className="ftb-icn">
+            <div className={classes.ft_box}>
+              <div className={classes.ftb_icn}>
                 <img src="/Assets/SVG/codeIcon.svg" alt="BadgeIcon" />
               </div>
-              <div className="ftb-info">
+              <div className={classes.ftb_info}>
                 <h4>Challenge Your Skills</h4>
                 <p>
                   Dive into a world of coding challenges suited for all levels,
@@ -89,11 +83,11 @@ const SignUp = () => {
                 </p>
               </div>
             </div>
-            <div className="ft-box">
-              <div className="ftb-icn">
+            <div className={classes.ft_box}>
+              <div className={classes.ftb_icn}>
                 <img src="/Assets/SVG/shieldIcon.svg" alt="ShieldIcon" />
               </div>
-              <div className="ftb-info">
+              <div className={classes.ftb_info}>
                 <h4>Unite with Coding Clans</h4>
                 <p>
                   Create your own or become part of a community that shares your
@@ -104,11 +98,14 @@ const SignUp = () => {
             </div>
           </div>
         </div>
-        <div className="auth">
-          <div className="auth-title">
+        <div className={classes.auth}>
+          <div className={classes.auth_title}>
             Sign up as a <span>Groofy</span>
           </div>
-          <form className="auth-form" onSubmit={formHandler.handleSubmit}>
+          <form
+            className={classes.auth_form}
+            onSubmit={formHandler.handleSubmit}
+          >
             <GroofyField
               giText="Username"
               giPlaceholder="Enter your username"
@@ -161,21 +158,21 @@ const SignUp = () => {
               }
               errMsg={formHandler.errors.confirmPassword}
             />
-            <div className="f-sbmt">
+            <div className={classes.f_sbmt}>
               <GBtn
                 btnText="Create new account"
                 clickEvent={() => {}}
                 btnType={true}
                 btnState={formHandler.isSubmitting}
               />
-              <span className="alrg">
+              <span className={classes.alrg}>
                 Already have an account?<Link to="/login">Login</Link>
               </span>
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </GroofyWrapper>
   );
 };
 

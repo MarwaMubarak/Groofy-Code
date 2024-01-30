@@ -12,19 +12,19 @@
     }
     .player {
       @include center;
-      .first-status,
-      .second-status {
+      .first_status,
+      .second_status {
         position: relative;
         border-radius: 50%;
         width: 28px;
         height: 28px;
         top: 10px;
       }
-      .first-status {
+      .first_status {
         background-color: #cecece;
         left: 10px;
       }
-      .second-status {
+      .second_status {
         right: 10px;
         img {
           max-width: 100%;
@@ -48,7 +48,7 @@
           border-radius: 50%;
         }
       }
-      .pr-st {
+      .pr_st {
         @include center;
         gap: 0 8px;
         position: relative;

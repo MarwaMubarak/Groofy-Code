@@ -1,0 +1,113 @@
+.gamemode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #0e141e;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px;
+  height: 310px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  box-shadow: 0px 4px 0px 0px #06090d;
+}
+.gamemode:not(:last-of-type) {
+  margin-right: 30px;
+}
+.gamemode:hover {
+  background-color: rgb(20, 27, 40);
+}
+.gamemode img {
+  width: 75px;
+  margin-bottom: 20px;
+}
+.gamemode .gm_info {
+  text-align: center;
+}
+.gamemode .gm_info h3 {
+  color: #f2f2f2;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.gamemode .gm_info p {
+  color: #c3c3c3;
+  width: 230px;
+  line-height: 1.4;
+  font-size: 13px;
+}
+
+.gamemode_full {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0e141e;
+  box-shadow: 0px 4px 0px 0px #06090d;
+  transition: 0.3s;
+  width: 500px;
+  border-radius: 6px;
+  padding: 20px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  transition: 0.3s;
+}
+.gamemode_full:hover {
+  background-color: rgb(20, 27, 40);
+}
+.gamemode_full img {
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
+}
+.gamemode_full .gm_info_full {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.gamemode_full .gm_info_full h3 {
+  color: #f2f2f2;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.gamemode_full .gm_info_full p {
+  color: #c3c3c3;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.mini_gamemode {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #0e141e;
+  box-shadow: 0px 4px 0px 0px #06090d;
+  transition: 0.3s;
+  width: 290px;
+  height: 70px;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.mini_gamemode:hover {
+  background-color: rgb(20, 27, 40);
+}
+.mini_gamemode img {
+  width: 34px;
+  margin-right: 15px;
+  margin-left: 15px;
+}
+.mini_gamemode h3 {
+  color: #f2f2f2;
+  font-size: 18px;
+}/*# sourceMappingURL=gamemode.module.css.map */

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { authThunks } from "../../store/actions";
 import { postActions } from "../../store/slices/post-slice";
-import "./scss/groofyheader.css";
+import classes from "./scss/groofyheader.module.css";
 
 const GroofyHeader = () => {
   const navigate = useNavigate();
@@ -31,17 +31,24 @@ const GroofyHeader = () => {
     navigate("/login");
   };
   return (
-    <div className="header-container">
-      <div className={`notify-area ${notifyActive}`}>
-        <div className="notify-header">
-          <h3 className="notify-title">Notifications</h3>
+    <div className={classes.header_container}>
+      <div
+        className={`${classes.notify_area} ${
+          notifyActive ? classes.true : classes.false
+        }`}
+      >
+        <div className={classes.notify_header}>
+          <h3 className={classes.notify_title}>Notifications</h3>
           <abbr title="Clear notifications">
-            <div className="clear-notify" onClick={() => setNotifyCnt(0)}>
+            <div
+              className={classes.clear_notify}
+              onClick={() => setNotifyCnt(0)}
+            >
               <img src="/Assets/SVG/clear.svg" alt="Clear" />
             </div>
           </abbr>
         </div>
-        <div className="na-content">
+        <div className={classes.na_content}>
           {notifyCnt > 0 ? (
             <NotifyBox
               nuImg="/Assets/Images/tourist.jpg"
@@ -49,7 +56,7 @@ const GroofyHeader = () => {
               ntime="3 Minutes ago."
             />
           ) : (
-            <div className="empty-box">
+            <div className={classes.empty_box}>
               <img
                 src="/Assets/Images/empty_notify.png"
                 alt="EmptyNotification"
@@ -58,37 +65,41 @@ const GroofyHeader = () => {
             </div>
           )}
         </div>
-        <div className="see-all">See more notifications</div>
+        <div className={classes.see_all}>See more notifications</div>
       </div>
-      <div className={`profile-area ${profileActive}`}>
-        <div className="pa-info">
+      <div
+        className={`${classes.profile_area} ${
+          profileActive ? classes.true : classes.false
+        }`}
+      >
+        <div className={classes.pa_info}>
           <img src={user.photo.url} alt="ProfilePicture" />
           <span>{user.username}</span>
         </div>
         <Link to={`/profile/${user.username}`}>
-          <div className="logout">
+          <div className={classes.pa_menu}>
             <img src="/Assets/SVG/ProfileIconBlack.svg" alt="ProfilePicture" />
             <span>Profile</span>
           </div>
         </Link>
         <Link to="/settings">
-          <div className="logout">
+          <div className={classes.pa_menu}>
             <img src="/Assets/SVG/settings.svg" alt="ProfilePicture" />
             <span>Settings</span>
           </div>
         </Link>
-        <div className="logout" onClick={handleLogout}>
+        <div className={classes.pa_menu} onClick={handleLogout}>
           <img src="/Assets/SVG/logout.svg" alt="ProfilePicture" />
           <span>Logout</span>
         </div>
       </div>
-      <div className="header-logo">
+      <div className={classes.header_logo}>
         <Link to="/">
           <img src="/Assets/Images/GroofyLogoCover.png" alt="Logo" />
         </Link>
       </div>
-      <div className="header-user-area">
-        <div className="header-h-imgbox">
+      <div className={classes.header_user_area}>
+        <div className={classes.header_h_imgbox}>
           <ActionButton
             count={friendsNewCnt}
             img="/Assets/SVG/people.svg"
@@ -118,14 +129,14 @@ const GroofyHeader = () => {
           />
 
           <div
-            className="pr-ph"
+            className={classes.pr_ph}
             onClick={() => {
               setProfileActive((state) => !state);
               setNotifyActive(false);
             }}
           >
             <img
-              className="header-pr-ph"
+              className={classes.header_pr_ph}
               src={user.photo.url}
               alt="ProfilePhoto"
             />

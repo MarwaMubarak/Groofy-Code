@@ -1,0 +1,96 @@
+.psec {
+  flex: 1;
+  height: calc(100vh - 229px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 2px solid #ababab;
+}
+.psec::-webkit-scrollbar {
+  width: 6px;
+}
+.psec::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 10px;
+}
+.psec::-webkit-scrollbar-thumb {
+  background-color: #0e141e;
+  border-radius: 10px;
+}
+.psec .problem-disc {
+  margin-left: 20px;
+  margin-right: 10px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+}
+.psec .problem-disc .ptitle {
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: bold;
+  position: relative;
+}
+.psec .problem-disc .ptitle::after {
+  content: "";
+  position: absolute;
+  width: 250px;
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
+}
+.psec .problem-disc .pdisc {
+  margin-top: 25px;
+  font-size: 18px;
+  color: #555;
+  line-height: 1.5;
+}
+.psec .testcases {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 15px;
+}
+.psec .testcases .tch {
+  font-weight: 500;
+  font-size: 25px;
+  background-color: #0e141e;
+  color: #fff;
+  padding: 8px 60px;
+  border-radius: 4px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.psec .testcases .tcs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 65px 0;
+  width: 100%;
+  margin-left: 20px;
+  margin-top: 50px;
+  padding: 15px;
+}
+.psec .testcases .tcs-container .tc-box {
+  position: relative;
+}
+.psec .testcases .tcs-container .tc-box .tc-num {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.psec .testcases .tcs-container .tc-box:not(:last-of-type)::after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 120px);
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -40px;
+}
+.psec .testcases .tcs-container .tc-box:not(:last-of-type)::after {
+  background-color: #ababab;
+}/*# sourceMappingURL=problemsection.module.css.map */

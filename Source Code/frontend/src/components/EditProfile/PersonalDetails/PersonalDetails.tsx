@@ -6,12 +6,11 @@ import { userSchema } from "../../../shared/schemas/user-schema";
 import GroofyField from "../../Auth/GroofyField/GroofyField";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import GBtn from "../../GBtn/GBtn";
-import classes from "./scss/private/personaldetails.module.css";
 import { userThunks } from "../../../store/actions";
 import { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { EditInfo } from "../../../store/actions/user-actions";
-import "./scss/global/personaldetails.css";
+import classes from "./scss/personaldetails.module.css";
 
 interface Country {
   name: string;
@@ -74,10 +73,6 @@ const PersonalDetails = () => {
               detail: res.data.message,
               life: 1500,
             });
-            // setTimeout(() => {
-            // actions.resetForm();
-            // localStorage.setItem("user", JSON.stringify(res.payload));
-            // }, 700);
           }
         });
       }

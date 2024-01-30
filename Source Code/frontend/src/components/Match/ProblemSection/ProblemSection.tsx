@@ -1,12 +1,13 @@
 import { Testcase } from "../..";
-import "./scss/problemsection.css";
+import classes from "./scss/problemsection.module.css";
+
 const ProblemSection = () => {
   return (
-    <div className="psec">
+    <div className={classes.psec}>
       {/* <ProblemsBar /> */}
-      <div className="problem-disc">
-        <span className="ptitle">Problem Title</span>
-        <p className="pdisc">
+      <div className={classes.problem_disc}>
+        <span className={classes.ptitle}>Problem Title</span>
+        <p className={classes.pdisc}>
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum maxime
           quas dolorem optio deserunt obcaecati, quam natus ipsa vitae amet ad
           reiciendis modi perferendis tenetur. Doloribus illo laborum deleniti
@@ -19,12 +20,12 @@ const ProblemSection = () => {
           in aliquid, ad molestiae reprehenderit quam!
         </p>
       </div>
-      <div className="testcases">
-        <span className="tch">Testcases</span>
-        <div className="tcs-container">
+      <div className={classes.testcases}>
+        <span className={classes.tch}>Testcases</span>
+        <div className={classes.tcs_container}>
           {[1, 2, 3].map((i) => (
-            <div className="tc-box">
-              <span className="tc-num">Testcase {i}:</span>
+            <div className={classes.tc_box}>
+              <span className={classes.tc_num}>Testcase {i}:</span>
               <Testcase />
             </div>
           ))}
