@@ -33,7 +33,7 @@ const ClanSchema = new mongoose.Schema(
       transform: function (doc, ret) {
         delete ret.id;
         delete ret.__v;
-
+        delete ret.updatedAt;
         return ret;
       },
     },

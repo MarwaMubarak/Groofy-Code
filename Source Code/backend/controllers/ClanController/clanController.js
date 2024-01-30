@@ -19,7 +19,15 @@ const createClan = async (req, res) => {
     const { errors } = createClanValidation(req.body);
     if (errors)
       return res.status(400).json(unsuccessfulRes(errors.details[0].message));
-    req.leader = req.user.id;
+
+    req.body.leader = req.user.id;
+
+    // Check if the clan name is already taken
+    const existingClan = await Clan.findOne({ name: req.body.name });
+    if (existingClan) {
+      return res.status(400).json(unsuccessfulRes("Clan name already exists. Please choose a different name."));
+    }
+
     const clan = new Clan(req.body);
     await clan.save();
     res.status(201).json(successfulRes("Clan created successfully!", clan));
@@ -37,9 +45,10 @@ const createClan = async (req, res) => {
 const getAllClans = async (req, res) => {
   try {
     const clans = await Clan.find();
-    res.json(clans);
+
+    res.json(successfulRes("Clans retrieved successfully", clans));
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json(unsuccessfulRes("Internal Server Error"));
   }
 };
 
@@ -52,10 +61,14 @@ const getAllClans = async (req, res) => {
 const getClanById = async (req, res) => {
   try {
     const clan = await Clan.findById(req.params.clanId);
-    if (!clan) return res.status(404).json({ error: "Clan not found!" });
-    res.json(clan);
+
+    if (!clan) {
+      return res.status(404).json(unsuccessfulRes("Clan not found!"));
+    }
+
+    res.json(successfulRes("Clan retrieved successfully", clan));
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json(unsuccessfulRes("Internal Server Error"));
   }
 };
 
@@ -68,20 +81,39 @@ const getClanById = async (req, res) => {
 const updateClanById = async (req, res) => {
   try {
     const { errors } = editClanValidation(req.body);
-    // console.log(errors);
-    if (errors)
-      return res.status(400).json({ error: errors.details[0].message });
 
-    const clan = await Clan.findByIdAndUpdate(req.params.clanId, req.body, {
-      new: true,
-    });
-    if (!clan) return res.status(404).json({ error: "Clan not found" });
-    res.json(clan);
+    if (errors) {
+      return res.status(400).json(unsuccessfulRes(errors.details[0].message));
+    }
+
+    // Check if the new name is already taken by another clan
+    const existingClan = await Clan.findOne({ name: req.body.name });
+
+    if (existingClan) {
+      return res
+        .status(400)
+        .json(unsuccessfulRes("Clan name already exists. Please choose a different name."));
+    }
+
+    // Check if the user is the leader of the clan
+    const clan = await Clan.findOne({ _id: req.params.clanId, leader: req.user.id });
+
+    if (!clan) {
+      return res.status(403).json(unsuccessfulRes("You do not have permission to update this clan"));
+    }
+
+    const updatedClan = await Clan.findByIdAndUpdate(req.params.clanId, req.body, { new: true });
+
+    if (!updatedClan) {
+      return res.status(404).json(unsuccessfulRes("Clan not found"));
+    }
+
+    res.json(successfulRes("Clan updated successfully", updatedClan));
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json(unsuccessfulRes("Internal Server Error"));
   }
 };
+
 
 /**----------------------------------------
  *  @description  Delete Clan
@@ -91,14 +123,25 @@ const updateClanById = async (req, res) => {
 -----------------------------------------*/
 const deleteClanById = async (req, res) => {
   try {
-    const clan = await Clan.findByIdAndDelete(req.params.clanId);
-    if (!clan) return res.status(404).json({ error: "Clan not found" });
+    // Check if the user is the leader of the clan
+    const clan = await Clan.findOne({ _id: req.params.clanId, leader: req.user.id });
 
-    res.json({ message: "Clan deleted successfully" });
+    if (!clan) {
+      return res.status(403).json(unsuccessfulRes("You do not have permission to delete this clan"));
+    }
+
+    const deletedClan = await Clan.findByIdAndDelete(req.params.clanId);
+
+    if (!deletedClan) {
+      return res.status(404).json(unsuccessfulRes("Clan not found"));
+    }
+
+    res.json(successfulRes("Clan deleted successfully", deletedClan));
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json(unsuccessfulRes("Internal Server Error"));
   }
 };
+
 
 module.exports = {
   createClan,
