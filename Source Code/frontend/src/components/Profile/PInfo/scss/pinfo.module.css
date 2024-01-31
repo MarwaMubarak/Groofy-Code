@@ -1,0 +1,156 @@
+.up_side_right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-left: 30px;
+}
+.up_side_right .profile_section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+.up_side_right .profile_section .ps_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #0e141e;
+  border-radius: 6px;
+  padding: 20px;
+  width: 290px;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+}
+.up_side_right .profile_section .ps_info .ps_container_box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #f2f2f2;
+}
+.up_side_right .profile_section .ps_info .ps_container_box .psi_single_details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+.up_side_right .profile_section .ps_info .ps_container_box .psi_single_details span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-items: flex-end;
+}
+.up_side_right .profile_section .ps_info .ps_container_box .psi_single_details span span {
+  margin-left: 5px;
+}
+.up_side_right .profile_section .ps_info .ps_container_box .psi_single_details span img {
+  width: 20px;
+  margin-right: 5px;
+}
+.up_side_right .profile_section .ps_info .ps_container_box .psi_single_details span .ls {
+  color: rgb(0, 255, 0);
+  font-weight: bold;
+}
+.up_side_right .profile_section .ps_info .ps_container_box .psi_single_details span .friends {
+  color: #00a9ff;
+  font-weight: bold;
+}
+.up_side_right .profile_section .ps_info .ps_container_box .psi_single_details .any {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+.up_side_right .profile_section .ps_info:not(:last-of-type) {
+  margin-bottom: 30px;
+}
+.up_side_right .profile_section .ps_info .ps_header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+  border-bottom: 3px solid rgba(22, 30, 46, 0.96);
+}
+.up_side_right .profile_section .ps_info .ps_header h3 {
+  color: #f2f2f2;
+  font-size: 20px;
+  font-weight: bold;
+}
+.up_side_right .profile_section .ps_info .ps_header .info_btn {
+  width: 18px;
+  cursor: pointer;
+}
+.up_side_right .profile_section .ps_info .ps_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  height: 150px;
+  padding: 10px 15px;
+  margin: 0 -40px;
+  border-radius: 12px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_box:not(:last-of-type) {
+  margin-right: 60px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_box img {
+  width: 85px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_box .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_box .wrapper span {
+  color: #ddd;
+  font-size: 14px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_box .wrapper h3 {
+  color: #fff;
+  font-size: 20px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  height: 150px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_badge:not(:last-of-type) {
+  margin-right: 20px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_badge::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  width: 60px;
+  bottom: 17px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f93535;
+  border-radius: 12px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_badge img {
+  width: 60px;
+  margin-bottom: 10px;
+}
+.up_side_right .profile_section .ps_info .ps_container .psi_badge span {
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+  font-size: 14px;
+}/*# sourceMappingURL=pinfo.module.css.map */

@@ -34,6 +34,8 @@ import Privacy from "./EditProfile/Privacy/Privacy";
 import Notifications from "./EditProfile/Notifications/Notifications";
 import GroofyTA from "./GroofyTA/GroofyTA";
 import GroofyWrapper from "./GroofyWrapper/GroofyWrapper";
+import PSocial from "./Profile/PSocial/PSocial";
+import PInfo from "./Profile/PInfo/PInfo";
 
 export {
   MatchHeader,
@@ -72,4 +74,6 @@ export {
   Notifications,
   GroofyTA,
   GroofyWrapper,
+  PSocial,
+  PInfo,
 };

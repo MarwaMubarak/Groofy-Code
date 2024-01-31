@@ -96,7 +96,7 @@ module.exports.loginUser = asyncHandler(async(req, res) => {
         if (errorEmail && errorUserName) {
             return res
                 .status(400)
-                .json(unsuccessfulRes("Invalid Email or password."));
+                .json(unsuccessfulRes("Invalid username/email or password."));
         }
         // Check if the user already exists in the database
         let userCan1, userCan2;
@@ -109,14 +109,14 @@ module.exports.loginUser = asyncHandler(async(req, res) => {
         if (!user) {
             return res
                 .status(400)
-                .json(unsuccessfulRes("Invalid Email or password."));
+                .json(unsuccessfulRes("Invalid username/email or password."));
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
             return res
                 .status(400)
-                .json(unsuccessfulRes("Invalid Email or password."));
+                .json(unsuccessfulRes("Invalid username/email or password."));
         }
         const token = user.generateAuthToken();
 
@@ -168,17 +168,6 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
         const { firstname, lastname, country, friends, bio, city, selectedBadges } =
         req.body;
 
-        // // check if the authentication
-        // if (String(userId) !== String(req.user.id)) {
-        //   return res
-        //     .status(403)
-        //     .json(
-        //       unsuccessfulRes(
-        //         "Unauthorized! You do not have permission to update user information."
-        //       )
-        //     );
-        // }
-        //validate changes
         const { error } = validateUpdateUser({
             firstname,
             lastname,
@@ -202,7 +191,7 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
         // update user
         const updatedUser = await User.findByIdAndUpdate(userId, { firstname, lastname, country, friends, bio, city, selectedBadges }, {
             new: true,
-        });
+        }).select("-password");
         if (!updatedUser) {
             return res.status(404).json(unsuccessfulRes("User Not Found!"));
         }

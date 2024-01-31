@@ -19,8 +19,9 @@ const SinglePost = (props: SinglePostProps) => {
   const [editContent, setEditContent] = useState(props.postContent);
   const [time, setTime] = useState(FormatDate(props.postTime));
   const [likesCnt, setLikesCnt] = useState(props.postLikesCnt);
-  console.log("Post", post);
-  console.log("Likes Counter = ", likesCnt);
+  const canModify = post.user === props.userid ? "can" : "not";
+  // console.log("Post", post);
+  // console.log("Likes Counter = ", likesCnt);
   const toast = useRef<Toast>(null);
   const op = useRef<any>(null);
 
@@ -55,7 +56,7 @@ const SinglePost = (props: SinglePostProps) => {
         severity: "info",
         summary: "Info",
         detail: "Post cannot be empty",
-        life: 1500,
+        life: 3000,
       });
       return;
     }
@@ -65,14 +66,14 @@ const SinglePost = (props: SinglePostProps) => {
         severity: "success",
         summary: "Success",
         detail: "Post updated succesfully",
-        life: 1500,
+        life: 3000,
       });
     } catch (error: any) {
       (toast.current as any)?.show({
         severity: "error",
         summary: "Failed",
         detail: "Error has occured",
-        life: 1500,
+        life: 3000,
       });
     }
   };
@@ -87,31 +88,28 @@ const SinglePost = (props: SinglePostProps) => {
         severity: "success",
         summary: "Success",
         detail: "Post deleted succesfully",
-        life: 1500,
+        life: 3000,
       });
     } catch (error: any) {
       (toast.current as any)?.show({
         severity: "error",
         summary: "Failed",
         detail: "Error has occured",
-        life: 1500,
+        life: 3000,
       });
     }
   };
 
   const handleLike = (postID: string) => {
     const likePost = async () => {
-      await dispatch(postThunks.likePost(postID) as any);
+      await dispatch(postThunks.likePost(postID, props.userid) as any);
     };
-    try {
-      likePost().then(() => {
-        setLikeActive(!likeActive);
-      });
-    } catch (error: any) {}
+    likePost();
+    setLikeActive(!likeActive);
   };
 
   return (
-    <div className={`single-post ${isEdit}`}>
+    <div className={`single-post ${isEdit} ${canModify}`}>
       <Toast ref={toast} />
       <div className="single-post-info">
         <div className="single-post-info-div">
@@ -137,7 +135,6 @@ const SinglePost = (props: SinglePostProps) => {
           {props.isEdited && (
             <span style={{ marginRight: "10px" }}>(Edited)</span>
           )}
-          <span>{time}</span>
           <div className="controls">
             {isEdit ? (
               <>
@@ -202,6 +199,7 @@ const SinglePost = (props: SinglePostProps) => {
             </OverlayPanel>
           </div>
         </div>
+        <span>{time}</span>
       </div>
       <div className="s-p-reactbtn" onClick={() => handleLike(props.postID)}>
         {likeActive === false ? (

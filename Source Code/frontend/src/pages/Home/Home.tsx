@@ -7,11 +7,12 @@ import {
   PostsContainer,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./scss/home.module.css";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.auth.user);
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
@@ -80,7 +81,7 @@ const Home = () => {
         <div className={classes.media_section}>
           <div className={classes.home_posts_container}>
             <h3 className={classes.hpc_title}>Posts</h3>
-            <PostsContainer toast={toast} self={true} />
+            <PostsContainer user={user} toast={toast} self={true} />
           </div>
           <div className={classes.profile_section}>
             <div className={classes.ps_info}>

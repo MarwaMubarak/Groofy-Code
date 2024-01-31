@@ -38,10 +38,13 @@ const postSlice = createSlice({
         (like: any) => like.user === action.payload.userID
       );
       if (!userLiked) {
-        state.body[postIdx].likes.push(action.payload.userID);
+        state.body[postIdx].likes.push({
+          user: action.payload.userID,
+          date: action.payload.time,
+        });
       } else {
         state.body[postIdx].likes = state.body[postIdx].likes.filter(
-          (like: any) => like !== action.payload.userID
+          (like: any) => like.user !== action.payload.userID
         );
       }
     },
