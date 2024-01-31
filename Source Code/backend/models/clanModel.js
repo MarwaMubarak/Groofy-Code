@@ -7,7 +7,7 @@ const ClanSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 30,
     },
     leader: {
@@ -56,14 +56,14 @@ const Clan = mongoose.model("Clan", ClanSchema);
 // Create Clan
 const createClanValidation = (clan) => {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
+    name: Joi.string().min(1).max(30).required(),
   });
   return schema.validate(clan);
 };
 // Edit Clan
 const editClanValidation = (clan) => {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
+    name: Joi.string().min(1).max(30).required(),
   });
   return schema.validate(clan);
 };

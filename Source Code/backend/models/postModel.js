@@ -9,6 +9,7 @@ const PostSchema = new mongoose.Schema(
     },
     content: {
       type: String,
+      trim: true,
       required: true,
       minlength: 1,
     },

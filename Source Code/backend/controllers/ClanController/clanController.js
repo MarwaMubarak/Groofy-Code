@@ -16,9 +16,9 @@ const {
 ------------------------------------------*/
 const createClan = async (req, res) => {
   try {
-    const { errors } = createClanValidation(req.body);
-    if (errors)
-      return res.status(400).json(unsuccessfulRes(errors.details[0].message));
+    const { error } = createClanValidation(req.body);
+    if (error)
+      return res.status(400).json(unsuccessfulRes(error.details[0].message));
 
     req.body.leader = req.user.id;
 
@@ -80,10 +80,10 @@ const getClanById = async (req, res) => {
 ------------------------------------------*/
 const updateClanById = async (req, res) => {
   try {
-    const { errors } = editClanValidation(req.body);
+    const { error } = editClanValidation(req.body);
 
-    if (errors) {
-      return res.status(400).json(unsuccessfulRes(errors.details[0].message));
+    if (error) {
+      return res.status(400).json(unsuccessfulRes(error.details[0].message));
     }
 
     // Check if the new name is already taken by another clan

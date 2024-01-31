@@ -168,17 +168,6 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
         const { firstname, lastname, country, friends, bio, city, selectedBadges } =
         req.body;
 
-        // // check if the authentication
-        // if (String(userId) !== String(req.user.id)) {
-        //   return res
-        //     .status(403)
-        //     .json(
-        //       unsuccessfulRes(
-        //         "Unauthorized! You do not have permission to update user information."
-        //       )
-        //     );
-        // }
-        //validate changes
         const { error } = validateUpdateUser({
             firstname,
             lastname,
