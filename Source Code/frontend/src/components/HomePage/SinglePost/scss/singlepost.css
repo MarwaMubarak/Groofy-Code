@@ -53,10 +53,11 @@
   top: -5px;
   right: 0;
 }
-.single-post .single-post-info .single-post-controls span {
+.single-post .single-post-info .single-post-controls + span {
   font-size: 16px;
   color: #596b8e;
   font-weight: bold;
+  width: 137px;
 }
 .single-post .single-post-info .single-post-controls .controls {
   display: none;
@@ -124,21 +125,24 @@
 .single-post .s-p-reactbtn .react-cnt.true {
   color: #f55353;
 }
-.single-post.false:hover .single-post-controls span {
+.single-post.false.can:hover .single-post-controls + span {
   display: none;
 }
-.single-post.false:hover .single-post-controls .controls {
+.single-post.false.can:hover .single-post-controls .controls {
   display: flex;
   justify-content: center;
   align-items: flex-start;
 }
-.single-post.true .single-post-controls span {
+.single-post.true.can .single-post-controls + span {
   display: none;
 }
-.single-post.true .single-post-controls .controls {
+.single-post.true.can .single-post-controls .controls {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+.single-post.not .single-post-controls, .single-post.not:hover .single-post-controls {
+  display: none;
 }
 
 .delete-panel {

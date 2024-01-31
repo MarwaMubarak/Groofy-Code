@@ -6,10 +6,11 @@ const getPosts = (_id: string) => {
     try {
       const user = JSON.parse(localStorage.getItem("user")!);
       if (user.token) {
-        reqInstance.defaults.headers.common[
-          "authorization"
-        ] = `Bearer ${user.token}`;
-        const response = await reqInstance.get(`/posts/${_id}`);
+        const response = await reqInstance.get(`/posts/${_id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         console.log(response.data.body);
         dispatch(postActions.setStatus(response.data.status));
         dispatch(postActions.setMessage(response.data.message));
@@ -27,12 +28,17 @@ const addPost = (content: string) => {
     try {
       const user = JSON.parse(localStorage.getItem("user")!);
       if (user.token) {
-        reqInstance.defaults.headers.common[
-          "authorization"
-        ] = `Bearer ${user.token}`;
-        const response = await reqInstance.post("/post/create", {
-          content,
-        });
+        const response = await reqInstance.post(
+          "/posts",
+          {
+            content,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         dispatch(postActions.setStatus(response.data.status));
         dispatch(postActions.setMessage(response.data.message));
         dispatch(postActions.addPost(response.data.body));
@@ -49,12 +55,17 @@ const updatePost = (postID: string, content: string) => {
     try {
       const user = JSON.parse(localStorage.getItem("user")!);
       if (user.token) {
-        reqInstance.defaults.headers.common[
-          "authorization"
-        ] = `Bearer ${user.token}`;
-        const response = await reqInstance.put(`/post/update/${postID}`, {
-          content,
-        });
+        const response = await reqInstance.put(
+          `/posts/${postID}`,
+          {
+            content,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         dispatch(postActions.updatePost(response.data.body));
       }
     } catch (error: any) {
@@ -69,10 +80,11 @@ const deletePost = (postID: string) => {
     try {
       const user = JSON.parse(localStorage.getItem("user")!);
       if (user.token) {
-        reqInstance.defaults.headers.common[
-          "authorization"
-        ] = `Bearer ${user.token}`;
-        const response = await reqInstance.delete(`/post/delete/${postID}`);
+        const response = await reqInstance.delete(`/posts/${postID}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         dispatch(postActions.deletePost(postID));
         dispatch(postActions.setStatus(response.data.status));
         dispatch(postActions.setMessage(response.data.message));
@@ -84,22 +96,23 @@ const deletePost = (postID: string) => {
   };
 };
 
-const likePost = (postID: string) => {
+const likePost = (postID: string, userID: string) => {
   return async (dispatch: any) => {
+    const userToken = JSON.parse(localStorage.getItem("user")!).token;
     try {
-      const user = JSON.parse(localStorage.getItem("user")!);
-      if (user.token) {
+      if (userToken) {
         const response = await reqInstance.post(
-          `/post/addLike/${postID}`,
+          `/posts/likes/${postID}`,
           {},
           {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${userToken}`,
             },
           }
         );
         console.log("Response", response);
-        dispatch(postActions.likePost({ userID: user._id, postID }));
+        const time = Date.now();
+        dispatch(postActions.likePost({ userID, postID, time }));
         dispatch(postActions.setStatus(""));
         dispatch(postActions.setMessage(""));
       }
