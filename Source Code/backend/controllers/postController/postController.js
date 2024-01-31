@@ -132,21 +132,9 @@ const deletePostById = async(req, res) => {
 const getUserPosts = async(req, res) => {
     try {
         const userId = req.params.userId;
-        if (String(userId) !== String(req.user.id)) {
-            return res
-                .status(403)
-                .json(
-                    unsuccessfulRes(
-                        "Unauthorized! You do not have permission to get the posts."
-                    )
-                );
-        }
-
         // Fetch posts for the specified user
         const userPosts = await Post.find({ user: userId })
             .sort({ createdAt: -1 }) // Sort by createdDate in descending order
-            // .populate("user", "username") // Populate user field with username only
-            // .populate("like", "username"); // Populate like field with username only
 
         return res.json(successfulRes("All posts returned.", userPosts));
     } catch (error) {
