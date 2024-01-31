@@ -56,26 +56,11 @@ const createPost = async(req, res) => {
 ------------------------------------------*/
 const updatePostById = async(req, res) => {
     try {
-        const { error } = updatePostValidation(req.body);
-        if (error) {
-            return res
-                .status(400)
-                .json(unsuccessfulRes(error.message, { _data: error._original }));
-        }
+        // Check if the authenticated user has permission to update this post
 
         const post = await Post.findByIdAndUpdate(req.params.postId, req.body, {
             new: true,
         });
-        if (!post) {
-            ret = {
-                status: "unsuccess",
-                message: "Post not found",
-                data: "No data exist!",
-            };
-            return res.status(404).json(ret);
-        }
-
-        // Check if the authenticated user has permission to update this post
         if (String(post.user) !== String(req.user.id)) {
             return res
                 .status(403)
@@ -85,6 +70,18 @@ const updatePostById = async(req, res) => {
                     )
                 );
         }
+        const { error } = updatePostValidation(req.body);
+        if (error) {
+            return res
+                .status(400)
+                .json(unsuccessfulRes(error.message, { _data: error._original }));
+        }
+
+        if (!post) {
+            return res.status(404).json(unsuccessfulRes("Post not found "));
+        }
+
+
         const currentDate = new Date();
         post.updatedAt = currentDate;
         // Update the post if the user has permission
