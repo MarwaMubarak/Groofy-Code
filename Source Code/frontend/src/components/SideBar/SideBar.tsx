@@ -4,7 +4,9 @@ import { useSelector } from "react-redux";
 import classes from "./scss/sidebar.module.css";
 
 const SideBar = (probs: { idx: number }) => {
-  const [sbActive, setSBActive] = useState(true);
+  const lsb =
+    localStorage.getItem("sbActive") === ("true" || null) ? true : false;
+  const [sbActive, setSBActive] = useState<boolean>(lsb);
   const user = useSelector((state: any) => state.auth.user);
   return (
     <div
@@ -86,7 +88,10 @@ const SideBar = (probs: { idx: number }) => {
       </div>
       <div
         className={classes.sidebar_down}
-        onClick={() => setSBActive((state) => !state)}
+        onClick={() => {
+          setSBActive((state: boolean) => !state);
+          localStorage.setItem("sbActive", (!sbActive).toString());
+        }}
       >
         <img src="/Assets/SVG/collapse.svg" alt="Collapse" />
         <span>Collapse</span>

@@ -52,10 +52,11 @@
       position: absolute;
       top: -5px;
       right: 0;
-      span {
+      & + span {
         font-size: 16px;
         color: #596b8e;
         font-weight: bold;
+        width: 137px;
       }
       .controls {
         display: none;
@@ -188,9 +189,9 @@
     //   }
     // }
   }
-  &.false:hover {
+  &.false.can:hover {
     .single-post-controls {
-      span {
+      & + span {
         display: none;
       }
       .controls {
@@ -200,9 +201,9 @@
       }
     }
   }
-  &.true {
+  &.true.can {
     .single-post-controls {
-      span {
+      & + span {
         display: none;
       }
       .controls {
@@ -210,6 +211,12 @@
         justify-content: center;
         align-items: flex-start;
       }
+    }
+  }
+  &.not,
+  &.not:hover {
+    .single-post-controls {
+      display: none;
     }
   }
   //   .s-p-reactions-cnt {

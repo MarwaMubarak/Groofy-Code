@@ -157,6 +157,7 @@ export interface UserProps {
 
 // Posts Container Props
 export interface PostsContainerProps {
+  user: any;
   toast: RefObject<Toast>;
   self: boolean;
 }
@@ -165,10 +166,24 @@ export interface PostsContainerProps {
 export interface PostsProps {
   posts: any[];
   user: any;
+  loggedUser: string;
 }
 
 // Groofy Textarea Props
 export interface GroofyTAProps {
   taValue: string;
   changeHandler: (val: string) => void;
+}
+
+// PSocial Props
+export interface PSocialProps {
+  profileUser: any;
+  profName: string;
+  loggedUser: string;
+  toast: RefObject<Toast>;
+}
+
+// PInfo Props
+export interface PInfoProps {
+  profileUser: any;
 }

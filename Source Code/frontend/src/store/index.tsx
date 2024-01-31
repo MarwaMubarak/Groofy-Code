@@ -1,10 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authReducer } from "./slices";
-import { postReducer } from "./slices";
+import { authReducer, postReducer, userReducer } from "./slices";
 import axios from "axios";
 
 const store = configureStore({
-  reducer: { auth: authReducer, post: postReducer },
+  reducer: { auth: authReducer, post: postReducer, user: userReducer },
 });
 
 export const reqInstance = axios.create({ baseURL: "http://localhost:8000" });

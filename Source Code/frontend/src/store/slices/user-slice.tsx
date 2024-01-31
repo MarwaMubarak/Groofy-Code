@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userInitialState = {
   user: null,
-  status: "",
-  message: "",
+  res: { status: "", message: "" },
 };
 
 const userSlice = createSlice({
@@ -14,8 +13,7 @@ const userSlice = createSlice({
       state.user = action.payload;
     },
     setRes(state, action) {
-      state.status = action.payload.status;
-      state.message = action.payload.message;
+      state.res = action.payload;
     },
   },
 });

@@ -7,9 +7,9 @@ import GroofyField from "../../Auth/GroofyField/GroofyField";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import GBtn from "../../GBtn/GBtn";
 import { userThunks } from "../../../store/actions";
-import { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { EditInfo } from "../../../store/actions/user-actions";
+import { AxiosError } from "axios";
 import classes from "./scss/personaldetails.module.css";
 
 interface Country {
@@ -58,20 +58,19 @@ const PersonalDetails = () => {
       const ret = dispatch(userThunks.updateUser(user._id, editInfo) as any);
       if (ret instanceof Promise) {
         ret.then((res: any) => {
-          console.log("RES", res);
           if (res instanceof AxiosError) {
             (toast.current as any)?.show({
               severity: "error",
               summary: "Failed",
               detail: res.response?.data?.message,
-              life: 1500,
+              life: 3000,
             });
           } else {
             (toast.current as any)?.show({
               severity: "success",
               summary: "Success",
               detail: res.data.message,
-              life: 1500,
+              life: 3000,
             });
           }
         });
@@ -116,10 +115,7 @@ const PersonalDetails = () => {
           <img src={user.photo.url} alt="profile_photo" />
           <input id="upload" type="file" hidden />
           <label htmlFor="upload">
-            <i
-              className="pi pi-upload
-"
-            />
+            <i className="pi pi-upload" />
             Upload photo
           </label>
         </div>
