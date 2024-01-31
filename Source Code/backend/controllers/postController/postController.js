@@ -132,15 +132,6 @@ const deletePostById = async(req, res) => {
 const getUserPosts = async(req, res) => {
     try {
         const userId = req.params.userId;
-        if (String(userId) !== String(req.user.id)) {
-            return res
-                .status(403)
-                .json(
-                    unsuccessfulRes(
-                        "Unauthorized! You do not have permission to get the posts."
-                    )
-                );
-        }
 
         // Fetch posts for the specified user
         const userPosts = await Post.find({ user: userId })

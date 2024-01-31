@@ -34,7 +34,7 @@ module.exports.regiseterUser = asyncHandler(async (req, res) => {
       lastname,
       country,
     });
-    
+
     if (error) {
       return res.status(400).json(unsuccessfulRes(error.details[0].message));
     }
