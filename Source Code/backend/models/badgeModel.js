@@ -7,6 +7,7 @@ const BadgeSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        trim: true,
         minlength: 4,
         maxlength: 100,
 
@@ -21,6 +22,7 @@ const BadgeSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true,
+        trim: true,
         minlength: 4,
         maxlength: 1000,
 

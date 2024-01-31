@@ -138,7 +138,6 @@ const getUserPosts = async(req, res) => {
 
         return res.json(successfulRes("All posts returned.", userPosts));
     } catch (error) {
-        console.error(error);
         return res.status(500).json(unsuccessfulRes(error));
     }
 };
