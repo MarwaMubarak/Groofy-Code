@@ -1,15 +1,16 @@
 import React from "react";
-import "./scss/privacy.css";
 import GBtn from "../../GBtn/GBtn";
 import { Button } from "primereact/button";
+import { classNames } from "primereact/utils";
+import classes from "./scss/privacy.module.css";
 
 const Privacy = () => {
   return (
-    <div className="edit-info">
-      <h3 className="edit-header">Privacy</h3>
-      <div className="edit-content"></div>
-      <GBtn btnText="Save Changes" clickEvent={() => {}} />
-      <Button label="Click" className="ggb" />
+    <div className={classes.edit_info}>
+      <h3 className={classes.edit_header}>Privacy</h3>
+      <form className={classes.edit_content}>
+        <Button className={classNames(classes.groofybtn)} label="Save" />
+      </form>
     </div>
   );
 };

@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import { EditInfo } from "../../../store/actions/user-actions";
 import { AxiosError } from "axios";
 import classes from "./scss/personaldetails.module.css";
+import { Button } from "primereact/button";
+import { classNames } from "primereact/utils";
 
 interface Country {
   name: string;
@@ -183,7 +185,7 @@ const PersonalDetails = () => {
             className="w-full md:w-14rem"
           />
         </div>
-        <GBtn btnText="Save" btnType={true} clickEvent={() => {}} />
+        <Button className={classNames(classes.groofybtn)} label="Save" />
       </form>
     </div>
   );
