@@ -9,7 +9,7 @@ router.post('/register', userController.regiseterUser);
 router.post('/login', userController.loginUser);
 
 
-router.route('/users/:userId').put(verifyToken, userController.updateUser);
+router.route('/users/update').put(verifyToken, userController.updateUser);
 
 router.route('/users/:username').get(verifyToken, userController.getUserByUsername);
 
