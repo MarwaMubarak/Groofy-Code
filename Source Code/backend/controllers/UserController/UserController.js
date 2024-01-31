@@ -20,7 +20,6 @@ const {
  *  @method       POST
  *  @access       public 
  -----------------------------------------*/
-
 module.exports.regiseterUser = asyncHandler(async (req, res) => {
   try {
     const { username, email, password, firstname, lastname, country } =
@@ -34,7 +33,7 @@ module.exports.regiseterUser = asyncHandler(async (req, res) => {
       lastname,
       country,
     });
-    
+
     if (error) {
       return res.status(400).json(unsuccessfulRes(error.details[0].message));
     }
@@ -74,7 +73,6 @@ module.exports.regiseterUser = asyncHandler(async (req, res) => {
       .status(201)
       .json(successfulRes("Registration successful", "No data exist!"));
   } catch (error) {
-    console.error(error);
     res.status(500).json(unsuccessfulRes("Internal server error"));
   }
 });
@@ -130,7 +128,6 @@ module.exports.loginUser = asyncHandler(async (req, res) => {
     userData.token = token;
     res.status(200).json(successfulRes("login successful", userData));
   } catch (error) {
-    console.error(error);
     res.status(500).json(unsuccessfulRes("Internal server error"));
   }
 });
@@ -160,7 +157,7 @@ module.exports.logoutUser = asyncHandler(async (req, res) => {
 
 /**----------------------------------------
  *  @description  Update User
- *  @route        /user/update/:userId 
+ *  @route        /api/users/:userId
  *  @method       PUT
  *  @access       private (users only)
  -----------------------------------------*/
@@ -181,7 +178,6 @@ module.exports.updateUser = asyncHandler(async (req, res) => {
           )
         );
     }
-    console.log(1);
     //validate changes
     const { error } = validateUpdateUser({
       firstname,
@@ -192,8 +188,6 @@ module.exports.updateUser = asyncHandler(async (req, res) => {
       city,
     });
     const currUser = await User.findById(req.user.id);
-    console.log(currUser.badges);
-    console.log(selectedBadges);
     if (selectedBadges) {
       const validateSelectedBadges = selectedBadges.every((value) =>
         currUser.badges.includes(value)
@@ -219,11 +213,16 @@ module.exports.updateUser = asyncHandler(async (req, res) => {
     }
     res.status(200).json(successfulRes("Updated successfully!", updatedUser));
   } catch (error) {
-    console.error(error);
     res.status(500).json(unsuccessfulRes("Internal server error"));
   }
 });
 
+/**----------------------------------------
+ *  @description  Change User Password
+ *  @route        /api/users/change-password
+ *  @method       POST
+ *  @access       private
+ -----------------------------------------*/
 module.exports.changePassword = asyncHandler(async (req, res) => {
   try {
     const { currentPassword, password, confirmPassword } = req.body;
@@ -263,17 +262,16 @@ module.exports.changePassword = asyncHandler(async (req, res) => {
       .status(200)
       .json(successfulRes("Password Updated Successfully!", updatedUser));
   } catch (error) {
-    console.error(error);
     res.status(500).json(unsuccessfulRes("Internal server error"));
   }
 });
 
 /**----------------------------------------
  *  @description  Get User Information by Username
- *  @route        /api/user/:username
+ *  @route        /api/users/:username
  *  @method       GET
  *  @access       public
- -----------------------------------------*/
+  -----------------------------------------*/
 module.exports.getUserByUsername = asyncHandler(async (req, res) => {
   const { username } = req.params;
   // Find the user by the provided username
@@ -292,7 +290,7 @@ module.exports.getUserByUsername = asyncHandler(async (req, res) => {
 
 /**----------------------------------------
  *  @description  Search Users by Username Prefix
- *  @route        /api/user/search/:prefix
+ *  @route        /api/users/search/:prefix
  *  @method       GET
  *  @access       public
  -----------------------------------------*/
@@ -325,7 +323,6 @@ module.exports.searchUsersByPrefix = asyncHandler(async (req, res) => {
 
     res.status(200).json(successfulRes("Usernames found", usernames));
   } catch (error) {
-    console.error(error);
     res.status(500).json(unsuccessfulRes("Internal server error"));
   }
 });
