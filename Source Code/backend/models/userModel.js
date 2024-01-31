@@ -30,31 +30,31 @@ const UserSchema = new mongoose.Schema({
     firstname: {
         type: String,
         trim: true,
-        minlength: 0,
+        minlength: 1,
         maxlength: 256,
     },
     lastname: {
         type: String,
         trim: true,
-        minlength: 0,
+        minlength: 1,
         maxlength: 256,
     },
     country: {
         type: String,
         trim: true,
-        minlength: 0,
+        minlength: 1,
         maxlength: 100,
     },
     city: {
         type: String,
         trim: true,
-        minlength: 0,
+        minlength: 1,
         maxlength: 100,
     },
     bio: {
         type: String,
         trim: true,
-        minlength: 0,
+        minlength: 1,
         maxlength: 1000,
     },
     badges: [{
@@ -197,11 +197,11 @@ const validateLoginUserName = (user) => {
 //Update User
 const validateUpdateUser = (user) => {
     const schema = Joi.object({
-        firstname: Joi.string().trim().max(256),
-        lastname: Joi.string().trim().max(256),
-        country: Joi.string().trim().max(100),
-        city: Joi.string().trim().max(100),
-        bio: Joi.string().trim().max(1000),
+        firstname: Joi.string().trim().min(1).max(256).allow(''),
+        lastname: Joi.string().trim().min(1).max(256).allow(''),
+        country: Joi.string().trim().min(1).max(100).allow(''),
+        city: Joi.string().trim().min(1).max(100).allow(''),
+        bio: Joi.string().trim().min(1).max(1000).allow(''),
         friends: Joi.array().items(Joi.string()), // Assuming friends is an array of strings
     });
     return schema.validate(user);
