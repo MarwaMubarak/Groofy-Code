@@ -47,7 +47,6 @@ const PersonalDetails = () => {
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      console.log("VALUES", values);
       const editInfo: EditInfo = {
         firstname: values.firstname,
         lastname: values.lastname,
@@ -55,7 +54,7 @@ const PersonalDetails = () => {
         bio: values.bio,
         country: values.country.name,
       };
-      const ret = dispatch(userThunks.updateUser(user._id, editInfo) as any);
+      const ret = dispatch(userThunks.updateUser(editInfo) as any);
       if (ret instanceof Promise) {
         ret.then((res: any) => {
           if (res instanceof AxiosError) {

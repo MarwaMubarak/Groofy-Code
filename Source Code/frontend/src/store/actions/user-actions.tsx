@@ -38,11 +38,10 @@ const getUser = (username: string) => {
   };
 };
 
-const updateUser = (userId: string, editInfo: EditInfo) => {
+const updateUser = (editInfo: EditInfo) => {
   return async (dispatch: any) => {
     try {
       const userToken = JSON.parse(localStorage.getItem("user")!).token;
-      console.log("Edit Info: ", editInfo);
       const response = await reqInstance.put(`/users/update`, editInfo, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -58,6 +57,34 @@ const updateUser = (userId: string, editInfo: EditInfo) => {
   };
 };
 
-const userThunks = { getUser, updateUser };
+const changePassword = (
+  currentPassword: string,
+  password: string,
+  confirmPassword: string
+) => {
+  return async (dispatch: any) => {
+    try {
+      const userToken = JSON.parse(localStorage.getItem("user")!).token;
+      const response = await reqInstance.put(
+        `/users/password`,
+        {
+          currentPassword: currentPassword,
+          password: password,
+          confirmPassword: confirmPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      return response;
+    } catch (error: any) {
+      return error;
+    }
+  };
+};
+
+const userThunks = { getUser, updateUser, changePassword };
 
 export default userThunks;
