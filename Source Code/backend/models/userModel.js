@@ -30,32 +30,41 @@ const UserSchema = new mongoose.Schema({
     firstname: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 256,
+        default:"",
     },
     lastname: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 256,
+        default:"",
+
     },
     country: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 100,
+        default:"",
+
     },
     city: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 100,
+        default:"",
+
     },
     bio: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 1000,
+        default:"",
+
     },
     badges: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -171,9 +180,9 @@ const validateSignUp = (user) => {
         username: Joi.string().trim().min(1).max(100).required(),
         email: Joi.string().trim().min(4).max(256).required().email(),
         password: JoiPassComplex().required(),
-        country: Joi.string().trim().min(1).max(100),
-        firstname: Joi.string().trim().min(1).max(256),
-        lastname: Joi.string().trim().min(1).max(256),
+        country: Joi.string().trim().min(0).max(100),
+        firstname: Joi.string().trim().min(0).max(256),
+        lastname: Joi.string().trim().min(0).max(256),
     });
     return schema.validate(user);
 };
@@ -197,11 +206,11 @@ const validateLoginUserName = (user) => {
 //Update User
 const validateUpdateUser = (user) => {
     const schema = Joi.object({
-        firstname: Joi.string().trim().min(1).max(256).allow(''),
-        lastname: Joi.string().trim().min(1).max(256).allow(''),
-        country: Joi.string().trim().min(1).max(100).allow(''),
-        city: Joi.string().trim().min(1).max(100).allow(''),
-        bio: Joi.string().trim().min(1).max(1000).allow(''),
+        firstname: Joi.string().trim().min(0).max(256),
+        lastname: Joi.string().trim().min(0).max(256),
+        country: Joi.string().trim().min(0).max(100),
+        city: Joi.string().trim().min(0).max(100),
+        bio: Joi.string().trim().min(0).max(1000),
         friends: Joi.array().items(Joi.string()), // Assuming friends is an array of strings
     });
     return schema.validate(user);
