@@ -202,7 +202,7 @@ module.exports.updateUser = asyncHandler(async(req, res) => {
         // update user
         const updatedUser = await User.findByIdAndUpdate(userId, { firstname, lastname, country, friends, bio, city, selectedBadges }, {
             new: true,
-        });
+        }).select("-password");
         if (!updatedUser) {
             return res.status(404).json(unsuccessfulRes("User Not Found!"));
         }
