@@ -30,25 +30,25 @@ const UserSchema = new mongoose.Schema({
     firstname: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 256,
     },
     lastname: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 256,
     },
     country: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 100,
     },
     city: {
         type: String,
         trim: true,
-        minlength: 1,
+        minlength: 0,
         maxlength: 100,
     },
     bio: {
