@@ -9,13 +9,13 @@ router.post('/register', userController.regiseterUser);
 router.post('/login', userController.loginUser);
 
 
-router.route('/user/update/:userId').put(verifyToken, userController.updateUser);
+router.route('/users/:userId').put(verifyToken, userController.updateUser);
 
-router.route('/user/:username').get(verifyToken, userController.getUserByUsername);
+router.route('/users/:username').get(verifyToken, userController.getUserByUsername);
 
 router.route('/users/password').put(verifyToken, userController.changePassword);
 
-router.route('/user/search/:prefix').get(verifyToken, userController.searchUsersByPrefix);
+router.route('/users/search/:prefix').get(verifyToken, userController.searchUsersByPrefix);
 
 
 module.exports = router;
