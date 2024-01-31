@@ -96,7 +96,7 @@ module.exports.loginUser = asyncHandler(async(req, res) => {
         if (errorEmail && errorUserName) {
             return res
                 .status(400)
-                .json(unsuccessfulRes("Invalid Email or password."));
+                .json(unsuccessfulRes("Invalid username/email or password."));
         }
         // Check if the user already exists in the database
         let userCan1, userCan2;
@@ -109,14 +109,14 @@ module.exports.loginUser = asyncHandler(async(req, res) => {
         if (!user) {
             return res
                 .status(400)
-                .json(unsuccessfulRes("Invalid Email or password."));
+                .json(unsuccessfulRes("Invalid username/email or password."));
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
             return res
                 .status(400)
-                .json(unsuccessfulRes("Invalid Email or password."));
+                .json(unsuccessfulRes("Invalid username/email or password."));
         }
         const token = user.generateAuthToken();
 
