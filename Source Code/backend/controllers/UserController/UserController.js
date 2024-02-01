@@ -276,7 +276,7 @@ module.exports.getUserByUsername = asyncHandler(async(req, res) => {
  *  @method       GET
  *  @access       public
  -----------------------------------------*/
-module.exports.searchUsersByPrefix = asyncHandler(async(req, res) => {
+ module.exports.searchUsersByPrefix = asyncHandler(async(req, res) => {
     try {
         const { prefix } = req.params;
 
@@ -294,16 +294,20 @@ module.exports.searchUsersByPrefix = asyncHandler(async(req, res) => {
             .sort({ Trophies: -1 }) // Sort by Trophies in descending order
             .limit(5); // Limit the result to the top 5 users
 
-        // Extract usernames from the users array
-        const usernames = users.map((user) => user.username);
-
-        if (usernames.length === 0) {
+        if (users.length === 0) {
             return res
                 .status(404)
                 .json(unsuccessfulRes("No users found with the provided prefix"));
         }
 
-        res.status(200).json(successfulRes("Usernames found", usernames));
+        // Extract desired information (username, country, photo) for each user
+        const userInfo = users.map((user) => ({
+            username: user.username,
+            country: user.country,
+            photo: user.photo,
+        }));
+
+        res.status(200).json(successfulRes("Users found", userInfo));
     } catch (error) {
         res.status(500).json(unsuccessfulRes("Internal server error"));
     }
