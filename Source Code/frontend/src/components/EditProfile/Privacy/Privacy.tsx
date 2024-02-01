@@ -1,5 +1,4 @@
 import React from "react";
-import GBtn from "../../GBtn/GBtn";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 import classes from "./scss/privacy.module.css";

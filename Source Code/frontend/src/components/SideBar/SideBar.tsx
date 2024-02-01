@@ -1,13 +1,83 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./scss/sidebar.module.css";
+import { OverlayPanel } from "primereact/overlaypanel";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import ReactCountryFlag from "react-country-flag";
+import styles from "./scss/overlay.module.css";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { userThunks } from "../../store/actions";
+import { AxiosError } from "axios";
 
+interface Country {
+  name: string;
+  code: string;
+}
 const SideBar = (probs: { idx: number }) => {
+  const dispatch = useDispatch();
   const lsb =
     localStorage.getItem("sbActive") === ("true" || null) ? true : false;
   const [sbActive, setSBActive] = useState<boolean>(lsb);
   const user = useSelector((state: any) => state.auth.user);
+  const op = useRef<OverlayPanel>(null);
+  const [searchText, setSearchText] = useState<string>("");
+  const [counterToFetch, setCounterToFetch] = useState<number>(2);
+  const countries: Country[] = [
+    { name: "Australia", code: "AU" },
+    { name: "Brazil", code: "BR" },
+    { name: "China", code: "CN" },
+    { name: "Egypt", code: "EG" },
+    { name: "France", code: "FR" },
+    { name: "Germany", code: "DE" },
+    { name: "India", code: "IN" },
+    { name: "Japan", code: "JP" },
+    { name: "Spain", code: "ES" },
+    { name: "United States", code: "US" },
+  ];
+  const [searchedUsers, setSearchedUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (counterToFetch > 0) {
+      setTimeout(() => {
+        setCounterToFetch((state) => state - 1);
+        console.log("TIMe");
+      }, 1000);
+    } else {
+      const ret = dispatch(userThunks.searchForUsers(searchText) as any);
+      if (ret instanceof Promise) {
+        ret.then((res: any) => {
+          console.log(res);
+          if (res instanceof AxiosError) {
+            console.log(res.response?.data?.message);
+            setSearchedUsers([]);
+          } else {
+            console.log(res.data.message);
+            setSearchedUsers(res.data.body);
+          }
+        });
+      }
+    }
+  }, [counterToFetch, dispatch, searchText]);
+  {
+    /* {profileUser.country && profileUser.country !== "" && (
+                  <ReactCountryFlag
+                    countryCode={
+                      countries.find(
+                        (country) => country.name === profileUser.country
+                      )?.code || " "
+                    }
+                    svg
+                    style={{
+                      width: "1em",
+                      height: "1em",
+                      marginLeft: "8px",
+                    }}
+                    title={profileUser.country || ""}
+                  />
+                )} */
+  }
   return (
     <div
       className={`${classes.sidebar_container} ${!sbActive && classes.false}`}
@@ -84,6 +154,187 @@ const SideBar = (probs: { idx: number }) => {
               <span>Help</span>
             </li>
           </Link>
+          <div
+            className={classes.search}
+            onClick={(e) => op.current?.toggle(e)}
+          >
+            <li className={`${probs.idx === 6 && classes.active}`}>
+              <i className="pi pi-search" />
+              <span>Search</span>
+            </li>
+          </div>
+          <OverlayPanel
+            ref={op}
+            showCloseIcon
+            closeOnEscape
+            dismissable={true}
+            className={styles.search_overlay}
+            onHide={() => {
+              setSearchText("");
+              setCounterToFetch(0);
+              setSearchedUsers([]);
+            }}
+          >
+            <div className={styles.search_container}>
+              <h1>Find a player</h1>
+              <div className={`p-inputgroup flex-1 ` + styles.inputfield}>
+                <InputText
+                  placeholder="Keyword"
+                  value={searchText}
+                  onChange={(e) => {
+                    setSearchText(e.target.value);
+                    setCounterToFetch(2);
+                    setSearchedUsers([]);
+                  }}
+                />
+                {searchText === "" ? (
+                  <Button icon="pi pi-search" className="p-button" />
+                ) : (
+                  <Button
+                    icon="pi pi-times-circle
+                  "
+                    className="p-button"
+                    onClick={() => {
+                      setSearchText("");
+                      setCounterToFetch(0);
+                      setSearchedUsers([]);
+                    }}
+                  />
+                )}
+              </div>
+              {counterToFetch > 0 ? (
+                <div className={styles.spinner}>
+                  <ProgressSpinner style={{ width: "40px" }} />
+                </div>
+              ) : (
+                <>
+                  <div className={styles.players_div}>
+                    {searchedUsers.map((user) => (
+                      <div className={styles.search_player}>
+                        <img
+                          src="/Assets/Images/Hazem Adel.jpg"
+                          alt="ProfilePicture"
+                        />
+                        <span>{user}</span>
+
+                        <ReactCountryFlag
+                          countryCode="EG"
+                          svg
+                          style={{
+                            width: "1em",
+                            height: "1em",
+                            marginLeft: "8px",
+                          }}
+                          title="Egypt"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* <div className={styles.players_div}>
+                    <div className={styles.search_player}>
+                      <img
+                        src="/Assets/Images/Hazem Adel.jpg"
+                        alt="ProfilePicture"
+                      />
+                      <span>hazemadelkhalel</span>
+
+                      <ReactCountryFlag
+                        countryCode="EG"
+                        svg
+                        style={{
+                          width: "1em",
+                          height: "1em",
+                          marginLeft: "8px",
+                        }}
+                        title="Egypt"
+                      />
+                    </div>
+                    <div className={styles.search_player}>
+                      <img
+                        src="/Assets/Images/Hazem Adel.jpg"
+                        alt="ProfilePicture"
+                      />
+                      <span>hazemadelkhalel</span>
+                      <ReactCountryFlag
+                        countryCode="EG"
+                        svg
+                        style={{
+                          width: "1em",
+                          height: "1em",
+                          marginLeft: "8px",
+                        }}
+                        title="Egypt"
+                      />
+                    </div>
+                    <div className={styles.search_player}>
+                      <img
+                        src="/Assets/Images/Hazem Adel.jpg"
+                        alt="ProfilePicture"
+                      />
+                      <span>hazemadelkhalel</span>
+
+                      <ReactCountryFlag
+                        countryCode="EG"
+                        svg
+                        style={{
+                          width: "1em",
+                          height: "1em",
+                          marginLeft: "8px",
+                        }}
+                        title="Egypt"
+                      />
+                    </div>
+                    <div className={styles.search_player}>
+                      <img
+                        src="/Assets/Images/Hazem Adel.jpg"
+                        alt="ProfilePicture"
+                      />
+                      <span>hazemadelkhalel</span>
+
+                      <ReactCountryFlag
+                        countryCode="EG"
+                        svg
+                        style={{
+                          width: "1em",
+                          height: "1em",
+                          marginLeft: "8px",
+                        }}
+                        title="Egypt"
+                      />
+                    </div>
+                    <div className={styles.search_player}>
+                      <img
+                        src="/Assets/Images/Hazem Adel.jpg"
+                        alt="ProfilePicture"
+                      />
+                      <span>hazemadelkhalel</span>
+
+                      <ReactCountryFlag
+                        countryCode="EG"
+                        svg
+                        style={{
+                          width: "1em",
+                          height: "1em",
+                          marginLeft: "8px",
+                        }}
+                        title="Egypt"
+                      />
+                    </div>
+                  </div> */}
+                  <div className={styles.footer}>
+                    {searchedUsers.length === 0 ? (
+                      <span>No results found</span>
+                    ) : (
+                      <span>
+                        The most matched results for <span>{searchText}</span>
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          </OverlayPanel>
         </ul>
       </div>
       <div

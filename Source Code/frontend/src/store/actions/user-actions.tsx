@@ -85,6 +85,22 @@ const changePassword = (
   };
 };
 
-const userThunks = { getUser, updateUser, changePassword };
+const searchForUsers = (searchQuery: string) => {
+  return async (dispatch: any) => {
+    try {
+      const userToken = JSON.parse(localStorage.getItem("user")!).token;
+      const response = await reqInstance.get(`/users/search/${searchQuery}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      return response;
+    } catch (error: any) {
+      return error;
+    }
+  };
+};
+
+const userThunks = { getUser, updateUser, changePassword, searchForUsers };
 
 export default userThunks;
