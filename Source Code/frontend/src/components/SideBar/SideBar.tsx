@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import classes from "./scss/sidebar.module.css";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import ReactCountryFlag from "react-country-flag";
-import styles from "./scss/overlay.module.css";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { userThunks } from "../../store/actions";
 import { AxiosError } from "axios";
+import ReactCountryFlag from "react-country-flag";
+import classes from "./scss/sidebar.module.css";
+import styles from "./scss/overlay.module.css";
 
 interface Country {
   name: string;
@@ -24,6 +24,7 @@ const SideBar = (probs: { idx: number }) => {
   const op = useRef<OverlayPanel>(null);
   const [searchText, setSearchText] = useState<string>("");
   const [counterToFetch, setCounterToFetch] = useState<number>(2);
+  const [searchedUsers, setSearchedUsers] = useState<any[]>([]);
   const countries: Country[] = [
     { name: "Australia", code: "AU" },
     { name: "Brazil", code: "BR" },
@@ -36,7 +37,6 @@ const SideBar = (probs: { idx: number }) => {
     { name: "Spain", code: "ES" },
     { name: "United States", code: "US" },
   ];
-  const [searchedUsers, setSearchedUsers] = useState<any[]>([]);
 
   useEffect(() => {
     if (counterToFetch > 0) {
@@ -60,24 +60,6 @@ const SideBar = (probs: { idx: number }) => {
       }
     }
   }, [counterToFetch, dispatch, searchText]);
-  {
-    /* {profileUser.country && profileUser.country !== "" && (
-                  <ReactCountryFlag
-                    countryCode={
-                      countries.find(
-                        (country) => country.name === profileUser.country
-                      )?.code || " "
-                    }
-                    svg
-                    style={{
-                      width: "1em",
-                      height: "1em",
-                      marginLeft: "8px",
-                    }}
-                    title={profileUser.country || ""}
-                  />
-                )} */
-  }
   return (
     <div
       className={`${classes.sidebar_container} ${!sbActive && classes.false}`}
@@ -210,118 +192,30 @@ const SideBar = (probs: { idx: number }) => {
                 <>
                   <div className={styles.players_div}>
                     {searchedUsers.map((user) => (
-                      <div className={styles.search_player}>
-                        <img
-                          src="/Assets/Images/Hazem Adel.jpg"
-                          alt="ProfilePicture"
-                        />
-                        <span>{user}</span>
-
-                        <ReactCountryFlag
-                          countryCode="EG"
-                          svg
-                          style={{
-                            width: "1em",
-                            height: "1em",
-                            marginLeft: "8px",
-                          }}
-                          title="Egypt"
-                        />
-                      </div>
+                      <Link to={`/profile/${user.username}`}>
+                        <div className={styles.search_player}>
+                          <img src={user.photo.url} alt="ProfilePicture" />
+                          <span>{user.username}</span>
+                          {user.country && user.country !== "" && (
+                            <ReactCountryFlag
+                              countryCode={
+                                countries.find(
+                                  (country) => country.name === user.country
+                                )?.code || " "
+                              }
+                              svg
+                              style={{
+                                width: "1em",
+                                height: "1em",
+                                marginLeft: "8px",
+                              }}
+                              title={user.country || ""}
+                            />
+                          )}
+                        </div>
+                      </Link>
                     ))}
                   </div>
-
-                  {/* <div className={styles.players_div}>
-                    <div className={styles.search_player}>
-                      <img
-                        src="/Assets/Images/Hazem Adel.jpg"
-                        alt="ProfilePicture"
-                      />
-                      <span>hazemadelkhalel</span>
-
-                      <ReactCountryFlag
-                        countryCode="EG"
-                        svg
-                        style={{
-                          width: "1em",
-                          height: "1em",
-                          marginLeft: "8px",
-                        }}
-                        title="Egypt"
-                      />
-                    </div>
-                    <div className={styles.search_player}>
-                      <img
-                        src="/Assets/Images/Hazem Adel.jpg"
-                        alt="ProfilePicture"
-                      />
-                      <span>hazemadelkhalel</span>
-                      <ReactCountryFlag
-                        countryCode="EG"
-                        svg
-                        style={{
-                          width: "1em",
-                          height: "1em",
-                          marginLeft: "8px",
-                        }}
-                        title="Egypt"
-                      />
-                    </div>
-                    <div className={styles.search_player}>
-                      <img
-                        src="/Assets/Images/Hazem Adel.jpg"
-                        alt="ProfilePicture"
-                      />
-                      <span>hazemadelkhalel</span>
-
-                      <ReactCountryFlag
-                        countryCode="EG"
-                        svg
-                        style={{
-                          width: "1em",
-                          height: "1em",
-                          marginLeft: "8px",
-                        }}
-                        title="Egypt"
-                      />
-                    </div>
-                    <div className={styles.search_player}>
-                      <img
-                        src="/Assets/Images/Hazem Adel.jpg"
-                        alt="ProfilePicture"
-                      />
-                      <span>hazemadelkhalel</span>
-
-                      <ReactCountryFlag
-                        countryCode="EG"
-                        svg
-                        style={{
-                          width: "1em",
-                          height: "1em",
-                          marginLeft: "8px",
-                        }}
-                        title="Egypt"
-                      />
-                    </div>
-                    <div className={styles.search_player}>
-                      <img
-                        src="/Assets/Images/Hazem Adel.jpg"
-                        alt="ProfilePicture"
-                      />
-                      <span>hazemadelkhalel</span>
-
-                      <ReactCountryFlag
-                        countryCode="EG"
-                        svg
-                        style={{
-                          width: "1em",
-                          height: "1em",
-                          marginLeft: "8px",
-                        }}
-                        title="Egypt"
-                      />
-                    </div>
-                  </div> */}
                   <div className={styles.footer}>
                     {searchedUsers.length === 0 ? (
                       <span>No results found</span>

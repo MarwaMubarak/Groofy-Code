@@ -43,6 +43,7 @@
   font-size: 16px;
   text-align: center;
   font-weight: bold;
+  color: #fff;
 }
 .search_overlay > [class=p-overlaypanel-content] .search_container .footer {
   margin-top: 10px;
