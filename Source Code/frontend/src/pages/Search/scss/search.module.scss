@@ -1,0 +1,158 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.search_container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+  .search_page {
+    width: 100%;
+    margin: 0 40px;
+    .search_area {
+      position: relative;
+      @include center;
+      margin-top: 35px;
+      .prime_input {
+        width: calc(100% - 700px);
+        border-radius: 25px;
+      }
+      i {
+        position: absolute;
+        right: 370px;
+        color: $hoverColor;
+      }
+    }
+    .search_box {
+      @include start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid $mainColor;
+      height: calc(100vh - 185px);
+      overflow-y: auto;
+      .nodata {
+        @include center;
+        flex-direction: column;
+        width: 100%;
+        img {
+          width: 300px;
+          height: 300px;
+        }
+        span {
+          color: $hoverColor;
+          font-size: 25px;
+        }
+      }
+      .searching {
+        @include start;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .search_result {
+        position: relative;
+        @include center;
+        flex-direction: column;
+        width: 270px;
+        height: 400px;
+        .message_user {
+          position: absolute;
+          right: 20px;
+          top: 28%;
+          .user_msg {
+            color: #000;
+            border-color: #000;
+            font-size: 22px;
+            cursor: pointer;
+          }
+        }
+        .user_skin {
+          height: 25%;
+          width: 100%;
+          background-color: $redColor;
+          border-radius: 25px 25px 0 0;
+        }
+        .sr_user {
+          @include center;
+          flex-direction: column;
+          position: absolute;
+          left: 50%;
+          top: 60px;
+          transform: translateX(-50%);
+          .user_img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            box-shadow: 0px 10px 15px 0px rgba(144, 144, 144, 0.75);
+          }
+          .sr_username {
+            @include center;
+            margin-top: 10px;
+            h3 {
+              color: #000;
+            }
+            .user_flag {
+              margin-left: 8px;
+            }
+          }
+        }
+        .user_info {
+          @include center;
+          flex-direction: column;
+          padding: 10px 15px;
+          height: 75%;
+          width: 100%;
+          background-color: #fff;
+          border-radius: 0 0 25px 25px;
+          .user_divisions {
+            @include center;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 80px);
+            justify-content: center;
+            align-items: center;
+            gap: 20px 25px;
+            margin-top: 100px;
+            margin-bottom: 20px;
+            width: 100%;
+            .division {
+              @include center;
+              flex-direction: column;
+              h3 {
+                // color: #0296e1;
+                color: black;
+                font-size: 16px;
+              }
+              span {
+                color: #a3a3a3;
+                font-size: 12px;
+              }
+            }
+          }
+          .sr_controls {
+            @include center;
+            width: 100%;
+            gap: 0 10px;
+            button {
+              @include center;
+              width: 100%;
+              // background-color: #ffcc00;
+              background-color: $blueColor;
+              border: none;
+              &:hover {
+                // background-color: #fdd638;
+                background-color: $blueHoverColor;
+              }
+              span {
+                font-size: 12px;
+                color: #fff;
+                flex: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
