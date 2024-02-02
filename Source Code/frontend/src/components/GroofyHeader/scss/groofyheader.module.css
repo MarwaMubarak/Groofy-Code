@@ -106,7 +106,7 @@
   border-radius: 0 0 6px 6px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 15px 10px;
-  border-top: 4px solid #00a9ff;
+  border-top: 4px solid #00aaff;
   z-index: 1;
 }
 .header_container .profile_area.false {
@@ -168,7 +168,7 @@
   color: #18191a;
 }
 .header_container .profile_area .pa_menu:hover {
-  background-color: #00a9ff;
+  background-color: #00aaff;
   color: #fff;
 }
 .header_container .profile_area .pa_menu img {
@@ -198,7 +198,7 @@
           user-select: none;
 }
 .header_container .header_logo span span {
-  color: #00a9ff;
+  color: #00aaff;
 }
 .header_container .header_logo::after {
   content: "";

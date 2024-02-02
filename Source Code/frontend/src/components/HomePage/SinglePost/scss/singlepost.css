@@ -1,11 +1,11 @@
 .single-post {
   border-top: 2px solid #242526;
   padding: 20px 25px 15px;
+  position: relative;
 }
 .single-post .single-post-info {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   color: white;
   position: relative;
 }
@@ -31,6 +31,12 @@
   font-size: 16px;
   color: #ddd;
 }
+.single-post .single-post-info .single-post-info-div .s-p-details .edited_span {
+  margin-left: 10px;
+  color: #4e4f50;
+  font-weight: bold;
+  font-size: 14px;
+}
 .single-post .single-post-info .single-post-info-div .s-p-details textarea {
   font-family: OpenSans, Arial, Helvetica, sans-serif;
   width: 500px;
@@ -54,10 +60,14 @@
   right: 0;
 }
 .single-post .single-post-info .single-post-controls + span {
-  font-size: 16px;
+  width: 140px;
+  display: flex;
+  justify-content: flex-end;
+  text-align: center;
+  font-size: 14px;
   color: #596b8e;
   font-weight: bold;
-  width: 137px;
+  margin-top: 5px;
 }
 .single-post .single-post-info .single-post-controls .controls {
   display: none;
@@ -163,7 +173,7 @@
   padding: 10px 50px;
   font-size: 15px;
   font-weight: bold;
-  background-color: #00a9ff;
+  background-color: #00aaff;
   outline: none;
   border: none;
   cursor: pointer;

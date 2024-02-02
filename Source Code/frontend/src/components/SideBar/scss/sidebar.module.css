@@ -10,6 +10,11 @@
   position: sticky;
   top: 0;
 }
+@media (max-width: 768px) {
+  .sidebar_container {
+    display: none;
+  }
+}
 .sidebar_container.false {
   width: 65px;
 }
@@ -103,7 +108,7 @@
   transition: 0.3s;
 }
 .sidebar_container .sidebar_up .sidebar_nav_items a li.active {
-  border-left: 4px solid #00a9ff;
+  border-left: 4px solid #00aaff;
   background-color: rgb(22, 30, 46);
 }
 .sidebar_container .sidebar_up .sidebar_nav_items a li:not(.active):hover {
@@ -148,7 +153,7 @@
   transition: 0.3s;
 }
 .sidebar_container .sidebar_up .sidebar_nav_items .search li.active {
-  border-left: 4px solid #00a9ff;
+  border-left: 4px solid #00aaff;
   background-color: rgb(22, 30, 46);
 }
 .sidebar_container .sidebar_up .sidebar_nav_items .search li:not(.active):hover {

@@ -76,7 +76,7 @@
   cursor: pointer;
 }
 .editprofile_container .editprofile_page .edit_profile .edit_menu .edit_section.active {
-  background-color: rgba(0, 169, 255, 0.1);
+  background-color: rgba(0, 170, 255, 0.1);
   font-weight: bold;
 }
 .editprofile_container .editprofile_page .edit_profile .edit_menu .edit_section.active .es_title {

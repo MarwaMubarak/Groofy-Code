@@ -4,10 +4,14 @@
 .single-post {
   border-top: 2px solid $mainColor2;
   padding: 20px 25px 15px;
+  position: relative;
+
   .single-post-info {
-    @include between;
+    display: flex;
+    justify-content: space-between;
     color: white;
     position: relative;
+
     .single-post-info-div {
       @include start;
       width: 100%;
@@ -26,6 +30,12 @@
         p {
           font-size: 16px;
           color: #ddd;
+        }
+        .edited_span {
+          margin-left: 10px;
+          color: $mainColorHover;
+          font-weight: bold;
+          font-size: 14px;
         }
         textarea {
           font-family: OpenSans, Arial, Helvetica, sans-serif;
@@ -53,11 +63,16 @@
       top: -5px;
       right: 0;
       & + span {
-        font-size: 16px;
+        width: 140px;
+        display: flex;
+        justify-content: flex-end;
+        text-align: center;
+        font-size: 14px;
         color: #596b8e;
         font-weight: bold;
-        width: 137px;
+        margin-top: 5px;
       }
+
       .controls {
         display: none;
         position: relative;

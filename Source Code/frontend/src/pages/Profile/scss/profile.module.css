@@ -112,7 +112,7 @@
   width: 20px;
 }
 .newprofile_container .userprofile .up_info .up_info_details .up_info_details_controls .groofybtn:hover {
-  background-color: #00a9ff;
+  background-color: #00aaff;
 }
 .newprofile_container .userprofile .up_info .up_info_details .up_info_details_controls .groofybtn .btn-text {
   font-size: 16px;
@@ -122,7 +122,7 @@
   background-color: #008ace;
 }
 .newprofile_container .userprofile .up_info .up_info_details .up_info_details_controls .groofybtn:not(:last-of-type):hover {
-  background-color: #00a9ff;
+  background-color: #00aaff;
 }
 .newprofile_container .userprofile .userprofile_side {
   display: flex;

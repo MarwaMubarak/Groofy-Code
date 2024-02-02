@@ -159,7 +159,7 @@ const SideBar = (probs: { idx: number }) => {
           >
             <div className={styles.search_container}>
               <h1>Find a player</h1>
-              <div className={`p-inputgroup flex-1 ` + styles.inputfield}>
+              <div className={`p-inputgroup flex-1 ` + styles.inputfield_div}>
                 <InputText
                   placeholder="Keyword"
                   value={searchText}
@@ -168,14 +168,15 @@ const SideBar = (probs: { idx: number }) => {
                     setCounterToFetch(2);
                     setSearchedUsers([]);
                   }}
+                  className={styles.inputfield}
                 />
                 {searchText === "" ? (
-                  <Button icon="pi pi-search" className="p-button" />
+                  <Button icon="pi pi-search" className={styles.searchBtn} />
                 ) : (
                   <Button
                     icon="pi pi-times-circle
                   "
-                    className="p-button"
+                    className={styles.searchBtn}
                     onClick={() => {
                       setSearchText("");
                       setCounterToFetch(0);

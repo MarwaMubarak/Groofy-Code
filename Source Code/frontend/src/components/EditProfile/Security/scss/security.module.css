@@ -45,7 +45,7 @@
   outline-color: #f55353;
 }
 .edit_info .edit_content .passwordField input:not(.err):focus, .edit_info .edit_content .passwordField input:not(.err):hover {
-  outline-color: #00a9ff;
+  outline-color: #00aaff;
 }
 .edit_info .edit_content .passwordField input::-moz-placeholder {
   opacity: 0.5;
@@ -61,7 +61,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #00a9ff;
+  background-color: #00aaff;
   color: #fff;
   border-radius: 12px;
   width: 140px;

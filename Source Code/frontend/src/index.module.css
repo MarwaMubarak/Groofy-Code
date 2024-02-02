@@ -35,13 +35,13 @@ a {
   text-decoration: none;
 }
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f5f9;
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #0e141e;
+  background-color: #18191a;
   border-radius: 5px;
 }

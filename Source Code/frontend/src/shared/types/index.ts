@@ -128,6 +128,7 @@ export interface GamemodeProps {
   title: string;
   description?: string;
   type?: string;
+  id?: string;
   img: string;
   clickEvent: () => void;
 }

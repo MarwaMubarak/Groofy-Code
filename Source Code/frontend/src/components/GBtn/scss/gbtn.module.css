@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #00a9ff;
+  background-color: #00aaff;
   color: #fff;
   border-radius: 12px;
   width: 140px;
@@ -17,17 +17,19 @@
 }
 .groofybtn:hover {
   box-shadow: none;
-  background-color: #18191a;
+  background-color: #29b8ff;
 }
 .groofybtn:disabled {
   background-color: #484848;
   cursor: not-allowed;
 }
 .groofybtn .btn_text {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
 }
 .groofybtn .btn_icn {
   width: 25px;
+  height: 25px;
+  margin-right: 5px;
 }/*# sourceMappingURL=gbtn.module.css.map */

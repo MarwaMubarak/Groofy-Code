@@ -10,6 +10,7 @@
     margin-bottom: 10px;
   }
   .search_container {
+    background-color: $mainColor2;
     .spinner {
       @include center;
       width: 100%;
@@ -19,8 +20,17 @@
       font-size: 20px;
       margin-bottom: 10px;
     }
-    .inputfield {
+    .inputfield_div {
       margin-bottom: 10px;
+      .inputfield {
+        background-color: $mainColor2;
+      }
+      .searchBtn {
+        background-color: $blueColor;
+        &:hover {
+          background-color: $blueHoverLightColor;
+        }
+      }
     }
     .search_player {
       display: flex;
@@ -30,7 +40,7 @@
       padding: 5px 10px;
       &:hover {
         cursor: pointer;
-        background-color: #324157;
+        background-color: $mainColorHover;
         border-radius: 6px;
       }
       img {
@@ -56,4 +66,8 @@
       }
     }
   }
+}
+
+.search_overlay [class="p-overlaypanel-content"] {
+  background-color: $mainColor2;
 }

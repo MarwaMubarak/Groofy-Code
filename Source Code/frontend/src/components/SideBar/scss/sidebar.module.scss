@@ -2,6 +2,9 @@
 @use "../../../shared/styles/mixins" as *;
 
 .sidebar_container {
+  @media (max-width: 768px) {
+    display: none;
+  }
   height: 100vh;
   width: 150px;
   @include between;
