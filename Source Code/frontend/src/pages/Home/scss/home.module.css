@@ -78,7 +78,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #0e141e;
+  background-color: #18191a;
   border-radius: 6px;
   padding: 20px;
   width: 290px;
@@ -93,7 +93,7 @@
   align-items: center;
   padding-bottom: 10px;
   margin-bottom: 5px;
-  border-bottom: 3px solid rgba(22, 30, 46, 0.96);
+  border-bottom: 3px solid #242526;
 }
 .home_container .activity_section .media_section .profile_section .ps_info .ps_header h3 {
   color: #f2f2f2;

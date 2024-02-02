@@ -136,7 +136,7 @@
   border-radius: 10px;
 }
 .clan-div .c-chat .ch::-webkit-scrollbar-thumb {
-  background-color: #0e141e;
+  background-color: #18191a;
   border-radius: 10px;
 }
 .clan-div .c-chat .ch .msg-box {
@@ -158,7 +158,7 @@
   text-align: end;
 }
 .clan-div .c-chat .ch .msg-box.to .msg-info .msg {
-  background-color: #0e141e;
+  background-color: #18191a;
 }
 .clan-div .c-chat .ch .msg-box .u-img img {
   width: 64px;
@@ -184,7 +184,7 @@
   border-radius: 10px;
 }
 .clan-div .c-chat .ch-msg textarea::-webkit-scrollbar-thumb {
-  background-color: #0e141e;
+  background-color: #18191a;
   border-radius: 10px;
 }
 .clan-div .c-chat .ch-msg textarea:focus {

@@ -61,7 +61,7 @@
   border-radius: 10px;
 }
 .header_container .notify_area .na_content::-webkit-scrollbar-thumb {
-  background-color: #0e141e;
+  background-color: #18191a;
   border-radius: 10px;
 }
 .header_container .notify_area .na_content .empty_box {
@@ -95,7 +95,7 @@
   cursor: pointer;
 }
 .header_container .notify_area .see_all:hover {
-  background-color: #0e141e;
+  background-color: #18191a;
   color: #fff;
 }
 .header_container .profile_area {
@@ -165,7 +165,7 @@
           user-select: none;
   width: 100%;
   padding: 10px;
-  color: #0e141e;
+  color: #18191a;
 }
 .header_container .profile_area .pa_menu:hover {
   background-color: #00a9ff;

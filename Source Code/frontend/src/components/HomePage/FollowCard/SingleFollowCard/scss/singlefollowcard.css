@@ -25,7 +25,7 @@
   font-size: 16px;
   padding: 8px 15px;
   border-radius: 20px;
-  background-color: #0e141e;
+  background-color: #18191a;
   outline: 2px solid transparent;
   cursor: pointer;
   transition: 0.3s;
@@ -38,14 +38,14 @@
 }
 .single-follow-card .follow:hover {
   background-color: white;
-  color: #0e141e;
+  color: #18191a;
 }
 .single-follow-card .unfollow {
-  color: #0e141e;
+  color: #18191a;
   background-color: white;
 }
 .single-follow-card .unfollow:hover {
-  background-color: #0e141e;
+  background-color: #18191a;
   color: white;
 }
 .single-follow-card:hover {

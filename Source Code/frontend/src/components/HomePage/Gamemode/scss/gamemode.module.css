@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #0e141e;
+  background-color: #18191a;
   width: -moz-fit-content;
   width: fit-content;
   padding: 10px;
@@ -20,7 +20,7 @@
   margin-right: 30px;
 }
 .gamemode:hover {
-  background-color: rgb(20, 27, 40);
+  background-color: #1e1f1f;
 }
 .gamemode img {
   width: 75px;
@@ -45,7 +45,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0e141e;
+  background-color: #18191a;
   box-shadow: 0px 4px 0px 0px #06090d;
   transition: 0.3s;
   width: 500px;
@@ -87,7 +87,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background-color: #0e141e;
+  background-color: #18191a;
   box-shadow: 0px 4px 0px 0px #06090d;
   transition: 0.3s;
   width: 290px;

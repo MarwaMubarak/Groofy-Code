@@ -1,5 +1,5 @@
 .single-post {
-  border-top: 2px solid rgba(22, 30, 46, 0.96);
+  border-top: 2px solid #242526;
   padding: 20px 25px 15px;
 }
 .single-post .single-post-info {
@@ -38,7 +38,7 @@
   border: none;
   padding: 12.2px 15px 5px;
   border-radius: 6px;
-  background-color: rgba(22, 30, 46, 0.96);
+  background-color: #242526;
   caret-color: #f2f2f2;
   color: #f2f2f2;
   margin-right: 20px;
@@ -75,7 +75,7 @@
           user-select: none;
 }
 .single-post .single-post-info .single-post-controls .controls img:hover {
-  background-color: rgba(22, 30, 46, 0.96);
+  background-color: #242526;
 }
 .single-post .s-p-reactbtn {
   display: flex;
@@ -87,7 +87,7 @@
   width: fit-content;
 }
 .single-post .s-p-reactbtn:hover img {
-  background-color: rgba(22, 30, 46, 0.96);
+  background-color: #242526;
 }
 .single-post .s-p-reactbtn:hover .react-info {
   display: block;
@@ -107,7 +107,7 @@
   bottom: -30px;
   left: -7px;
   display: none;
-  background-color: rgba(22, 30, 46, 0.96);
+  background-color: #242526;
   color: #fff;
   border-radius: 12px;
   padding: 5px 10px;

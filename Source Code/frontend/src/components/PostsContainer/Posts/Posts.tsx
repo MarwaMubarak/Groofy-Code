@@ -3,12 +3,16 @@ import {
   Paginator,
   PaginatorCurrentPageReportOptions,
   PaginatorPageChangeEvent,
+  PaginatorPageLinksOptions,
   PaginatorRowsPerPageDropdownOptions,
 } from "primereact/paginator";
 import { Dropdown } from "primereact/dropdown";
 import { SinglePost } from "../..";
 import { PostsProps } from "../../../shared/types";
 import classes from "./scss/posts.module.css";
+import "./scss/haha.css";
+
+import styles from "./scss/dropdown.module.css";
 
 const Posts = (props: PostsProps) => {
   const [first, setFirst] = useState<number>(0);
@@ -28,7 +32,7 @@ const Posts = (props: PostsProps) => {
         { label: 20, value: 20 },
         { label: 50, value: 50 },
       ];
-
+      console.log("OPTIONS", options);
       return (
         <>
           <span
@@ -41,6 +45,8 @@ const Posts = (props: PostsProps) => {
             value={options.value}
             options={dropdownOptions}
             onChange={options.onChange}
+            className={classes.paginator_dropdown}
+            panelClassName={styles.paginator_dropdown_panel}
           />
         </>
       );
@@ -57,6 +63,22 @@ const Posts = (props: PostsProps) => {
         >
           {options.first} - {options.last} of {options.totalRecords}
         </span>
+      );
+    },
+
+    PageLinks: (options: PaginatorPageLinksOptions) => {
+      console.log(options);
+      return (
+        <button
+          className={
+            classes.paginator_page_links +
+            " " +
+            (options.currentPage === options.page && classes.active)
+          }
+          onClick={options.onClick}
+        >
+          {options.page + 1}
+        </button>
       );
     },
   };
@@ -89,6 +111,10 @@ const Posts = (props: PostsProps) => {
             rowsPerPageOptions={[5, 10, 20]}
             onPageChange={onPageChange}
             template={PaginatorTemplate}
+            className={classes.paginator}
+            // style={{
+            //   backgroundColor: "#18191a",
+            // }}
           />
         </>
       ) : (

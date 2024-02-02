@@ -1,0 +1,14 @@
+.paginator_dropdown_panel
+  [class~="p-dropdown-items-wrapper"]
+  [class~="p-dropdown-items"]
+  [class~="p-dropdown-item" + "p-highlight"] {
+  background-color: #242526;
+  border-radius: 6px 6px 0px 0px;
+}
+
+.paginator_dropdown_panel
+  [class~="p-dropdown-items-wrapper"]
+  [class~="p-dropdown-items"] {
+  background-color: #313334;
+  border-radius: 6px;
+}
