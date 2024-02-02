@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { userSchema } from "../../../shared/schemas/user-schema";
 import GroofyField from "../../Auth/GroofyField/GroofyField";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import GBtn from "../../GBtn/GBtn";
 import { userThunks } from "../../../store/actions";
 import { useDispatch } from "react-redux";
 import { EditInfo } from "../../../store/actions/user-actions";
@@ -13,7 +12,6 @@ import { AxiosError } from "axios";
 import classes from "./scss/personaldetails.module.css";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
-import "./scss/tteest.css";
 
 interface Country {
   name: string;

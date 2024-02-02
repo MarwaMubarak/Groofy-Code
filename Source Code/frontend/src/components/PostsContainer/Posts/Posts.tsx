@@ -10,8 +10,6 @@ import { Dropdown } from "primereact/dropdown";
 import { SinglePost } from "../..";
 import { PostsProps } from "../../../shared/types";
 import classes from "./scss/posts.module.css";
-import "./scss/haha.css";
-
 import styles from "./scss/dropdown.module.css";
 
 const Posts = (props: PostsProps) => {
