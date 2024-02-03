@@ -90,7 +90,11 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
         )}
         {!self && loggedUser.username === user.username && (
           <div className={classes.post_row}>
-            <img src={user.photo.url} alt="UserPhoto" />
+            <img
+              src={user.photo.url}
+              alt="UserPhoto"
+              className={classes.post_row_img}
+            />
             <GroofyTA
               taValue={newPostContent}
               changeHandler={setNewPostContent}
