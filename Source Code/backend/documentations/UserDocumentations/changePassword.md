@@ -32,12 +32,10 @@ To access the API, you need to include your API key in the `Authorization` heade
 
 ```jsx
 {
-    "username":"mohamed",
-    "email":"moahmed@gmail.com",
+    "currentPassword":"12345@Gc$",
     "password":"12345@Gc",
-    "firstname":"ali",
-    "lastname":"Mohamed",
-    "country": "Egypt"
+    "confirmPassword":"12345@Gc"
+
 }
 ```
 
@@ -46,8 +44,35 @@ To access the API, you need to include your API key in the `Authorization` heade
 ```jsx
 {
     "status": "success",
-    "message": "Registration successful",
-    "body": "No data exist!"
+    "message": "Password Updated Successfully!",
+    "body": {
+        "city": "",
+        "bio": "",
+        "_id": "65b7e209015b539b257e0f0b",
+        "username": "esawy",
+        "email": "esawy@gmail.com",
+        "firstname": "Omar",
+        "lastname": "Esawy",
+        "country": "Egypt",
+        "badges": [],
+        "selectedBadges": [],
+        "friends": [],
+        "photo": {
+            "url": "https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI4MDQwOTc0L29yaWdpbmFsX2ZmNGYxZjQzZDdiNzJjYzMxZDJlYjViMDgyN2ZmMWFjLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTIwMCwiaGVpZ2h0IjoxMjAwLCJmaXQiOiJpbnNpZGUiLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWV9LCJ3ZWJwIjp7InF1YWxpdHkiOjkwfSwianBlZyI6eyJxdWFsaXR5Ijo5MH0sInJvdGF0ZSI6bnVsbH19?bc=0",
+            "publicID": null
+        },
+        "status": false,
+        "isOnline": true,
+        "totalMatch": 0,
+        "highestTrophies": 0,
+        "wins": 0,
+        "loses": 0,
+        "draws": 0,
+        "division": "",
+        "createdAt": "2024-01-29T17:36:09.772Z",
+        "updatedAt": "2024-01-31T21:42:19.502Z",
+        "Trophies": 0
+    }
 }
 ```
 
