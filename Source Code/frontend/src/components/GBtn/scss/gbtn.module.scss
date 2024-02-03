@@ -15,18 +15,20 @@
   user-select: none;
   &:hover {
     box-shadow: none;
-    background-color: $mainColor;
+    background-color: $blueHoverLightColor;
   }
   &:disabled {
     background-color: $darkColor;
     cursor: not-allowed;
   }
   .btn_text {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     font-family: "Roboto", sans-serif;
   }
   .btn_icn {
     width: 25px;
+    height: 25px;
+    margin-right: 5px;
   }
 }

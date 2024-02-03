@@ -9,7 +9,7 @@
 .signup_div .features {
   width: 40%;
   height: 650px;
-  background-color: #0e141e;
+  background-color: #18191a;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border-radius: 6px 0 0 6px;
 }
@@ -20,7 +20,7 @@
   margin: 15px 0 30px 20px;
 }
 .signup_div .features .ft_title span {
-  color: #00a9ff;
+  color: #00aaff;
 }
 .signup_div .features .ft_container {
   padding: 30px 30px 100px;
@@ -44,7 +44,7 @@
   align-items: center;
   margin-right: 15px;
   padding: 25px;
-  background-color: #00a9ff;
+  background-color: #00aaff;
   border-radius: 12px;
 }
 .signup_div .features .ft_container .ft_box .ftb_icn img {
@@ -83,7 +83,7 @@
   background-color: #ddd;
 }
 .signup_div .auth .auth_title span {
-  color: #00a9ff;
+  color: #00aaff;
 }
 .signup_div .auth .auth_form {
   display: flex;
@@ -94,7 +94,7 @@
   width: 100%;
 }
 .signup_div .auth .auth_form .groofy_input input:hover {
-  outline-color: #00a9ff;
+  outline-color: #00aaff;
 }
 .signup_div .auth .auth_form .f_sbmt {
   display: flex;
@@ -118,7 +118,7 @@
 }
 .signup_div .auth .auth_form .f_sbmt .alrg a {
   margin-left: 5px;
-  color: #00a9ff;
+  color: #00aaff;
   transition: 0.3s;
 }
 .signup_div .auth .auth_form .f_sbmt .alrg a:hover {

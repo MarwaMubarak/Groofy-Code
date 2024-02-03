@@ -1,0 +1,103 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.burger_menu {
+  background-color: $mainColor2;
+  position: relative;
+  .burger_header {
+    @include start;
+    background-color: $mainColorHover2;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    box-shadow: 0px 1px 0px 0px #06090d;
+    img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    & + div {
+      position: absolute;
+      right: -15px;
+      border-radius: 50%;
+      background-color: $redColor;
+      button {
+        width: 1.7rem;
+        height: 1.7rem;
+      }
+    }
+  }
+  .burger_list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+    &:not(:last-of-type) {
+      margin-bottom: 10px;
+    }
+    li {
+      @include start;
+      padding: 10px;
+      border-radius: 6px;
+      transition: 0.3s;
+      cursor: pointer;
+      user-select: none;
+      &:hover,
+      &:active,
+      &:focus {
+        background-color: $mainColorHover;
+      }
+      img {
+        width: 32px;
+        margin-right: 10px;
+      }
+      span {
+        color: #fff;
+      }
+    }
+  }
+  .divider {
+    height: 2px;
+    width: 100%;
+    background-color: $mainColorHover2;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  .logout_btn {
+    @include start;
+    padding: 10px;
+    border-radius: 6px;
+    // background-color: rgba($redColor, 0.8);
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.3s;
+    &:hover {
+      background-color: $redColor;
+    }
+    img {
+      width: 28px;
+      margin-right: 10px;
+    }
+  }
+}
+.burger_btn {
+  @include start;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-right: 10px;
+  @media (min-width: 1121px) {
+    display: none;
+  }
+  &:hover {
+    background-color: $mainColorHover2;
+  }
+  i {
+    @include center;
+    text-align: center;
+    font-size: 26px;
+    color: #fff;
+  }
+}

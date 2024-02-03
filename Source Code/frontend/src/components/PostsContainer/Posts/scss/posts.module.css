@@ -7,8 +7,44 @@
   align-items: center;
   padding: 30px 10px;
   width: 100%;
-  border-top: 2px solid rgba(22, 30, 46, 0.96);
+  border-top: 2px solid #242526;
   margin: 0 auto;
   color: #fff;
   font-size: 16px;
+}
+.posts .paginator {
+  background-color: #242526;
+}
+.posts .paginator li {
+  background-color: #242526 !important;
+}
+
+.paginator > [class=p-paginator-pages] {
+  display: flex;
+  gap: 7px;
+  background-color: #242526;
+}
+
+.paginator_page_links {
+  padding: 15px 20px;
+  border-radius: 6px;
+  background-color: #242526;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+.paginator_page_links:hover {
+  background-color: #313334;
+}
+
+.active {
+  background-color: #313334;
+}
+
+.paginator_dropdown {
+  background-color: #313334;
+}
+.paginator_dropdown li {
+  background-color: #242526 !important;
 }/*# sourceMappingURL=posts.module.css.map */

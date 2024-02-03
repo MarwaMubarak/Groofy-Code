@@ -2,8 +2,10 @@ import { GamemodeProps } from "../../../shared/types";
 import classes from "./scss/gamemode.module.css";
 
 const Gamemode = (props: GamemodeProps) => {
+  console.log("MY ID", props.id);
   return props.description ? (
     <div
+      id={props.id ? props.id : ""}
       className={`${
         props.type === "full" ? classes.gamemode_full : classes.gamemode
       }`}
@@ -20,7 +22,11 @@ const Gamemode = (props: GamemodeProps) => {
       </div>
     </div>
   ) : (
-    <div className={classes.mini_gamemode} onClick={props.clickEvent}>
+    <div
+      id={props.id ? props.id : ""}
+      className={classes.mini_gamemode}
+      onClick={props.clickEvent}
+    >
       <img src={props.img} alt="Gamemode" />
       <h3>{props.title}</h3>
     </div>

@@ -127,14 +127,16 @@ const SinglePost = (props: SinglePostProps) => {
                 maxLength={500}
               ></textarea>
             ) : (
-              <p>{props.postContent}</p>
+              <p>
+                {props.postContent}
+                {props.isEdited && (
+                  <span className="edited_span">(Edited)</span>
+                )}
+              </p>
             )}
           </div>
         </div>
         <div className="single-post-controls">
-          {props.isEdited && (
-            <span style={{ marginRight: "10px" }}>(Edited)</span>
-          )}
           <div className="controls">
             {isEdit ? (
               <>

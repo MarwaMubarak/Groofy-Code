@@ -69,12 +69,33 @@
         color: $hoverColor;
       }
     }
-    .ggb {
-      background-color: #ff352e;
+    .groofybtn {
+      @include center;
+      background-color: $blueColor;
+      color: #fff;
+      border-radius: 12px;
       width: 140px;
-      border-radius: 6px;
+      box-shadow: $headerShadow;
+      padding: 8px 12px;
+      transition: 0.3s;
+      border: none;
+      cursor: pointer;
+      user-select: none;
       &:hover {
-        background-color: $blueColor;
+        box-shadow: none;
+        background-color: $blueHoverColor;
+      }
+      &:disabled {
+        background-color: $darkColor;
+        cursor: not-allowed;
+      }
+      .btn_text {
+        font-size: 12px;
+        font-weight: 500;
+        font-family: "Roboto", sans-serif;
+      }
+      .btn_icn {
+        width: 25px;
       }
     }
   }

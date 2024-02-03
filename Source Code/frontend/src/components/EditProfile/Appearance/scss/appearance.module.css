@@ -8,71 +8,36 @@
   margin-bottom: 30px;
   color: #f2f2f2;
 }
-.edit_info .edit_content .editprofile_photo {
+.edit_info .edit_content .groofybtn {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  position: absolute;
-  right: 150px;
-}
-.edit_info .edit_content .editprofile_photo img {
-  width: 170px;
-  border-radius: 50%;
-  margin-bottom: 25px;
-}
-.edit_info .edit_content .editprofile_photo label {
-  cursor: pointer;
-  color: #f2f2f2;
-  font-size: 16px;
-  transition: 0.3s;
-  background-color: #008ace;
-  padding: 10px 15px;
-  border-radius: 6px;
-  font-weight: bold;
-}
-.edit_info .edit_content .editprofile_photo label:hover {
-  background-color: #00a9ff;
-}
-.edit_info .edit_content .editprofile_photo label i {
-  margin-right: 10px;
-}
-.edit_info .edit_content .bio_content h1 {
-  font-size: 16px;
-}
-.edit_info .edit_content .bio_content textarea {
-  font-family: OpenSans, Arial, Helvetica, sans-serif;
-  width: 400px;
-  overflow-y: hidden;
-  border: none;
-  padding: 12.2px 15px 5px;
-  border-radius: 6px;
-  background-color: #0e141e;
-  caret-color: #f2f2f2;
-  color: #f2f2f2;
-  margin-right: 20px;
-  font-size: 16px;
-  resize: none;
-  margin-bottom: 10px;
-}
-.edit_info .edit_content .bio_content textarea:focus {
-  outline: none;
-}
-.edit_info .edit_content .country_selector {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
-}
-.edit_info .edit_content .country_selector .cs-title {
-  margin-right: 10px;
-  color: #f2f2f2;
-}
-.edit_info .edit_content .groofybtn {
-  background-color: #008ace;
+  background-color: #00aaff;
+  color: #fff;
+  border-radius: 12px;
   width: 140px;
-  border-radius: 6px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 8px 12px;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .edit_info .edit_content .groofybtn:hover {
-  background-color: #00a9ff;
+  box-shadow: none;
+  background-color: #0083c4;
+}
+.edit_info .edit_content .groofybtn:disabled {
+  background-color: #484848;
+  cursor: not-allowed;
+}
+.edit_info .edit_content .groofybtn .btn_text {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+.edit_info .edit_content .groofybtn .btn_icn {
+  width: 25px;
 }/*# sourceMappingURL=appearance.module.css.map */

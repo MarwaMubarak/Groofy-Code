@@ -15,7 +15,7 @@ const GroofyTA = ({ taValue, changeHandler }: GroofyTAProps) => {
     <textarea
       className={classes.gta}
       value={taValue}
-      placeholder="Share your coding insights and experiences"
+      placeholder="What's on your mind?"
       onChange={handleExpanding}
       maxLength={500}
     />

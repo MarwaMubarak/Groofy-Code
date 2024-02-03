@@ -28,7 +28,7 @@
   background-color: #ddd;
 }
 .login_div .auth_title span {
-  color: #00a9ff;
+  color: #00aaff;
 }
 .login_div .auth_form {
   display: flex;
@@ -46,7 +46,7 @@
 .login_div .auth_form .f_sbmt .frg_pass {
   margin-top: 20px;
   margin-bottom: 25px;
-  color: #00a9ff;
+  color: #00aaff;
   transition: 0.3s;
 }
 .login_div .auth_form .f_sbmt .frg_pass:hover {
@@ -67,7 +67,7 @@
 }
 .login_div .auth_form .f_sbmt .alrg a {
   margin-left: 5px;
-  color: #00a9ff;
+  color: #00aaff;
   transition: 0.3s;
 }
 .login_div .auth_form .f_sbmt .alrg a:hover {

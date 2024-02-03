@@ -5,12 +5,13 @@ import { useSelector } from "react-redux";
 import { userSchema } from "../../../shared/schemas/user-schema";
 import GroofyField from "../../Auth/GroofyField/GroofyField";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import GBtn from "../../GBtn/GBtn";
 import { userThunks } from "../../../store/actions";
 import { useDispatch } from "react-redux";
 import { EditInfo } from "../../../store/actions/user-actions";
 import { AxiosError } from "axios";
 import classes from "./scss/personaldetails.module.css";
+import { Button } from "primereact/button";
+import { classNames } from "primereact/utils";
 
 interface Country {
   name: string;
@@ -47,7 +48,6 @@ const PersonalDetails = () => {
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      console.log("VALUES", values);
       const editInfo: EditInfo = {
         firstname: values.firstname,
         lastname: values.lastname,
@@ -55,7 +55,7 @@ const PersonalDetails = () => {
         bio: values.bio,
         country: values.country.name,
       };
-      const ret = dispatch(userThunks.updateUser(user._id, editInfo) as any);
+      const ret = dispatch(userThunks.updateUser(editInfo) as any);
       if (ret instanceof Promise) {
         ret.then((res: any) => {
           if (res instanceof AxiosError) {
@@ -183,8 +183,9 @@ const PersonalDetails = () => {
             itemTemplate={countryOptionTemplate}
             className="w-full md:w-14rem"
           />
+          <h1>gg</h1>
         </div>
-        <GBtn btnText="Save" btnType={true} clickEvent={() => {}} />
+        <Button className={classNames(classes.groofybtn)} label="Save" />
       </form>
     </div>
   );

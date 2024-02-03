@@ -12,4 +12,39 @@
     color: #fff;
     font-size: 16px;
   }
+  .paginator {
+    background-color: $mainColor2;
+    li {
+      background-color: $mainColor2 !important;
+    }
+  }
+}
+
+.paginator > [class="p-paginator-pages"] {
+  display: flex;
+  gap: 7px;
+  background-color: $mainColor2;
+}
+
+.paginator_page_links {
+  padding: 15px 20px;
+  border-radius: 6px;
+  background-color: $mainColor2;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  &:hover {
+    background-color: $lighHoverColor;
+  }
+}
+.active {
+  background-color: $lighHoverColor;
+}
+
+.paginator_dropdown {
+  background-color: $lighHoverColor;
+  li {
+    background-color: $mainColor2 !important;
+  }
 }

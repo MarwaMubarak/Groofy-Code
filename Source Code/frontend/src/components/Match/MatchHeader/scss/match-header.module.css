@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  background-color: #0e141e;
+  background-color: #18191a;
 }
 .header_div .logo {
   width: 130px;
@@ -19,7 +19,7 @@
           user-select: none;
 }
 .header_div .logo span span {
-  color: #00a9ff;
+  color: #00aaff;
 }
 .header_div .logo::after {
   content: "";

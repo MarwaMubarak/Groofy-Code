@@ -65,13 +65,13 @@
 .event-card .ec-details .groofybtn {
   margin-top: 10px;
   background-color: white;
-  color: #0e141e;
+  color: #18191a;
   width: 70px;
   padding: 7px;
   border-radius: 12px;
 }
 .event-card .ec-details .groofybtn:hover {
-  background-color: #0e141e;
+  background-color: #18191a;
   color: white;
 }
 .event-card .ec-details .groofybtn .btn-text {

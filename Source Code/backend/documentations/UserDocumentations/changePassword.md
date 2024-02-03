@@ -23,10 +23,10 @@ To access the API, you need to include your API key in the `Authorization` heade
 - **URL**: **`/change-password`**
 - **Method**: **`PUT`**
 - **Parameters**:
-    - **Request Body**:
-        - **`currentPassword`** (string, required): The current password of the user.
-        - **`password`** (string, required): The new password for the user. It must pass the complexity requirements.
-        - **`confirmPassword`** (string, required): The confirmation of the new password. Must match the **`password`** field.
+  - **Request Body**:
+    - **`currentPassword`** (string, required): The current password of the user.
+    - **`password`** (string, required): The new password for the user. It must pass the complexity requirements.
+    - **`confirmPassword`** (string, required): The confirmation of the new password. Must match the **`password`** field.
 
 ### Example Request
 
@@ -82,8 +82,8 @@ To access the API, you need to include your API key in the `Authorization` heade
 **## Error Handling**
 
 - **400 Bad Request**:
-    - If the current password is invalid.
-    - If the new password fails validation or doesn't match the confirmation.
+  - If the current password is invalid.
+  - If the new password fails validation or doesn't match the confirmation.
 - **404 Not Found**: If the user is not found.
 - **500 Internal Server Error**: If there is an issue with the server processing the request.
 ```

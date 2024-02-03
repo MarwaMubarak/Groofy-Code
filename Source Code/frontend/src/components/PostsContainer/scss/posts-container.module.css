@@ -2,7 +2,7 @@
   width: 100%;
 }
 .posts_container .post_box {
-  background-color: #0e141e;
+  background-color: #18191a;
   padding-top: 15px;
   width: 100%;
   border-radius: 6px;
@@ -18,7 +18,7 @@
   align-items: center;
   margin-bottom: 20px;
 }
-.posts_container .post_box .post_row img {
+.posts_container .post_box .post_row .post_row_img {
   width: 50px;
   border-radius: 50%;
   margin-right: 10px;
@@ -30,7 +30,7 @@
   border: none;
   padding: 12.2px 15px 5px;
   border-radius: 6px;
-  background-color: rgba(22, 30, 46, 0.96);
+  background-color: #242526;
   caret-color: #f2f2f2;
   color: #f2f2f2;
   margin-right: 20px;
@@ -47,7 +47,7 @@
   width: 140px;
 }
 .posts_container .post_box .post_row .groofybtn:hover {
-  background-color: #00a9ff;
+  background-color: #00aaff;
 }
 .posts_container .post_box .post_row .groofybtn img {
   width: 24px;

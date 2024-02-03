@@ -5,10 +5,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  background-color: #0e141e;
+  background-color: #18191a;
   flex-direction: column;
   position: sticky;
   top: 0;
+}
+@media (max-width: 991px) {
+  .sidebar_container {
+    display: none;
+  }
 }
 .sidebar_container.false {
   width: 65px;
@@ -31,6 +36,13 @@
 }
 .sidebar_container.false .sidebar_up a:nth-child(4) img {
   left: -2px !important;
+}
+.sidebar_container.false .sidebar_up .search li {
+  width: 65px !important;
+  justify-content: center !important;
+}
+.sidebar_container.false .sidebar_up .search li i {
+  margin-right: 0 !important;
 }
 .sidebar_container.false .sidebar_down {
   margin-right: 5px;
@@ -96,7 +108,7 @@
   transition: 0.3s;
 }
 .sidebar_container .sidebar_up .sidebar_nav_items a li.active {
-  border-left: 4px solid #00a9ff;
+  border-left: 4px solid #00aaff;
   background-color: rgb(22, 30, 46);
 }
 .sidebar_container .sidebar_up .sidebar_nav_items a li:not(.active):hover {
@@ -128,6 +140,37 @@
   position: relative;
   left: -6px;
 }
+.sidebar_container .sidebar_up .sidebar_nav_items .search:not(:last-child) {
+  margin-bottom: 10px;
+}
+.sidebar_container .sidebar_up .sidebar_nav_items .search li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 14px 30px;
+  width: 150px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.sidebar_container .sidebar_up .sidebar_nav_items .search li.active {
+  border-left: 4px solid #00aaff;
+  background-color: rgb(22, 30, 46);
+}
+.sidebar_container .sidebar_up .sidebar_nav_items .search li:not(.active):hover {
+  background-color: rgb(22, 30, 46);
+  border-radius: 10px;
+}
+.sidebar_container .sidebar_up .sidebar_nav_items .search li i {
+  font-size: 28px;
+  transition: 0.3s;
+  margin-right: 10px;
+  color: white;
+}
+.sidebar_container .sidebar_up .sidebar_nav_items .search li span {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
 .sidebar_container .sidebar_down {
   display: flex;
   justify-content: flex-start;
@@ -137,6 +180,11 @@
   padding: 9px 12px;
   cursor: pointer;
   transition: 0.3s;
+}
+@media (max-width: 1120px) {
+  .sidebar_container .sidebar_down {
+    display: none;
+  }
 }
 .sidebar_container .sidebar_down img {
   width: 20px;
