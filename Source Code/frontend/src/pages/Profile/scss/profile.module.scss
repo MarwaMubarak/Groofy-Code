@@ -118,8 +118,11 @@
       }
     }
     .userprofile_side {
-      @include start;
+      @include center;
       margin-top: 30px;
+      @media (max-width: 1053px) {
+        flex-direction: column-reverse;
+      }
     }
   }
 }

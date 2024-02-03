@@ -6,6 +6,13 @@
   flex: 3;
   margin-bottom: auto;
 }
+@media (max-width: 1053px) {
+  .up_side_left {
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 20px;
+  }
+}
 .up_side_left .media_section {
   display: flex;
   justify-content: center;

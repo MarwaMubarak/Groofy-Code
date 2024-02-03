@@ -6,6 +6,11 @@
   flex-direction: column;
   flex: 3;
   margin-bottom: auto;
+  @media (max-width: 1053px) {
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 20px;
+  }
   .media_section {
     @include center;
     flex-direction: column;

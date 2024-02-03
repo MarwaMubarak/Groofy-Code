@@ -5,9 +5,16 @@
   @include center;
   flex-direction: column;
   margin-left: 30px;
+  @media (max-width: 1053px) {
+    margin-left: 0;
+    width: 100%;
+  }
   .profile_section {
     @include start;
     flex-direction: column;
+    @media (max-width: 1053px) {
+      width: 100%;
+    }
     .ps_info {
       @include center;
       flex-direction: column;
@@ -16,6 +23,9 @@
       padding: 20px;
       width: 290px;
       box-shadow: $lightShadow;
+      @media (max-width: 1053px) {
+        width: 100%;
+      }
       .ps_container_box {
         width: 100%;
         @include start;
