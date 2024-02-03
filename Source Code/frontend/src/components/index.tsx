@@ -33,10 +33,11 @@ import Appearance from "./EditProfile/Appearance/Appearance";
 import Privacy from "./EditProfile/Privacy/Privacy";
 import Notifications from "./EditProfile/Notifications/Notifications";
 import GroofyTA from "./GroofyTA/GroofyTA";
-import GroofyWrapper from "./GroofyWrapper/GroofyWrapper";
 import PSocial from "./Profile/PSocial/PSocial";
 import PInfo from "./Profile/PInfo/PInfo";
 import BurgerMenu from "./BurgerMenu/BurgerMenu";
+import GroofyWrapper from "./GroofyWrapper/GroofyWrapper";
+import ClanResult from "./Search/Clan/ClanResult";
 
 export {
   MatchHeader,
@@ -74,8 +75,9 @@ export {
   Privacy,
   Notifications,
   GroofyTA,
-  GroofyWrapper,
   PSocial,
   PInfo,
   BurgerMenu,
+  GroofyWrapper,
+  ClanResult,
 };

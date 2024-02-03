@@ -1,0 +1,34 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.clan_search {
+  .search_area {
+    position: relative;
+    @include center;
+    margin-top: 35px;
+    .prime_input {
+      width: calc(100% - 700px);
+      border-radius: 25px;
+      background-color: $mainColor;
+      margin-right: 20px;
+    }
+    i {
+      position: absolute;
+      right: 465px;
+      color: $hoverColor;
+    }
+    .create_btn {
+      background-color: #16b308;
+      border-color: #16b308;
+      border-radius: 25px;
+
+      &:focus,
+      &:hover,
+      &:active {
+        background-color: $greenColor;
+        border-color: $greenColor;
+        box-shadow: none;
+      }
+    }
+  }
+}

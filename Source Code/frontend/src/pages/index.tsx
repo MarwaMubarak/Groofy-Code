@@ -7,5 +7,17 @@ import Profile from "./Profile/Profile";
 import Play from "./Play/Play";
 import EditProfile from "./EditProfile/EditProfile";
 import Search from "./Search/Search";
+import ClanSearch from "./ClanSearch/ClanSearch";
 
-export { Home, Match, Login, SignUp, Clan, Profile, Play, EditProfile, Search };
+export {
+  Home,
+  Match,
+  Login,
+  SignUp,
+  Clan,
+  Profile,
+  Play,
+  EditProfile,
+  Search,
+  ClanSearch,
+};
