@@ -67,6 +67,24 @@ const Home = () => {
               <h3 className={classes.psg_header}>Game Modes</h3>
               <div className={classes.gamemode_box}>
                 <Gamemode
+                  id="ranked_match_play_card"
+                  title="Ranked Match"
+                  img="/Assets/Images/ranked.png"
+                  clickEvent={() => {}}
+                />
+                <Gamemode
+                  id="velocity_code_play_card"
+                  title="Velocity Code"
+                  img="/Assets/Images/clock.png"
+                  clickEvent={() => {}}
+                />
+                <Gamemode
+                  id="solo_practice_play_card"
+                  title="Solo Practice"
+                  img="/Assets/Images/lightbulb.png"
+                  clickEvent={() => {}}
+                />
+                <Gamemode
                   id="casual_match_card"
                   title="Casual Match"
                   img="/Assets/Images/battle.png"

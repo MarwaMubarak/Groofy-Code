@@ -1,8 +1,6 @@
 @use "../../../shared/styles/colors" as *;
 @use "../../../shared/styles/mixins" as *;
-.search_overlay {
-  margin-left: 15px;
-}
+
 .search_overlay > [class="p-overlaypanel-content"] {
   h1 {
     margin-left: 5px;

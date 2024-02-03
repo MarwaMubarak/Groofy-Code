@@ -1,0 +1,114 @@
+.burger_menu {
+  background-color: #242526;
+  position: relative;
+}
+.burger_menu .burger_header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #303031;
+  padding: 10px;
+  border-radius: 6px;
+  width: 100%;
+  box-shadow: 0px 1px 0px 0px #06090d;
+}
+.burger_menu .burger_header img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.burger_menu .burger_header + div {
+  position: absolute;
+  right: -15px;
+  border-radius: 50%;
+  background-color: #f55353;
+}
+.burger_menu .burger_header + div button {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+.burger_menu .burger_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0;
+}
+.burger_menu .burger_list:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+.burger_menu .burger_list li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  transition: 0.3s;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.burger_menu .burger_list li:hover, .burger_menu .burger_list li:active, .burger_menu .burger_list li:focus {
+  background-color: #4e4f50;
+}
+.burger_menu .burger_list li img {
+  width: 32px;
+  margin-right: 10px;
+}
+.burger_menu .burger_list li span {
+  color: #fff;
+}
+.burger_menu .divider {
+  height: 2px;
+  width: 100%;
+  background-color: #303031;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.burger_menu .logout_btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  transition: 0.3s;
+}
+.burger_menu .logout_btn:hover {
+  background-color: #f55353;
+}
+.burger_menu .logout_btn img {
+  width: 28px;
+  margin-right: 10px;
+}
+
+.burger_btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-right: 10px;
+}
+@media (min-width: 1121px) {
+  .burger_btn {
+    display: none;
+  }
+}
+.burger_btn:hover {
+  background-color: #303031;
+}
+.burger_btn i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 26px;
+  color: #fff;
+}/*# sourceMappingURL=burgermenu.module.css.map */

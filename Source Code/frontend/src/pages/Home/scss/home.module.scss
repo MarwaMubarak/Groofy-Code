@@ -10,11 +10,18 @@
     height: 100%;
     width: 1450px;
     margin: 0 auto;
-    @media (max-width: 1440px) {
+    @media (max-width: 1600px) {
       width: 1200px;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 1300px) {
+      width: 860px;
+    }
+    @media (max-width: 991px) {
       width: 728px;
+    }
+    @media (max-width: 767px) {
+      width: 100%;
+      margin: 0 20px;
     }
     .main_section {
       @include center;
@@ -24,6 +31,11 @@
       margin-bottom: 200px;
       // mkat4 mwgoda in 768px
       gap: 30px;
+      @media (max-width: 767px) {
+        flex-direction: column-reverse;
+        height: auto;
+        min-height: calc(100vh - 60px);
+      }
       .left_section {
         display: flex;
         // kant center
@@ -33,13 +45,19 @@
         width: 100%;
         flex-direction: column;
         gap: 30px;
-        @media (max-width: 768px) {
+        @media (max-width: 991px) {
           width: 65%;
+        }
+        @media (max-width: 767px) {
+          width: 100%;
         }
         .play_section_features {
           // mkat4 mwgoda in 768px
-          @media (max-width: 768px) {
+          @media (max-width: 991px) {
             width: 100%;
+          }
+          @media (max-width: 767px) {
+            display: none;
           }
           .psf_header {
             color: $hoverColor;
@@ -54,13 +72,15 @@
             gap: 40px;
           }
         }
-
         .home_posts_container {
           display: flex;
           justify-content: center;
           align-items: flex-start;
           flex-direction: column;
           width: 100%;
+          @media (max-width: 767px) {
+            align-items: center;
+          }
           .hpc_title {
             color: $hoverColor;
             margin-bottom: 20px;
@@ -79,12 +99,16 @@
         height: 100%;
         width: 100%;
         gap: 30px;
-        @media (max-width: 768px) {
+        @media (max-width: 991px) {
           width: 35%;
+        }
+        @media (max-width: 767px) {
+          width: 100%;
+          align-items: center;
         }
         .play_section_gamemode {
           // mkat4 mwgoda in 768px
-          @media (max-width: 768px) {
+          @media (max-width: 991px) {
             width: 100%;
           }
           .psg_header {
@@ -103,7 +127,7 @@
         }
         .profile_section {
           // mkat4 mwgoda in 768px
-          @media (max-width: 768px) {
+          @media (max-width: 991px) {
             width: 100%;
           }
           .ps_title {
@@ -127,7 +151,7 @@
               border-radius: 6px;
               padding: 20px;
               width: 290px;
-              @media (max-width: 768px) {
+              @media (max-width: 991px) {
                 width: 100%;
               }
               .ps_header {

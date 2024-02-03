@@ -2,7 +2,7 @@
 @use "../../../shared/styles/mixins" as *;
 
 .sidebar_container {
-  @media (max-width: 768px) {
+  @media (max-width: 991px) {
     display: none;
   }
   height: 100vh;
@@ -176,6 +176,9 @@
     @include start;
     margin-bottom: 20px;
     margin-right: 10px;
+    @media (max-width: 1120px) {
+      display: none;
+    }
     img {
       width: 20px;
       height: 20px;

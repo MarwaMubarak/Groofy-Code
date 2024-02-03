@@ -10,7 +10,7 @@
   position: sticky;
   top: 0;
 }
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .sidebar_container {
     display: none;
   }
@@ -180,6 +180,11 @@
   padding: 9px 12px;
   cursor: pointer;
   transition: 0.3s;
+}
+@media (max-width: 1120px) {
+  .sidebar_container .sidebar_down {
+    display: none;
+  }
 }
 .sidebar_container .sidebar_down img {
   width: 20px;

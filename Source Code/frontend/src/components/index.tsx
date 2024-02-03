@@ -36,6 +36,7 @@ import GroofyTA from "./GroofyTA/GroofyTA";
 import GroofyWrapper from "./GroofyWrapper/GroofyWrapper";
 import PSocial from "./Profile/PSocial/PSocial";
 import PInfo from "./Profile/PInfo/PInfo";
+import BurgerMenu from "./BurgerMenu/BurgerMenu";
 
 export {
   MatchHeader,
@@ -76,4 +77,5 @@ export {
   GroofyWrapper,
   PSocial,
   PInfo,
+  BurgerMenu,
 };

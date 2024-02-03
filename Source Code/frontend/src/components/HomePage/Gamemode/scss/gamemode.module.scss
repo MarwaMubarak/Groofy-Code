@@ -13,12 +13,17 @@
   transition: 0.3s;
   user-select: none;
   box-shadow: 0px 4px 0px 0px #06090d;
-  @media (max-width: 1440px) {
+  @media (max-width: 1600px) {
     &:nth-child(3) {
       display: none;
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1300px) {
+    &:nth-child(4) {
+      display: none;
+    }
+  }
+  @media (max-width: 991px) {
     width: 100%;
     &:nth-child(1) {
       display: none;
@@ -34,7 +39,7 @@
   img {
     width: 75px;
     margin-bottom: 20px;
-    @media (max-width: 768px) {
+    @media (max-width: 991px) {
       width: 95px;
     }
   }
@@ -44,7 +49,7 @@
       color: $hoverColor;
       font-size: 20px;
       margin-bottom: 10px;
-      @media (max-width: 768px) {
+      @media (max-width: 991px) {
         font-size: 22px;
       }
     }
@@ -53,7 +58,7 @@
       width: 230px;
       line-height: 1.4;
       font-size: 13px;
-      @media (max-width: 768px) {
+      @media (max-width: 991px) {
         width: 324px;
         font-size: 15px;
       }
@@ -110,9 +115,28 @@
   padding: 10px;
   cursor: pointer;
   user-select: none;
-
-  @media (max-width: 768px) {
+  @media (max-width: 991px) {
     width: 100%;
+  }
+  @media (min-width: 768px) {
+    &:nth-child(1) {
+      display: none;
+    }
+  }
+  @media (min-width: 992px) {
+    &:nth-child(2) {
+      display: none;
+    }
+  }
+  @media (min-width: 1301px) {
+    &:nth-child(3) {
+      display: none;
+    }
+  }
+  @media (min-width: 1601px) {
+    &:nth-child(7) {
+      display: none;
+    }
   }
   &:hover {
     background-color: $mainColorHover2;
