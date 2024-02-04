@@ -1,101 +1,145 @@
-.clan-div {
+.clan_wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+}
+.clan_wrapper .clan_container {
+  height: 100%;
+  width: 1450px;
+  margin: 0 auto;
+}
+@media (max-width: 1600px) {
+  .clan_wrapper .clan_container {
+    width: 1200px;
+  }
+}
+@media (max-width: 1300px) {
+  .clan_wrapper .clan_container {
+    width: 860px;
+  }
+}
+@media (max-width: 991px) {
+  .clan_wrapper .clan_container {
+    width: 728px;
+  }
+}
+@media (max-width: 767px) {
+  .clan_wrapper .clan_container {
+    width: 100%;
+    margin: 0 20px;
+  }
+}
+.clan_wrapper .clan_container .clan-div {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 70px;
-  margin-left: 120px;
-  margin-right: 60px;
   gap: 0 42px;
   height: calc(100vh - 130px);
 }
-.clan-div .c-info {
+.clan_wrapper .clan_container .clan-div .c-info {
   display: flex;
   flex-direction: column;
   gap: 25px 0;
   height: 100%;
+  width: 25%;
 }
-.clan-div .c-info .c-box {
+.clan_wrapper .clan_container .clan-div .c-info .c-box {
   background-color: #fff;
   padding: 15px 20px;
-  -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 60%, 100% 100%, 8% 100%, 0% 88%, 0 0);
-          clip-path: polygon(50% 0%, 100% 0, 100% 60%, 100% 100%, 8% 100%, 0% 88%, 0 0);
+  border-radius: 12px;
+  flex: 1;
 }
-.clan-div .c-info .c-box:nth-child(1) {
-  flex: 2;
-}
-.clan-div .c-info .c-box .c-header {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .c-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   background-color: #eaedf2;
   margin-bottom: 10px;
+  border-radius: 6px;
 }
-.clan-div .c-info .c-box .c-header .ch-icn {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .c-header .ch-icn {
   width: 25px;
   cursor: pointer;
 }
-.clan-div .c-info .c-box .m-box {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box {
   display: flex;
-  flex-direction: column;
-  gap: 5px 0;
-  position: relative;
-  left: -5px;
-  margin-right: 25px;
-  margin-bottom: 40px;
-}
-.clan-div .c-info .c-box .m-box .member {
-  display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  gap: 0 5px;
-}
-.clan-div .c-info .c-box .m-box .member .m-img {
-  width: 55px;
-}
-.clan-div .c-info .c-box .m-box .member .m-img img {
-  max-width: 100%;
-}
-.clan-div .c-info .c-box .m-box .member .m-info {
-  display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 10px 0;
 }
-.clan-div .c-info .c-box .m-box .member .m-info .m-usn {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box .member {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-radius: 6px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box .member:hover {
+  background-color: #f5f5f5;
+}
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box .member .m-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box .member .m-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box .member .m-info .m-usn {
   font-size: 15px;
 }
-.clan-div .c-info .c-box .m-box .member .m-info .m-usi {
-  font-size: 13px;
-  color: #959595;
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box .member .m-online {
+  font-size: 12px;
+  font-weight: bold;
+  color: #18cf08;
+  position: relative;
 }
-.clan-div .c-info .c-box .rm-box {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .m-box .member .m-online::before {
+  content: "";
+  position: absolute;
+  height: 6px;
+  width: 6px;
+  background-color: #18cf08;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -10px;
+}
+.clan_wrapper .clan_container .clan-div .c-info .c-box .rm-box {
   display: flex;
   flex-direction: column;
   gap: 5px 0;
   margin-bottom: 30px;
 }
-.clan-div .c-info .c-box .rm-box .member {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .rm-box .member {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
 }
-.clan-div .c-info .c-box .rm-box .member .rm-usn {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .rm-box .member .rm-usn {
   font-size: 15px;
 }
-.clan-div .c-info .c-box .rm-box .member .rm-usp {
+.clan_wrapper .clan_container .clan-div .c-info .c-box .rm-box .member .rm-usp {
   font-size: 14px;
   color: #959595;
 }
-.clan-div .c-chat {
+.clan_wrapper .clan_container .clan-div .c-chat {
   background-color: #fff;
   height: 100%;
   width: 75%;
-  -webkit-clip-path: polygon(50% 0%, 100% 0, 100% 60%, 100% 100%, 2% 100%, 0% 95%, 0 0);
-          clip-path: polygon(50% 0%, 100% 0, 100% 60%, 100% 100%, 2% 100%, 0% 95%, 0 0);
   box-shadow: 40px 11px 15px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
 }
-.clan-div .c-chat .ch-header {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-header {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -103,114 +147,122 @@
   padding: 20px 40px 15px;
   border-bottom: 1px solid #ddd;
 }
-.clan-div .c-chat .ch-header .cl-img {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-header .cl-img {
   background-color: #f55353;
   border-radius: 50%;
   padding: 13px;
 }
-.clan-div .c-chat .ch-header .cl-img img {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-header .cl-img img {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 32px;
   opacity: 0.5;
 }
-.clan-div .c-chat .ch-header .cl-i .cln {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-header .cl-i .cln {
   margin-bottom: 5px;
 }
-.clan-div .c-chat .ch-header .cl-i .cld {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-header .cl-i .cld {
   color: #7d7d7d;
 }
-.clan-div .c-chat .ch {
-  height: calc(100% - 175px);
+.clan_wrapper .clan_container .clan-div .c-chat .ch {
+  height: calc(100% - 173px);
   overflow-y: auto;
   margin-top: 10px;
   padding-left: 20px;
   padding-right: 20px;
 }
-.clan-div .c-chat .ch::-webkit-scrollbar {
+.clan_wrapper .clan_container .clan-div .c-chat .ch::-webkit-scrollbar {
   width: 6px;
 }
-.clan-div .c-chat .ch::-webkit-scrollbar-track {
+.clan_wrapper .clan_container .clan-div .c-chat .ch::-webkit-scrollbar-track {
   background-color: #f1f5f9;
   border-radius: 10px;
 }
-.clan-div .c-chat .ch::-webkit-scrollbar-thumb {
+.clan_wrapper .clan_container .clan-div .c-chat .ch::-webkit-scrollbar-thumb {
   background-color: #18191a;
   border-radius: 10px;
 }
-.clan-div .c-chat .ch .msg-box {
+.clan_wrapper .clan_container .clan-div .c-chat .ch .msg-box {
   display: flex;
   align-items: center;
   gap: 0 10px;
 }
-.clan-div .c-chat .ch .msg-box .msg-info .msg {
+.clan_wrapper .clan_container .clan-div .c-chat .ch .msg-box .msg-info .msg {
   margin-top: 5px;
   padding: 10px;
   border-radius: 6px;
   background-color: #afafaf;
   color: #fff;
 }
-.clan-div .c-chat .ch .msg-box.to {
+.clan_wrapper .clan_container .clan-div .c-chat .ch .msg-box.to {
   flex-direction: row-reverse;
 }
-.clan-div .c-chat .ch .msg-box.to .msg-info .msg-usn {
+.clan_wrapper .clan_container .clan-div .c-chat .ch .msg-box.to .msg-info .msg-usn {
   text-align: end;
 }
-.clan-div .c-chat .ch .msg-box.to .msg-info .msg {
+.clan_wrapper .clan_container .clan-div .c-chat .ch .msg-box.to .msg-info .msg {
   background-color: #18191a;
 }
-.clan-div .c-chat .ch .msg-box .u-img img {
+.clan_wrapper .clan_container .clan-div .c-chat .ch .msg-box .u-img img {
   width: 64px;
 }
-.clan-div .c-chat .ch-msg {
-  border-top: 1px solid #ddd;
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #ddd;
 }
-.clan-div .c-chat .ch-msg textarea {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg textarea {
+  background-color: #fff;
+  color: #000;
   padding: 20px 75px 10px 40px;
-  width: 100%;
-  border: none;
+  width: calc(100% - 70px);
   font-size: 16px;
   font-family: "Roboto", sans-serif;
   resize: none;
   overflow-y: auto;
+  border: none;
+  border-radius: 0 0 0 6px;
 }
-.clan-div .c-chat .ch-msg textarea::-webkit-scrollbar {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg textarea::-webkit-scrollbar {
   width: 6px;
 }
-.clan-div .c-chat .ch-msg textarea::-webkit-scrollbar-track {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg textarea::-webkit-scrollbar-track {
   background-color: #f1f5f9;
   border-radius: 10px;
 }
-.clan-div .c-chat .ch-msg textarea::-webkit-scrollbar-thumb {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg textarea::-webkit-scrollbar-thumb {
   background-color: #18191a;
   border-radius: 10px;
 }
-.clan-div .c-chat .ch-msg textarea:focus {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg textarea:focus {
   outline: none;
 }
-.clan-div .c-chat .ch-msg textarea::-moz-placeholder {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg textarea::-moz-placeholder {
   font-family: "Roboto", sans-serif;
   color: #9f9f9f;
   font-size: 16px;
 }
-.clan-div .c-chat .ch-msg textarea::placeholder {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg textarea::placeholder {
   font-family: "Roboto", sans-serif;
   color: #9f9f9f;
   font-size: 16px;
 }
-.clan-div .c-chat .ch-msg button {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg .submit-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+}
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg .submit-btn button {
   border: none;
   background-color: #feb139;
   border-radius: 50%;
   padding: 10px;
-  margin-right: 18px;
-  margin-top: 11px;
-  margin-bottom: auto;
   cursor: pointer;
 }
-.clan-div .c-chat .ch-msg button img {
+.clan_wrapper .clan_container .clan-div .c-chat .ch-msg .submit-btn button img {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { GBtn, GroofyField, GroofyWrapper } from "../../components";
+import { GBtn, GroofyField } from "../../components";
 import { useDispatch } from "react-redux";
 import { authThunks } from "../../store/actions";
 import { loginSchema } from "../../shared/schemas";
@@ -49,7 +49,7 @@ const Login = () => {
   });
 
   return (
-    <GroofyWrapper>
+    <div className={classes.align}>
       <Toast ref={toast} />
       <div className={classes.login_div}>
         <div className={classes.auth_title}>
@@ -99,7 +99,7 @@ const Login = () => {
           </div>
         </form>
       </div>
-    </GroofyWrapper>
+    </div>
   );
 };
 

@@ -1,117 +1,113 @@
-import "./scss/clan.css";
+import { GroofyWrapper } from "../../components";
+import classes from "./scss/clan.module.css";
 
 const Clan = () => {
   return (
-    <>
-      <div className="clan-div">
-        <div className="c-info">
-          <div className="c-box">
-            <div className="c-header">
-              <h3 className="c-title">Members</h3>
+    <GroofyWrapper idx={3}>
+      <div className={classes.clan_div}>
+        <div className={classes.c_info}>
+          <div className={classes.c_box}>
+            <div className={classes.c_header}>
+              <h3 className={classes.c_title}>Members</h3>
               <img
-                className="ch-icn"
+                className={classes.ch_icn}
                 src="/Assets/SVG/view-all.svg"
                 alt="ViewAll"
               />
             </div>
-            <div className="m-box">
-              <div className="member">
-                <div className="m-img">
-                  <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
+            <div className={classes.m_box}>
+              <div className={classes.member}>
+                <div className={classes.m_info}>
+                  <img src="/Assets/Images/Hazem Adel.jpg" alt="profilePhoto" />
+                  <span className={classes.m_usn}>Username</span>
                 </div>
-                <div className="m-info">
-                  <span className="m-usn">Username</span>
-                  <span className="m-usi">Information about the user</span>
-                </div>
+                <div className={classes.m_online}>Online</div>
               </div>
-              <div className="member">
-                <div className="m-img">
-                  <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
+              <div className={classes.member}>
+                <div className={classes.m_info}>
+                  <img src="/Assets/Images/Hazem Adel.jpg" alt="profilePhoto" />
+                  <span className={classes.m_usn}>Username</span>
                 </div>
-                <div className="m-info">
-                  <span className="m-usn">Username</span>
-                  <span className="m-usi">Information about the user</span>
-                </div>
+                <div className={classes.m_online}>Online</div>
               </div>
-              <div className="member">
-                <div className="m-img">
-                  <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
-                </div>
-                <div className="m-info">
-                  <span className="m-usn">Username</span>
-                  <span className="m-usi">Information about the user</span>
+              <div className={classes.member}>
+                <div className={classes.m_info}>
+                  <img src="/Assets/Images/Hazem Adel.jpg" alt="profilePhoto" />
+                  <span className={classes.m_usn}>Username</span>
                 </div>
               </div>
             </div>
           </div>
-          <div className="c-box">
-            <div className="c-header">
-              <h3 className="c-title">Top rated in the clan</h3>
+          <div className={classes.c_box}>
+            <div className={classes.c_header}>
+              <h3 className={classes.c_title}>Top rated</h3>
               <img
-                className="ch-icn"
+                className={classes.ch_icn}
                 src="/Assets/SVG/view-all.svg"
                 alt="ViewAll"
               />
             </div>
-            <div className="rm-box">
-              <div className="member">
-                <span className="rm-usn">1. Username</span>
-                <span className="rm-usp">2437</span>
+            <div className={classes.rm_box}>
+              <div className={classes.member}>
+                <span className={classes.rm_usn}>1. Username</span>
+                <span className={classes.rm_usp}>2437</span>
               </div>
-              <div className="member">
-                <span className="rm-usn">2. Username</span>
-                <span className="rm-usp">1762</span>
+              <div className={classes.member}>
+                <span className={classes.rm_usn}>2. Username</span>
+                <span className={classes.rm_usp}>1762</span>
               </div>
-              <div className="member">
-                <span className="rm-usn">3. Username</span>
-                <span className="rm-usp">1249</span>
+              <div className={classes.member}>
+                <span className={classes.rm_usn}>3. Username</span>
+                <span className={classes.rm_usp}>1249</span>
               </div>
             </div>
           </div>
         </div>
-        <div className="c-chat">
-          <div className="ch-header">
-            <div className="cl-img">
+        <div className={classes.c_chat}>
+          <div className={classes.ch_header}>
+            <div className={classes.cl_img}>
               <img src="/Assets/SVG/code.svg" alt="Code" />
             </div>
-            <div className="cl-i">
-              <h3 className="cln">Clan Name</h3>
-              <p className="cld">short description</p>
+            <div className={classes.cl_i}>
+              <h3 className={classes.cln}>Clan Name</h3>
+              <p className={classes.cld}>short description</p>
             </div>
           </div>
-          <div className="ch">
-            <div className="msg-box fr">
-              <div className="u-img">
-                <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
+          <div className={classes.ch}>
+            <div className={classes.msg_box + " " + classes.fr}>
+              <div className={classes.u_img}>
+                <img src="/Assets/Images/Hazem Adel.jpg" alt="profilePhoto" />
               </div>
-              <div className="msg-info">
-                <h4 className="msg-usn">User1</h4>
-                <p className="msg">
+              <div className={classes.msg_info}>
+                <h4 className={classes.msg_usn}>User1</h4>
+                <p className={classes.msg}>
                   This is a test message, not an online one.
                 </p>
               </div>
             </div>
-            <div className="msg-box to">
-              <div className="u-img">
-                <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
+            <div className={classes.msg_box + " " + classes.to}>
+              <div className={classes.u_img}>
+                <img src="/Assets/Images/Hazem Adel.jpg" alt="profilePhoto" />
               </div>
-              <div className="msg-info">
-                <h4 className="msg-usn">User2</h4>
-                <p className="msg">
+              <div className={classes.msg_info}>
+                <h4 className={classes.msg_usn}>User2</h4>
+                <p className={classes.msg}>
                   This is a test response, not an online one.
                 </p>
               </div>
             </div>
           </div>
-          <form className="ch-msg">
+          <form className={classes.ch_msg}>
             <textarea placeholder="type a message here"></textarea>
-            <button type="submit">
-              <img src="/Assets/SVG/send.svg" alt="Send" />
-            </button>
+            <div className={classes.submit_btn}>
+              <button type="submit">
+                <img src="/Assets/SVG/send.svg" alt="Send" />
+              </button>
+            </div>
           </form>
         </div>
       </div>
-    </>
+    </GroofyWrapper>
   );
 };
 

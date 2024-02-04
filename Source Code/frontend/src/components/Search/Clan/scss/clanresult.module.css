@@ -1,0 +1,22 @@
+.clan_result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clan_result .clan_img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+}
+.clan_result .clan_img img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+.clan_result .clan_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}/*# sourceMappingURL=clanresult.module.css.map */

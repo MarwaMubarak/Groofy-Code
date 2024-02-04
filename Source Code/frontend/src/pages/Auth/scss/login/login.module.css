@@ -1,4 +1,8 @@
-.login_div {
+.align {
+  margin: auto;
+  width: 100%;
+}
+.align .login_div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,13 +16,13 @@
   flex-direction: column;
   border-radius: 6px;
 }
-.login_div .auth_title {
+.align .login_div .auth_title {
   position: relative;
   font-weight: bold;
   font-size: 26px;
   margin: 20px 0 60px 30px;
 }
-.login_div .auth_title::after {
+.align .login_div .auth_title::after {
   content: "";
   position: absolute;
   bottom: -15px;
@@ -27,35 +31,35 @@
   height: 5px;
   background-color: #ddd;
 }
-.login_div .auth_title span {
+.align .login_div .auth_title span {
   color: #00aaff;
 }
-.login_div .auth_form {
+.align .login_div .auth_form {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   padding: 30px 45px 100px;
 }
-.login_div .auth_form .f_sbmt {
+.align .login_div .auth_form .f_sbmt {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-.login_div .auth_form .f_sbmt .frg_pass {
+.align .login_div .auth_form .f_sbmt .frg_pass {
   margin-top: 20px;
   margin-bottom: 25px;
   color: #00aaff;
   transition: 0.3s;
 }
-.login_div .auth_form .f_sbmt .frg_pass:hover {
+.align .login_div .auth_form .f_sbmt .frg_pass:hover {
   text-decoration: underline;
 }
-.login_div .auth_form .f_sbmt .alrg {
+.align .login_div .auth_form .f_sbmt .alrg {
   position: relative;
 }
-.login_div .auth_form .f_sbmt .alrg::before {
+.align .login_div .auth_form .f_sbmt .alrg::before {
   content: "";
   position: absolute;
   width: calc(100% + 100px);
@@ -65,11 +69,11 @@
   left: 50%;
   transform: translateX(-50%);
 }
-.login_div .auth_form .f_sbmt .alrg a {
+.align .login_div .auth_form .f_sbmt .alrg a {
   margin-left: 5px;
   color: #00aaff;
   transition: 0.3s;
 }
-.login_div .auth_form .f_sbmt .alrg a:hover {
+.align .login_div .auth_form .f_sbmt .alrg a:hover {
   text-decoration: underline;
 }/*# sourceMappingURL=login.module.css.map */

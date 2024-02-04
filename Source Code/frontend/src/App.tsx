@@ -9,6 +9,7 @@ import {
   Play,
   EditProfile,
   Search,
+  ClanSearch,
 } from "./pages";
 import { useSelector } from "react-redux";
 
@@ -48,6 +49,10 @@ function App() {
         <Route
           path="/search"
           element={user ? <Search /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/clan-search"
+          element={user ? <ClanSearch /> : <Navigate to="/login" />}
         />
       </Routes>
     </BrowserRouter>
