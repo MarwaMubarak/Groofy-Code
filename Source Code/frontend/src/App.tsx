@@ -10,6 +10,7 @@ import {
   EditProfile,
   Search,
   ClanSearch,
+  Messaging,
 } from "./pages";
 import { useSelector } from "react-redux";
 
@@ -53,6 +54,10 @@ function App() {
         <Route
           path="/clan-search"
           element={user ? <ClanSearch /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/user/message"
+          element={user ? <Messaging /> : <Navigate to="/login" />}
         />
       </Routes>
     </BrowserRouter>

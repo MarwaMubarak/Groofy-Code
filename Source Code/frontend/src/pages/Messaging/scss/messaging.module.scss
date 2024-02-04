@@ -1,0 +1,9 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.messaging_container {
+  @include start;
+  gap: 30px;
+  margin: 2.5vh 0;
+  width: 100%;
+}

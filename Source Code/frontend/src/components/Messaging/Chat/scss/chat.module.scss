@@ -1,0 +1,216 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.chat_container {
+  display: flex;
+  flex-direction: column;
+  height: 95vh;
+  width: 70%;
+  color: white;
+  background-color: $mainColor;
+  border-radius: 25px;
+  border: 1px solid $mainColorHover3;
+
+  .chat_header {
+    @include between;
+    position: relative;
+    padding-right: 20px;
+    background-color: $mainColor2;
+    border-radius: 25px 25px 0px 0px;
+
+    &::after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 3px;
+      bottom: 0px;
+      left: 0px;
+      background-color: white;
+    }
+    .friend_box {
+      @include start;
+      cursor: pointer;
+      width: 250px;
+      padding: 6px 15px 6px 30px;
+      border-radius: 25px 0px 0px 0px;
+      &:hover {
+        background-color: $mainColorHover2;
+      }
+      .friend_img {
+        margin-right: 10px;
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+        }
+      }
+      .friend_info {
+        line-height: 1.4;
+        h3 {
+          font-size: 18px;
+        }
+        p {
+          font-size: 14px;
+          color: rgb(83, 255, 40);
+          font-weight: bold;
+        }
+      }
+    }
+    .header_dots {
+      i {
+        font-size: 24px;
+        cursor: pointer;
+        background-color: $mainColorHover2;
+        padding: 8px 10px;
+        border-radius: 50%;
+        &:hover {
+          background-color: $mainColorHover;
+        }
+      }
+    }
+  }
+  .chat_body {
+    margin-top: 20px;
+    @include start;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    .chat_date {
+      text-align: center;
+      margin: 10px 0px;
+      padding: 10px 25px;
+      background-color: $mainColorHover3;
+      border-radius: 40px;
+      font-weight: bold;
+      box-shadow: $lightShadow;
+    }
+
+    .msg_box {
+      width: 100%;
+      @include start;
+      padding: 0px 30px;
+      &.reciever {
+      }
+      &.sender {
+        flex-direction: row-reverse;
+        text-align: end;
+        .msg_info {
+          margin-right: 15px;
+          .message_status {
+            display: block;
+          }
+          .msg {
+            border-radius: 12px 0px 12px 12px;
+            background-color: $blueHighColor;
+            color: white;
+          }
+        }
+      }
+      .u_img {
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+      }
+      .msg_info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 15px;
+        line-height: 1.4;
+        .msg_usn {
+          margin: 0;
+        }
+        .msg {
+          position: relative;
+          @include start;
+          padding: 16px 15px;
+          font-weight: bold;
+          border-radius: 0px 12px 12px 12px;
+          background-color: #ffffff;
+          color: $mainColor;
+
+          .message_date {
+            position: absolute;
+            right: 10px;
+            bottom: 0;
+            font-size: 10px;
+            font-weight: 400;
+          }
+        }
+        .message_status {
+          display: none;
+          font-size: 14px;
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+  .chat_footer {
+    position: relative;
+    @include between;
+    width: 100%;
+    padding: 20px;
+    background-color: $mainColor2;
+    border-radius: 0px 0px 25px 25px;
+
+    .text_box {
+      position: relative;
+      width: 100%;
+      .text_send {
+        width: 100%;
+        background-color: $mainColorHover3;
+        border-radius: 25px;
+        box-shadow: none;
+        border: none;
+      }
+      .chat_footer_actions {
+        @include center;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        i {
+          font-size: 18px;
+          cursor: pointer;
+        }
+        i:nth-child(2) {
+          margin: 0 10px;
+        }
+      }
+    }
+
+    &::before {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 3px;
+      top: -5px;
+      left: 0px;
+      background-color: white;
+    }
+  }
+}
+.dots_menu {
+  font-size: 14px;
+  background-color: $mainColor2;
+}
+.dots_menu :nth-child(1) {
+  background-color: $mainColor2;
+
+  &:hover {
+    background-color: $mainColorHover2;
+  }
+}
+
+.send_text {
+  @include center;
+  background-color: $blueHighColor;
+  color: white;
+  width: 50px;
+  margin-left: 10px;
+  box-shadow: none;
+  &:hover {
+    background-color: $blueColor;
+  }
+}

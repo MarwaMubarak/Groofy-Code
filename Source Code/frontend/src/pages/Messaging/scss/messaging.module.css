@@ -1,0 +1,8 @@
+.messaging_container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+  margin: 2.5vh 0;
+  width: 100%;
+}/*# sourceMappingURL=messaging.module.css.map */
