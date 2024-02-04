@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Socket.io Client</title>
     <style>
-      .notification {
-        position: fixed;
-        top: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        display: none;
-      }
+        .notification {
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <input type="text" id="receiverId" placeholder="Receiver ID" />
     <input type="text" id="like" placeholder="comment" />
     <button onclick="pushNotification()">add comment</button>
@@ -27,33 +29,39 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
     <script>
-      const socket = io("http://localhost:3000");
+        const socket = io("http://localhost:3000");
 
+        // Function to send like
+        function pushNotification() {
+            const receiverId = document.getElementById("receiverId").value;
+            const like = document.getElementById("like").value;
+            socket.emit("send_like", {
+                receiverId,
+                like
+            });
+        }
 
-      // Function to send like
-      function pushNotification() {
-        const receiverId = document.getElementById("receiverId").value;
-        const like = document.getElementById("like").value;
-        socket.emit("push_notification", { receiverId, like });
-      }
+        // Listen for received likes
+        socket.on("receive_like", (data) => {
+            const {
+                senderId,
+                like
+            } = data;
+            showNotification(`You received a like from ${senderId}: ${like}`);
+        });
 
-      // Listen for received likes
-      socket.on("receive_notification", (data) => {
-        const { senderId, like } = data;
-        showNotification(`You received a like from ${senderId}: ${like}`);
-      });
+        // Function to show notification
+        function showNotification(message) {
+            const notification = document.getElementById("notification");
+            notification.innerText = message;
+            notification.style.display = "block";
 
-      // Function to show notification
-      function showNotification(message) {
-        const notification = document.getElementById("notification");
-        notification.innerText = message;
-        notification.style.display = "block";
-
-        // Hide notification after 2 seconds
-        setTimeout(() => {
-          notification.style.display = "none";
-        }, 2000);
-      }
+            // Hide notification after 2 seconds
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 2000);
+        }
     </script>
-  </body>
+</body>
+
 </html>
