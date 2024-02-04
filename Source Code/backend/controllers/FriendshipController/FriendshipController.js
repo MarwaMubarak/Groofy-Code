@@ -5,42 +5,66 @@ const { unsuccessfulRes, successfulRes } = require("../../utilities/responseForm
 
 
 /**----------------------------------------
- *  @description  add friend 
- *  @rounter      /api/addfriend 
+ *  @description  send friend request 
+ *  @rounter      /sendFriendRequest
  *  @method       POST
  *  @access       private (users only)
  -----------------------------------------*/
 
-module.exports.addFriend = asyncHandler(async(req, res) => {
+module.exports.sendFriendRequest = asyncHandler(async(req, res) => {
 
     try {
-        const { friendId } = req.body;
-        const friend1Id = req.user.id;
-        if (friend1Id == friendId) {
+        const { receiverId } = req.body;
+        const senderId = req.user.id;
+        if (!senderId) {
+            return res.status(400).json(unsuccessfulRes("Unauthorized User!"));
+
+        }
+        if (senderId == receiverId) {
             return res.status(400).json(unsuccessfulRes("Not allowed to add yourself!"));
         }
-        const friend2 = await User.findById(friendId);
-
-
-        if (!friend2) {
+        const userFound = await User.findById(receiverId);
+        if (!userFound) {
             return res
                 .status(404)
-                .json({ success: false, message: "Friend not found" });
+                .json({ success: false, message: "User not found!" });
         }
-        const found1 = await Friendship.findOne({ friend1Id: friend1Id, friend2Id: friendId });
-        const found2 = await Friendship.findOne({ friend1Id: friendId, friend2Id: friend1Id });
+        const found1 = await Friendship.findOne({ senderId: senderId, receiverId: receiverId });
+        const found2 = await Friendship.findOne({ senderId: receiverId, receiverId: senderId });
 
-        console.log(1);
         if (!found1 && !found2) {
-            const newFriendship = new Friendship({ friend1Id: friend1Id, friend2Id: friendId });
+            const newFriendship = new Friendship({ senderId: senderId, receiverId: receiverId });
             await newFriendship.save();
             return res
                 .status(200)
-                .json(successfulRes("Added Successfully!", newFriendship));
+                .json(successfulRes("Request send Successfully!", newFriendship));
         } else {
-            return res
-                .status(400)
-                .json(unsuccessfulRes("There are already Friendship!"));
+            if (found1) {
+                if (found1.status == 'accepted') {
+                    return res
+                        .status(400)
+                        .json(unsuccessfulRes("There is already Friendship!"));
+
+                } else if (found1.status == 'pending') {
+                    return res
+                        .status(400)
+                        .json(unsuccessfulRes("There is already Pending Request!"));
+
+                }
+            }
+            if (found2) {
+                if (found2.status == 'accepted') {
+                    return res
+                        .status(400)
+                        .json(unsuccessfulRes("There is already Friendship!"));
+
+                } else if (found2.status == 'pending') {
+                    return res
+                        .status(400)
+                        .json(unsuccessfulRes("There is already Pending Request!"));
+
+                }
+            }
         }
 
     } catch (error) {
@@ -53,43 +77,107 @@ module.exports.addFriend = asyncHandler(async(req, res) => {
 });
 
 /**----------------------------------------
- *  @description  remove friend 
- *  @route        /api/removefriend 
- *  @method       POST
+ *  @description  accept friend request 
+ *  @route        /acceptFriendRequest
+ *  @method       PUT
+ *  @access       private (users only)
+ -----------------------------------------*/
+module.exports.acceptFriendRequest = asyncHandler(async(req, res) => {
+    try {
+        const { requestId } = req.body;
+        const userId = req.user.id;
+        if (!userId) {
+            return res.status(400).json(unsuccessfulRes("Unauthorized User!"));
+        }
+        const friendship = await Friendship.findOne({ _id: requestId, receiverId: userId });
+        console.log(friendship);
+        if (!friendship) {
+            return res
+                .status(404)
+                .json(unsuccessfulRes("Friend Request Not Found!"));
+        }
+        console.log(friendship.status);
+        if (friendship.status == 'pending') {
+            friendship.status = 'accepted';
+            await friendship.save();
+            return res.status(200).json(successfulRes("Accepted Successfully!", friendship));
+        }
+        if (friendship.status == 'accepted') {
+            return res.status(400).json(successfulRes("Already Accepted!"));
+        }
+
+    } catch (error) {
+        return res
+            .status(500)
+            .json(unsuccessfulRes("Internal server error"));
+    }
+
+});
+
+/**----------------------------------------
+ *  @description  reject friend request
+ *  @route        /rejectFriendRequest 
+ *  @method       DELETE
  *  @access       private (users only)
  -----------------------------------------*/
 
-module.exports.removeFriend = asyncHandler(async(req, res) => {
+module.exports.rejectFriendRequest = asyncHandler(async(req, res) => {
     try {
-        const { friendId } = req.body;
-        const friend1Id = req.user.id;
-        const friend2 = await User.findById(friendId);
-        if (!friend2) {
+        const { requestId } = req.body;
+        const userId = req.user.id;
+        if (!userId) {
+            return res.status(400).json(unsuccessfulRes("Unauthorized User!"));
+        }
+        const friendship = await Friendship.findOne({ _id: requestId, receiverId: userId });
+        if (!friendship) {
             return res
                 .status(404)
-                .json({ success: false, message: "Friend not found" });
+                .json(unsuccessfulRes("Friend Request Not Found!"));
         }
-        const found1 = await Friendship.findOne({ friend1Id: friend1Id, friend2Id: friendId });
-        const found2 = await Friendship.findOne({ friend1Id: friendId, friend2Id: friend1Id });
+        if (friendship.status == 'pending') {
+            await Friendship.deleteOne({ _id: requestId });
+            return res.status(200).json(successfulRes("Rejected Successfully!"));
+        }
+        if (friendship.status == 'accepted') {
+            return res.status(400).json(successfulRes("The Request Accepted Before!"));
+        }
 
-        if (found1 || found2) {
-            console.log(1);
-            console.log(found1);
-            console.log(found2);
+    } catch (error) {
+        return res
+            .status(500)
+            .json(unsuccessfulRes("Internal server error"));
+    }
 
-            if (found1) {
-                await Friendship.deleteOne({ friend1Id: friend1Id, friend2Id: friendId });
-            } else {
-                await Friendship.deleteOne({ friend1Id: friendId, friend2Id: friend1Id });
-            }
+});
 
+
+
+/**----------------------------------------
+ *  @description  delete friend
+ *  @route        /deleteFriend 
+ *  @method       DELETE
+ *  @access       private (users only)
+ -----------------------------------------*/
+
+module.exports.deleteFriend = asyncHandler(async(req, res) => {
+    try {
+        const { requestId } = req.body;
+        const userId = req.user.id;
+        if (!userId) {
+            return res.status(400).json(unsuccessfulRes("Unauthorized User!"));
+        }
+        const friendship = await Friendship.findOne({ _id: requestId });
+        if (!friendship) {
             return res
-                .status(200)
-                .json(successfulRes("Deleted Successfully!"));
-        } else {
-            return res
-                .status(400)
-                .json(unsuccessfulRes("There are already not Friendship!"));
+                .status(404)
+                .json(unsuccessfulRes("Friend Request Not Found!"));
+        }
+        if (friendship.status == 'accepted') {
+            await Friendship.deleteOne({ _id: requestId });
+            return res.status(200).json(successfulRes("Deleted Successfully!"));
+        }
+        if (friendship.status == 'pending') {
+            return res.status(400).json(successfulRes("Not Accepted Request!"));
         }
 
     } catch (error) {
@@ -112,11 +200,10 @@ module.exports.getAllFriends = asyncHandler(async(req, res) => {
     try {
         // 1. Identify the user making the request
         const userId = req.user.id;
-        console.log(1);
-        const friends1 = await Friendship.find({ friend1Id: userId });
-        const friends2 = await Friendship.find({ friend2Id: userId });
+        const sender = await Friendship.find({ senderId: userId, status: 'accepted' });
+        const receiver = await Friendship.find({ receiverId: userId, status: 'accepted' });
 
-        const friends = { friends1, friends2 };
+        const friends = { sender, receiver };
         console.log(friends);
         // 2. Return the list of friends
         return res.status(200).json(successfulRes("Successfully!", friends));
