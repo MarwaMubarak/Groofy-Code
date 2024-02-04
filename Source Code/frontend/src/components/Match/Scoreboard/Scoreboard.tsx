@@ -11,28 +11,28 @@ const Scoreboard = () => {
         <div className={classes.player}>
           <div className={classes.first_status}></div>
           <div className={classes.info}>
-            <div className={classes.usn}>Username</div>
+            <div className={classes.usn}>Hazem Adel</div>
             <div className={classes.img}>
-              <img src="/Assets/Images/defAv.png" alt="ProfilePhoto" />
+              <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePhoto" />
             </div>
           </div>
-          <div className={classes.pr_st + " " + classes.first}>
+          {/* <div className={classes.pr_st + " " + classes.first}>
             <div className={classes.pr + " " + classes.y}>1</div>
             <div className={classes.pr + " " + classes.n}>2</div>
             <div className={classes.pr + " " + classes.p}>3</div>
-          </div>
+          </div> */}
         </div>
-        <span>VS</span>
+        <span className={classes.vs_word}>VS</span>
         <div className={classes.player}>
-          <div className={classes.pr_st + " " + classes.second}>
+          {/* <div className={classes.pr_st + " " + classes.second}>
             <div className={classes.pr + " " + classes.y}>1</div>
             <div className={classes.pr + " " + classes.n}>2</div>
             <div className={classes.pr + " " + classes.y}>3</div>
-          </div>
+          </div> */}
           <div className={classes.info}>
-            <div className={classes.usn}>Username</div>
+            <div className={classes.usn}>Tourist</div>
             <div className={classes.img}>
-              <img src="/Assets/Images/defAv2.png" alt="ProfilePhoto" />
+              <img src="/Assets/Images/tourist.jpg" alt="ProfilePhoto" />
             </div>
           </div>
           <div className={classes.second_status}>

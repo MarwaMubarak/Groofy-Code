@@ -8,7 +8,7 @@
   width: fit-content;
 }
 .testcase .card {
-  background-color: #fff;
+  background-color: #3a3b3c;
   padding: 15px;
   width: 326px;
   border-radius: 6px;
@@ -20,10 +20,12 @@
   width: fit-content;
   font-size: 18px;
   margin-bottom: 5px;
+  color: #fff;
 }
 .testcase .card .tc_text {
   padding: 5px;
-  background-color: #efefef;
+  background-color: #4e4f50;
+  color: #fff;
   border-radius: 6px;
   font-size: 16px;
   transition: 0.3s;

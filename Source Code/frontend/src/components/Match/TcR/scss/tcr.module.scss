@@ -1,7 +1,7 @@
 @use "../../../../shared/styles/colors" as *;
 
 .tcr {
-  background-color: #e5e5e5;
+  background-color: $mainColorHover;
   border-radius: 6px;
   display: flex;
   justify-content: flex-start;
@@ -11,6 +11,7 @@
   .tcr_text {
     font-weight: bold;
     font-size: 16px;
+    color: #fff;
   }
   .tcr_icn {
     width: 25px;

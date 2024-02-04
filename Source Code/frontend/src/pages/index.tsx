@@ -8,6 +8,7 @@ import Play from "./Play/Play";
 import EditProfile from "./EditProfile/EditProfile";
 import Search from "./Search/Search";
 import ClanSearch from "./ClanSearch/ClanSearch";
+import Messaging from "./Messaging/Messaging";
 
 export {
   Home,
@@ -20,4 +21,5 @@ export {
   EditProfile,
   Search,
   ClanSearch,
+  Messaging,
 };

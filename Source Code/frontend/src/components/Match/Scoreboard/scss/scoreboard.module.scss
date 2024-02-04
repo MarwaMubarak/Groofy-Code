@@ -4,7 +4,7 @@
 @use "./sections/players" as *;
 
 .scoreboard {
-  background-color: #fff;
+  background-color: #3a3b3c;
   border-radius: 12px;
   @include center;
   flex-direction: column;

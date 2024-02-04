@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import SideBar from "../SideBar/SideBar";
-import GroofyHeader from "../GroofyHeader/GroofyHeader";
 import classes from "./scss/groofywrapper.module.css";
 
 const GroofyWrapper = ({

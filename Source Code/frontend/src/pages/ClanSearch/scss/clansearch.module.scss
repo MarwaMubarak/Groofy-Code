@@ -6,6 +6,8 @@
     position: relative;
     @include center;
     margin-top: 35px;
+    border-bottom: 2px solid $mainColor;
+    padding-bottom: 20px;
     .prime_input {
       width: calc(100% - 700px);
       border-radius: 25px;
@@ -28,6 +30,72 @@
         background-color: $greenColor;
         border-color: $greenColor;
         box-shadow: none;
+      }
+    }
+  }
+  .clan_results {
+    @include start;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    .clan_card {
+      @include center;
+      flex-direction: column;
+      padding: 15px;
+      border-radius: 6px;
+      background-color: #fff;
+      .clan_info {
+        @include center;
+        .clan_img {
+          margin-right: 10px;
+          img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+          }
+        }
+        .clan_details {
+          @include center;
+          flex-direction: column;
+          .clan_name {
+            width: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+          }
+          .clan_tags {
+            @include center;
+            span {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+      .clan_actions {
+        @include end;
+        width: 100%;
+        gap: 0 10px;
+        .view_btn {
+          background-color: #27b7ff;
+          border-color: #27b7ff;
+          &:hover,
+          &:active,
+          &:focus {
+            box-shadow: none;
+            background-color: $blueColor;
+            border-color: $blueColor;
+          }
+        }
+        .join_btn {
+          background-color: #fabf60;
+          border-color: #fabf60;
+          &:hover,
+          &:active,
+          &:focus {
+            box-shadow: none;
+            background-color: $btnColor;
+            border-color: $btnColor;
+          }
+        }
       }
     }
   }

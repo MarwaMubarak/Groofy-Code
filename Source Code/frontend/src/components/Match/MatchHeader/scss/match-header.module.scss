@@ -1,36 +1,59 @@
 @use "../../../../shared/styles/colors" as *;
 @use "../../../../shared/styles/mixins" as *;
 .header_div {
-  height: 60px;
   @include between;
+  height: 60px;
   padding: 0 20px;
   background-color: $mainColor;
-  .logo {
-    width: 130px;
-    position: relative;
-    span {
-      color: white;
-      font-size: 26px;
-      font-weight: bold;
-      user-select: none;
-      span {
-        color: $blueColor;
+  .logo_area {
+    @include center;
+    .logo {
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 30px;
+        background-color: rgb(59, 67, 85);
+        right: -11px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      img {
+        width: 190px;
       }
     }
-    &::after {
-      content: "";
-      position: absolute;
-      width: 2px;
-      height: 20px;
-      background-color: rgb(59, 67, 85);
-      right: -30px;
-      top: 4px;
+    .exit_btn {
+      @include between;
+      gap: 0 5px;
+      border: none;
+      border-radius: 6px;
+      background-color: $redColor;
+      padding: 4px 12px;
+      margin-left: 25px;
+      user-select: none;
+      color: #fff;
+      box-shadow: $headerShadow;
+      transition: 0.3s;
+      &:hover {
+        box-shadow: none;
+      }
+      cursor: pointer;
+      img {
+        width: 25px;
+      }
+      span {
+        font-family: "Roboto", sans-serif;
+        font-size: 20px;
+      }
     }
   }
   .m_dur {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     color: #fff;
     font-size: 25px;
-    user-select: none;
     span {
       color: $yellowColor;
     }
@@ -43,14 +66,13 @@
       color: #fff;
       font-weight: 400;
       font-size: 18px;
+      margin-right: 10px;
     }
     .h_imgbox {
-      position: relative;
-      margin-right: 2px;
       .pr_ph {
         border-radius: 50%;
-        width: 60px;
-        height: 60px;
+        width: 45px;
+        height: 45px;
       }
     }
   }

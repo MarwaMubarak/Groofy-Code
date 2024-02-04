@@ -38,6 +38,8 @@ import PInfo from "./Profile/PInfo/PInfo";
 import BurgerMenu from "./BurgerMenu/BurgerMenu";
 import GroofyWrapper from "./GroofyWrapper/GroofyWrapper";
 import ClanResult from "./Search/Clan/ClanResult";
+import Chat from "./Messaging/Chat/Chat";
+import ChatUsers from "./Messaging/ChatUsers/ChatUsers";
 
 export {
   MatchHeader,
@@ -80,4 +82,6 @@ export {
   BurgerMenu,
   GroofyWrapper,
   ClanResult,
+  Chat,
+  ChatUsers,
 };
