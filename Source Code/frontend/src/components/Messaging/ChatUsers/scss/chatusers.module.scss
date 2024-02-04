@@ -5,10 +5,10 @@
   @include start;
   flex-direction: column;
   width: 30%;
-  height: 95vh;
+  height: 100%;
   color: white;
   background-color: $mainColor;
-  border-radius: 25px;
+  border-radius: 25px 25px 0 25px;
   border: 1px solid $mainColorHover3;
   .chats_header {
     position: relative;
@@ -17,16 +17,16 @@
     padding: 8px 20px;
     background-color: $mainColor2;
     border-radius: 25px 25px 0px 0px;
+    margin-bottom: 18px;
     &::after {
       position: absolute;
       content: "";
       width: 100%;
       height: 3px;
-      bottom: -10px;
+      bottom: -13px;
       left: 0px;
       background-color: white;
     }
-    margin-bottom: 30px;
     h3 {
       font-size: 28px;
     }
@@ -58,27 +58,16 @@
     }
   }
   .chats_users {
-    @include center;
+    @include start;
     flex-direction: column;
     width: 100%;
-    margin-top: 10px;
-    // .offline_card {
-    //   position: absolute;
-    //   content: "";
-    //   width: 100%;
-    //   height: 100%;
-    //   background-color: rgba(17, 17, 17, 0.6);
-    //   color: gray;
-    //   z-index: 1;
-    // }
-
+    overflow-y: auto;
     .chat_user {
       @include between;
       width: 100%;
       padding: 10px 0px;
       cursor: pointer;
       position: relative;
-
       &:hover {
         background-color: $mainColorHover2;
       }
@@ -136,15 +125,16 @@
         }
       }
       .chat_user_status {
-        width: 20%;
+        width: 85px;
         padding-right: 20px;
         display: flex;
-        align-items: flex-end;
         justify-content: center;
+        align-items: flex-end;
         flex-direction: column;
         gap: 5px;
         span {
           font-size: 14px;
+          text-align: center;
         }
         .messages_cnt {
           background-color: $redColor;
