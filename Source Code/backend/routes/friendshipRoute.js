@@ -3,9 +3,9 @@ const friendshipController = require('../controllers/FriendshipController/Friend
 const { verifyToken } = require('../middleware/verifyToken');
 
 
-router.route('/addfriend').post(verifyToken, friendshipController.addFriend);
-
-router.route('/removefriend').post(verifyToken, friendshipController.removeFriend);
-
+router.route('/sendFriendRequest').post(verifyToken, friendshipController.sendFriendRequest);
+router.route('/acceptFriendRequest').put(verifyToken, friendshipController.acceptFriendRequest);
+router.route('/rejectFriendRequest').delete(verifyToken, friendshipController.rejectFriendRequest);
+router.route('/deleteFriend').delete(verifyToken, friendshipController.deleteFriend);
 router.route('/:username/friends').get(verifyToken, friendshipController.getAllFriends);
 module.exports = router;

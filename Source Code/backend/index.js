@@ -3,6 +3,7 @@ const connectToDB = require("./config/connectToDB");
 const helmet = require("helmet");
 const hpp = require("hpp");
 const cors = require("cors");
+const { Socket } = require("socket.io");
 require("dotenv").config();
 
 // Connect to MongoDB
