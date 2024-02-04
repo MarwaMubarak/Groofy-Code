@@ -12,12 +12,79 @@
   flex-direction: column;
   gap: 25px 0;
   height: 100%;
-  width: 25%;
+  width: 30%;
+}
+.clan_div .c_info .c_dashboard {
+  background-color: #fff;
+  border-radius: 12px;
+  flex: 1;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ddd;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper .c_details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper .c_details img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper .c_details span {
+  font-size: 18px;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper .c_actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper .c_actions i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px;
+  border-radius: 50%;
+  font-size: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper .c_actions i:first-of-type:hover {
+  color: #00aaff;
+  background-color: #f5f5f5;
+}
+.clan_div .c_info .c_dashboard .c_details_wrapper .c_actions i:last-of-type:hover {
+  color: #f55353;
+  background-color: #f5f5f5;
+}
+.clan_div .c_info .c_dashboard .c_stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 25px 0;
+  padding: 20px 15px;
+}
+.clan_div .c_info .c_dashboard .c_stats .c_stat {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.clan_div .c_info .c_dashboard .c_stats .c_stat .stat_title {
+  font-weight: bold;
 }
 .clan_div .c_info .c_box {
   background-color: #fff;
-  padding: 15px 20px;
   border-radius: 12px;
+  padding: 15px;
   flex: 1;
 }
 .clan_div .c_info .c_box .c_header {
@@ -35,10 +102,12 @@
 }
 .clan_div .c_info .c_box .m_box {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   gap: 10px 0;
+  height: 260px;
+  overflow: auto;
 }
 .clan_div .c_info .c_box .m_box .member {
   display: flex;
@@ -104,7 +173,7 @@
 }
 .clan_div .c_chat {
   height: 100%;
-  width: 75%;
+  width: 70%;
   border-radius: 12px;
   background-color: #303031;
 }

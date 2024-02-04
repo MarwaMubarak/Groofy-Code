@@ -67,6 +67,22 @@
 .chat_container .chat_header .header_dots i:hover {
   background-color: #4e4f50;
 }
+.chat_container .clan_chat_header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 25px;
+  border-bottom: 3px solid #fff;
+}
+.chat_container .clan_chat_header img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.chat_container .clan_chat_header span {
+  font-size: 20px;
+}
 .chat_container .chat_body {
   margin-top: 20px;
   display: flex;

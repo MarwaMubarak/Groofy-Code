@@ -1,11 +1,12 @@
-import React, { useRef } from "react";
-import classes from "./scss/chat.module.css";
+import { useRef } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import { MenuItem } from "primereact/menuitem";
+import { ChatProps } from "../../../shared/types";
+import classes from "./scss/chat.module.css";
 
-const Chat = () => {
+const Chat = (props: ChatProps) => {
   const menu = useRef<any>(null);
   const items: MenuItem[] = [
     {
@@ -56,24 +57,30 @@ const Chat = () => {
         breakpoint="767px"
         className={classes.dots_menu}
       />
-
-      <div className={classes.chat_header}>
-        <div className={classes.friend_box}>
-          <div className={classes.friend_img}>
-            <img src="/Assets/Images/Hazem Adel.jpg" alt="FriendProfilePic" />
+      {props.type === "clan" ? (
+        <div className={classes.clan_chat_header}>
+          <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
+          <span>Chat</span>
+        </div>
+      ) : (
+        <div className={classes.chat_header}>
+          <div className={classes.friend_box}>
+            <div className={classes.friend_img}>
+              <img src="/Assets/Images/Hazem Adel.jpg" alt="FriendProfilePic" />
+            </div>
+            <div className={classes.friend_info}>
+              <h3>Hazem Adel</h3>
+              <p>Online</p>
+            </div>
           </div>
-          <div className={classes.friend_info}>
-            <h3>Hazem Adel</h3>
-            <p>Online</p>
+          <div
+            className={classes.header_dots}
+            onClick={(e) => menu.current.toggle(e)}
+          >
+            <i className="bi bi-three-dots" />
           </div>
         </div>
-        <div
-          className={classes.header_dots}
-          onClick={(e) => menu.current.toggle(e)}
-        >
-          <i className="bi bi-three-dots" />
-        </div>
-      </div>
+      )}
       <div className={classes.chat_body}>
         <span className={classes.chat_date}>Today</span>
         <div className={classes.msg_box + " " + classes.reciever}>

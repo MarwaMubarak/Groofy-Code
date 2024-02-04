@@ -12,11 +12,68 @@
     flex-direction: column;
     gap: 25px 0;
     height: 100%;
-    width: 25%;
+    width: 30%;
+    .c_dashboard {
+      background-color: #fff;
+      border-radius: 12px;
+      flex: 1;
+      .c_details_wrapper {
+        @include between;
+        padding: 5px 10px;
+        border-bottom: 1px solid #ddd;
+        .c_details {
+          @include center;
+          img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 5px;
+          }
+          span {
+            font-size: 18px;
+          }
+        }
+        .c_actions {
+          @include center;
+          margin-right: 5px;
+          i {
+            @include center;
+            padding: 7px;
+            border-radius: 50%;
+            font-size: 20px;
+            transition: 0.3s;
+            cursor: pointer;
+            &:first-of-type:hover {
+              color: $blueColor;
+              background-color: #f5f5f5;
+            }
+            &:last-of-type:hover {
+              color: $redColor;
+              background-color: #f5f5f5;
+            }
+          }
+        }
+      }
+      .c_stats {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 25px 0;
+        padding: 20px 15px;
+        .c_stat {
+          width: 100%;
+          @include between;
+          .stat_title {
+            font-weight: bold;
+          }
+        }
+      }
+    }
     .c_box {
       background-color: #fff;
-      padding: 15px 20px;
       border-radius: 12px;
+      padding: 15px;
       flex: 1;
       .c_header {
         display: flex;
@@ -32,9 +89,14 @@
         }
       }
       .m_box {
-        @include center;
+        // @include center;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
         flex-direction: column;
         gap: 10px 0;
+        height: 260px;
+        overflow: auto;
         .member {
           @include between;
           width: 100%;
@@ -98,7 +160,7 @@
   }
   .c_chat {
     height: 100%;
-    width: 75%;
+    width: 70%;
     border-radius: 12px;
     background-color: $mainColorHover2;
     .ch_header {
