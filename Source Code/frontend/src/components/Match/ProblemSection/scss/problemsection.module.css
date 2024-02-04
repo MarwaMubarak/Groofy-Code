@@ -16,22 +16,23 @@
   background-color: #18191a;
   border-radius: 10px;
 }
-.psec .problem-disc {
+.psec .problem_disc {
   margin-left: 20px;
   margin-right: 10px;
-  background-color: #fff;
+  background-color: #3a3b3c;
   border-radius: 12px;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
   padding: 15px;
 }
-.psec .problem-disc .ptitle {
+.psec .problem_disc .ptitle {
   display: flex;
   justify-content: center;
   font-size: 26px;
   font-weight: bold;
   position: relative;
+  color: #fff;
 }
-.psec .problem-disc .ptitle::after {
+.psec .problem_disc .ptitle::after {
   content: "";
   position: absolute;
   width: 250px;
@@ -41,10 +42,10 @@
   transform: translateX(-50%);
   top: 40px;
 }
-.psec .problem-disc .pdisc {
+.psec .problem_disc .pdisc {
   margin-top: 25px;
   font-size: 18px;
-  color: #555;
+  color: #dbdbdb;
   line-height: 1.5;
 }
 .psec .testcases {
@@ -63,7 +64,7 @@
   border-radius: 4px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
-.psec .testcases .tcs-container {
+.psec .testcases .tcs_container {
   display: flex;
   flex-direction: column;
   gap: 65px 0;
@@ -72,16 +73,17 @@
   margin-top: 50px;
   padding: 15px;
 }
-.psec .testcases .tcs-container .tc-box {
+.psec .testcases .tcs_container .tc_box {
   position: relative;
 }
-.psec .testcases .tcs-container .tc-box .tc-num {
+.psec .testcases .tcs_container .tc_box .tc_num {
   display: block;
   margin-bottom: 10px;
   font-size: 20px;
   font-weight: 500;
+  color: #fff;
 }
-.psec .testcases .tcs-container .tc-box:not(:last-of-type)::after {
+.psec .testcases .tcs_container .tc_box:not(:last-of-type)::after {
   content: "";
   position: absolute;
   width: calc(100% - 120px);
@@ -91,6 +93,6 @@
   transform: translateX(-50%);
   bottom: -40px;
 }
-.psec .testcases .tcs-container .tc-box:not(:last-of-type)::after {
+.psec .testcases .tcs_container .tc_box:not(:last-of-type)::after {
   background-color: #ababab;
 }/*# sourceMappingURL=problemsection.module.css.map */
