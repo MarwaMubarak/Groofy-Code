@@ -13,18 +13,16 @@ const io = socketIo(server, {
   },
 });
 
-// Dictionary to store client connections and their respective IDs
-const clients = {};
 
 io.on("connection", (socket) => {
   console.log(`[NEW CONNECTION] ${socket.id} connected.`);
 
   // When a client sends a like
-  socket.on("send_like", (data) => {
+  socket.on("push_notification", (data) => {
     const { receiverId, like } = data;
 
     // Sending notification to the receiving client
-    io.to(receiverId).emit("receive_like", { senderId: socket.id, like });
+    io.to(receiverId).emit("receive_notification", { senderId: socket.id, like });
   });
 
   // When a client disconnects
