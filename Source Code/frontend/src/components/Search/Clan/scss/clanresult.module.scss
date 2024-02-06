@@ -1,0 +1,19 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.clan_result {
+  @include center;
+  .clan_img {
+    @include center;
+    padding: 25px;
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+  }
+  .clan_info {
+    @include center;
+    flex-direction: column;
+  }
+}

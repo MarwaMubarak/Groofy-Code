@@ -1,0 +1,165 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.chats_container {
+  @include start;
+  flex-direction: column;
+  width: 30%;
+  height: 100%;
+  color: white;
+  background-color: $mainColor;
+  border-radius: 25px 25px 0 25px;
+  border: 1px solid $mainColorHover3;
+  .chats_header {
+    position: relative;
+    @include between;
+    width: 100%;
+    padding: 8px 20px;
+    background-color: $mainColor2;
+    border-radius: 25px 25px 0px 0px;
+    margin-bottom: 18px;
+    &::after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 3px;
+      bottom: -13px;
+      left: 0px;
+      background-color: white;
+    }
+    h3 {
+      font-size: 28px;
+    }
+    i {
+      font-size: 24px;
+      cursor: pointer;
+      padding: 10px 12px;
+      border-radius: 50%;
+      &:hover {
+        color: $blueHighColor;
+        background-color: $mainColorHover2;
+      }
+    }
+  }
+  .chats_search {
+    width: 100%;
+    padding: 10px 20px;
+    position: relative;
+    .search_input {
+      width: 100%;
+      background-color: $mainColor2;
+    }
+    i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 30px;
+      font-size: 24px;
+    }
+  }
+  .chats_users {
+    @include start;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
+    .chat_user {
+      @include between;
+      width: 100%;
+      padding: 10px 0px;
+      cursor: pointer;
+      position: relative;
+      &:hover {
+        background-color: $mainColorHover2;
+      }
+      .chat_user_info {
+        width: 80%;
+        padding-left: 20px;
+        @include start;
+        gap: 10px;
+        .chat_user_img {
+          position: relative;
+          img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+          }
+          .online {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: $greenColor;
+            z-index: 1;
+            position: absolute;
+            bottom: 4px;
+            left: 36px;
+            border-top: 1px solid white;
+            border-left: 1px solid white;
+          }
+          .offline {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: gray;
+            z-index: 1;
+            position: absolute;
+            bottom: 4px;
+            left: 36px;
+            border-top: 1px solid white;
+            border-left: 1px solid white;
+          }
+        }
+        .chat_user_data {
+          width: 100%;
+
+          line-height: 1.4;
+          h3 {
+            font-size: 18px;
+          }
+          p {
+            max-width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 15px;
+          }
+        }
+      }
+      .chat_user_status {
+        width: 85px;
+        padding-right: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        flex-direction: column;
+        gap: 5px;
+        span {
+          font-size: 14px;
+          text-align: center;
+        }
+        .messages_cnt {
+          background-color: $redColor;
+          color: white;
+          font-size: 12px;
+          min-width: 1.1rem;
+          line-height: 1.1rem;
+          height: 1.1rem;
+        }
+      }
+    }
+    .offline_users {
+      width: 100%;
+      padding: 10px 20px;
+      @include start;
+      border-bottom: 1px solid $mainColorHover3;
+      margin-top: 10px;
+      i {
+        font-size: 24px;
+        margin-right: 10px;
+      }
+      span {
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+  }
+}

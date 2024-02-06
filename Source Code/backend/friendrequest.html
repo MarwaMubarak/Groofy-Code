@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Form</title>
+</head>
+
+<body>
+
+    <h2>User Data Form</h2>
+
+    <form id="userDataForm">
+        <label for="currentUsername">Your Username:</label>
+        <input type="text" id="currentUsername" name="currentUsername" required>
+
+        <br>
+
+        <label for="friendUsername">Friend's Username:</label>
+        <input type="text" id="friendUsername" name="friendUsername" required>
+
+        <br>
+
+        <button type="button" onclick="sendData()">Send Data</button>
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+
+    <script>
+        const socket = io("http://localhost:3000");
+
+        function sendData() {
+            var senderId = document.getElementById("currentUsername").value;
+            var receiverId = document.getElementById("friendUsername").value;
+
+            // You can perform actions with the data, such as sending it to a server, here.
+            // For simplicity, we'll just log the data to the console in this example.
+            console.log("Current Username: " + senderId);
+            console.log("Friend's Username: " + receiverId);
+            socket.emit("sendFriendRequest", {
+                receiverId,
+                senderId,
+            });
+
+
+        }
+        socket.on("receivedfriendRequest", (data) => {
+            const {
+                receiverId,
+                senderId,
+            } = data;
+            showNotification(`You received a like from ${senderId}:`);
+        });
+    </script>
+
+</body>
+
+</html>

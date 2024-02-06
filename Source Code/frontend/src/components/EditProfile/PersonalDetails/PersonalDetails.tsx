@@ -183,7 +183,6 @@ const PersonalDetails = () => {
             itemTemplate={countryOptionTemplate}
             className="w-full md:w-14rem"
           />
-          <h1>gg</h1>
         </div>
         <Button className={classNames(classes.groofybtn)} label="Save" />
       </form>

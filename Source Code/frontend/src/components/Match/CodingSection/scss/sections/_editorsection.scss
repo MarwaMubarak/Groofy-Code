@@ -13,6 +13,7 @@
       align-items: center;
       .cl_title {
         font-size: 25px;
+        color: #fff;
       }
       select {
         margin-left: 15px;
@@ -20,8 +21,8 @@
         width: 200px;
         padding: 10px;
         border-radius: 6px;
-        background-color: #fff;
-        color: $mainColor;
+        background-color: #3a3b3c;
+        color: #fff;
         font-size: 18px;
         font-weight: bold;
         box-shadow: $cardShadow;

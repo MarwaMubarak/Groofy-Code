@@ -1,0 +1,283 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.clan_div {
+  @include center;
+  gap: 0 42px;
+  height: calc(100vh - 40px);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  .c_info {
+    display: flex;
+    flex-direction: column;
+    gap: 25px 0;
+    height: 100%;
+    width: 30%;
+    .c_dashboard {
+      background-color: #fff;
+      border-radius: 12px;
+      flex: 1;
+      .c_details_wrapper {
+        @include between;
+        padding: 5px 10px;
+        border-bottom: 1px solid #ddd;
+        .c_details {
+          @include center;
+          img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 5px;
+          }
+          span {
+            font-size: 18px;
+          }
+        }
+        .c_actions {
+          @include center;
+          margin-right: 5px;
+          i {
+            @include center;
+            padding: 7px;
+            border-radius: 50%;
+            font-size: 20px;
+            transition: 0.3s;
+            cursor: pointer;
+            &:first-of-type:hover {
+              color: $blueColor;
+              background-color: #f5f5f5;
+            }
+            &:last-of-type:hover {
+              color: $redColor;
+              background-color: #f5f5f5;
+            }
+          }
+        }
+      }
+      .c_stats {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 25px 0;
+        padding: 20px 15px;
+        .c_stat {
+          width: 100%;
+          @include between;
+          .stat_title {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    .c_box {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      flex: 1;
+      .c_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #eaedf2;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        .ch_icn {
+          width: 25px;
+          cursor: pointer;
+        }
+      }
+      .m_box {
+        // @include center;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px 0;
+        height: 260px;
+        overflow: auto;
+        .member {
+          @include between;
+          width: 100%;
+          border-radius: 6px;
+          padding: 5px 15px;
+          cursor: pointer;
+          &:hover {
+            background-color: #f5f5f5;
+          }
+          .m_info {
+            @include center;
+            img {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              margin-right: 10px;
+            }
+            .m_usn {
+              font-size: 15px;
+            }
+          }
+          .m_online {
+            font-size: 12px;
+            font-weight: bold;
+            color: $greenColor;
+            position: relative;
+            &::before {
+              content: "";
+              position: absolute;
+              height: 6px;
+              width: 6px;
+              background-color: $greenColor;
+              border-radius: 50%;
+              top: 50%;
+              transform: translateY(-50%);
+              left: -10px;
+            }
+          }
+        }
+      }
+      .rm_box {
+        display: flex;
+        flex-direction: column;
+        gap: 5px 0;
+        margin-bottom: 30px;
+        .member {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+          .rm_usn {
+            font-size: 15px;
+          }
+          .rm_usp {
+            font-size: 14px;
+            color: #959595;
+          }
+        }
+      }
+    }
+  }
+  .c_chat {
+    height: 100%;
+    width: 70%;
+    border-radius: 12px;
+    background-color: $mainColorHover2;
+    .ch_header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0 20px;
+      padding: 20px 40px 15px;
+      // border-bottom: 1px solid #ddd;
+      .cl_img {
+        background-color: $redColor;
+        border-radius: 50%;
+        padding: 13px;
+        img {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 32px;
+          opacity: 0.5;
+        }
+      }
+      .cl_i {
+        .cln {
+          margin-bottom: 5px;
+        }
+        .cld {
+          color: #7d7d7d;
+        }
+      }
+    }
+    .ch {
+      background-color: $mainColor;
+      height: calc(100% - 173px);
+      overflow-y: auto;
+      margin-top: 10px;
+      padding-left: 20px;
+      padding-right: 20px;
+      @include scrollbar;
+      .msg_box {
+        display: flex;
+        align-items: center;
+        gap: 0 10px;
+        .msg_info {
+          .msg {
+            margin-top: 5px;
+            padding: 10px;
+            border-radius: 0px 6px 6px 6px;
+            background-color: #afafaf;
+            color: #fff;
+          }
+          .msg_usn {
+            color: #fff;
+          }
+        }
+        &.to {
+          flex-direction: row-reverse;
+          .msg_info {
+            .msg_usn {
+              text-align: end;
+            }
+            .msg {
+              background-color: $blueColor;
+              border-radius: 6px 0px 6px 6px;
+            }
+          }
+        }
+        .u_img {
+          img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    .ch_msg {
+      @include center;
+      background-color: $mainColor2;
+      padding: 10px;
+      textarea {
+        color: #fff;
+        padding: 10px 75px 5px 40px;
+        width: calc(100% - 70px);
+        border-radius: 6px;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        resize: none;
+        overflow-y: auto;
+        border: none;
+        // border-radius: 0 0 0 6px;
+        @include scrollbar;
+        &:focus {
+          outline: none;
+        }
+        &::placeholder {
+          font-family: "Roboto", sans-serif;
+          color: #9f9f9f;
+          font-size: 16px;
+        }
+      }
+      .submit_btn {
+        @include center;
+        width: 70px;
+        button {
+          border: none;
+          background-color: $btnColor;
+          border-radius: 50%;
+          padding: 10px;
+          cursor: pointer;
+          img {
+            @include center;
+            width: 28px;
+            opacity: 0.5;
+            transition: 0.3s;
+          }
+        }
+      }
+    }
+  }
+}

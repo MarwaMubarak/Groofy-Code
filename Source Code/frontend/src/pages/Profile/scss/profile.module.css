@@ -126,7 +126,12 @@
 }
 .newprofile_container .userprofile .userprofile_side {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   margin-top: 30px;
+}
+@media (max-width: 1053px) {
+  .newprofile_container .userprofile .userprofile_side {
+    flex-direction: column-reverse;
+  }
 }/*# sourceMappingURL=profile.module.css.map */

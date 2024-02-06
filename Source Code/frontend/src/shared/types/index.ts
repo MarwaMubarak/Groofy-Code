@@ -188,3 +188,8 @@ export interface PSocialProps {
 export interface PInfoProps {
   profileUser: any;
 }
+
+// Chat Props
+export interface ChatProps {
+  type?: string;
+}
