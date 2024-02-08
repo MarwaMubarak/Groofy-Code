@@ -29,7 +29,7 @@ const MatchSchema = new mongoose.Schema(
       ref: "User",
     },
     duration: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
