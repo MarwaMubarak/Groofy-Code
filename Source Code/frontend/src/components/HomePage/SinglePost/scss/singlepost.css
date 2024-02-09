@@ -123,6 +123,7 @@
   padding: 5px 10px;
   font-size: 14px;
   font-weight: bold;
+  z-index: 1;
 }
 .single-post .s-p-reactbtn .react-cnt {
   margin-top: 2px;

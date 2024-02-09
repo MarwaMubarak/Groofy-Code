@@ -15,6 +15,7 @@ import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
 import ReactCountryFlag from "react-country-flag";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
+import useClickOutside from "../../shared/functions/handleClickOutside";
 
 interface Country {
   name: string;
@@ -29,6 +30,18 @@ const GroofyHeader = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [counterToFetch, setCounterToFetch] = useState<number>(2);
   const [searchedUsers, setSearchedUsers] = useState<any[]>([]);
+  const componentRefProfileArea = useRef(null);
+  const componentRefNotifyArea = useRef(null);
+  const [searchActive, setSearchActive] = useState(false);
+
+  useClickOutside(componentRefProfileArea, () => {
+    setProfileActive(false);
+  });
+
+  useClickOutside(componentRefNotifyArea, () => {
+    setNotifyActive(false);
+  });
+
   const countries: Country[] = [
     { name: "Australia", code: "AU" },
     { name: "Brazil", code: "BR" },
@@ -43,10 +56,14 @@ const GroofyHeader = () => {
   ];
 
   useEffect(() => {
+    if (searchText === "") {
+      setSearchedUsers([]);
+      setCounterToFetch(0);
+      return;
+    }
     if (counterToFetch > 0) {
       setTimeout(() => {
         setCounterToFetch((state) => state - 1);
-        console.log("TIMe");
       }, 1000);
     } else {
       const ret = dispatch(userThunks.searchForUsers(searchText) as any);
@@ -88,6 +105,7 @@ const GroofyHeader = () => {
         className={`${classes.notify_area} ${
           notifyActive ? classes.true : classes.false
         }`}
+        ref={componentRefNotifyArea}
       >
         <div className={classes.notify_header}>
           <h3 className={classes.notify_title}>Notifications</h3>
@@ -123,6 +141,7 @@ const GroofyHeader = () => {
         className={`${classes.profile_area} ${
           profileActive ? classes.true : classes.false
         }`}
+        ref={componentRefProfileArea}
       >
         <div className={classes.pa_info}>
           <img src={user.photo.url} alt="ProfilePicture" />
@@ -134,7 +153,7 @@ const GroofyHeader = () => {
             <span>Profile</span>
           </div>
         </Link>
-        <Link to="/settings">
+        <Link to="/profile/edit">
           <div className={classes.pa_menu}>
             <img src="/Assets/SVG/settings.svg" alt="ProfilePicture" />
             <span>Settings</span>
@@ -153,8 +172,14 @@ const GroofyHeader = () => {
             <img src="/Assets/Images/GroofyLogoCover.png" alt="Logo" />
           </Link>
         </div>
-        <div className={classes.search} onClick={(e) => op.current?.toggle(e)}>
+        <div
+          className={
+            classes.search + " " + (searchActive ? classes.active : "")
+          }
+          onClick={(e) => op.current?.toggle(e)}
+        >
           <i className="pi pi-search" />
+          <span className={classes.search_text}>Search</span>
         </div>
         <OverlayPanel
           ref={op}
@@ -162,10 +187,14 @@ const GroofyHeader = () => {
           closeOnEscape
           dismissable={true}
           className={styles.search_overlay}
+          onShow={() => {
+            setSearchActive(true);
+          }}
           onHide={() => {
             setSearchText("");
             setCounterToFetch(0);
             setSearchedUsers([]);
+            setSearchActive(false);
           }}
         >
           <div className={styles.search_container}>

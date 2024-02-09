@@ -68,6 +68,9 @@
   margin-right: 10px;
   color: #f2f2f2;
 }
+.edit_info .edit_content .country_selector .drop_down_div {
+  background-color: #18191a;
+}
 .edit_info .edit_content .groofybtn {
   display: flex;
   justify-content: center;
@@ -100,4 +103,8 @@
 }
 .edit_info .edit_content .groofybtn .btn_icn {
   width: 25px;
+}
+
+.drop_down_panel {
+  background-color: #18191a;
 }/*# sourceMappingURL=personaldetails.module.css.map */

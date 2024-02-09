@@ -92,7 +92,7 @@
   transition: 0.3s;
 }
 .gamemode_full:hover {
-  background-color: rgb(20, 27, 40);
+  background-color: #242526;
 }
 .gamemode_full img {
   width: 48px;

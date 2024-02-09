@@ -187,11 +187,12 @@
     .search {
       @include center;
       padding: 10px;
-      border-radius: 50%;
+      border-radius: 12px;
       background-color: $mainColor;
       margin-left: 25px;
       margin-right: 15px;
       cursor: pointer;
+      transition: 0.3s;
       &:hover {
         background-color: $mainColorHover2;
       }
@@ -199,6 +200,13 @@
         text-align: center;
         font-size: 22px;
         color: #fff;
+      }
+      span {
+        color: white;
+        margin-left: 10px;
+      }
+      &.active {
+        background-color: $mainColorHover2;
       }
     }
   }

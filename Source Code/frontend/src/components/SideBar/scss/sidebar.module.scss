@@ -106,7 +106,7 @@
             background-color: rgb(22, 30, 46);
           }
           &:not(.active):hover {
-            background-color: rgb(22, 30, 46);
+            background-color: $mainColorHover2;
             border-radius: 10px;
           }
           img {
@@ -195,7 +195,7 @@
     cursor: pointer;
     transition: 0.3s;
     &:hover {
-      background-color: rgb(22, 30, 46);
+      background-color: $mainColorHover2;
       border-radius: 10px;
     }
   }

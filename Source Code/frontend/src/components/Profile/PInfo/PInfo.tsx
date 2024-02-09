@@ -18,7 +18,7 @@ const PInfo = (props: PInfoProps) => {
             </abbr>
           </div>
           <div className={classes.ps_container_box}>
-            <div className={classes.psi_single_details}>
+            {/* <div className={classes.psi_single_details}>
               <span>
                 <img src="/Assets/SVG/calendar.svg" alt="calender" />
                 Joined
@@ -26,12 +26,12 @@ const PInfo = (props: PInfoProps) => {
                   {FormatDate(props.profileUser.createdAt)}
                 </span>
               </span>
-            </div>
-            <div className={classes.psi_single_details}>
+            </div> */}
+            {/* <div className={classes.psi_single_details}>
               <span>
                 World Rank: <span className={classes.beside}> {0}</span>
               </span>
-            </div>
+            </div> */}
             <div className={classes.psi_single_details}>
               <span>
                 Last Seen:
@@ -71,13 +71,13 @@ const PInfo = (props: PInfoProps) => {
                 {props.profileUser.totalMatch}
               </span>
             </div>
-            <div className={classes.psi_single_details}>
+            {/* <div className={classes.psi_single_details}>
               <span>
                 <img src="/Assets/Images/Yellow_trophy.png" alt="StatsIcon" />
                 Highest Trophies
               </span>
               <span className={classes.any}>5030</span>
-            </div>
+            </div> */}
             <div className={classes.psi_single_details}>
               <span>Wins</span>
               <span className={classes.any}>{props.profileUser.wins}</span>
@@ -92,7 +92,7 @@ const PInfo = (props: PInfoProps) => {
             </div>
           </div>
         </div>
-        <div className={classes.ps_info}>
+        {/* <div className={classes.ps_info}>
           <div className={classes.ps_header}>
             <h3>Division</h3>
             <abbr title="Info">
@@ -119,7 +119,7 @@ const PInfo = (props: PInfoProps) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className={classes.ps_info}>
           <div className={classes.ps_header}>
             <h3>Badges</h3>

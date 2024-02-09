@@ -12,6 +12,7 @@ import { AxiosError } from "axios";
 import classes from "./scss/personaldetails.module.css";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
+import styles from "./scss/dropdown.module.css";
 
 interface Country {
   name: string;
@@ -181,7 +182,9 @@ const PersonalDetails = () => {
             filter
             valueTemplate={selectedCountryTemplate}
             itemTemplate={countryOptionTemplate}
-            className="w-full md:w-14rem"
+            // className="w-full md:w-14rem"
+            className={classes.drop_down_div}
+            panelClassName={styles.drop_down_panel}
           />
         </div>
         <Button className={classNames(classes.groofybtn)} label="Save" />

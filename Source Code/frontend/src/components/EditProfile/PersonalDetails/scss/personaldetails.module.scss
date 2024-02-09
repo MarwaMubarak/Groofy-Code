@@ -68,6 +68,9 @@
         margin-right: 10px;
         color: $hoverColor;
       }
+      .drop_down_div {
+        background-color: $mainColor;
+      }
     }
     .groofybtn {
       @include center;
@@ -99,4 +102,8 @@
       }
     }
   }
+}
+
+.drop_down_panel {
+  background-color: $mainColor;
 }

@@ -18,6 +18,7 @@
 .search_container .search_page .search_area .prime_input {
   width: calc(100% - 700px);
   border-radius: 25px;
+  background-color: #18191a;
 }
 .search_container .search_page .search_area i {
   position: absolute;

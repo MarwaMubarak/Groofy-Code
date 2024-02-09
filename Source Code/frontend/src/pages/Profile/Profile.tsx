@@ -9,6 +9,8 @@ import { userThunks } from "../../store/actions";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import classes from "./scss/profile.module.css";
+import { Button } from "primereact/button";
+import FormatDate from "../../shared/functions/format-date";
 
 interface Country {
   name: string;
@@ -52,64 +54,131 @@ const Profile = () => {
         {profileRes.status === "success" ? (
           <>
             <div className={classes.up_info}>
-              <div className={classes.up_info_img}>
-                <Image
-                  src={profileUser.photo.url}
-                  alt="Image"
-                  width="160"
-                  preview
-                />
-              </div>
-              <div className={classes.up_info_details}>
-                <div className={classes.up_info_d_box}>
-                  <h3>{profileUser.username}</h3>
-                  {userProfile === loggedUser.username && (
-                    <Link to="/profile/edit">
-                      <div className={classes.up_info_d_box_edit}>
-                        <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
-                        <span>Edit</span>
-                      </div>
-                    </Link>
-                  )}
+              <div className={classes.left_up_info}>
+                <div className={classes.up_info_img}>
+                  <Image
+                    src={profileUser.photo.url}
+                    alt="Image"
+                    width="180"
+                    preview
+                  />
                 </div>
-                <h4>
-                  {(profileUser.firstname || "") +
-                    " " +
-                    (profileUser.lastname || "")}
-                  {profileUser.city ? "," + profileUser.city + "," : ""}
-                  {profileUser.country || ""}
-                  {profileUser.country && profileUser.country !== "" && (
-                    <ReactCountryFlag
-                      countryCode={
-                        countries.find(
-                          (country) => country.name === profileUser.country
-                        )?.code || " "
-                      }
-                      svg
-                      style={{
-                        width: "1em",
-                        height: "1em",
-                        marginLeft: "8px",
-                      }}
-                      title={profileUser.country || ""}
-                    />
-                  )}
-                </h4>
-                <p>{profileUser.bio || ""}</p>
-                {userProfile !== loggedUser.username && (
-                  <div className={classes.up_info_details_controls}>
-                    <GBtn
-                      btnText="Message"
-                      icnSrc="/Assets/SVG/message.svg"
-                      clickEvent={() => {}}
-                    />
-                    <GBtn
-                      btnText="Add Friend"
-                      icnSrc="/Assets/SVG/addfriend.svg"
-                      clickEvent={() => {}}
-                    />
+                <div className={classes.up_info_details}>
+                  <div className={classes.up_info_d_box}>
+                    <div className={classes.up_info_d_box_names}>
+                      <h3>
+                        {profileUser.firstname + " " + profileUser.lastname}
+                        {profileUser.country && profileUser.country !== "" && (
+                          <ReactCountryFlag
+                            countryCode={
+                              countries.find(
+                                (country) =>
+                                  country.name === profileUser.country
+                              )?.code || " "
+                            }
+                            svg
+                            style={{
+                              width: "1em",
+                              height: "1em",
+                              marginLeft: "8px",
+                            }}
+                            title={profileUser.country || ""}
+                          />
+                        )}
+                      </h3>
+                      <h4>@{profileUser.username}</h4>
+                    </div>
+                    {userProfile === loggedUser.username && (
+                      <Link to="/profile/edit">
+                        <div className={classes.up_info_d_box_edit}>
+                          <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
+                          <span>Edit</span>
+                        </div>
+                      </Link>
+                    )}
+                    {userProfile !== loggedUser.username && (
+                      <div className={classes.up_info_details_controls}>
+                        <button
+                          className={
+                            "bi bi-chat-dots-fill " + classes.user_action_btn
+                          }
+                        />
+                        <button
+                          className={
+                            "bi bi-person-plus-fill " + classes.user_action_btn
+                          }
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className={classes.psi_single_details}>
+                    <span>
+                      <img src="/Assets/SVG/calendar.svg" alt="calender" />
+                      Joined
+                      <span className={classes.beside}>
+                        {FormatDate(
+                          userProfile === loggedUser.username
+                            ? loggedUser.createdAt
+                            : profileUser.createdAt
+                        )}
+                      </span>
+                    </span>
+                  </div>
+
+                  <p>{profileUser.bio || ""}</p>
+                </div>
+              </div>
+              <div className={classes.middle_up_info}>
+                <div className={classes.ps_header}>
+                  <h3>Division</h3>
+                </div>
+                <div className={classes.middle_upper_section}>
+                  <div className={classes.rank_img}>
+                    <img src="/Assets/Badges/Badge5.svg" alt="RankImg" />
+                  </div>
+                  <div className={classes.rank_info}>
+                    <h3>Elite</h3>
+                    <div className={classes.rank_box}>
+                      <img
+                        src="/Assets/SVG/trophyIconYellow.svg"
+                        alt="RankImg"
+                      />
+                      <span>1986</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={classes.middle_down_section}>
+                  <div className={classes.middle_down_info}>
+                    <h3>World rank</h3>
+                    <div className={classes.middle_down_box}>
+                      <img src="/Assets/SVG/world_rank.svg" alt="RankImg" />
+                      <span>#217</span>
+                    </div>
+                  </div>
+                  <div className={classes.middle_down_info}>
+                    <h3>Max Rating</h3>
+                    <div className={classes.middle_down_box}>
+                      <img src="/Assets/Badges/Badge6.svg" alt="RankImg" />
+                      <span>3247</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={classes.right_up_info}>
+                <div className={classes.ps_info}>
+                  <div className={classes.ps_header}>
+                    <h3>Clan</h3>
+                  </div>
+                  <div className={classes.ps_container}>
+                    <div className={classes.psi_box}>
+                      <img src="/Assets/Badges/Badge1.svg" alt="ClanImg" />
+                      <div className={classes.wrapper}>
+                        <span>Clan</span>
+                        <h3>Ghosts</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className={classes.userprofile_side}>

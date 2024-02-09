@@ -34,7 +34,7 @@
       .play_menu {
         @include center;
         flex-direction: column;
-        background-color: rgb(30, 41, 61);
+        background-color: $mainColorHover2;
         width: fit-content;
         margin: auto;
         margin-top: 30px;
