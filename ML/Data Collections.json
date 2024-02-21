@@ -1,0 +1,42 @@
+[
+  {
+    "Title": "Get all the users on the platform",
+    "api": "https://codeforces.com/api/user.ratedList?activeOnly=false&includeRetired=false",
+
+    "result": [
+      {
+        "rating": 3678,
+        "maxRating": 3859
+      }
+    ]
+  },
+  {
+    "Title": "Get all the problems solved by a specific user",
+    "api": "https://codeforces.com/api/user.status?handle=Fefer_Ivan&from=1&count=1000000000",
+
+    "result": [
+      {
+        "problem": {
+          "contestId": 1677,
+          "index": "A",
+          "rating": 1600,
+          "tags": ["brute force", "data structures", "dp"]
+        },
+        "verdict": "OK"
+      }
+    ]
+  },
+  {
+    "Title": "Calculate number of wins and losses for a specific user",
+    "_comment": "Filter users with count of contests >= 30 (to have a good sample size)",
+    "api": "https://codeforces.com/api/user.rating?handle=Fefer_Ivan",
+
+    "result": [
+      {
+        "_comment": "If abs(oldRating - newRating) <= 10, then we can assume it's a draw. otherwise it's a win or a loss",
+        "oldRating": 1430,
+        "newRating": 1502
+      }
+    ]
+  }
+]
