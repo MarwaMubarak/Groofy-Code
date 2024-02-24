@@ -40,7 +40,7 @@ def get_user_submissions(user_handle):
 
 def main():
     print(f"Creating dataset...")
-    data = [["user_rating",
+    data = [["user_handle","user_rating",
              "user_max_rating",
              "wins",
              "draws",
@@ -76,46 +76,52 @@ def main():
 
     users = get_all_users()
     print(f"Got all users...")
-    problems = get_all_problems()
-    print(f"Got all problems...")
+    # problems = get_all_problems()
+    # print(f"Got all problems...")
+    
+    ok = False
+    # ok = True
     for user in users:
-        try:
-            print(f"Processing user {user['handle']}...")
+        if user['handle'] == 'TeaTime':
+            ok = True
+        if ok:
+            try:
+                print(f"Progress: {100 * users.index(user)//len(users)}% complete. ({users.index(user)}/{len(users)})")
+                print(f"Processing user {user['handle']}...")
 
-            user_stats = get_user_stats(user['handle'])
-            wins, draws, losses = 0, 0, 0
-            for stat in user_stats:
-                if abs(stat['newRating'] - stat['oldRating']) <= 10:
-                    draws += 1
-                elif stat['newRating'] > stat['oldRating']:
-                    wins += 1
-                else:
-                    losses += 1
-            print(f"Got user wins, draws, losses...")
+                user_stats = get_user_stats(user['handle'])
+                wins, draws, losses = 0, 0, 0
+                for stat in user_stats:
+                    if abs(stat['newRating'] - stat['oldRating']) <= 10:
+                        draws += 1
+                    elif stat['newRating'] > stat['oldRating']:
+                        wins += 1
+                    else:
+                        losses += 1
+                print(f"Got user wins, draws, losses...")
 
-            user_submissions = get_user_submissions(user['handle'])
+                user_submissions = get_user_submissions(user['handle'])
 
-            df = pd.DataFrame(user_submissions)
+                df = pd.DataFrame(user_submissions)
 
-            filtered_submissions = df[(df['problem'].apply(lambda x: 'rating' in x and x['rating'] is not None)) & (df['verdict'] == 'OK')]
-            filtered_submissions = filtered_submissions.drop_duplicates(subset=['problem'])
+                filtered_submissions = df[(df['problem'].apply(lambda x: 'rating' in x and x['rating'] is not None)) & (df['verdict'] == 'OK')]
+                filtered_submissions = filtered_submissions.drop_duplicates(subset=['problem'])
 
-            rating_counts = filtered_submissions[(filtered_submissions['problem'].apply(lambda x: 800 <= x['rating'] <= 3500))]['problem'].apply(lambda x: x['rating']).value_counts().sort_index()
-            rating_counts_list = rating_counts.tolist()
-            print(f"Got user rates...")
+                rating_counts = filtered_submissions[(filtered_submissions['problem'].apply(lambda x: 800 <= x['rating'] <= 3500))]['problem'].apply(lambda x: x['rating']).value_counts().sort_index()
+                rating_counts_list = rating_counts.tolist()
+                print(f"Got user rates...")
 
-            data.append([user['rating'], user['maxRating'], wins, draws, losses] + rating_counts_list)
-        except Exception as e:
-            df = pd.DataFrame(data)
-            df.to_excel('coders_dataset_1.xlsx', index=False)
-            print(f"Failed to process user {user['handle']}. Reason: {e}")
-            print("User Handle: ", user['handle'])
-            exit()
+                data.append([user['handle'], user['rating'], user['maxRating'], wins, draws, losses] + rating_counts_list)
+            except Exception as e:
+                df = pd.DataFrame(data)
+                df.to_excel('coders_dataset_2.xlsx', index=False)
+                print(f"Failed to process user {user['handle']}. Reason: {e}")
+                print("User Handle: ", user['handle'])
+                exit()
             
-
     print(f"Creating excel file...")
     df = pd.DataFrame(data)
-    df.to_excel('coders_dataset_1.xlsx', index=False)
+    df.to_excel('coders_dataset_2.xlsx', index=False)
     print(f"Done!")
 
 
