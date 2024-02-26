@@ -27,6 +27,15 @@ def get_user_rate(user_handle):
         print(f"Failed to retrieve user info")
         return None
 
+def get_all_users():
+    url = f"https://codeforces.com/api/user.ratedList?activeOnly=false&includeRetired=false"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return len(response.json()['result'])
+    else:
+        print(f"Failed to retrieve all users")
+        return None
+
 
 def count_wrong_attempts(contest_id, user_handle, problem_idx):
     url = f"https://codeforces.com/api/contest.status?contestId={contest_id}&handle={user_handle}&from=1&count=100000"
@@ -48,23 +57,24 @@ def count_wrong_attempts(contest_id, user_handle, problem_idx):
 
 
 def main():
-    print(f"Creating dataset...")
-    submissions = get_recent_submissions()
-    data = []
-    for submission in submissions:
-        if 'rating' not in submission['problem']:
-            continue
-        problem_data = submission['problem']
-        user_handle = submission['author']['members'][0]['handle']
-        user_rate = get_user_rate(user_handle)
-        problem_tags = ', '.join(problem_data['tags'])
-        solved, wrong_cnt = count_wrong_attempts(problem_data['contestId'], user_handle, problem_data['index'])
-        data.append({'User_Rate': user_rate, 'Problem_Rate': problem_data['rating'], 'Problem_Tags': problem_tags,
-                     'Solved': solved, 'Wrong_Attempts': wrong_cnt})
-    print(f"Creating excel file...")
-    df = pd.DataFrame(data)
-    df.to_excel('coders_dataset.xlsx', index=False)
-    print(f"Done!")
+    # print(f"Creating dataset...")
+    # submissions = get_recent_submissions()
+    # data = []
+    # for submission in submissions:
+    #     if 'rating' not in submission['problem']:
+    #         continue
+    #     problem_data = submission['problem']
+    #     user_handle = submission['author']['members'][0]['handle']
+    #     user_rate = get_user_rate(user_handle)
+    #     problem_tags = ', '.join(problem_data['tags'])
+    #     solved, wrong_cnt = count_wrong_attempts(problem_data['contestId'], user_handle, problem_data['index'])
+    #     data.append({'User_Rate': user_rate, 'Problem_Rate': problem_data['rating'], 'Problem_Tags': problem_tags,
+    #                  'Solved': solved, 'Wrong_Attempts': wrong_cnt})
+    # print(f"Creating excel file...")
+    # df = pd.DataFrame(data)
+    # df.to_excel('coders_dataset.xlsx', index=False)
+    # print(f"Done!")
+    print(get_all_users())
 
 
 if __name__ == "__main__":

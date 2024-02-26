@@ -1,0 +1,5 @@
+{
+  "Title": "Training model",
+  "Features": ["problem_rate", "easy_cnt", "medium_cnt", "hard_cnt"],
+  "Target": "difficulty"
+}
