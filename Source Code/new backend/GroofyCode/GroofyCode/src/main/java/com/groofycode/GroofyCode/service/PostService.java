@@ -1,47 +1,67 @@
 package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.PostDTO;
-import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.model.PostModel;
 import com.groofycode.GroofyCode.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class PostService {
 
     @Autowired
-    private PostRepository postRepository; // Assuming you have a repository for posts
+    private PostRepository postRepository;
+
 
     public PostDTO createPost(PostDTO postDTO) {
-        // Access the authenticated user through userDTO or SecurityContextHolder
-
-        // Validate post data
-        // You can implement createPostValidation method separately or use Spring's validation annotations
-
-        // Convert DTO to entity
-        PostModel post = new PostModel();
-        post.setContent(postDTO.getContent());
-//        post.setUser(userDTO); // Assuming user is associated with the post
-
-        // Save the post
-        PostModel savedPost = postRepository.save(post);
-
-        // Convert saved entity back to DTO and return
-        return convertToDTO(savedPost);
+        PostModel post = convertToEntity(postDTO);
+        post.setCreatedAt(new Date());
+        post = postRepository.save(post);
+        return convertToDTO(post);
     }
 
-    // You can define other service methods for updating, deleting, and retrieving posts
+    public PostDTO updatePostById(Long id, PostDTO updatedPostDTO) {
+        try {
+            Optional<PostModel> optionalPost = postRepository.findById(id);
+            if (optionalPost.isEmpty()) {
+                return null;
+            }
 
-    // Utility method to convert entity to DTO
+            PostModel post = optionalPost.get();
+            post.setContent(updatedPostDTO.getContent());
+            post.setUpdatedAt(new Date());
+            PostModel updatedPost = postRepository.save(post);
+
+            return convertToDTO(updatedPost);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void deletePostById(Long id) {
+        postRepository.deleteById(id);
+    }
+
     private PostDTO convertToDTO(PostModel post) {
         PostDTO postDTO = new PostDTO();
         postDTO.setId(post.getId());
-//        postDTO.setUserId(post.getUser().getId());
         postDTO.setContent(post.getContent());
         postDTO.setCreatedAt(post.getCreatedAt());
         postDTO.setUpdatedAt(post.getUpdatedAt());
-        // You can set other properties as needed
         return postDTO;
+    }
+
+    private PostModel convertToEntity(PostDTO postDTO) {
+        PostModel post = new PostModel();
+        post.setContent(postDTO.getContent());
+        post.setUpdatedAt(post.getUpdatedAt());
+        post.setCreatedAt(post.getCreatedAt());
+        return post;
     }
 }

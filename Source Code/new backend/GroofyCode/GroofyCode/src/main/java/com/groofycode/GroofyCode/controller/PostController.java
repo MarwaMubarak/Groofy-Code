@@ -1,5 +1,4 @@
 package com.groofycode.GroofyCode.controller;
-
 import com.groofycode.GroofyCode.dto.PostDTO;
 import com.groofycode.GroofyCode.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,29 +11,26 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     @Autowired
-    private PostService postService; // Assuming you have a service layer for posts
+    private PostService postService;
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody PostDTO postDTO) {
-        // Implement createPost logic in your service layer
         PostDTO createdPost = postService.createPost(postDTO);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
-//    @PutMapping("/{postId}")
-//    public ResponseEntity<?> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
-//        // Implement updatePostById logic in your service layer
-//        PostDTO updatedPost = postService.updatePostById(postId, postDTO);
-//        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/{postId}")
-//    public ResponseEntity<?> deletePostById(@PathVariable Long postId) {
-//        // Implement deletePostById logic in your service layer
-//        postService.deletePostById(postId);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-//
+    @PutMapping("/{postId}")
+    public ResponseEntity<?> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
+        PostDTO updatedPost = postService.updatePostById(postId, postDTO);
+        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> deletePostById(@PathVariable Long postId) {
+        postService.deletePostById(postId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 //    @GetMapping("/{userId}")
 //    public ResponseEntity<?> getUserPosts(@PathVariable Long userId) {
 //        // Implement getUserPosts logic in your service layer
