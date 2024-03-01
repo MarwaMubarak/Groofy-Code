@@ -44,6 +44,11 @@ public class UserModel {
     @Size(max = 1000)
     private String bio;
 
+
+    @ManyToOne
+    @JoinColumn(name = "clan_id")
+    private ClanModel clan;
+
 //    @OneToMany(mappedBy = "user")
 //    private List<BadgeModel> badges;
 

@@ -12,16 +12,13 @@ public class BadgeModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank
-    @Size(min = 4, max = 100)
+    @Column(unique = true,nullable = false)
     private String name;
 
-
-    @NotBlank
+    @Column(unique = true, nullable = false)
     private String photo;
 
-    @NotBlank
-    @Size(min = 4, max = 1000)
+    @Column(nullable = false)
     private String description;
 
     public Long getId() {
