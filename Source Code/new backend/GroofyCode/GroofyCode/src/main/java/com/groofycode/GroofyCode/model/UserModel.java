@@ -1,15 +1,28 @@
 package com.groofycode.GroofyCode.model;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class UserModel {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,6 +62,44 @@ public class UserModel {
     @JoinColumn(name = "clan_id")
     private ClanModel clan;
 
+
+    public UserModel(Long id) {
+        super();
+        this.id = id;
+    }
+
+    public UserModel(String username, String password, Collection<GrantedAuthority> grantedAuthorityList) {
+        super();
+
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority>authorityList=new ArrayList<>();
+        return authorityList;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
 //    @OneToMany(mappedBy = "user")
 //    private List<BadgeModel> badges;
 
@@ -57,94 +108,6 @@ public class UserModel {
 
     // Other fields and mappings
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-//    public List<BadgeModel> getBadges() {
-//        return badges;
-//    }
-//
-//    public void setBadges(List<BadgeModel> badges) {
-//        this.badges = badges;
-//    }
-//
-//    public List<BadgeModel> getSelectedBadges() {
-//        return selectedBadges;
-//    }
-//
-//    public void setSelectedBadges(List<BadgeModel> selectedBadges) {
-//        this.selectedBadges = selectedBadges;
-//    }
 }
 
 // You can add additional entity classes for related tables like Badge, Comment, Match, Submission, etc.
