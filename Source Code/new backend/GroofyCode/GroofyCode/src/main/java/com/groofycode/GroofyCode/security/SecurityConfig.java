@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.security;
 
+import com.groofycode.GroofyCode.service.UserService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,12 @@ public class SecurityConfig  {
     @Autowired
     AuthenticationProvider authenticationProvider;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private  JwtTokenUtils jwtTokenUtils;
+
     //configure (HttpSecurity http)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -46,7 +53,7 @@ public class SecurityConfig  {
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .addFilterBefore(new AuthFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new AuthFilter(userService,jwtTokenUtils), UsernamePasswordAuthenticationFilter.class);
 
 
 
@@ -77,7 +84,7 @@ public class SecurityConfig  {
 
     @Bean
     public AuthFilter authFilter() {
-        return new AuthFilter();
+        return new AuthFilter(userService,jwtTokenUtils);
     }
 
 }

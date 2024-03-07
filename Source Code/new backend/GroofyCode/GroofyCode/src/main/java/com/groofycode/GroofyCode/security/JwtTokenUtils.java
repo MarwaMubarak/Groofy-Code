@@ -3,6 +3,7 @@ package com.groofycode.GroofyCode.security;
 import com.groofycode.GroofyCode.model.UserModel;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -61,8 +62,9 @@ public class JwtTokenUtils {
         log.info("username from token >>> " + username);
         log.info("userDetails.getUsername >>> " + userDetails.getUsername());
         log.info("username =  >>> userDetails.getUsername >>> " + username.equals(userDetails.getUsername()));
-        Boolean isUserNameEqual = username.equalsIgnoreCase(userDetails.getUsername()) ;
-        return (isUserNameEqual && !isTokenExpired(token));
+        //Boolean isUserNameEqual = username.equalsIgnoreCase(userDetails.getUsername()) ;
+        //System.out.println(isUserNameEqual+"888888888888888888888");
+        return (!isTokenExpired(token));
     }
 
     public boolean isTokenExpired(String token) {
@@ -77,27 +79,44 @@ public class JwtTokenUtils {
 
 
     public boolean validateToken(String token , HttpServletRequest httpServletRequest){
-
+        System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh1");
         try {
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh2");
+
             Jwts.parser().setSigningKey(TOKEN_SECRET).parseClaimsJws(token);
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh3");
+
             return true;
         }catch (SignatureException ex){
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh4"+ex.getMessage());
+
             log.info("Invalid JWT Signature");
-            //  throw new SecurityException("Invalid JWT Signature");
+             //throw new SecurityException("Invalid JWT Signature");
         }catch (MalformedJwtException ex){
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh5"+ex.getMessage());
+
             log.info("Invalid JWT token");
             httpServletRequest.setAttribute("expired",ex.getMessage());
-            //  throw new SecurityException("Invalid JWT token");
+             //throw new SecurityException("Invalid JWT token");
         }catch (ExpiredJwtException ex){
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh6"+ex.getMessage());
+
             log.info("Expired JWT token");
             httpServletRequest.setAttribute("expired",ex.getMessage());
-            //  throw new SecurityException("security.token_expired");
+              //throw new SecurityException("security.token_expired");
         }catch (UnsupportedJwtException ex){
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh7"+ex.getMessage());
+
             log.info("Unsupported JWT exception");
-            //   throw new SecurityException("Unsupported JWT exception");
+               //throw new SecurityException("Unsupported JWT exception");
         }catch (IllegalArgumentException ex){
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh8"+ex.getMessage());
+
             log.info("Jwt claims string is empty");
-            //   throw new SecurityException("Jwt claims string is empty");
+               //throw new SecurityException("Jwt claims string is empty");
+        }catch (Throwable err) {
+            System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhh9"+err.getMessage());
+
         }
         return false;
     }

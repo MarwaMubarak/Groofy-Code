@@ -25,15 +25,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final  AuthenticationManager authManager;
-
-    private final HttpServletRequest httpRequest;
-
-    private final JwtTokenUtils jwtTokenUtils;
-
+    @Autowired
+    private AuthenticationManager authManager;
 
     @Autowired
-    TokenInfoService tokenInfoService;
+    private HttpServletRequest httpRequest;
+
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
+
+    @Autowired
+    private TokenInfoService tokenInfoService;
 
 
     public JwtResponseDTO login(String emailOrUsername, String password) {
