@@ -1,4 +1,5 @@
 package com.groofycode.GroofyCode.service;
+
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.mapper.UserMapper;
 import com.groofycode.GroofyCode.model.UserModel;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -57,16 +59,12 @@ public class UserService implements UserDetailsService {
     @Override
     public UserModel loadUserByUsername(String username) throws UsernameNotFoundException {
         //getUser
-        Optional<UserModel> user = userRepository.findByUsername(username);
+        Optional<UserModel> userOptional = userRepository.findByUsername(username);
         //if not found return exception
-        if(!user.isPresent()){
-            throw new UsernameNotFoundException("This Username["+username+"] Not Found");
+        if (!userOptional.isPresent()) {
+            throw new UsernameNotFoundException("This Username[" + username + "] Not Found");
         }
-        // else return userDetails contain username, password, authorities
-        Collection<GrantedAuthority> grantedAuthorityList= new ArrayList<>();
-        //return new User(user.get().getUsername(),user.get().getPassword(),(grantedAuthorityList));
-        // return new UserModelDetails(user.get());
-        return new UserModel(user.get().getUsername(),user.get().getPassword(),grantedAuthorityList);
 
+        return userOptional.get();
     }
 }

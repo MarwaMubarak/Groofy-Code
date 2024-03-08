@@ -70,6 +70,8 @@ public class UserModel implements UserDetails {
 
     public UserModel(String username, String password, Collection<GrantedAuthority> grantedAuthorityList) {
         super();
+        this.username = username;
+        this.password = password;
 
     }
 

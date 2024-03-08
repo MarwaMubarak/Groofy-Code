@@ -1,10 +1,14 @@
 package com.groofycode.GroofyCode.controller;
 import com.groofycode.GroofyCode.dto.UserDTO;
+import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 import java.util.List;
 
@@ -14,21 +18,36 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    @GetMapping("/email")
+    public ResponseEntity<String> getUserEmail() {
+        // Get the username from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Fetch the user details from the service
+        UserModel userModel = (UserModel) userService.loadUserByUsername(username);
+
+        // Get the email from the user entity
+        String email = userModel.getEmail();
+        System.out.println(email);
+        return ResponseEntity.ok(email);
+    }
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        UserDTO user = userService.getBadgeById(id);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+//        UserDTO user = userService.getBadgeById(id);
+//        if (user != null) {
+//            return new ResponseEntity<>(user, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
@@ -42,4 +61,6 @@ public class UserController {
         userService.deleteBadge(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 }
