@@ -18,7 +18,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.Optional;import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -33,6 +37,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private final Validator validator;
+
+    public UserService() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        this.validator = factory.getValidator();
+    }
 
     public List<UserDTO> getAllUsers() {
         List<UserModel> users = userRepository.findAll();
@@ -45,6 +55,16 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDTO createUser(UserDTO userDTO) {
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        if (!violations.isEmpty()) {
+            // Handle validation errors
+            for (ConstraintViolation<UserDTO> violation : violations) {
+                System.out.println(violation.getMessage());
+            }
+            // You can throw an exception or handle the errors in another way
+        }
+
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         UserModel user = userMapper.toModel(userDTO);
         user = userRepository.save(user);
