@@ -7,19 +7,20 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import javax.validation.constraints.*;
+//import javax.validation.constraints.*;
 
 @Getter
 @Setter
 public class UserDTO {
 
-    @NotNull(message = "ID must not be null")
+//    @NotNull(message = "ID must not be null")
     private Long id;
 
     @NotBlank(message = "Username is required")

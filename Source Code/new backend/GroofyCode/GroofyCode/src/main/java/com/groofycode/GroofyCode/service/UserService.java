@@ -20,10 +20,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import java.util.Optional;
+//import javax.validation.ConstraintViolation;
+//import javax.validation.Validation;
+//import javax.validation.Validator;
+//import javax.validation.ValidatorFactory;
 import java.util.Set;
 
 @Service
@@ -39,12 +40,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final Validator validator;
+//    private final Validator validator;
 
-    public UserService() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
-    }
+//    public UserService() {
+//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//        this.validator = factory.getValidator();
+//    }
 
     public List<UserDTO> getAllUsers() {
         List<UserModel> users = userRepository.findAll();
