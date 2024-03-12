@@ -57,15 +57,6 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDTO createUser(UserDTO userDTO) {
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
-
-        if (!violations.isEmpty()) {
-            // Handle validation errors
-            for (ConstraintViolation<UserDTO> violation : violations) {
-                System.out.println(violation.getMessage());
-            }
-            // You can throw an exception or handle the errors in another way
-        }
 
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         UserModel user = userMapper.toModel(userDTO);
