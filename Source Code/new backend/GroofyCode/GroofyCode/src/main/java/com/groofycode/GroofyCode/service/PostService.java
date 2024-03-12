@@ -5,7 +5,10 @@ import com.groofycode.GroofyCode.model.PostModel;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.repository.PostRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.utilities.ResponseModel;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,34 +38,32 @@ public class PostService {
     }
 
 
-    public PostDTO updatePostById(Long id, PostDTO updatedPostDTO) {
+    public ResponseModel<PostDTO> updatePostById(Long id, PostDTO updatedPostDTO) {
         try {
             Optional<PostModel> optionalPost = postRepository.findById(id);
             if (optionalPost.isEmpty()) {
-                return null; // Post not found
+                return ResponseUtils.unsuccessfulRes(HttpStatus.NOT_FOUND,"this post id not found",null);
             }
 
             PostModel post = optionalPost.get();
             UserModel currentUser = userService.getCurrentUser();
 
-            // Check if the current user is the owner of the post
-            System.out.println(post.getUser());
-            System.out.println(post.getUser());
 
             if (!post.getUser().equals(currentUser)) {
-                return null; // Current user is not allowed to update this post
+                return  ResponseUtils.unsuccessfulRes(HttpStatus.FORBIDDEN,"You are not allowed to update this post",null);
             }
 
             post.setContent(updatedPostDTO.getContent());
             post.setUpdatedAt(new Date());
             PostModel updatedPost = postRepository.save(post);
 
-            return convertToDTO(updatedPost);
+            return  ResponseUtils.successfulRes(HttpStatus.OK,"The post updated successfully",convertToDTO(updatedPost));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
 
 
     public void deletePostById(Long id) {

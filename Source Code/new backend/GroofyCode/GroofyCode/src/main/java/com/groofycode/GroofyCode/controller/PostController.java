@@ -1,6 +1,7 @@
 package com.groofycode.GroofyCode.controller;
 import com.groofycode.GroofyCode.dto.PostDTO;
 import com.groofycode.GroofyCode.service.PostService;
+import com.groofycode.GroofyCode.utilities.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,23 @@ public class PostController {
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
-        PostDTO updatedPost = postService.updatePostById(postId, postDTO);
-        if (updatedPost == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to update this post");
+    @PutMapping("/{postId}")
+    public ResponseEntity<ResponseModel<PostDTO>> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
+        ResponseModel<PostDTO> updatedPost = postService.updatePostById(postId, postDTO);
+
+        if (updatedPost.getStatusHttp() == HttpStatus.OK) {
+            // Post updated successfully
+            return ResponseEntity.ok(updatedPost);
+        } else if (updatedPost.getStatusHttp() == HttpStatus.NOT_FOUND) {
+            // Post not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(updatedPost);
+        } else if (updatedPost.getStatusHttp() == HttpStatus.FORBIDDEN) {
+            // User not allowed to update this post
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(updatedPost);
+        } else {
+            // Handle other status codes as needed
+            return ResponseEntity.status(updatedPost.getStatusHttp()).body(updatedPost);
         }
-        return ResponseEntity.ok(updatedPost);
     }
 
     @DeleteMapping("/{postId}")
