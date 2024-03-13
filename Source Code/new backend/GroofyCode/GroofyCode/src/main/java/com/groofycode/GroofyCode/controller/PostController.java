@@ -1,7 +1,11 @@
 package com.groofycode.GroofyCode.controller;
+
 import com.groofycode.GroofyCode.dto.PostDTO;
+import com.groofycode.GroofyCode.model.LikeModel;
+import com.groofycode.GroofyCode.service.LikeService;
 import com.groofycode.GroofyCode.service.PostService;
 import com.groofycode.GroofyCode.utilities.ResponseModel;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,7 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    private LikeService likeService;
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody PostDTO postDTO) {
@@ -38,6 +43,12 @@ public class PostController {
         // Implement getUserPosts logic in your service layer
         List<PostDTO> userPosts = postService.getUserPosts(userId);
         return new ResponseEntity<>(userPosts, HttpStatus.OK);
+    }
+
+    // Endpoint to like a post
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<Object> likePost(@PathVariable Long postId) {
+        return postService.likePost(postId);
     }
 //
 //    @PostMapping("/likes/{postId}")

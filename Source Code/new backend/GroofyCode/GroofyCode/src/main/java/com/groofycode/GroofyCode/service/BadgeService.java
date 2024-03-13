@@ -1,9 +1,13 @@
 package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.BadgeDTO;
+import com.groofycode.GroofyCode.mapper.BadgeMapper;
 import com.groofycode.GroofyCode.model.BadgeModel;
 import com.groofycode.GroofyCode.repository.BadgeRepository;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,45 +19,81 @@ public class BadgeService {
 
     @Autowired
     private BadgeRepository badgeRepository;
+    @Autowired
+    private BadgeMapper badgeMapper;
 
-    public List<BadgeDTO> getAllBadges() {
-        List<BadgeModel> badges = badgeRepository.findAll();
-        return badges.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getAllBadges() {
+        try {
+            List<BadgeModel> badges = badgeRepository.findAll();
+
+            List<BadgeDTO>badgeDTOList=badges.stream()
+                    .map(badgeModel -> badgeMapper.toDTO(badgeModel))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Done Successfully!",badgeDTOList));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
+
+        }
+
     }
 
-    public BadgeDTO getBadgeById(Long id) {
-        Optional<BadgeModel> badgeOptional = badgeRepository.findById(id);
-        return badgeOptional.map(this::convertToDTO).orElse(null);
+    public ResponseEntity<?> getBadgeById(Long id) {
+        try{
+            Optional<BadgeModel> badgeOptional = badgeRepository.findById(id);
+            if (badgeOptional.isEmpty()) {
+                return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("This Badge Id Not Found",null));
+            }
+            BadgeDTO badgeDTO = badgeOptional.map(badgeModel -> badgeMapper.toDTO(badgeModel)).orElse(null);
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Done Successfully!",badgeDTO));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
+
+        }
+
     }
 
-    public BadgeDTO createBadge(BadgeDTO badgeDTO) {
+    public ResponseEntity<?> createBadge(BadgeDTO badgeDTO) {
 
-        BadgeModel badge = convertToEntity(badgeDTO);
-        badge = badgeRepository.save(badge);
-        return convertToDTO(badge);
+        try{
+            BadgeModel badge = badgeMapper.toModel(badgeDTO);
+            // check if same name or photo
+            Optional<BadgeModel> badgeName = badgeRepository.findByName(badgeDTO.getName());
+            Optional<BadgeModel> badgePhoto = badgeRepository.findByPhoto(badgeDTO.getPhoto());
+            if (badgeName.isPresent())//found
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("The Name Should Be Unique!",null));
+            if(badgePhoto.isPresent())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("The Photo Should Be Unique!",null));
+
+            BadgeModel savedBadge = badgeRepository.save(badge);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Created Successfully!", badgeMapper.toDTO(savedBadge)));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
+
+        }
     }
 
-    public void deleteBadge(Long id) {
-        badgeRepository.deleteById(id);
+    public ResponseEntity<?> deleteBadge(Long id) {
+        try {
+            Optional<BadgeModel> badgeModel = badgeRepository.findById(id);
+            if (badgeModel.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("This Badge Id Not Found",null));
+
+            badgeRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Deleted Successfully!",null));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
+
+        }
+
     }
 
-    private BadgeDTO convertToDTO(BadgeModel badge) {
-        BadgeDTO badgeDTO = new BadgeDTO();
-        badgeDTO.setId(badge.getId());
-        badgeDTO.setName(badge.getName());
-        badgeDTO.setPhoto(badge.getPhoto());
-        badgeDTO.setDescription(badge.getDescription());
-        return badgeDTO;
-    }
-
-    private BadgeModel convertToEntity(BadgeDTO badgeDTO) {
-        BadgeModel badge = new BadgeModel();
-        badge.setId(badgeDTO.getId());
-        badge.setName(badgeDTO.getName());
-        badge.setPhoto(badgeDTO.getPhoto());
-        badge.setDescription(badgeDTO.getDescription());
-        return badge;
-    }
 }
