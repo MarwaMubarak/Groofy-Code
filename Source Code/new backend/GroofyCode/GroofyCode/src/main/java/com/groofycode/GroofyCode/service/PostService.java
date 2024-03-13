@@ -9,6 +9,7 @@ import com.groofycode.GroofyCode.utilities.ResponseModel;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,29 +39,31 @@ public class PostService {
     }
 
 
-    public ResponseModel<PostDTO> updatePostById(Long id, PostDTO updatedPostDTO) {
+    public ResponseEntity<Object> updatePostById(Long id, PostDTO updatedPostDTO) {
         try {
             Optional<PostModel> optionalPost = postRepository.findById(id);
             if (optionalPost.isEmpty()) {
-                return ResponseUtils.unsuccessfulRes(HttpStatus.NOT_FOUND,"this post id not found",null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("This post id not found", null));
             }
 
             PostModel post = optionalPost.get();
             UserModel currentUser = userService.getCurrentUser();
 
-
             if (!post.getUser().equals(currentUser)) {
-                return  ResponseUtils.unsuccessfulRes(HttpStatus.FORBIDDEN,"You are not allowed to update this post",null);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtils.unsuccessfulRes("You are not allowed to update this post", null));
             }
 
             post.setContent(updatedPostDTO.getContent());
             post.setUpdatedAt(new Date());
             PostModel updatedPost = postRepository.save(post);
 
-            return  ResponseUtils.successfulRes(HttpStatus.OK,"The post updated successfully",convertToDTO(updatedPost));
+            return ResponseEntity.ok(ResponseUtils.successfulRes("The post updated successfully", convertToDTO(updatedPost)));
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
         }
     }
 

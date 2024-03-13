@@ -8,13 +8,11 @@ import org.springframework.http.HttpStatus;
 @Setter
 
 public class ResponseModel<T> {
-    private HttpStatus statusHttp;
     private String status;
     private String message;
     private T body;
 
-    public ResponseModel(HttpStatus statusHttp, String status, String message, T body) {
-        this.statusHttp = statusHttp;
+    public ResponseModel(String status, String message, T body) {
         this.status = status;
         this.message = message;
         this.body = body;

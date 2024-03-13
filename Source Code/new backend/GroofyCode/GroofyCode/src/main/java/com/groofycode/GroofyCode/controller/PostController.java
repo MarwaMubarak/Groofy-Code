@@ -23,22 +23,8 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<ResponseModel<PostDTO>> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
-        ResponseModel<PostDTO> updatedPost = postService.updatePostById(postId, postDTO);
-
-        if (updatedPost.getStatusHttp() == HttpStatus.OK) {
-            // Post updated successfully
-            return ResponseEntity.ok(updatedPost);
-        } else if (updatedPost.getStatusHttp() == HttpStatus.NOT_FOUND) {
-            // Post not found
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(updatedPost);
-        } else if (updatedPost.getStatusHttp() == HttpStatus.FORBIDDEN) {
-            // User not allowed to update this post
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(updatedPost);
-        } else {
-            // Handle other status codes as needed
-            return ResponseEntity.status(updatedPost.getStatusHttp()).body(updatedPost);
-        }
+    public ResponseEntity<Object> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
+        return postService.updatePostById(postId, postDTO);
     }
 
     @DeleteMapping("/{postId}")
