@@ -1,10 +1,14 @@
 package com.groofycode.GroofyCode.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "CLAN",uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
 public class ClanModel {
 
@@ -29,45 +33,5 @@ public class ClanModel {
     private String current_rank="Metal";
 
 
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public UserModel getLeader() {
-        return leader;
-    }
-
-    public void setLeader(UserModel leader) {
-        this.leader = leader;
-    }
-
-    public List<UserModel> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<UserModel> members) {
-        this.members = members;
-    }
-
-    public String getRank() {
-        return current_rank;
-    }
-
-    public void setRank(String rank) {
-        this.current_rank = rank;
-    }
 
 }

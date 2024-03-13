@@ -1,60 +1,43 @@
 package com.groofycode.GroofyCode.dto;
 
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.validation.Valid;
+
+@Getter
+@Setter
+@Data
 public class BadgeDTO {
+
+
+
     private Long id;
 
-    @NotBlank
-    @Size(min = 4, max = 100)
-    private String name;
+    @NotNull(message = "name is mandatory")
+    @NotBlank(message = "name is mandatory")
+    @Min(value = 4, message =  " name length must be between 4 and 100")
+    @Max(value = 100, message =  " name length must be between 4 and 100")    private String name;
 
-    @NotBlank
+    @NotBlank(message = "photo is mandatory")
+    @NotNull(message = "photo is mandatory")
     private String photo;
 
-    @NotBlank
-    @Size(min = 4, max = 1000)
+    @NotBlank(message = "description is mandatory")
+    @NotNull(message = "description is mandatory")
+    @Min(value = 4, message =  " description length must be between 4 and 100")
+    @Max(value = 100, message =  " description length must be between 4 and 100")
+
     private String description;
 
+    public BadgeDTO(){}
     public BadgeDTO(Long id, String name, String photo, String description) {
         this.id = id;
         this.name = name;
         this.photo = photo;
-        this.description = description;
-    }
-    public BadgeDTO() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
     }
 }

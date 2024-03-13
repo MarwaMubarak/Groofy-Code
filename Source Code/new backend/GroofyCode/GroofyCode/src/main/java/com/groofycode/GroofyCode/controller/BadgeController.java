@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,8 +32,8 @@ public class BadgeController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<BadgeDTO> createBadge(@RequestBody BadgeDTO badgeDTO) {
+    @PostMapping("")
+    public ResponseEntity<BadgeDTO> createBadge(@RequestBody @Valid BadgeDTO badgeDTO) {
         BadgeDTO createdBadge = badgeService.createBadge(badgeDTO);
         return new ResponseEntity<>(createdBadge, HttpStatus.CREATED);
     }
