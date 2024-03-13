@@ -53,7 +53,6 @@ public class UserDTO {
 
     private Long clanId;
 
-    // Constructors...
 
     public UserDTO(String username, String email, String firstname, String lastname, String country, String city, String bio, Long clanId) {
         this.username = username;

@@ -3,6 +3,7 @@ package com.groofycode.GroofyCode.controller;
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.service.UserService;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,21 +27,6 @@ public class UserController {
     private UserService userService;
 
 
-    @GetMapping("/email")
-    public ResponseEntity<String> getUserEmail() {
-        // Get the username from the security context
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        // Fetch the user details from the service
-        UserModel userModel = (UserModel) userService.loadUserByUsername(username);
-
-        // Get the email from the user entity
-        String email = userModel.getEmail();
-        System.out.println(email);
-        return ResponseEntity.ok(email);
-    }
-
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
@@ -57,11 +43,9 @@ public class UserController {
 //        }
 //    }
 
-        @PostMapping("/register")
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
-        System.out.println("doooooooooooodooooooooooooo");
-        UserDTO createdUser = userService.createUser(userDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    @PostMapping("/register")
+    public ResponseEntity<Object> createUser(@RequestBody @Valid UserDTO userDTO) {
+        return userService.createUser(userDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -70,11 +54,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
         StringBuilder errorMessage = new StringBuilder();
         ex.getBindingResult().getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append("; "));
-        return new ResponseEntity<>(errorMessage.toString(), HttpStatus.FORBIDDEN);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ResponseUtils.unsuccessfulRes(errorMessage.toString(), null));
     }
 
 }

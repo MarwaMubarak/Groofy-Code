@@ -4,8 +4,11 @@ import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.mapper.UserMapper;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,13 +60,38 @@ public class UserService implements UserDetailsService {
         return userOptional.map(userModel -> userMapper.toDTO(userModel)).orElse(null);
     }
 
-    public UserDTO createUser(UserDTO userDTO) {
+    public ResponseEntity<Object> createUser(UserDTO userDTO) {
+        try {
+            // Check if the email or username already exists in the database
+            UserModel existingUser = userRepository.findByEmailOrUsername(userDTO.getEmail(), userDTO.getUsername());
 
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        UserModel user = userMapper.toModel(userDTO);
-        user = userRepository.save(user);
-        return userMapper.toDTO(user);
+            if (existingUser != null) {
+                if (existingUser.getEmail().equals(userDTO.getEmail())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes("Email is already registered", null));
+                }
+                if (existingUser.getUsername().equals(userDTO.getUsername())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes("Username is already taken", null));
+                }
+            }
+
+            // Encode the password
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+            // Save the user
+            UserModel newUser = userMapper.toModel(userDTO);
+            newUser = userRepository.save(newUser);
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(ResponseUtils.successfulRes("Registration successful", userMapper.toDTO(newUser)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Internal server error", null));
+        }
     }
+
 
     public void deleteBadge(Long id) {
         userRepository.deleteById(id);
