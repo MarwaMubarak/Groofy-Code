@@ -6,32 +6,25 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.Valid;
 
 @Getter
 @Setter
 @Data
 public class BadgeDTO {
 
-
-
     private Long id;
 
-    @NotNull(message = "name is mandatory")
-    @NotBlank(message = "name is mandatory")
-    @Min(value = 4, message =  " name length must be between 4 and 100")
-    @Max(value = 100, message =  " name length must be between 4 and 100")    private String name;
+    @NotBlank(message = "Name is required")
+    @Size(min = 4, max = 100,message =  "Name length must be between 4 and 100")
+    private String name;
 
-    @NotBlank(message = "photo is mandatory")
-    @NotNull(message = "photo is mandatory")
+    @NotBlank(message = "Photo is required")
     private String photo;
 
-    @NotBlank(message = "description is mandatory")
-    @NotNull(message = "description is mandatory")
-    @Min(value = 4, message =  " description length must be between 4 and 100")
-    @Max(value = 100, message =  " description length must be between 4 and 100")
-
+    @NotBlank(message = "Description is required")
+    @Size(min = 4, max = 100, message =  " Description length must be between 4 and 100")
     private String description;
+
 
     public BadgeDTO(){}
     public BadgeDTO(Long id, String name, String photo, String description) {
