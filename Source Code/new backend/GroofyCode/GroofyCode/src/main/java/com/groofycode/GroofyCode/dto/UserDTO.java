@@ -1,24 +1,59 @@
 package com.groofycode.GroofyCode.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+//import javax.validation.constraints.*;
 
+@Getter
+@Setter
 public class UserDTO {
+
+//    @NotNull(message = "ID must not be null")
     private Long id;
+
+    @NotBlank(message = "Username is required")
+    @Size(min = 1, max = 100, message = "Username must be between 1 and 100 characters")
     private String username;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
+    @Size(min = 4, max = 256, message = "Email must be between 4 and 256 characters")
     private String email;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 256, message = "Password must be between 8 and 256 characters")
     private String password;
-    // Password is intentionally left out to not expose it in the DTO
+
+    @Size(max = 256, message = "First name must be less than or equal to 256 characters")
     private String firstname;
+
+    @Size(max = 256, message = "Last name must be less than or equal to 256 characters")
     private String lastname;
+
+    @Size(max = 100, message = "Country must be less than or equal to 100 characters")
     private String country;
+
+    @Size(max = 100, message = "City must be less than or equal to 100 characters")
     private String city;
+
+    @Size(max = 1000, message = "Bio must be less than or equal to 1000 characters")
     private String bio;
-    // Assuming ClanDTO exists, otherwise just use Long for clanId or similar
+
     private Long clanId;
 
+    // Constructors...
 
     public UserDTO(String username, String email, String firstname, String lastname, String country, String city, String bio, Long clanId) {
         this.username = username;
@@ -30,97 +65,19 @@ public class UserDTO {
         this.bio = bio;
         this.clanId = clanId;
     }
-    public UserDTO( String username, String email, String password, String firstname, String lastname, String country, String city, String bio, Long clanId) {
+
+    public UserDTO(String username, String email, String password, String firstname, String lastname, String country, String city, String bio, Long clanId) {
         this.username = username;
         this.email = email;
-        this.password=password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.country = country;
-        this.city = city;
-        this.bio = bio;
-        this.clanId = clanId;
-    }
-
-    public UserDTO(){}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public Long getClanId() {
-        return clanId;
-    }
-
-    public void setClanId(Long clanId) {
-        this.clanId = clanId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.country = country;
+        this.city = city;
+        this.bio = bio;
+        this.clanId = clanId;
     }
+
+    public UserDTO() {}
 }
+

@@ -6,7 +6,9 @@ import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +21,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+//import javax.validation.ConstraintViolation;
+//import javax.validation.Validation;
+//import javax.validation.Validator;
+//import javax.validation.ValidatorFactory;
+import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -33,6 +40,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+//    private final Validator validator;
+
+//    public UserService() {
+//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//        this.validator = factory.getValidator();
+//    }
 
     public List<UserDTO> getAllUsers() {
         List<UserModel> users = userRepository.findAll();
@@ -45,6 +58,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDTO createUser(UserDTO userDTO) {
+
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         UserModel user = userMapper.toModel(userDTO);
         user = userRepository.save(user);
@@ -66,5 +80,11 @@ public class UserService implements UserDetailsService {
         }
 
         return userOptional.get();
+    }
+    public UserModel getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found"));
     }
 }

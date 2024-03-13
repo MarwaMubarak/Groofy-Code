@@ -1,10 +1,13 @@
 package com.groofycode.GroofyCode.controller;
 import com.groofycode.GroofyCode.dto.PostDTO;
 import com.groofycode.GroofyCode.service.PostService;
+import com.groofycode.GroofyCode.utilities.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -20,9 +23,8 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<?> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
-        PostDTO updatedPost = postService.updatePostById(postId, postDTO);
-        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+    public ResponseEntity<Object> updatePostById(@PathVariable Long postId, @RequestBody PostDTO postDTO) {
+        return postService.updatePostById(postId, postDTO);
     }
 
     @DeleteMapping("/{postId}")
@@ -31,12 +33,12 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<?> getUserPosts(@PathVariable Long userId) {
-//        // Implement getUserPosts logic in your service layer
-//        List<PostDTO> userPosts = postService.getUserPosts(userId);
-//        return new ResponseEntity<>(userPosts, HttpStatus.OK);
-//    }
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserPosts(@PathVariable Long userId) {
+        // Implement getUserPosts logic in your service layer
+        List<PostDTO> userPosts = postService.getUserPosts(userId);
+        return new ResponseEntity<>(userPosts, HttpStatus.OK);
+    }
 //
 //    @PostMapping("/likes/{postId}")
 //    public ResponseEntity<?> addLike(@PathVariable Long postId, @RequestBody Long userId) {
