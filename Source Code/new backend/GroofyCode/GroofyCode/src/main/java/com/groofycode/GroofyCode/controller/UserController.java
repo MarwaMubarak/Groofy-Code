@@ -44,9 +44,16 @@ public class UserController {
 //        }
 //    }
 
-    @PutMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<Object> createUser(@RequestBody @Valid UserDTO userDTO) {
         return userService.createUser(userDTO);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteBadge(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/password")
@@ -63,8 +70,8 @@ public class UserController {
     @GetMapping("/search/{prefix}")
     public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) {
         return userService.searchUsersByPrefix(prefix);
-
     }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {

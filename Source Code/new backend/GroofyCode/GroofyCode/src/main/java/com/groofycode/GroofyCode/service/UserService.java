@@ -92,7 +92,6 @@ public class UserService implements UserDetailsService {
                     .body(ResponseUtils.unsuccessfulRes("Internal server error", null));
         }
     }
-
     public ResponseEntity<Object> changePassword(ChangePasswordDTO changePasswordDTO) {
         try {
             // Find current user
@@ -127,6 +126,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+
     public ResponseEntity<Object> getUserByUsername(String username) {
         try {
             // Find the user by the provided username
@@ -149,6 +149,11 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("Internal server error", null));
         }
+    }
+
+
+    public void deleteBadge(Long id) {
+        userRepository.deleteById(id);
     }
 
     public ResponseEntity<Object> searchUsersByPrefix(String prefix) {
@@ -179,9 +184,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void deleteBadge(Long id) {
-        userRepository.deleteById(id);
-    }
 
 
     @Override
