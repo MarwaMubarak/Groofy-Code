@@ -1,6 +1,5 @@
 package com.groofycode.GroofyCode.controller;
 
-import com.groofycode.GroofyCode.dto.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.service.UserService;
@@ -44,14 +43,9 @@ public class UserController {
 //        }
 //    }
 
-    @PutMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<Object> createUser(@RequestBody @Valid UserDTO userDTO) {
         return userService.createUser(userDTO);
-    }
-
-    @PostMapping("/password")
-    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
-        return userService.changePassword(changePasswordDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -60,17 +54,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-    @GetMapping("/users/{username}")
-    public ResponseEntity<Object> getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
-    }
-
-    @GetMapping("/users/search/{prefix}")
-    public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) {
-        return userService.searchUsersByPrefix(prefix);
-
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
