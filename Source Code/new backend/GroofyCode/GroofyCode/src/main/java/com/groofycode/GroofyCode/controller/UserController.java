@@ -49,24 +49,18 @@ public class UserController {
         return userService.createUser(userDTO);
     }
 
-    @PostMapping("/password")
+    @PutMapping("/password")
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         return userService.changePassword(changePasswordDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteBadge(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 
-
-    @GetMapping("/users/{username}")
+    @GetMapping("/{username}")
     public ResponseEntity<Object> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
 
-    @GetMapping("/users/search/{prefix}")
+    @GetMapping("/search/{prefix}")
     public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) {
         return userService.searchUsersByPrefix(prefix);
 
