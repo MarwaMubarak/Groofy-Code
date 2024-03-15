@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.service;
 
+import com.groofycode.GroofyCode.dto.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.mapper.UserMapper;
 import com.groofycode.GroofyCode.model.UserModel;
@@ -85,6 +86,40 @@ public class UserService implements UserDetailsService {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(ResponseUtils.successfulRes("Registration successful", userMapper.toDTO(newUser)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Internal server error", null));
+        }
+    }
+
+    public ResponseEntity<Object> changePassword(ChangePasswordDTO changePasswordDTO) {
+        try {
+            // Find current user
+            UserModel currentUser = userRepository.findById(changePasswordDTO.getUserId()).orElse(null);
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("User Not Found", null));
+            }
+
+            // Check if current password matches
+            if (!passwordEncoder.matches(changePasswordDTO.getCurrentPassword(), currentUser.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Invalid password", null));
+            }
+
+            // Validate new password
+            if (!changePasswordDTO.getPassword().equals(changePasswordDTO.getConfirmPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Passwords do not match", null));
+            }
+
+            // Update password
+            currentUser.setPassword(passwordEncoder.encode(changePasswordDTO.getPassword()));
+            UserModel updatedUser = userRepository.save(currentUser);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ResponseUtils.successfulRes("Password Updated Successfully", userMapper.toDTO(updatedUser)));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
