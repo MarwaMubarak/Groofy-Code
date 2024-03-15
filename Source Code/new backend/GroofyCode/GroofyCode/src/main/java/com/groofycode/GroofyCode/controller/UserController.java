@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.controller;
 
+import com.groofycode.GroofyCode.dto.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.service.UserService;
@@ -53,6 +54,17 @@ public class UserController {
         userService.deleteBadge(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/password")
+    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        return userService.changePassword(changePasswordDTO);
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<Object> getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
+    }
+
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
