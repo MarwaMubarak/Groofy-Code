@@ -2,9 +2,7 @@ package com.groofycode.GroofyCode.dto;
 
 
 import jakarta.validation.constraints.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.antlr.v4.runtime.misc.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +12,8 @@ import java.util.Map;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class BadgeDTO {
 
@@ -31,40 +31,5 @@ public class BadgeDTO {
     private String description;
 
 
-    public BadgeDTO(){}
-    public BadgeDTO(Long id, String name, String photo, String description) {
-        this.id = id;
-        this.name = name;
-        this.photo = photo;
-        this.description = description;
-    }
 
-
-//    public Pair<HashMap<String,List<String>>,BadgeDTO> updateBadge(BadgeDTO badgeDTO){
-//
-//        List<String> errors = new ArrayList<>();
-//
-//        if(badgeDTO.getDescription().length()<=100 && badgeDTO.getDescription().length()>=4){
-//            this.description = badgeDTO.getDescription();
-//        }else {
-//            errors.add( "Description length must be between 4 and 100");
-//        }
-//
-//        if(badgeDTO.getPhoto().length()>=4){
-//            this.photo = badgeDTO.getPhoto();
-//        }
-//
-//
-//        if(badgeDTO.getPhoto().length()<=100 && badgeDTO.getName().length()>=4){
-//            this.name = badgeDTO.getName();
-//        }else{
-//            errors.add( "Name length must be between 4 and 100");
-//
-//        }
-//
-//        HashMap errMap = new HashMap<>();
-//        errMap.put("errors",errors);
-//
-//        return (errMap, this)
-//    }
 }

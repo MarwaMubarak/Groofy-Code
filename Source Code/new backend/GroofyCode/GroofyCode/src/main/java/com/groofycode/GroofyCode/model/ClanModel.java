@@ -1,36 +1,37 @@
 package com.groofycode.GroofyCode.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
-
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "CLAN",uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
+@Entity
+@Data
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
 public class ClanModel {
 
-    public ClanModel() {}
-
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToOne
     @JoinColumn(name = "leader", nullable = false)
     private UserModel leader;
 
-    @OneToMany(mappedBy = "clan")
+    @OneToMany
+    @JoinColumn(name = "members")
     private List<UserModel> members;
 
-    @Column(nullable = false)
-    private String current_rank="Metal";
+    @OneToMany
+    @JoinColumn(nullable = false)
+    private List<BadgeModel> badges;
 
 
 
