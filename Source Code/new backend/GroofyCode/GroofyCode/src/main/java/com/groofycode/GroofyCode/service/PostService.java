@@ -37,13 +37,21 @@ public class PostService {
     @Autowired
     private LikeRepository likeRepository;
 
-    public PostDTO createPost(PostDTO postDTO) {
-        PostModel post = convertToEntity(postDTO);
-        post.setCreatedAt(new Date());
-        UserModel userModel = userService.getCurrentUser();
-        post.setUser(userModel);
-        post = postRepository.save(post);
-        return convertToDTO(post);
+    public ResponseEntity<Object> createPost(PostDTO postDTO) {
+        try {
+            PostModel post = convertToEntity(postDTO);
+            post.setCreatedAt(new Date());
+            UserModel userModel = userService.getCurrentUser();
+            post.setUser(userModel);
+            post = postRepository.save(post);
+            PostDTO createdPostDTO = convertToDTO(post);
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Post created successfully", createdPostDTO));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
+        }
     }
 
 
@@ -76,53 +84,96 @@ public class PostService {
     }
 
 
-    public void deletePostById(Long id) {
-        postRepository.deleteById(id);
+    public ResponseEntity<Object> deletePostById(Long id) {
+        try {
+            Optional<PostModel> optionalPost = postRepository.findById(id);
+            if (optionalPost.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("This post id not found", null));
+            }
+
+            PostModel post = optionalPost.get();
+            UserModel currentUser = userService.getCurrentUser();
+
+            if (!post.getUser().equals(currentUser)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtils.unsuccessfulRes("You are not allowed to delete this post", null));
+            }
+
+            postRepository.deleteById(id);
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("The post deleted successfully", null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
+        }
     }
 
+
     public ResponseEntity<Object> likePost(Long postId) {
-        // Retrieve the post from the database
-        Optional<PostModel> optionalPost = postRepository.findById(postId);
-        if (optionalPost.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ResponseUtils.unsuccessfulRes("This post id not found", null));
+        try {
+            // Retrieve the post from the database
+            Optional<PostModel> optionalPost = postRepository.findById(postId);
+            if (optionalPost.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("This post id not found", null));
+            }
+            PostModel post = optionalPost.get();
+
+            // Get the current user who is liking the post
+            UserModel currentUser = userService.getCurrentUser();
+
+            // Check if the user has already liked the post
+            Optional<LikeModel> existingLike = likeRepository.findByUserIdAndPostId(currentUser.getId(), postId);
+            if (existingLike.isPresent()) {
+                // User has already liked the post, so remove the like
+                likeRepository.delete(existingLike.get());
+                return ResponseEntity.ok(ResponseUtils.successfulRes("The like removed successfully", null));
+            } else {
+                // User has not liked the post, so add the like
+                LikeModel like = new LikeModel();
+                like.setUser(currentUser);
+                like.setPost(post);
+                // Save the like to the database
+                like = likeRepository.save(like);
+                return ResponseEntity.ok(ResponseUtils.successfulRes("The like added successfully", likeService.convertToDto(like)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
         }
-        PostModel post = optionalPost.get();
-
-        // Get the current user who is liking the post
-        UserModel currentUser = userService.getCurrentUser();
+    }
 
 
-        // Create a new like and associate it with the post and user
-        LikeModel like = new LikeModel();
-        like.setUser(currentUser);
-        like.setPost(post);
-        // Save the like to the database
-        like = likeRepository.save(like);
-        return ResponseEntity.ok(ResponseUtils.successfulRes("The like added successfully", likeService.convertToDto(like)));
+    public ResponseEntity<Object> getUserPosts(Long userId) {
+        try {
+            // Fetch posts by user ID from the repository
+            List<PostModel> posts = postRepository.findByUserId(userId);
+            // Convert PostModel list to PostDTO list
+            List<PostDTO> postDTOs = posts.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
 
+            return ResponseEntity.ok(ResponseUtils.successfulRes("User posts retrieved successfully", postDTOs));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
+        }
     }
 
     public PostDTO convertToDTO(PostModel post) {
         PostDTO postDTO = new PostDTO();
         postDTO.setId(post.getId());
-        postDTO.setUserId(post.getUser().getId()); // Assuming you have getId() method in UserModel
+        postDTO.setUserId(post.getUser().getId());
         postDTO.setContent(post.getContent());
         postDTO.setCreatedAt(post.getCreatedAt());
         postDTO.setUpdatedAt(post.getUpdatedAt());
         postDTO.setLikes(likeService.getAllLikesForPost(post.getId()));
         // Set other properties
         return postDTO;
-    }
-
-    public List<PostDTO> getUserPosts(Long userId) {
-        // Fetch posts by user ID from the repository
-        List<PostModel> posts = postRepository.findByUserId(userId);
-        // Convert PostModel list to PostDTO list
-        List<PostDTO> postDTOs = posts.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return postDTOs;
     }
 
 

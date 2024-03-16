@@ -1,12 +1,10 @@
 package com.groofycode.GroofyCode.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+
 @Setter
 @Getter
 @Entity
@@ -25,5 +23,9 @@ public class BadgeModel {
 
     @Column(nullable = false)
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private UserModel createdBy;
 
 }
