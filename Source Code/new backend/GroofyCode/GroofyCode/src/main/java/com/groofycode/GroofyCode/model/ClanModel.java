@@ -6,12 +6,11 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Data
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
+@Table(name = "CLAN", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
 public class ClanModel {
 
     @Id
@@ -25,15 +24,18 @@ public class ClanModel {
     @JoinColumn(name = "leader", nullable = false)
     private UserModel leader;
 
-    @OneToMany
-    @JoinColumn(name = "members")
-    private List<UserModel> members;
+    @Column
+    private List<Long> members;
 
     @OneToMany
     @JoinColumn(nullable = false)
     private List<BadgeModel> badges;
 
 
+    public ClanModel(){
+        badges=new ArrayList<>();
+        members=new ArrayList<>();
+    }
 
 
 }

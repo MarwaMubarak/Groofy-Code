@@ -73,12 +73,16 @@ public class ClanService {
 
         try {
 
-            clanDTOBody.setLeader(userService.getCurrentUser());
+            UserModel currentUser = userService.getCurrentUser();
+            clanDTOBody.setLeader(currentUser);
             ClanModel clan = clanMapper.toModel(clanDTOBody);
             // check if same name
             Optional<ClanModel> clanByName = clanRepository.findByName(clan.getName());
             if (clanByName.isPresent())//found
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("The Name Should Be Unique!", null));
+            Optional<ClanModel> clanByLeader = clanRepository.findByLeader(currentUser);
+            if(clanByLeader.isPresent())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("You already have Created a Clan!", null));
 
             System.out.println("offffffffffff1"+ clan.getName()+clan.getId());
 
@@ -100,6 +104,9 @@ public class ClanService {
             if (clanModel.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Not Found", null));
 
+            if(clanModel.get().getLeader()!=userService.getCurrentUser())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Not Allowed!", null));
+
             clanRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Deleted Successfully!", null));
         } catch (Exception e) {
@@ -114,13 +121,20 @@ public class ClanService {
     public ResponseEntity<?> updateName(Long clanId, String name) {
         try {
             Optional<ClanModel> clanModel = clanRepository.findById(clanId);
+
+
             if (clanModel.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Not Found", null));
             }
+
+            if(clanModel.get().getLeader()!=userService.getCurrentUser())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Not Allowed!", null));
+
+
             Optional<ClanModel> clanModelName = clanRepository.findByName(name);
-            if (clanModelName.isPresent()) {
+            if (clanModelName.isPresent())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Name Should Be Unique", null));
-            }
+
             ClanDTO updatedClanDTO = clanMapper.toDTO(clanModel.get());
             updatedClanDTO.setName(name);
             ClanModel updatedBadgeModel = clanRepository.save(clanMapper.toModel(updatedClanDTO));
@@ -135,8 +149,7 @@ public class ClanService {
         }
     }
 
-
-    public ResponseEntity<?> joinClan(Long clanId, Long memberId) {
+    public ResponseEntity<?> joinClan(Long clanId) {
         try {
             Optional<ClanModel> clanModel = clanRepository.findById(clanId);
             if (clanModel.isEmpty()) {
@@ -144,18 +157,18 @@ public class ClanService {
             }
 
             ClanDTO updatedClanDTO = clanMapper.toDTO(clanModel.get());
-            Optional<UserModel> member = userRepository.findById(memberId);
+            Optional<UserModel> member = userRepository.findById(userService.getCurrentUser().getId());
             if(member.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.successfulRes("Member Not Found!",null));
             }
-            boolean ok = updatedClanDTO.addMember(member.get());
+            boolean ok = updatedClanDTO.addMember(member.get().getId());
             if(!ok){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.successfulRes("Already Member!",null));
 
             }
             ClanModel updatedBadgeModel = clanRepository.save(clanMapper.toModel(updatedClanDTO));
 
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invited Successfully!", clanMapper.toDTO(updatedBadgeModel)));
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Joined Successfully!", clanMapper.toDTO(updatedBadgeModel)));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,7 +178,7 @@ public class ClanService {
         }
     }
 
-    public ResponseEntity<?> leaveClan(Long clanId, Long memberId) {
+    public ResponseEntity<?> leaveClan(Long clanId) {
         try {
             Optional<ClanModel> clanModel = clanRepository.findById(clanId);
             if (clanModel.isEmpty()) {
@@ -173,18 +186,18 @@ public class ClanService {
             }
 
             ClanDTO updatedClanDTO = clanMapper.toDTO(clanModel.get());
-            Optional<UserModel> member = userRepository.findById(memberId);
+            Optional<UserModel> member = userRepository.findById(userService.getCurrentUser().getId());
             if(member.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.successfulRes("Member Not Found!",null));
             }
-            boolean ok = updatedClanDTO.removeMember(member.get());
+            boolean ok = updatedClanDTO.removeMember(member.get().getId());
             if(!ok){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.successfulRes("Already Not Member!",null));
 
             }
             ClanModel updatedBadgeModel = clanRepository.save(clanMapper.toModel(updatedClanDTO));
 
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Removed Successfully!", clanMapper.toDTO(updatedBadgeModel)));
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Leaved Successfully!", clanMapper.toDTO(updatedBadgeModel)));
 
         } catch (Exception e) {
             e.printStackTrace();

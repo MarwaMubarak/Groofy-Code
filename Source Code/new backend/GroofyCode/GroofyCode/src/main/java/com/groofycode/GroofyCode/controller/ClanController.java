@@ -1,8 +1,7 @@
 package com.groofycode.GroofyCode.controller;
 
 import com.groofycode.GroofyCode.dto.ClanDTO;
-import com.groofycode.GroofyCode.dto.UserDTO;
-import com.groofycode.GroofyCode.model.ClanModel;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -11,10 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 import com.groofycode.GroofyCode.service.ClanService;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clans")
@@ -49,22 +44,20 @@ public class ClanController {
     }
 
     @PutMapping("/join/{clanId}")
-    public ResponseEntity<?> joinClan(@PathVariable Long clanId, @RequestBody Long memberId) {
-       return clanService.joinClan(clanId,memberId);
+    public ResponseEntity<?> joinClan(@PathVariable Long clanId) {
+       return clanService.joinClan(clanId);
     }
 
     @PutMapping("/leave/{clanId}")
-    public ResponseEntity<?> leaveClan(@PathVariable Long clanId, @RequestBody Long memberId) {
-       return clanService.leaveClan(clanId,memberId);
+    public ResponseEntity<?> leaveClan(@PathVariable Long clanId) {
+       return clanService.leaveClan(clanId);
     }
 
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<HashMap<String, List<String>>> handleValidationExceptions(BindException ex) {
-        List<String>errors = ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
-        HashMap<String,List<String>>errMap  = new HashMap<>();
-        errMap.put("errors",errors);
-        return new ResponseEntity<>(errMap, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> handleValidationExceptions(BindException ex) {
+       String errors = ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toString();
+        return  ResponseEntity.status( HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes(errors,null));
     }
 
 }
