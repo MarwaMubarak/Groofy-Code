@@ -1,6 +1,5 @@
 package com.groofycode.GroofyCode.controller;
 
-import com.groofycode.GroofyCode.dto.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.service.UserService;
@@ -49,27 +48,10 @@ public class UserController {
         return userService.createUser(userDTO);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteBadge(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PutMapping("/password")
-    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
-        return userService.changePassword(changePasswordDTO);
-    }
-
-
-    @GetMapping("/{username}")
-    public ResponseEntity<Object> getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
-    }
-
-    @GetMapping("/search/{prefix}")
-    public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) {
-        return userService.searchUsersByPrefix(prefix);
     }
 
 

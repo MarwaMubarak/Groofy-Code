@@ -24,7 +24,7 @@ public class BadgeService {
     private BadgeRepository badgeRepository;
 
     @Autowired
-    private  UserService userService;
+    private UserService userService;
 
     @Autowired
     private BadgeMapper badgeMapper;
@@ -33,13 +33,13 @@ public class BadgeService {
         try {
             List<BadgeModel> badges = badgeRepository.findAll();
 
-            List<BadgeDTO>badgeDTOList=badges.stream()
+            List<BadgeDTO> badgeDTOList = badges.stream()
                     .map(badgeModel -> badgeMapper.toDTO(badgeModel))
                     .collect(Collectors.toList());
 
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Done Successfully!",badgeDTOList));
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Done Successfully!", badgeDTOList));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
 
@@ -48,15 +48,15 @@ public class BadgeService {
     }
 
     public ResponseEntity<?> getBadgeById(Long id) {
-        try{
+        try {
             Optional<BadgeModel> badgeOptional = badgeRepository.findById(id);
             if (badgeOptional.isEmpty()) {
-                return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("This Badge Id Not Found",null));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("This Badge Id Not Found", null));
             }
             BadgeDTO badgeDTO = badgeOptional.map(badgeModel -> badgeMapper.toDTO(badgeModel)).orElse(null);
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Done Successfully!",badgeDTO));
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Done Successfully!", badgeDTO));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
 
@@ -66,7 +66,7 @@ public class BadgeService {
 
     public ResponseEntity<?> createBadge(BadgeDTO badgeDTO) {
 
-        try{
+        try {
 
             BadgeModel badge = badgeMapper.toModel(badgeDTO);
             badge.setCreatedBy(userService.getCurrentUser());
@@ -74,13 +74,13 @@ public class BadgeService {
             Optional<BadgeModel> badgeName = badgeRepository.findByName(badgeDTO.getName());
             Optional<BadgeModel> badgePhoto = badgeRepository.findByPhoto(badgeDTO.getPhoto());
             if (badgeName.isPresent())//found
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("The Name Should Be Unique!",null));
-            if(badgePhoto.isPresent())
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("The Photo Should Be Unique!",null));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("The Name Should Be Unique!", null));
+            if (badgePhoto.isPresent())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("The Photo Should Be Unique!", null));
 
             BadgeModel savedBadge = badgeRepository.save(badge);
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Created Successfully!", badgeMapper.toDTO(savedBadge)));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
@@ -92,11 +92,11 @@ public class BadgeService {
         try {
             Optional<BadgeModel> badgeModel = badgeRepository.findById(id);
             if (badgeModel.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("This Badge Id Not Found",null));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("This Badge Id Not Found", null));
 
             badgeRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Deleted Successfully!",null));
-        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Deleted Successfully!", null));
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));
@@ -105,27 +105,27 @@ public class BadgeService {
 
     }
 
-    public ResponseEntity<?> updateBadge(Long id, UpdateBadgeDTO badgeDTO){
+    public ResponseEntity<?> updateBadge(Long id, UpdateBadgeDTO badgeDTO) {
         try {
             Optional<BadgeModel> badgeModel = badgeRepository.findById(id);
-            if(badgeModel.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Badge Not Found",null));
+            if (badgeModel.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Badge Not Found", null));
             }
             Optional<BadgeModel> badgeModelName = badgeRepository.findByName(badgeDTO.getName());
             Optional<BadgeModel> badgeModelPhoto = badgeRepository.findByPhoto(badgeDTO.getPhoto());
-            if(badgeModelName.isPresent()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Name Should Be Unique",null));
+            if (badgeModelName.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Name Should Be Unique", null));
             }
-            if(badgeModelPhoto.isPresent()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Photo Should Be Unique",null));
+            if (badgeModelPhoto.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Photo Should Be Unique", null));
             }
-            BadgeDTO updatedBadgeDTO = badgeMapper.updateBadge(badgeDTO,badgeMapper.toDTO(badgeModel.get()));
+            BadgeDTO updatedBadgeDTO = badgeMapper.updateBadge(badgeDTO, badgeMapper.toDTO(badgeModel.get()));
 
             BadgeModel updatedBadgeModel = badgeRepository.save(badgeMapper.toModel(updatedBadgeDTO));
 
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Updated Successfully!",badgeMapper.toDTO(updatedBadgeModel)));
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Updated Successfully!", badgeMapper.toDTO(updatedBadgeModel)));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("An internal server error occurred", null));

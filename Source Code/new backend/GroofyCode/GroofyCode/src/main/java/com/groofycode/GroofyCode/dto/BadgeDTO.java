@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.*;
 import org.antlr.v4.runtime.misc.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,8 @@ import java.util.Map;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class BadgeDTO {
 
@@ -31,13 +34,6 @@ public class BadgeDTO {
     private String description;
 
 
-    public BadgeDTO(){}
-    public BadgeDTO(Long id, String name, String photo, String description) {
-        this.id = id;
-        this.name = name;
-        this.photo = photo;
-        this.description = description;
-    }
 
 
 }

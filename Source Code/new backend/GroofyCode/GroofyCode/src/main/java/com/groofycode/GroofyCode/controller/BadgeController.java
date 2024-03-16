@@ -53,14 +53,17 @@ public class BadgeController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBadge(@PathVariable Long id,@Valid @RequestBody UpdateBadgeDTO badgeDTO){
         return badgeService.updateBadge(id,badgeDTO);
+
     }
 
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<HashMap<String,List<String>>> handleValidationExceptions(BindException ex) {
-        List<String>errors = ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+       List<String>errors = ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
         HashMap<String,List<String>>errMap  = new HashMap<>();
         errMap.put("errors",errors);
-        return new ResponseEntity<>(errMap,HttpStatus.BAD_REQUEST);
+       return new ResponseEntity<>(errMap,HttpStatus.BAD_REQUEST);
     }
+
+
 }

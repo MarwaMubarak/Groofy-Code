@@ -61,15 +61,15 @@ public class BadgeMapper {
         return models;
     }
 
-    public BadgeDTO updateBadge(UpdateBadgeDTO updateBadgeDTO, BadgeDTO badgeDTO){
-        if(updateBadgeDTO.getName()!=null){
+    public BadgeDTO updateBadge(UpdateBadgeDTO updateBadgeDTO, BadgeDTO badgeDTO) {
+        if (updateBadgeDTO.getName() != null) {
             badgeDTO.setName(updateBadgeDTO.getName());
         }
-        if(updateBadgeDTO.getDescription()!=null){
+        if (updateBadgeDTO.getDescription() != null) {
             badgeDTO.setDescription(updateBadgeDTO.getDescription());
 
         }
-        if(updateBadgeDTO.getPhoto()!=null){
+        if (updateBadgeDTO.getPhoto() != null) {
             badgeDTO.setPhoto(updateBadgeDTO.getPhoto());
         }
         return badgeDTO;

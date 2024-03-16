@@ -16,7 +16,7 @@ public class ClanMapper {
         ClanDTO dto = new ClanDTO();
         dto.setId(clanModel.getId());
         dto.setName(clanModel.getName());
-        dto.setRank(clanModel.getCurrent_rank());
+        dto.setBadges(clanModel.getBadges());
         dto.setLeader(clanModel.getLeader());
         dto.setMembers(clanModel.getMembers());
         return dto;
@@ -24,9 +24,9 @@ public class ClanMapper {
 
     public ClanModel toModel(ClanDTO clanDTO) {
         ClanModel model = new ClanModel();
-        model.setId(clanDTO.getId());
+       model.setId(clanDTO.getId());
         model.setName(clanDTO.getName());
-        model.setCurrent_rank(clanDTO.getRank());
+        model.setBadges(clanDTO.getBadges());
         model.setLeader(clanDTO.getLeader());
         model.setMembers(clanDTO.getMembers());
         return model;
