@@ -1,7 +1,6 @@
 package com.groofycode.GroofyCode.mapper;
 
 import com.groofycode.GroofyCode.dto.BadgeDTO;
-import com.groofycode.GroofyCode.dto.UpdateBadgeDTO;
 import com.groofycode.GroofyCode.model.BadgeModel;
 import org.springframework.stereotype.Component;
 
@@ -59,19 +58,5 @@ public class BadgeMapper {
             models.add(toModel(badgeDTO));
         }
         return models;
-    }
-
-    public BadgeDTO updateBadge(UpdateBadgeDTO updateBadgeDTO, BadgeDTO badgeDTO){
-        if(updateBadgeDTO.getName()!=null){
-            badgeDTO.setName(updateBadgeDTO.getName());
-        }
-        if(updateBadgeDTO.getDescription()!=null){
-            badgeDTO.setDescription(updateBadgeDTO.getDescription());
-
-        }
-        if(updateBadgeDTO.getPhoto()!=null){
-            badgeDTO.setPhoto(updateBadgeDTO.getPhoto());
-        }
-        return badgeDTO;
     }
 }
