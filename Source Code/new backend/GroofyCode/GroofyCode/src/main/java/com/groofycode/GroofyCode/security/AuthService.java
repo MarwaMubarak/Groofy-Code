@@ -4,14 +4,18 @@ import com.groofycode.GroofyCode.model.TokenInfoModel;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.repository.TokenRepository;
 import com.groofycode.GroofyCode.service.TokenInfoService;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -38,26 +42,63 @@ public class AuthService {
     private TokenInfoService tokenInfoService;
 
 
-    public JwtResponseDTO login(String emailOrUsername, String password) {
-        Authentication authentication = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(emailOrUsername, password));
+//    public JwtResponseDTO login(String emailOrUsername, String password) {
+//        Authentication authentication = authManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(emailOrUsername, password));
+//
+//        log.debug("Valid userDetails credentials.");
+//
+//        UserModel userDetails = (UserModel) authentication.getPrincipal();
+//
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        log.debug("SecurityContextHolder updated. [login={}]", emailOrUsername);
+//
+//
+//        TokenInfoModel  tokenInfo = createLoginToken(emailOrUsername, userDetails.getId());
+//
+//
+//        return JwtResponseDTO.builder()
+//                .accessToken(tokenInfo.getAccessToken())
+//                .refreshToken(tokenInfo.getRefreshToken())
+//                .build();
+//    }
 
-        log.debug("Valid userDetails credentials.");
+    public ResponseEntity<Object> login(String emailOrUsername, String password) {
+        try {
 
-        UserModel userDetails = (UserModel) authentication.getPrincipal();
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(emailOrUsername, password));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.debug("SecurityContextHolder updated. [login={}]", emailOrUsername);
+            log.debug("Valid credentials.");
+            log.debug("Valid userDetails credentials.");
+
+            UserModel userDetails = (UserModel) authentication.getPrincipal();
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.debug("SecurityContextHolder updated. [login={}]", emailOrUsername);
 
 
-        TokenInfoModel  tokenInfo = createLoginToken(emailOrUsername, userDetails.getId());
+            TokenInfoModel tokenInfo = createLoginToken(emailOrUsername, userDetails.getId());
+
+            JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder().accessToken(tokenInfo.getAccessToken())
+                    .refreshToken(tokenInfo.getRefreshToken())
+                    .build();
+
+            ReposeDTO reposeDTO = new ReposeDTO(userDetails, jwtResponseDTO.getAccessToken());
 
 
-        return JwtResponseDTO.builder()
-                .accessToken(tokenInfo.getAccessToken())
-                .refreshToken(tokenInfo.getRefreshToken())
-                .build();
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Login successful", reposeDTO));
+        } catch (AuthenticationException e) {
+            log.error("Authentication failed for username: {}", emailOrUsername, e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ResponseUtils.unsuccessfulRes("Invalid credentials", null));
+        } catch (Exception e) {
+            log.error("An unexpected error occurred during authentication for username: {}", emailOrUsername, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("An unexpected error occurred", null));
+        }
     }
+
 
     public TokenInfoModel createLoginToken(String userName, Long userId) {
         String userAgent = httpRequest.getHeader(HttpHeaders.USER_AGENT);
