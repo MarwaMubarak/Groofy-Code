@@ -10,12 +10,12 @@ import org.springframework.http.HttpStatus;
 public class ResponseModel<T> {
     private String status;
     private String message;
-    private T body;
+    private T data;
 
     public ResponseModel(String status, String message, T body) {
         this.status = status;
         this.message = message;
-        this.body = body;
+        this.data = body;
     }
 
 
