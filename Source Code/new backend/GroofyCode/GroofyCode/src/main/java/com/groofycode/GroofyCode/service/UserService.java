@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.service;
 
+import com.groofycode.GroofyCode.dto.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.mapper.UserMapper;
 import com.groofycode.GroofyCode.model.UserModel;
@@ -92,10 +93,100 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public ResponseEntity<Object> changePassword(ChangePasswordDTO changePasswordDTO) {
+        try {
+            // Find current user
+            UserModel currentUser = getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("User Not Found", null));
+            }
+
+            // Check if current password matches
+            if (!passwordEncoder.matches(changePasswordDTO.getCurrentPassword(), currentUser.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Invalid password", null));
+            }
+
+            // Validate new password
+            if (!changePasswordDTO.getPassword().equals(changePasswordDTO.getConfirmPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Passwords do not match", null));
+            }
+
+            // Update password
+            currentUser.setPassword(passwordEncoder.encode(changePasswordDTO.getPassword()));
+            UserModel updatedUser = userRepository.save(currentUser);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ResponseUtils.successfulRes("Password Updated Successfully", userMapper.toDTO(updatedUser)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Internal server error", null));
+        }
+    }
+
+
+    public ResponseEntity<Object> getUserByUsername(String username) {
+        try {
+            // Find the user by the provided username
+            Optional<UserModel> optionalUser = userRepository.findByUsername(username);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("User not found", null));
+            }
+
+            UserModel user = optionalUser.get();
+
+            // Exclude sensitive information like password
+            user.setPassword(null); // Or remove it from the DTO
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ResponseUtils.successfulRes("User found", userMapper.toDTO(user)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Internal server error", null));
+        }
+    }
+
 
     public void deleteBadge(Long id) {
         userRepository.deleteById(id);
     }
+
+    public ResponseEntity<Object> searchUsersByPrefix(String prefix) {
+        try {
+            // Validate if prefix is provided
+            if (prefix.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Prefix parameter is required", null));
+            }
+
+            // Perform case-insensitive search for usernames starting with the given prefix
+            List<UserModel> users = userRepository.findByUsernameStartingWithIgnoreCase(prefix);
+
+            if (users.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("No users found with the provided prefix", null));
+            }
+
+            // Extract desired information (username, country, photo) for each user
+            List<UserDTO> userInfo = userMapper.toDTOs(users);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ResponseUtils.successfulRes("Users found", userInfo));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Internal server error", null));
+        }
+    }
+
+
+
 
 
     @Override
