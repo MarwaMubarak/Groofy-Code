@@ -12,8 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class ClanDTO {
 
 
@@ -25,11 +24,14 @@ public class ClanDTO {
 
     private UserModel leader;
 
-    private List<UserModel> members=new ArrayList<>();
+    private List<Long> members;
 
-    private List<BadgeModel> badges=new ArrayList<>();
+    private List<BadgeModel> badges;
 
-    public boolean addMember(UserModel member){
+    public boolean addMember(Long member){
+
+        if(members==null)
+            members=new ArrayList<>();
         int index = members.indexOf(member);
         if(index!=-1)
             return false;
@@ -37,7 +39,7 @@ public class ClanDTO {
         return true;
     }
 
-    public boolean removeMember(UserModel member){
+    public boolean removeMember(Long member){
         int index = members.indexOf(member);
         if(index==-1)
             return false;
@@ -48,4 +50,10 @@ public class ClanDTO {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ClanDTO(){
+        this.members=new ArrayList<>();
+        this.badges=new ArrayList<>();
+    }
+
 }

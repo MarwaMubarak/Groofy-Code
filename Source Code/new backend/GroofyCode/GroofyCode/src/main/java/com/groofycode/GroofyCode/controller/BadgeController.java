@@ -58,11 +58,9 @@ public class BadgeController {
 
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<HashMap<String,List<String>>> handleValidationExceptions(BindException ex) {
-       List<String>errors = ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
-        HashMap<String,List<String>>errMap  = new HashMap<>();
-        errMap.put("errors",errors);
-       return new ResponseEntity<>(errMap,HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> handleValidationExceptions(BindException ex) {
+        String errors = ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toString();
+        return  ResponseEntity.status( HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes(errors,null));
     }
 
 

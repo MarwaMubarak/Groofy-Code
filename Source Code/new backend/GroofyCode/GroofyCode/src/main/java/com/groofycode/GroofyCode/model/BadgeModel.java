@@ -13,7 +13,7 @@ import lombok.*;
 @Getter
 @Entity
 @Data
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"name","photo","description"})})
+@Table(name = "BADGE",uniqueConstraints={@UniqueConstraint(columnNames={"name","photo","description"})})
 public class BadgeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
