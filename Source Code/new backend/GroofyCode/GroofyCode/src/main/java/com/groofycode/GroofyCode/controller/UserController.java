@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping
 public class UserController {
     @Autowired
     private UserService userService;
@@ -55,18 +55,18 @@ public class UserController {
 //        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 //    }
 
-    @PutMapping("/password")
+    @PutMapping("/users/password")
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         return userService.changePassword(changePasswordDTO);
     }
 
 
-    @GetMapping("/{username}")
+    @GetMapping("/users/{username}")
     public ResponseEntity<Object> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
 
-    @GetMapping("/search/{prefix}")
+    @GetMapping("/users/search/{prefix}")
     public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) {
         return userService.searchUsersByPrefix(prefix);
     }
