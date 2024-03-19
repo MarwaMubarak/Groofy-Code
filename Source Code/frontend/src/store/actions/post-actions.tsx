@@ -1,12 +1,12 @@
 import { reqInstance } from "..";
 import { postActions } from "../slices/post-slice";
 
-const getPosts = (_id: string) => {
+const getPosts = (id: string) => {
   return async (dispatch: any) => {
     try {
       const user = JSON.parse(localStorage.getItem("user")!);
       if (user.token) {
-        const response = await reqInstance.get(`/posts/${_id}`, {
+        const response = await reqInstance.get(`/posts/${id}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -102,7 +102,7 @@ const likePost = (postID: string, userID: string) => {
     try {
       if (userToken) {
         const response = await reqInstance.post(
-          `/posts/likes/${postID}`,
+          `/posts/${postID}/like`,
           {},
           {
             headers: {

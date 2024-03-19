@@ -10,16 +10,16 @@ import "./scss/singlepost.css";
 const SinglePost = (props: SinglePostProps) => {
   const dispatch = useDispatch();
   const post = useSelector((state: any) =>
-    state.post.body.find((post: any) => post._id === props.postID)
+    state.post.body.find((post: any) => post.id === props.postID)
   );
   const [likeActive, setLikeActive] = useState(
-    post?.likes.some((like: any) => like.user === props.userid)
+    post?.likes.some((like: any) => like.userId === props.userid)
   );
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
   const [time, setTime] = useState(FormatDate(props.postTime));
   const [likesCnt, setLikesCnt] = useState(props.postLikesCnt);
-  const canModify = post.user === props.userid ? "can" : "not";
+  const canModify = post.userId === props.userid ? "can" : "not";
   // console.log("Post", post);
   // console.log("Likes Counter = ", likesCnt);
   const toast = useRef<Toast>(null);
@@ -35,13 +35,14 @@ const SinglePost = (props: SinglePostProps) => {
   };
 
   useEffect(() => {
+    console.log("post", post);
     const intervalId = setInterval(() => {
       setTime(FormatDate(props.postTime));
     }, 1000);
     return () => {
       clearInterval(intervalId);
     };
-  }, [props.postTime]);
+  }, [props.postTime, post]);
 
   useEffect(() => {
     setLikesCnt(post.likes.length);

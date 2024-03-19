@@ -12,13 +12,16 @@ const login = (loginInfo: LoginProps) => {
   return async (dispatch: any) => {
     try {
       const response = await reqInstance.post("/login", {
-        emailOrUserName: loginInfo.usernameOrEmail,
+        emailOrUsername: loginInfo.usernameOrEmail,
         password: loginInfo.password,
       });
       dispatch(authActions.setErrorMessage(""));
+      console.log("Response", response);
       localStorage.setItem("user", JSON.stringify(response.data.body));
       dispatch(authActions.login(response.data.body));
     } catch (error: any) {
+      console.log("error", error);
+
       throw error;
     }
   };

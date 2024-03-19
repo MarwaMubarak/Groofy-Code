@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -57,6 +57,19 @@ public class UserModel implements UserDetails {
     @Size(max = 1000)
     private String bio;
 
+    //    @Column(nullable = false, columnDefinition = "text default ''")
+    @Column(columnDefinition = "TEXT")
+    @Value("asd")
+    private String photoUrl;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false)
+    private Date updatedAt;
+
 
     @ManyToOne
     @JoinColumn(name = "clan_id")
@@ -72,12 +85,11 @@ public class UserModel implements UserDetails {
         super();
         this.username = username;
         this.password = password;
-
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority>authorityList=new ArrayList<>();
+        List<GrantedAuthority> authorityList = new ArrayList<>();
         return authorityList;
     }
 

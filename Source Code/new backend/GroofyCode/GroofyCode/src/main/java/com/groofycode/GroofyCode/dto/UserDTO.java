@@ -14,13 +14,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 //import javax.validation.constraints.*;
 
 @Getter
 @Setter
 public class UserDTO {
 
-//    @NotNull(message = "ID must not be null")
+    //    @NotNull(message = "ID must not be null")
     private Long id;
 
     @NotBlank(message = "Username is required")
@@ -53,8 +54,14 @@ public class UserDTO {
 
     private Long clanId;
 
+    private String photoUrl;
 
-    public UserDTO(String username, String email, String firstname, String lastname, String country, String city, String bio, Long clanId) {
+    private Date createdAt;
+
+    private Date updatedAt;
+
+
+    public UserDTO(String username, String email, String firstname, String lastname, String country, String city, String bio, Long clanId, String photoUrl) {
         this.username = username;
         this.email = email;
         this.firstname = firstname;
@@ -63,9 +70,11 @@ public class UserDTO {
         this.city = city;
         this.bio = bio;
         this.clanId = clanId;
+        this.photoUrl = photoUrl;
+
     }
 
-    public UserDTO(String username, String email, String password, String firstname, String lastname, String country, String city, String bio, Long clanId) {
+    public UserDTO(String username, String email, String password, String firstname, String lastname, String country, String city, String bio, Long clanId, String photoUrl) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -75,8 +84,13 @@ public class UserDTO {
         this.city = city;
         this.bio = bio;
         this.clanId = clanId;
+        this.photoUrl = photoUrl;
     }
 
-    public UserDTO() {}
+    public UserDTO() {
+        this.photoUrl = "https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI4MDQwOTc0L29yaWdpbmFsX2ZmNGYxZjQzZDdiNzJjYzMxZDJlYjViMDgyN2ZmMWFjLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTIwMCwiaGVpZ2h0IjoxMjAwLCJmaXQiOiJpbnNpZGUiLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWV9LCJ3ZWJwIjp7InF1YWxpdHkiOjkwfSwianBlZyI6eyJxdWFsaXR5Ijo5MH0sInJvdGF0ZSI6bnVsbH19?bc=0";
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 }
 

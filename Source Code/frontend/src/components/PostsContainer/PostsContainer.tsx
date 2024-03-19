@@ -32,7 +32,7 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      await dispatch(postThunks.getPosts(user._id) as any);
+      await dispatch(postThunks.getPosts(user.id) as any);
     };
     fetchPosts();
   }, [dispatch, user]);
@@ -72,7 +72,7 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
         {self && user && (
           <div className={classes.post_row}>
             <img
-              src={user.photo.url}
+              src={user.photoUrl}
               alt="UserPhoto"
               className={classes.post_row_img}
             />
@@ -91,7 +91,7 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
         {!self && loggedUser.username === user.username && (
           <div className={classes.post_row}>
             <img
-              src={user.photo.url}
+              src={user.photoUrl}
               alt="UserPhoto"
               className={classes.post_row_img}
             />
@@ -107,7 +107,7 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
             />
           </div>
         )}
-        <Posts posts={allPosts} user={user} loggedUser={loggedUser._id} />
+        <Posts posts={allPosts} user={user} loggedUser={loggedUser.id} />
       </div>
     </form>
   );

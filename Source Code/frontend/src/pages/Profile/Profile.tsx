@@ -57,7 +57,7 @@ const Profile = () => {
               <div className={classes.left_up_info}>
                 <div className={classes.up_info_img}>
                   <Image
-                    src={profileUser.photo.url}
+                    src={profileUser.photoUrl}
                     alt="Image"
                     width="180"
                     preview
@@ -67,7 +67,13 @@ const Profile = () => {
                   <div className={classes.up_info_d_box}>
                     <div className={classes.up_info_d_box_names}>
                       <h3>
-                        {profileUser.firstname + " " + profileUser.lastname}
+                        {(profileUser.firstname === null
+                          ? ""
+                          : profileUser.firstname) +
+                          " " +
+                          (profileUser.lastname === null
+                            ? ""
+                            : profileUser.lastname)}
                         {profileUser.country && profileUser.country !== "" && (
                           <ReactCountryFlag
                             countryCode={

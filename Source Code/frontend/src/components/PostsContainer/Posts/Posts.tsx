@@ -91,13 +91,13 @@ const Posts = (props: PostsProps) => {
             )
             .map((post: any) => (
               <SinglePost
-                key={post._id}
+                key={post.id}
                 userid={props.loggedUser}
                 postUser={props.user.username}
-                postUserImg={props.user.photo.url}
+                postUserImg={props.user.photoUrl}
                 postContent={post.content}
                 postTime={post.createdAt}
-                postID={post._id}
+                postID={post.id}
                 postLikesCnt={post.likes.length}
                 isEdited={post.createdAt !== post.updatedAt}
               />

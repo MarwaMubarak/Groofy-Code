@@ -15,7 +15,7 @@ export default function BurgerMenu() {
         onHide={() => setVisible(false)}
         header={
           <div className={classes.burger_header}>
-            <img src={user.photo.url} alt="ProfilePhoto" />
+            <img src={user.photoUrl} alt="ProfilePhoto" />
             <span>{user.username}</span>
           </div>
         }

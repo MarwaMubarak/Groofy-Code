@@ -140,7 +140,7 @@ const Search = () => {
                 <Link to={`/profile/${user.username}`}>
                   <div className={classes.sr_user}>
                     <img
-                      src={`${user.photo.url}`}
+                      src={`${user.photoUrl}`}
                       alt="ProfilePicture"
                       className={classes.user_img}
                     />

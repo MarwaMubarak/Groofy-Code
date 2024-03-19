@@ -1,17 +1,17 @@
 package com.groofycode.GroofyCode.mapper;
 
 
-
 import com.groofycode.GroofyCode.dto.UserDTO;
 import com.groofycode.GroofyCode.model.UserModel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
 public class UserMapper {
 
-    public  UserDTO toDTO(UserModel userModel) {
+    public UserDTO toDTO(UserModel userModel) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userModel.getId());
         userDTO.setUsername(userModel.getUsername());
@@ -21,7 +21,10 @@ public class UserMapper {
         userDTO.setCountry(userModel.getCountry());
         userDTO.setCity(userModel.getCity());
         userDTO.setBio(userModel.getBio());
-        if(userModel.getPassword()!=null){
+        userDTO.setPhotoUrl(userModel.getPhotoUrl());
+        userDTO.setCreatedAt(userModel.getCreatedAt());
+        userDTO.setUpdatedAt(userModel.getUpdatedAt());
+        if (userModel.getPassword() != null) {
             userDTO.setPassword(userModel.getPassword());
         }
         if (userModel.getClan() != null) {
@@ -30,7 +33,7 @@ public class UserMapper {
         return userDTO;
     }
 
-    public  UserModel toModel(UserDTO userDTO) {
+    public UserModel toModel(UserDTO userDTO) {
         UserModel userModel = new UserModel();
         userModel.setId(userDTO.getId());
         userModel.setUsername(userDTO.getUsername());
@@ -41,6 +44,9 @@ public class UserMapper {
         userModel.setCity(userDTO.getCity());
         userModel.setBio(userDTO.getBio());
         userModel.setPassword(userDTO.getPassword());
+        userModel.setPhotoUrl(userDTO.getPhotoUrl());
+        userModel.setCreatedAt(userDTO.getCreatedAt());
+        userModel.setUpdatedAt(userDTO.getUpdatedAt());
         // Setting clanId requires fetching the ClanModel from the database or similar
         // This is typically done in the service layer, not here
         return userModel;

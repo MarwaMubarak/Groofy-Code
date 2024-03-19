@@ -16,13 +16,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig  {
+public class SecurityConfig {
 
 
     @Autowired
@@ -41,20 +45,26 @@ public class SecurityConfig  {
     private UserService userService;
 
     @Autowired
-    private  JwtTokenUtils jwtTokenUtils;
+    private JwtTokenUtils jwtTokenUtils;
 
     //configure (HttpSecurity http)
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests()
-                .requestMatchers("/auth/login", "users/register").permitAll()
+                .requestMatchers("/login", "/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .cors(c -> c.configurationSource(request -> {
+                    CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                    configuration.setAllowedHeaders(List.of("*"));
+                    return configuration;
+                }))
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .addFilterBefore(new AuthFilter(userService,jwtTokenUtils), UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(new AuthFilter(userService, jwtTokenUtils), UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();
@@ -62,13 +72,13 @@ public class SecurityConfig  {
 
     //configure (webSecurity web)
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return null;
     }
 
     // configure (AuthenticationManagerBuilder auth)
     @Bean
-    public AuthenticationManager authManagerBuilder(HttpSecurity http) throws Exception{
+    public AuthenticationManager authManagerBuilder(HttpSecurity http) throws Exception {
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userDetailsService)
@@ -84,7 +94,7 @@ public class SecurityConfig  {
 
     @Bean
     public AuthFilter authFilter() {
-        return new AuthFilter(userService,jwtTokenUtils);
+        return new AuthFilter(userService, jwtTokenUtils);
     }
 
 }

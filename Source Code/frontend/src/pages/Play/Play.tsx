@@ -18,7 +18,7 @@ const Play = () => {
               <img src="/Assets/Images/versus.png" alt="Versus" />
             </div>
             <div className={classes.play_img_user}>
-              <img src={user.photo.url} alt="UserPhoto" />
+              <img src={user.photoUrl} alt="UserPhoto" />
             </div>
           </div>
           <div className={classes.play_menu}>

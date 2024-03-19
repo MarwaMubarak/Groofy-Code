@@ -6,6 +6,6 @@ const store = configureStore({
   reducer: { auth: authReducer, post: postReducer, user: userReducer },
 });
 
-export const reqInstance = axios.create({ baseURL: "http://localhost:8000" });
+export const reqInstance = axios.create({ baseURL: "http://localhost:8080" });
 
 export default store;

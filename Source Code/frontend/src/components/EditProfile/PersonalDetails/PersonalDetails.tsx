@@ -113,7 +113,7 @@ const PersonalDetails = () => {
         onSubmit={formikHandle.handleSubmit}
       >
         <div className={classes.editprofile_photo}>
-          <img src={user.photo.url} alt="profile_photo" />
+          <img src={user.photoUrl} alt="profile_photo" />
           <input id="upload" type="file" hidden />
           <label htmlFor="upload">
             <i className="pi pi-upload" />

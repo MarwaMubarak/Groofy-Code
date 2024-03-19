@@ -144,7 +144,7 @@ const GroofyHeader = () => {
         ref={componentRefProfileArea}
       >
         <div className={classes.pa_info}>
-          <img src={user.photo.url} alt="ProfilePicture" />
+          <img src={user.photoUrl} alt="ProfilePicture" />
           <span>{user.username}</span>
         </div>
         <Link to={`/profile/${user.username}`}>
@@ -235,7 +235,7 @@ const GroofyHeader = () => {
                   {searchedUsers.map((user) => (
                     <Link to={`/profile/${user.username}`}>
                       <div className={styles.search_player}>
-                        <img src={user.photo.url} alt="ProfilePicture" />
+                        <img src={user.photoUrl} alt="ProfilePicture" />
                         <span>{user.username}</span>
                         {user.country && user.country !== "" && (
                           <ReactCountryFlag
@@ -310,7 +310,7 @@ const GroofyHeader = () => {
           >
             <img
               className={classes.header_pr_ph}
-              src={user.photo.url}
+              src={user.photoUrl}
               alt="ProfilePhoto"
             />
           </div>

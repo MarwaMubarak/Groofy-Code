@@ -18,33 +18,31 @@ const postSlice = createSlice({
     },
     updatePost(state, action) {
       const postIdx = state.body.findIndex(
-        (post: any) => post._id === action.payload._id
+        (post: any) => post.id === action.payload.id
       );
       console.log("Post Index", postIdx);
       state.body[postIdx].content = action.payload.content;
       state.body[postIdx].updatedAt = action.payload.updatedAt;
     },
     deletePost(state, action) {
-      state.body = state.body.filter(
-        (post: any) => post._id !== action.payload
-      );
+      state.body = state.body.filter((post: any) => post.id !== action.payload);
     },
 
     likePost(state, action) {
       const postIdx = state.body.findIndex(
-        (post: any) => post._id === action.payload.postID
+        (post: any) => post.id === action.payload.postID
       );
       const userLiked = state.body[postIdx].likes.some(
-        (like: any) => like.user === action.payload.userID
+        (like: any) => like.userId === action.payload.userID
       );
       if (!userLiked) {
         state.body[postIdx].likes.push({
-          user: action.payload.userID,
+          userId: action.payload.userID,
           date: action.payload.time,
         });
       } else {
         state.body[postIdx].likes = state.body[postIdx].likes.filter(
-          (like: any) => like.user !== action.payload.userID
+          (like: any) => like.userId !== action.payload.userID
         );
       }
     },
