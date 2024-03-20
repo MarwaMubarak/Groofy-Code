@@ -17,8 +17,5 @@ public class PostDTO {
     private Date updatedAt;
     private List<LikeDTO> likes;
 
-    public PostDTO() {
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
+
 }
