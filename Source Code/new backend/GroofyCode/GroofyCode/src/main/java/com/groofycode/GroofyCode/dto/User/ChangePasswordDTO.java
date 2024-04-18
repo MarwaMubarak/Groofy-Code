@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.dto;
+package com.groofycode.GroofyCode.dto.User;
 
 
 import lombok.Getter;

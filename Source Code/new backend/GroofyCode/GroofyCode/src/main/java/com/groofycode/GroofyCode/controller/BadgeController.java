@@ -1,67 +1,46 @@
 package com.groofycode.GroofyCode.controller;
 
 import com.groofycode.GroofyCode.dto.BadgeDTO;
-import com.groofycode.GroofyCode.dto.UpdateBadgeDTO;
 import com.groofycode.GroofyCode.service.BadgeService;
-import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.BreakIterator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/badges")
 public class BadgeController {
+    private final BadgeService badgeService;
+
     @Autowired
-    private BadgeService badgeService;
+    public BadgeController(BadgeService badgeService) {
+        this.badgeService = badgeService;
+    }
 
     @GetMapping
-    public ResponseEntity<?> getAllBadges() {
-
+    public ResponseEntity<Object> getAllBadges() throws Exception {
         return badgeService.getAllBadges();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBadgeById(@PathVariable Long id) {
+    public ResponseEntity<Object> getBadgeById(@PathVariable Long id) throws Exception {
         return badgeService.getBadgeById(id);
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> createBadge(@Valid @RequestBody  BadgeDTO badgeDTO) {
-//        if(bindingResult.hasErrors()){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Validation Errors!",bindingResult.getAllErrors()));
-//        }
+    @PostMapping
+    public ResponseEntity<Object> createBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws Exception {
         return badgeService.createBadge(badgeDTO);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateBadge(@PathVariable Long id, @Valid @RequestBody BadgeDTO badgeDTO) throws Exception {
+        return badgeService.updateBadge(id, badgeDTO);
+
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBadge(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteBadge(@PathVariable Long id) throws Exception {
 
         return badgeService.deleteBadge(id);
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateBadge(@PathVariable Long id,@Valid @RequestBody UpdateBadgeDTO badgeDTO){
-        return badgeService.updateBadge(id,badgeDTO);
-
-    }
-
-
-    @ExceptionHandler(BindException.class)
-    public ResponseEntity<?> handleValidationExceptions(BindException ex) {
-        String errors = ex.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toString();
-        return  ResponseEntity.status( HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes(errors,null));
-    }
-
-
 }

@@ -1,42 +1,40 @@
 package com.groofycode.GroofyCode.model;
-import java.util.ArrayList;
+
 import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.List;
-
-
-@Setter
-@Getter
-@Entity
 @Table(name = "posts")
+@Entity
+@Getter
+@Setter
 public class PostModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private UserModel user;
-
     @Column(nullable = false)
     private String content;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
     private Date createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
+    @CreationTimestamp
     private Date updatedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
+    private UserModel user;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<LikeModel> likes;
 
     public PostModel() {
         this.createdAt = new Date();
         this.updatedAt = new Date();
-
     }
-
 }

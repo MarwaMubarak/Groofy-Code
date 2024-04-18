@@ -1,29 +1,31 @@
 package com.groofycode.GroofyCode.model;
+
 import java.util.ArrayList;
 import java.util.Date;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
+@Table(name = "likes")
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "likes")
 public class LikeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private UserModel user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "post_id")
     private PostModel post;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "liked_at", nullable = false)
+    @CreationTimestamp
     private Date likedAt;
 
     public LikeModel() {

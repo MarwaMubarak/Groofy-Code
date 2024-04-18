@@ -1,18 +1,11 @@
 package com.groofycode.GroofyCode.model;
 
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,77 +13,60 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(min = 1, max = 100)
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, length = 100)
     private String username;
 
-    @NotBlank
-    @Email
-    @Size(min = 4, max = 256)
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @NotBlank
-    @Size(min = 8, max = 256)
+    @Column(nullable = false)
     private String password;
 
-    @Size(max = 256)
     private String firstname;
 
-    @Size(max = 256)
     private String lastname;
 
-    @Size(max = 100)
+    @Column(length = 100)
     private String country;
 
-    @Size(max = 100)
+    @Column(length = 100)
     private String city;
 
-    @Size(max = 1000)
+    @Column(length = 1000)
     private String bio;
 
-    //    @Column(nullable = false, columnDefinition = "text default ''")
     @Column(columnDefinition = "TEXT")
-    @Value("asd")
     private String photoUrl;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PostModel> posts;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "clan_id")
     private ClanModel clan;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "badges_users", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "badge_id"))
+    private List<BadgeModel> badges;
 
-    public UserModel(Long id) {
-        super();
-        this.id = id;
-    }
+    @CreationTimestamp
+    private Date createdAt;
 
-    public UserModel(String username, String password, Collection<GrantedAuthority> grantedAuthorityList) {
-        super();
-        this.username = username;
-        this.password = password;
+    @CreationTimestamp
+    private Date updatedAt;
+
+    public UserModel() {
+        this.photoUrl = "https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI4MDQwOTc0L29yaWdpbmFsX2ZmNGYxZjQzZDdiNzJjYzMxZDJlYjViMDgyN2ZmMWFjLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTIwMCwiaGVpZ2h0IjoxMjAwLCJmaXQiOiJpbnNpZGUiLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWV9LCJ3ZWJwIjp7InF1YWxpdHkiOjkwfSwianBlZyI6eyJxdWFsaXR5Ijo5MH0sInJvdGF0ZSI6bnVsbH19?bc=0";
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorityList = new ArrayList<>();
-        return authorityList;
+        return null;
     }
 
     @Override
@@ -112,16 +88,4 @@ public class UserModel implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-//    @OneToMany(mappedBy = "user")
-//    private List<BadgeModel> badges;
-
-//    @OneToMany(mappedBy = "user")
-//    private List<BadgeModel> selectedBadges;
-
-    // Other fields and mappings
-
 }
-
-// You can add additional entity classes for related tables like Badge, Comment, Match, Submission, etc.

@@ -2,11 +2,9 @@ package com.groofycode.GroofyCode.utilities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-
 public class ResponseModel<T> {
     private String status;
     private String message;
@@ -17,7 +15,4 @@ public class ResponseModel<T> {
         this.message = message;
         this.body = body;
     }
-
-
-    // Getters and setters
 }

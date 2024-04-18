@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<PostModel, Long> {
-    // You can define additional methods for custom queries if needed
     List<PostModel> findByUserId(Long userId);
 }

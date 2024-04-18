@@ -1,37 +1,29 @@
 package com.groofycode.GroofyCode.controller;
 
-import com.groofycode.GroofyCode.dto.ChangePasswordDTO;
-import com.groofycode.GroofyCode.dto.UserDTO;
-import com.groofycode.GroofyCode.model.UserModel;
-import com.groofycode.GroofyCode.service.UserService;
+import com.groofycode.GroofyCode.dto.User.ChangePasswordDTO;
+import com.groofycode.GroofyCode.dto.User.RegisterDTO;
+import com.groofycode.GroofyCode.service.User.UserService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-
-import javax.xml.validation.Validator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    public ResponseEntity<Object> getAllUsers() throws Exception {
+        return userService.getAllUsers();
     }
 
 //    @GetMapping("/{id}")
@@ -45,8 +37,8 @@ public class UserController {
 //    }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> createUser(@RequestBody @Valid UserDTO userDTO) {
-        return userService.createUser(userDTO);
+    public ResponseEntity<Object> createUser(@RequestBody @Valid RegisterDTO registerDTO) throws Exception {
+        return userService.createUser(registerDTO);
     }
 
 //    @DeleteMapping("/{id}")
@@ -56,18 +48,18 @@ public class UserController {
 //    }
 
     @PutMapping("/users/password")
-    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception {
         return userService.changePassword(changePasswordDTO);
     }
 
 
     @GetMapping("/users/{username}")
-    public ResponseEntity<Object> getUserByUsername(@PathVariable String username) {
+    public ResponseEntity<Object> getUserByUsername(@PathVariable String username) throws Exception {
         return userService.getUserByUsername(username);
     }
 
     @GetMapping("/users/search/{prefix}")
-    public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) {
+    public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) throws Exception {
         return userService.searchUsersByPrefix(prefix);
     }
 

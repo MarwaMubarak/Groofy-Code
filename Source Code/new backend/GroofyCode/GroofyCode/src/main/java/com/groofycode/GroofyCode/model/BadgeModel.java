@@ -1,35 +1,33 @@
 package com.groofycode.GroofyCode.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
+import java.util.List;
+
+@Table(name = "badges", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "photo", "description"})})
 @Entity
-@Data
-@Table(name = "BADGE",uniqueConstraints={@UniqueConstraint(columnNames={"name","photo","description"})})
+@NoArgsConstructor
+@Getter
+@Setter
 public class BadgeModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String photo;
 
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private UserModel createdBy;
-
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "badges_users", joinColumns = @JoinColumn(name = "badge_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<UserModel> users;
 }
