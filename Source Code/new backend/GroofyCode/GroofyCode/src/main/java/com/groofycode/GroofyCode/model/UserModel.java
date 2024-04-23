@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.model;
 
+import com.groofycode.GroofyCode.model.Post.PostModel;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.Date;
@@ -27,15 +28,10 @@ public class UserModel implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private String firstname;
-
-    private String lastname;
+    private String displayName;
 
     @Column(length = 100)
     private String country;
-
-    @Column(length = 100)
-    private String city;
 
     @Column(length = 1000)
     private String bio;

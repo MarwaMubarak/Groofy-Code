@@ -5,7 +5,7 @@ import { RefObject } from "react";
 export interface btnProps {
   btnText: string;
   icnSrc?: string;
-  clickEvent: any;
+  clickEvent?: any;
   btnType?: boolean;
   btnState?: boolean;
 }
@@ -142,18 +142,18 @@ export interface SinglePostProps {
   postTime: string;
   postID: string;
   postLikesCnt: number;
+  isLiked: boolean;
   isEdited: boolean;
 }
 
 // User Props
 export interface UserProps {
   username?: string;
+  displayName: string;
   email: string;
   password: string;
   confirmPassword?: string;
-  firstname?: string;
-  lastname?: string;
-  country?: string;
+  country?: any;
 }
 
 // Posts Container Props

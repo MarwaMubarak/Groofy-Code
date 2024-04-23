@@ -7,17 +7,38 @@ import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import classes from "./scss/signup/signup.module.css";
+import styles from "./scss/dropdown.module.css";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+
+interface Country {
+  name: string;
+  code: string;
+}
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
+  const countries: Country[] = [
+    { name: "Australia", code: "AU" },
+    { name: "Brazil", code: "BR" },
+    { name: "China", code: "CN" },
+    { name: "Egypt", code: "EG" },
+    { name: "France", code: "FR" },
+    { name: "Germany", code: "DE" },
+    { name: "India", code: "IN" },
+    { name: "Japan", code: "JP" },
+    { name: "Spain", code: "ES" },
+    { name: "United States", code: "US" },
+  ];
   const formHandler = useFormik({
     initialValues: {
       username: "",
+      displayName: "",
       email: "",
       password: "",
       confirmPassword: "",
+      country: { name: "", code: "" },
     },
     validationSchema: registerSchema,
     onSubmit: (values, actions) => {
@@ -48,6 +69,24 @@ const SignUp = () => {
         });
     },
   });
+
+  const selectedCountryTemplate = (option: Country, props: any) => {
+    if (option) {
+      return (
+        <div className="flex align-items-center">
+          <div>{option.name}</div>
+        </div>
+      );
+    }
+    return <span>{props.placeholder}</span>;
+  };
+  const countryOptionTemplate = (option: Country) => {
+    return (
+      <div className="flex align-items-center">
+        <div>{option.name}</div>
+      </div>
+    );
+  };
 
   return (
     <div className={classes.align}>
@@ -120,6 +159,20 @@ const SignUp = () => {
               errMsg={formHandler.errors.username}
             />
             <GroofyField
+              giText="Display Name"
+              giPlaceholder="Enter your display name"
+              giType="text"
+              giValue={formHandler.values.displayName}
+              onChange={formHandler.handleChange("displayName")}
+              onBlur={formHandler.handleBlur("displayName")}
+              errState={
+                (formHandler.errors.displayName &&
+                  formHandler.touched.displayName) ||
+                false
+              }
+              errMsg={formHandler.errors.displayName}
+            />
+            <GroofyField
               giText="Email"
               giPlaceholder="Enter your email"
               giType="email"
@@ -157,6 +210,21 @@ const SignUp = () => {
                 false
               }
               errMsg={formHandler.errors.confirmPassword}
+            />
+            <Dropdown
+              id="country"
+              value={formHandler.values.country}
+              onChange={(e: DropdownChangeEvent) =>
+                formHandler.setFieldValue("country", e.value)
+              }
+              options={countries}
+              optionLabel="name"
+              placeholder="Select a Country"
+              filter
+              valueTemplate={selectedCountryTemplate}
+              itemTemplate={countryOptionTemplate}
+              className={classes.drop_down_div}
+              panelClassName={styles.drop_down_panel}
             />
             <div className={classes.f_sbmt}>
               <GBtn

@@ -13,15 +13,13 @@ const SinglePost = (props: SinglePostProps) => {
     state.post.body.find((post: any) => post.id === props.postID)
   );
   const [likeActive, setLikeActive] = useState(
-    post?.likes.some((like: any) => like.userId === props.userid)
+    post?.isLiked === 1 ? true : false
   );
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState(props.postContent);
   const [time, setTime] = useState(FormatDate(props.postTime));
   const [likesCnt, setLikesCnt] = useState(props.postLikesCnt);
-  const canModify = post.userId === props.userid ? "can" : "not";
-  // console.log("Post", post);
-  // console.log("Likes Counter = ", likesCnt);
+  const canModify = post.postUserId === props.userid ? "can" : "not";
   const toast = useRef<Toast>(null);
   const op = useRef<any>(null);
 
@@ -35,7 +33,6 @@ const SinglePost = (props: SinglePostProps) => {
   };
 
   useEffect(() => {
-    console.log("post", post);
     const intervalId = setInterval(() => {
       setTime(FormatDate(props.postTime));
     }, 1000);
@@ -45,8 +42,8 @@ const SinglePost = (props: SinglePostProps) => {
   }, [props.postTime, post]);
 
   useEffect(() => {
-    setLikesCnt(post.likes.length);
-  }, [post.likes.length]);
+    setLikesCnt(post.likesCnt);
+  }, [post.likesCnt]);
 
   const handleUpdate = (postID: string, content: string) => {
     const updatePost = async () => {

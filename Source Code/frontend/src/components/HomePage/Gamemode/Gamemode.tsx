@@ -2,7 +2,6 @@ import { GamemodeProps } from "../../../shared/types";
 import classes from "./scss/gamemode.module.css";
 
 const Gamemode = (props: GamemodeProps) => {
-  console.log("MY ID", props.id);
   return props.description ? (
     <div
       id={props.id ? props.id : ""}

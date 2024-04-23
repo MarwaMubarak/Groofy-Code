@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.controller;
+package com.groofycode.GroofyCode.controller.User;
 
 import com.groofycode.GroofyCode.service.User.AuthService;
 import com.groofycode.GroofyCode.dto.User.LoginRequestDTO;

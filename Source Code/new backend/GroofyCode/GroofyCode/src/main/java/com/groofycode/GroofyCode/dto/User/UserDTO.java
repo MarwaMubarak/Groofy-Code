@@ -9,6 +9,7 @@ import java.util.Date;
 @Setter
 public class UserDTO {
     private Long id;
+
     private String username;
 
     private String email;
@@ -18,8 +19,6 @@ public class UserDTO {
     private String lastname;
 
     private String country;
-
-    private String city;
 
     private String bio;
 

@@ -32,7 +32,6 @@ const Security = () => {
       );
       if (ret instanceof Promise) {
         ret.then((res: any) => {
-          console.log(res);
           if (res instanceof AxiosError) {
             toast.current?.show({
               severity: "error",

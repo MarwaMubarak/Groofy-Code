@@ -3,9 +3,7 @@ import { authActions } from "../slices/auth-slice";
 import { userActions } from "../slices/user-slice";
 
 export interface EditInfo {
-  firstname: string;
-  lastname: string;
-  city: string;
+  displayName: string;
   bio: string;
   country: string;
 }
@@ -13,7 +11,6 @@ export interface EditInfo {
 const getUser = (username: string) => {
   return async (dispatch: any) => {
     const loggedUser = JSON.parse(localStorage.getItem("user")!);
-    console.log("Token = ", loggedUser.token);
     try {
       const response = await reqInstance.get(`/users/${username}`, {
         headers: {
@@ -42,7 +39,7 @@ const updateUser = (editInfo: EditInfo) => {
   return async (dispatch: any) => {
     try {
       const userToken = JSON.parse(localStorage.getItem("user")!).token;
-      const response = await reqInstance.put(`/users/update`, editInfo, {
+      const response = await reqInstance.put(`/users`, editInfo, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },

@@ -1,8 +1,8 @@
-package com.groofycode.GroofyCode.model;
+package com.groofycode.GroofyCode.model.Post;
 
-import java.util.ArrayList;
 import java.util.Date;
 
+import com.groofycode.GroofyCode.model.UserModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

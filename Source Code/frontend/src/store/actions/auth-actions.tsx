@@ -16,12 +16,9 @@ const login = (loginInfo: LoginProps) => {
         password: loginInfo.password,
       });
       dispatch(authActions.setErrorMessage(""));
-      console.log("Response", response);
       localStorage.setItem("user", JSON.stringify(response.data.body));
       dispatch(authActions.login(response.data.body));
     } catch (error: any) {
-      console.log("error", error);
-
       throw error;
     }
   };
@@ -41,11 +38,10 @@ const signup = (userData: UserProps) => {
     try {
       await reqInstance.post("/register", {
         username: userData.username,
+        displayName: userData.displayName,
         email: userData.email,
         password: userData.password,
-        firstname: userData.firstname,
-        lastname: userData.lastname,
-        country: userData.country,
+        country: userData.country.name,
       });
     } catch (error: any) {
       throw error;

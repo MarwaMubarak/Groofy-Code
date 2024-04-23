@@ -1,7 +1,8 @@
-package com.groofycode.GroofyCode.controller;
+package com.groofycode.GroofyCode.controller.User;
 
 import com.groofycode.GroofyCode.dto.User.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.User.RegisterDTO;
+import com.groofycode.GroofyCode.dto.User.UpdatedUserDTO;
 import com.groofycode.GroofyCode.service.User.UserService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.validation.Valid;
@@ -41,6 +42,11 @@ public class UserController {
         return userService.createUser(registerDTO);
     }
 
+    @PutMapping("/users")
+    public ResponseEntity<Object> updatedUser(@RequestBody @Valid UpdatedUserDTO updatedUserDTO) throws Exception {
+        return userService.updatedUser(updatedUserDTO);
+    }
+
 //    @DeleteMapping("/{id}")
 //    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 //        userService.deleteBadge(id);
@@ -62,13 +68,4 @@ public class UserController {
     public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) throws Exception {
         return userService.searchUsersByPrefix(prefix);
     }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        StringBuilder errorMessage = new StringBuilder();
-        ex.getBindingResult().getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append("; "));
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(ResponseUtils.unsuccessfulRes(errorMessage.toString(), null));
-    }
-
 }

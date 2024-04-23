@@ -7,6 +7,12 @@ const registerSchema = yup.object().shape({
     .min(4, "Username should be at least 4 characters")
     .max(100, "Username shouldn't be more than 100 characters")
     .required("Username is required"),
+  displayName: yup
+    .string()
+    .trim()
+    .min(4, "Display name should be at least 4 characters")
+    .max(100, "Display name mustn't exceed 100 characters")
+    .required("Display name is required"),
   email: yup
     .string()
     .trim()
@@ -26,6 +32,7 @@ const registerSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), undefined], "Passwords must match")
     .required("Confirming Password is required"),
+  country: yup.object().required("Country is required"),
 });
 
 const loginSchema = yup.object().shape({

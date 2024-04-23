@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.filter;
 
+import com.groofycode.GroofyCode.dto.User.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -29,13 +30,14 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwtTokenHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (jwtTokenHeader != null && jwtTokenHeader.startsWith("Bearer")) {
+        if (jwtTokenHeader != null && jwtTokenHeader.startsWith("Bearer ")) {
             try {
                 jwtTokenHeader = jwtTokenHeader.substring(7);
                 SecretKey secretKey = Keys.hmacShaKeyFor(tokenSecretKey.getBytes(StandardCharsets.UTF_8));
                 Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(jwtTokenHeader).getPayload();
                 String username = claims.get("username", String.class);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username,null, new ArrayList<>());
+                UserInfo userInfo = new UserInfo(username,null);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userInfo,null, new ArrayList<>());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (JwtException | IllegalArgumentException e) {
                 System.out.println(e.getMessage());

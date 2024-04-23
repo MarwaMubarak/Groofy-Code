@@ -45,7 +45,6 @@ public class SecurityConfig {
                     configuration.setAllowedHeaders(List.of("*"));
                     return configuration;
                 }))
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

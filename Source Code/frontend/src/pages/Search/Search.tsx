@@ -63,12 +63,9 @@ const Search = () => {
       const ret = dispatch(userThunks.searchForUsers(searchText) as any);
       if (ret instanceof Promise) {
         ret.then((res: any) => {
-          console.log(res);
           if (res instanceof AxiosError) {
-            console.log(res.response?.data?.message);
             setSearchedUsers([]);
           } else {
-            console.log(res.data.message);
             setSearchedUsers(res.data.body);
           }
           setSearching(false);

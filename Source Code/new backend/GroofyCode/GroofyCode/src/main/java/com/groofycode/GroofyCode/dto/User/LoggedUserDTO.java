@@ -11,6 +11,7 @@ import java.util.Date;
 public class LoggedUserDTO {
     private Long id;
     private String username;
+    private String displayName;
     private String email;
     private String firstname;
     private String lastname;

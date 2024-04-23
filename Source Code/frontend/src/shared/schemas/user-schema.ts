@@ -1,16 +1,17 @@
 import * as yup from "yup";
 
 const userSchema = yup.object().shape({
-  firstname: yup
+  displayName: yup
     .string()
     .trim()
-    .max(100, "First Name shouldn't exceed 100 characters"),
-  lastname: yup
+    .max(100, "Display name must be between 1 and 100 characters")
+    .required("Display name is required"),
+  country: yup
     .string()
     .trim()
-    .max(100, "Last Name shouldn't exceed 100 characters"),
-  city: yup.string().trim().max(40, "City shouldn't exceed 40 characters"),
-  bio: yup.string().trim().max(400, "Bio shouldn't exceed 400 characters"),
+    .max(100, "Country must be between 1 and 100 characters")
+    .required("Country is required"),
+  bio: yup.string().trim().max(1000, "Bio can't exceed 1000 characters"),
 });
 
 const passwordSchema = yup.object().shape({

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { SideBar, GroofyHeader, GBtn, PSocial, PInfo } from "../../components";
+import { SideBar, GroofyHeader, PSocial, PInfo } from "../../components";
 import { useSelector } from "react-redux";
 import ReactCountryFlag from "react-country-flag";
 import { Toast } from "primereact/toast";
@@ -9,7 +9,6 @@ import { userThunks } from "../../store/actions";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import classes from "./scss/profile.module.css";
-import { Button } from "primereact/button";
 import FormatDate from "../../shared/functions/format-date";
 
 interface Country {
@@ -67,14 +66,8 @@ const Profile = () => {
                   <div className={classes.up_info_d_box}>
                     <div className={classes.up_info_d_box_names}>
                       <h3>
-                        {(profileUser.firstname === null
-                          ? ""
-                          : profileUser.firstname) +
-                          " " +
-                          (profileUser.lastname === null
-                            ? ""
-                            : profileUser.lastname)}
-                        {profileUser.country && profileUser.country !== "" && (
+                        {profileUser.displayName}
+                        {
                           <ReactCountryFlag
                             countryCode={
                               countries.find(
@@ -90,7 +83,7 @@ const Profile = () => {
                             }}
                             title={profileUser.country || ""}
                           />
-                        )}
+                        }
                       </h3>
                       <h4>@{profileUser.username}</h4>
                     </div>

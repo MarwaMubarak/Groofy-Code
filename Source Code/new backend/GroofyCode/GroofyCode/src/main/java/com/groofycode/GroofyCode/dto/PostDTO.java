@@ -10,9 +10,12 @@ import java.util.List;
 @Setter
 @Getter
 public class PostDTO {
+    private Long id;
+    private Long postUserId;
     @NotBlank(message = "You should enter at least one character")
     private String content;
-    private List<LikeDTO> likes;
+    private Integer likesCnt;
+    private Integer isLiked;
     private Date createdAt;
     private Date updatedAt;
 }

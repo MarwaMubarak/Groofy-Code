@@ -1,8 +1,6 @@
 package com.groofycode.GroofyCode.service.User;
 
-import com.groofycode.GroofyCode.dto.User.ChangePasswordDTO;
-import com.groofycode.GroofyCode.dto.User.RegisterDTO;
-import com.groofycode.GroofyCode.dto.User.UserDTO;
+import com.groofycode.GroofyCode.dto.User.*;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
@@ -68,10 +66,23 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public ResponseEntity<Object> updatedUser(UpdatedUserDTO updatedUserDTO) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
+            modelMapper.map(updatedUserDTO,userModel);
+            userRepository.save(userModel);
+            return ResponseEntity.ok(ResponseUtils.successfulRes("User info updated successfully",null));
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
     public ResponseEntity<Object> changePassword(ChangePasswordDTO changePasswordDTO) throws Exception {
         try {
             // Find current user
-            UserModel currentUser = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
             if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ResponseUtils.unsuccessfulRes("Action not allowed", null));
@@ -102,13 +113,14 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<Object> getUserByUsername(String username) throws Exception {
         try {
-            Optional<UserModel> optionalUser = userRepository.findByUsername(username);
-            if (optionalUser.isEmpty()) {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
+            if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ResponseUtils.unsuccessfulRes("User not found", null));
             }
 
-            UserDTO userDTO = modelMapper.map(optionalUser.get(), UserDTO.class);
+            UserDTO userDTO = modelMapper.map(currentUser, UserDTO.class);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(ResponseUtils.successfulRes("User retrieved successfully", userDTO));
         } catch (Exception e) {

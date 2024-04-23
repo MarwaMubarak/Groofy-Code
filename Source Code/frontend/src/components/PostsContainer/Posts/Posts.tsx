@@ -30,7 +30,6 @@ const Posts = (props: PostsProps) => {
         { label: 20, value: 20 },
         { label: 50, value: 50 },
       ];
-      console.log("OPTIONS", options);
       return (
         <>
           <span
@@ -65,7 +64,6 @@ const Posts = (props: PostsProps) => {
     },
 
     PageLinks: (options: PaginatorPageLinksOptions) => {
-      console.log(options);
       return (
         <button
           className={
@@ -98,7 +96,8 @@ const Posts = (props: PostsProps) => {
                 postContent={post.content}
                 postTime={post.createdAt}
                 postID={post.id}
-                postLikesCnt={post.likes.length}
+                postLikesCnt={post.likesCnt}
+                isLiked={post.isLiked}
                 isEdited={post.createdAt !== post.updatedAt}
               />
             ))}

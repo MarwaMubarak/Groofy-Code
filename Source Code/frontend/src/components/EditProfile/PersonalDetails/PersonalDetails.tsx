@@ -38,23 +38,16 @@ const PersonalDetails = () => {
 
   const formikHandle = useFormik({
     initialValues: {
-      firstname: user.firstname?.toString() || "",
-      lastname: user.lastname?.toString() || "",
-      city: user.city?.toString() || "",
+      displayName: user.displayName,
       bio: user.bio?.toString() || "",
-      country: countries.find((country) => country.name === user.country) || {
-        name: "",
-        code: "",
-      },
+      country: countries.find((country) => country.name === user.country),
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
       const editInfo: EditInfo = {
-        firstname: values.firstname,
-        lastname: values.lastname,
-        city: values.city,
+        displayName: values.displayName,
         bio: values.bio,
-        country: values.country.name,
+        country: values.country!.name,
       };
       const ret = dispatch(userThunks.updateUser(editInfo) as any);
       if (ret instanceof Promise) {
@@ -122,40 +115,16 @@ const PersonalDetails = () => {
         </div>
         <GroofyField
           giText="First name"
-          giValue={formikHandle.values.firstname}
-          giPlaceholder="Enter your first name"
+          giValue={formikHandle.values.displayName}
+          giPlaceholder="Enter your display name"
           giType="text"
           errState={
-            formikHandle.touched.firstname && formikHandle.errors.firstname
+            formikHandle.touched.displayName && formikHandle.errors.displayName
               ? true
               : false
           }
-          onChange={formikHandle.handleChange("firstname")}
-          onBlur={formikHandle.handleBlur("firstname")}
-        />
-        <GroofyField
-          giText="Last name"
-          giValue={formikHandle.values.lastname}
-          giPlaceholder="Enter your last name"
-          giType="text"
-          errState={
-            formikHandle.touched.lastname && formikHandle.errors.lastname
-              ? true
-              : false
-          }
-          onChange={formikHandle.handleChange("lastname")}
-          onBlur={formikHandle.handleBlur("lastname")}
-        />
-        <GroofyField
-          giText="City"
-          giValue={formikHandle.values.city}
-          giPlaceholder="Enter your city"
-          giType="text"
-          errState={
-            formikHandle.touched.city && formikHandle.errors.city ? true : false
-          }
-          onChange={formikHandle.handleChange("city")}
-          onBlur={formikHandle.handleBlur("city")}
+          onChange={formikHandle.handleChange("displayName")}
+          onBlur={formikHandle.handleBlur("displayName")}
         />
         <div className={classes.bio_content}>
           <h1>Bio</h1>
@@ -182,7 +151,6 @@ const PersonalDetails = () => {
             filter
             valueTemplate={selectedCountryTemplate}
             itemTemplate={countryOptionTemplate}
-            // className="w-full md:w-14rem"
             className={classes.drop_down_div}
             panelClassName={styles.drop_down_panel}
           />

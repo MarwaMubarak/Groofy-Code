@@ -11,7 +11,6 @@ const getPosts = (id: string) => {
             Authorization: `Bearer ${user.token}`,
           },
         });
-        console.log(response.data.body);
         dispatch(postActions.setStatus(response.data.status));
         dispatch(postActions.setMessage(response.data.message));
         dispatch(postActions.setPosts(response.data.body));
@@ -101,7 +100,7 @@ const likePost = (postID: string, userID: string) => {
     const userToken = JSON.parse(localStorage.getItem("user")!).token;
     try {
       if (userToken) {
-        const response = await reqInstance.post(
+        await reqInstance.post(
           `/posts/${postID}/like`,
           {},
           {
@@ -110,7 +109,6 @@ const likePost = (postID: string, userID: string) => {
             },
           }
         );
-        console.log("Response", response);
         const time = Date.now();
         dispatch(postActions.likePost({ userID, postID, time }));
         dispatch(postActions.setStatus(""));

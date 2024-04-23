@@ -2,6 +2,7 @@ package com.groofycode.GroofyCode.service;
 
 
 import com.groofycode.GroofyCode.dto.ClanDTO;
+import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.ClanModel;
 import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.repository.ClanRepository;
@@ -55,7 +56,8 @@ public class ClanService {
 
     public ResponseEntity<Object> create(ClanDTO clanDTOBody) throws Exception {
         try {
-            UserModel currentUser = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
             clanDTOBody.setLeader(currentUser);
             ClanModel clan = modelMapper.map(clanDTOBody, ClanModel.class);
             // check if same name
@@ -77,7 +79,8 @@ public class ClanService {
     public ResponseEntity<Object> delete(Long id) throws Exception {
         try {
             Optional<ClanModel> clanModel = clanRepository.findById(id);
-            UserModel currentUser = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
 
             if (clanModel.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Not Found", null));
@@ -94,7 +97,8 @@ public class ClanService {
 
     public ResponseEntity<Object> updateName(Long clanId, String name) throws Exception {
         try {
-            UserModel currentUser = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
             Optional<ClanModel> clanModel = clanRepository.findById(clanId);
 
             if (clanModel.isEmpty()) {
@@ -123,7 +127,8 @@ public class ClanService {
     public ResponseEntity<Object> joinClan(Long clanId) throws Exception {
         try {
             Optional<ClanModel> clanModel = clanRepository.findById(clanId);
-            UserModel currentUser = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
 
             if (clanModel.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Clan Not Found", null));
@@ -149,7 +154,8 @@ public class ClanService {
     public ResponseEntity<?> leaveClan(Long clanId) throws Exception {
         try {
             Optional<ClanModel> clanModel = clanRepository.findById(clanId);
-            UserModel currentUser = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
             if (clanModel.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Clan Not Found.", null));
             }
