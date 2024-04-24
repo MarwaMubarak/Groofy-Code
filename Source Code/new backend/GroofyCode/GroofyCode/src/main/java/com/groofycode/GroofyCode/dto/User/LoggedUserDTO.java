@@ -13,23 +13,14 @@ public class LoggedUserDTO {
     private String username;
     private String displayName;
     private String email;
-    private String firstname;
-    private String lastname;
     private String country;
     private String[] badges;
     private String[] selectedBadges;
     private String[] friends;
     private boolean status;
     private boolean isOnline;
-    private int totalMatch;
-    private int highestTrophies;
-    private int wins;
-    private int loses;
-    private int draws;
-    private String division;
     private int Trophies;
     private String token;
     private String photoUrl;
     private Date createdAt;
-    private Date updatedAt;
 }

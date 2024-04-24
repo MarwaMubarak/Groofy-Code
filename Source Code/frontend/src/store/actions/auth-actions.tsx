@@ -16,7 +16,7 @@ const login = (loginInfo: LoginProps) => {
         password: loginInfo.password,
       });
       dispatch(authActions.setErrorMessage(""));
-      localStorage.setItem("user", JSON.stringify(response.data.body));
+      localStorage.setItem("token", response.data.body.token);
       dispatch(authActions.login(response.data.body));
     } catch (error: any) {
       throw error;
@@ -29,7 +29,7 @@ const logout = () => {
     dispatch(authActions.logout());
     dispatch(postActions.setStatus(""));
     dispatch(postActions.setMessage(""));
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 };
 

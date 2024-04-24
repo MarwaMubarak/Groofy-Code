@@ -6,11 +6,7 @@ const userSchema = yup.object().shape({
     .trim()
     .max(100, "Display name must be between 1 and 100 characters")
     .required("Display name is required"),
-  country: yup
-    .string()
-    .trim()
-    .max(100, "Country must be between 1 and 100 characters")
-    .required("Country is required"),
+  country: yup.object().required("Country is required"),
   bio: yup.string().trim().max(1000, "Bio can't exceed 1000 characters"),
 });
 

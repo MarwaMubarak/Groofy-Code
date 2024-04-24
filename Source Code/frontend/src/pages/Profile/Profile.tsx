@@ -44,6 +44,7 @@ const Profile = () => {
     };
     getUser();
   }, [dispatch, userProfile]);
+
   return (
     <div className={classes.newprofile_container}>
       <Toast ref={toast} />
@@ -115,11 +116,7 @@ const Profile = () => {
                       <img src="/Assets/SVG/calendar.svg" alt="calender" />
                       Joined
                       <span className={classes.beside}>
-                        {FormatDate(
-                          userProfile === loggedUser.username
-                            ? loggedUser.createdAt
-                            : profileUser.createdAt
-                        )}
+                        {FormatDate(profileUser.createdAt)}
                       </span>
                     </span>
                   </div>
@@ -142,7 +139,7 @@ const Profile = () => {
                         src="/Assets/SVG/trophyIconYellow.svg"
                         alt="RankImg"
                       />
-                      <span>1986</span>
+                      <span>{profileUser.currentTrophies}</span>
                     </div>
                   </div>
                 </div>
@@ -151,14 +148,18 @@ const Profile = () => {
                     <h3>World rank</h3>
                     <div className={classes.middle_down_box}>
                       <img src="/Assets/SVG/world_rank.svg" alt="RankImg" />
-                      <span>#217</span>
+                      <span>
+                        {profileUser.worldRank === 0
+                          ? "Unranked"
+                          : `#${profileUser.worldRank}`}
+                      </span>
                     </div>
                   </div>
                   <div className={classes.middle_down_info}>
                     <h3>Max Rating</h3>
                     <div className={classes.middle_down_box}>
                       <img src="/Assets/Badges/Badge6.svg" alt="RankImg" />
-                      <span>3247</span>
+                      <span>{profileUser.maxRating}</span>
                     </div>
                   </div>
                 </div>

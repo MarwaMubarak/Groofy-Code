@@ -12,11 +12,9 @@ public class UserDTO {
 
     private String username;
 
+    private String displayName;
+
     private String email;
-
-    private String firstname;
-
-    private String lastname;
 
     private String country;
 
@@ -26,7 +24,19 @@ public class UserDTO {
 
     private String photoUrl;
 
-    private Date createdAt;
+    private Integer totalMatches;
 
-    private Date updatedAt;
+    private Integer wins;
+
+    private Integer draws;
+
+    private Integer losses;
+
+    private Integer currentTrophies;
+
+    private Integer worldRank;
+
+    private Integer maxRating;
+
+    private Date createdAt;
 }
