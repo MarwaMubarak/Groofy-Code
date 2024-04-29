@@ -23,6 +23,10 @@ public class ClanModel {
     @JoinColumn(name = "leader", nullable = false)
     private UserModel leader;
 
+    @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Message> messages;
+
+
     @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<UserModel> members;
 
