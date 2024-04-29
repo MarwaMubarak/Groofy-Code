@@ -41,7 +41,7 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
     if (
       resStatus === "" ||
       resMessage === "" ||
-      resMessage === "All posts returned."
+      resMessage === "User posts retrieved successfully"
     )
       return;
     if (resStatus === "success") {

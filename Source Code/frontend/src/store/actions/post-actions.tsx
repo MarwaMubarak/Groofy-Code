@@ -4,11 +4,11 @@ import { postActions } from "../slices/post-slice";
 const getPosts = (id: string) => {
   return async (dispatch: any) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user")!);
-      if (user.token) {
+      const token = localStorage.getItem("token");
+      if (token) {
         const response = await reqInstance.get(`/posts/${id}`, {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         dispatch(postActions.setStatus(response.data.status));
@@ -25,8 +25,8 @@ const getPosts = (id: string) => {
 const addPost = (content: string) => {
   return async (dispatch: any) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user")!);
-      if (user.token) {
+      const token = localStorage.getItem("token");
+      if (token) {
         const response = await reqInstance.post(
           "/posts",
           {
@@ -34,7 +34,7 @@ const addPost = (content: string) => {
           },
           {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -52,8 +52,8 @@ const addPost = (content: string) => {
 const updatePost = (postID: string, content: string) => {
   return async (dispatch: any) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user")!);
-      if (user.token) {
+      const token = localStorage.getItem("token");
+      if (token) {
         const response = await reqInstance.put(
           `/posts/${postID}`,
           {
@@ -61,7 +61,7 @@ const updatePost = (postID: string, content: string) => {
           },
           {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -77,11 +77,11 @@ const updatePost = (postID: string, content: string) => {
 const deletePost = (postID: string) => {
   return async (dispatch: any) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user")!);
-      if (user.token) {
+      const token = localStorage.getItem("token");
+      if (token) {
         const response = await reqInstance.delete(`/posts/${postID}`, {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         dispatch(postActions.deletePost(postID));
@@ -97,15 +97,15 @@ const deletePost = (postID: string) => {
 
 const likePost = (postID: string, userID: string) => {
   return async (dispatch: any) => {
-    const userToken = JSON.parse(localStorage.getItem("user")!).token;
+    const token = localStorage.getItem("token");
     try {
-      if (userToken) {
+      if (token) {
         await reqInstance.post(
           `/posts/${postID}/like`,
           {},
           {
             headers: {
-              Authorization: `Bearer ${userToken}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );

@@ -114,7 +114,7 @@ const PersonalDetails = () => {
           </label>
         </div>
         <GroofyField
-          giText="First name"
+          giText="Display name"
           giValue={formikHandle.values.displayName}
           giPlaceholder="Enter your display name"
           giType="text"
@@ -155,7 +155,11 @@ const PersonalDetails = () => {
             panelClassName={styles.drop_down_panel}
           />
         </div>
-        <Button className={classNames(classes.groofybtn)} label="Save" />
+        <Button
+          className={classNames(classes.groofybtn)}
+          type="submit"
+          label="Save"
+        />
       </form>
     </div>
   );

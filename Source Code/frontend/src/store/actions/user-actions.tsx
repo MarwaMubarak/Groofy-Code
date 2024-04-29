@@ -10,11 +10,11 @@ export interface EditInfo {
 
 const getUser = (username: string) => {
   return async (dispatch: any) => {
-    const loggedUser = JSON.parse(localStorage.getItem("user")!);
+    const token = localStorage.getItem("token");
     try {
       const response = await reqInstance.get(`/users/${username}`, {
         headers: {
-          Authorization: `Bearer ${loggedUser.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       dispatch(userActions.setUser(response.data.body));
@@ -35,17 +35,34 @@ const getUser = (username: string) => {
   };
 };
 
+const getProfile = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(`/users/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(authActions.setUser(response.data.body));
+      } catch (error: any) {
+        throw error;
+      }
+    }
+  };
+};
+
 const updateUser = (editInfo: EditInfo) => {
   return async (dispatch: any) => {
     try {
-      const userToken = JSON.parse(localStorage.getItem("user")!).token;
+      const token = localStorage.getItem("token");
       const response = await reqInstance.put(`/users`, editInfo, {
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-      const newInfo = { ...response.data.body, token: userToken };
-      localStorage.setItem("user", JSON.stringify(newInfo));
+      const newInfo = { ...response.data.body };
       dispatch(authActions.setUser(newInfo));
       return response;
     } catch (error: any) {
@@ -61,7 +78,7 @@ const changePassword = (
 ) => {
   return async (dispatch: any) => {
     try {
-      const userToken = JSON.parse(localStorage.getItem("user")!).token;
+      const token = localStorage.getItem("token");
       const response = await reqInstance.put(
         `/users/password`,
         {
@@ -71,7 +88,7 @@ const changePassword = (
         },
         {
           headers: {
-            Authorization: `Bearer ${userToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -85,10 +102,10 @@ const changePassword = (
 const searchForUsers = (searchQuery: string) => {
   return async (dispatch: any) => {
     try {
-      const userToken = JSON.parse(localStorage.getItem("user")!).token;
+      const token = localStorage.getItem("token");
       const response = await reqInstance.get(`/users/search/${searchQuery}`, {
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return response;
@@ -98,6 +115,12 @@ const searchForUsers = (searchQuery: string) => {
   };
 };
 
-const userThunks = { getUser, updateUser, changePassword, searchForUsers };
+const userThunks = {
+  getUser,
+  getProfile,
+  updateUser,
+  changePassword,
+  searchForUsers,
+};
 
 export default userThunks;

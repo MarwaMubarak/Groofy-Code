@@ -4,16 +4,12 @@ import com.groofycode.GroofyCode.dto.User.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.User.RegisterDTO;
 import com.groofycode.GroofyCode.dto.User.UpdatedUserDTO;
 import com.groofycode.GroofyCode.service.User.UserService;
-import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
 public class UserController {
     private final UserService userService;
 
@@ -27,15 +23,10 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-//        UserDTO user = userService.getBadgeById(id);
-//        if (user != null) {
-//            return new ResponseEntity<>(user, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @GetMapping("/users/profile")
+    public ResponseEntity<Object> getProfile() throws Exception {
+        return userService.getProfile();
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Object> createUser(@RequestBody @Valid RegisterDTO registerDTO) throws Exception {

@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const authInitialState = {
-  user: localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user")!)
-    : null,
+  user: null,
   errorMessage: "",
 };
 
@@ -18,7 +16,7 @@ const authSlice = createSlice({
       state.user = null;
     },
     setUser(state, action) {
-      state.user = action.payload;
+      state.user = { ...(state.user || {}), ...action.payload };
     },
     setErrorMessage(state, action) {
       state.errorMessage = action.payload;

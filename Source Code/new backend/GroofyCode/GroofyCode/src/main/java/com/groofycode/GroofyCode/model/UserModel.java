@@ -2,9 +2,11 @@ package com.groofycode.GroofyCode.model;
 
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import jakarta.persistence.*;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +41,20 @@ public class UserModel implements UserDetails {
     @Column(columnDefinition = "TEXT")
     private String photoUrl;
 
+    private Integer totalMatches = 0;
+
+    private Integer wins;
+
+    private Integer draws;
+
+    private Integer losses;
+
+    private Integer currentTrophies;
+
+    private Integer worldRank;
+
+    private Integer maxRating;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PostModel> posts;
 
@@ -53,11 +69,15 @@ public class UserModel implements UserDetails {
     @CreationTimestamp
     private Date createdAt;
 
-    @CreationTimestamp
-    private Date updatedAt;
-
     public UserModel() {
         this.photoUrl = "https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI4MDQwOTc0L29yaWdpbmFsX2ZmNGYxZjQzZDdiNzJjYzMxZDJlYjViMDgyN2ZmMWFjLnBuZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTIwMCwiaGVpZ2h0IjoxMjAwLCJmaXQiOiJpbnNpZGUiLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWV9LCJ3ZWJwIjp7InF1YWxpdHkiOjkwfSwianBlZyI6eyJxdWFsaXR5Ijo5MH0sInJvdGF0ZSI6bnVsbH19?bc=0";
+        this.currentTrophies = 0;
+        this.worldRank = 0;
+        this.maxRating = 0;
+        this.totalMatches = 0;
+        this.wins = 0;
+        this.draws = 0;
+        this.losses = 0;
     }
 
     @Override

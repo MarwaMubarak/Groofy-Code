@@ -1,8 +1,8 @@
-import FormatDate from "../../../shared/functions/format-date";
 import { PInfoProps } from "../../../shared/types";
 import classes from "./scss/pinfo.module.css";
 
 const PInfo = (props: PInfoProps) => {
+  console.log("Profile User", props.profileUser);
   return (
     <div className={classes.up_side_right}>
       <div className={classes.profile_section}>
@@ -18,20 +18,6 @@ const PInfo = (props: PInfoProps) => {
             </abbr>
           </div>
           <div className={classes.ps_container_box}>
-            {/* <div className={classes.psi_single_details}>
-              <span>
-                <img src="/Assets/SVG/calendar.svg" alt="calender" />
-                Joined
-                <span className={classes.beside}>
-                  {FormatDate(props.profileUser.createdAt)}
-                </span>
-              </span>
-            </div> */}
-            {/* <div className={classes.psi_single_details}>
-              <span>
-                World Rank: <span className={classes.beside}> {0}</span>
-              </span>
-            </div> */}
             <div className={classes.psi_single_details}>
               <span>
                 Last Seen:
@@ -68,23 +54,16 @@ const PInfo = (props: PInfoProps) => {
                 Total Matches
               </span>
               <span className={classes.any}>
-                {props.profileUser.totalMatch}
+                {props.profileUser.totalMatches}
               </span>
             </div>
-            {/* <div className={classes.psi_single_details}>
-              <span>
-                <img src="/Assets/Images/Yellow_trophy.png" alt="StatsIcon" />
-                Highest Trophies
-              </span>
-              <span className={classes.any}>5030</span>
-            </div> */}
             <div className={classes.psi_single_details}>
               <span>Wins</span>
               <span className={classes.any}>{props.profileUser.wins}</span>
             </div>
             <div className={classes.psi_single_details}>
               <span>Loses</span>
-              <span className={classes.any}>{props.profileUser.loses}</span>
+              <span className={classes.any}>{props.profileUser.losses}</span>
             </div>
             <div className={classes.psi_single_details}>
               <span>Draws</span>
@@ -92,34 +71,6 @@ const PInfo = (props: PInfoProps) => {
             </div>
           </div>
         </div>
-        {/* <div className={classes.ps_info}>
-          <div className={classes.ps_header}>
-            <h3>Division</h3>
-            <abbr title="Info">
-              <img
-                src="/Assets/SVG/info.svg"
-                className={classes.info_btn}
-                alt="Info"
-              />
-            </abbr>
-          </div>
-          <div className={classes.ps_container}>
-            <div className={classes.psi_box}>
-              <img src="/Assets/Images/elite-rank.png" alt="RankImg" />
-              <div className={classes.wrapper}>
-                <span>Rank</span>
-                <h3>Elite</h3>
-              </div>
-            </div>
-            <div className={classes.psi_box}>
-              <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
-              <div className={classes.wrapper}>
-                <span>Clan</span>
-                <h3>Ghosts</h3>
-              </div>
-            </div>
-          </div>
-        </div> */}
         <div className={classes.ps_info}>
           <div className={classes.ps_header}>
             <h3>Badges</h3>

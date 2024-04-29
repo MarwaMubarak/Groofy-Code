@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -35,6 +34,17 @@ public class UserService implements UserDetailsService {
             List<UserModel> users = userRepository.findAll();
             List<UserDTO> userDTOS = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
             return ResponseEntity.ok(ResponseUtils.successfulRes("Users retrieved successfully", userDTOS));
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
+    public ResponseEntity<Object> getProfile() throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
+            UserDTO userDTO = modelMapper.map(userModel, UserDTO.class);
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -70,9 +80,9 @@ public class UserService implements UserDetailsService {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
-            modelMapper.map(updatedUserDTO,userModel);
+            modelMapper.map(updatedUserDTO, userModel);
             userRepository.save(userModel);
-            return ResponseEntity.ok(ResponseUtils.successfulRes("User info updated successfully",null));
+            return ResponseEntity.ok(ResponseUtils.successfulRes("User info updated successfully", null));
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -113,13 +123,11 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<Object> getUserByUsername(String username) throws Exception {
         try {
-            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
+            UserModel currentUser = userRepository.findByUsername(username);
             if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ResponseUtils.unsuccessfulRes("User not found", null));
             }
-
             UserDTO userDTO = modelMapper.map(currentUser, UserDTO.class);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(ResponseUtils.successfulRes("User retrieved successfully", userDTO));

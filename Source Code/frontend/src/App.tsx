@@ -12,52 +12,77 @@ import {
   ClanSearch,
   Messaging,
 } from "./pages";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { userThunks } from "./store/actions";
+import { useEffect } from "react";
 
 function App() {
-  const user = useSelector((state: any) => state.auth.user);
+  const loggedUser = useSelector((state: any) => state.auth.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const getProfile = async () => {
+      await dispatch(userThunks.getProfile() as any);
+    };
+    if (!loggedUser) {
+      getProfile();
+    }
+  }, [dispatch, loggedUser]);
+
+  if (!loggedUser && localStorage.getItem("token")) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route
+          path="/"
+          element={loggedUser ? <Home /> : <Navigate to="/login" />}
+        />
         <Route path="/login" element={<Login />} />
         <Route
           path="/signup"
-          element={user ? <Navigate to="/" /> : <SignUp />}
+          element={loggedUser ? <Navigate to="/" /> : <SignUp />}
         />
         <Route
           path="/profile/:username"
-          element={user ? <Profile /> : <Navigate to="/login" />}
+          element={loggedUser ? <Profile /> : <Navigate to="/login" />}
         />
         <Route
           path="/profile/edit"
-          element={user ? <EditProfile /> : <Navigate to="/login" />}
+          element={loggedUser ? <EditProfile /> : <Navigate to="/login" />}
         />
         <Route
           path="/play"
-          element={user ? <Play /> : <Navigate to="/login" />}
+          element={loggedUser ? <Play /> : <Navigate to="/login" />}
         />
         <Route
           path="/clan"
-          element={user ? <Clan /> : <Navigate to="/login" />}
+          element={loggedUser ? <Clan /> : <Navigate to="/login" />}
         />
-        <Route path="/news" element={user ? null : <Navigate to="/login" />} />
-        <Route path="/help" element={user ? null : <Navigate to="/login" />} />
+        <Route
+          path="/news"
+          element={loggedUser ? null : <Navigate to="/login" />}
+        />
+        <Route
+          path="/help"
+          element={loggedUser ? null : <Navigate to="/login" />}
+        />
         <Route
           path="/match"
-          element={user ? <Match /> : <Navigate to="/login" />}
+          element={loggedUser ? <Match /> : <Navigate to="/login" />}
         />
         <Route
           path="/search"
-          element={user ? <Search /> : <Navigate to="/login" />}
+          element={loggedUser ? <Search /> : <Navigate to="/login" />}
         />
         <Route
           path="/clan-search"
-          element={user ? <ClanSearch /> : <Navigate to="/login" />}
+          element={loggedUser ? <ClanSearch /> : <Navigate to="/login" />}
         />
         <Route
           path="/user/message"
-          element={user ? <Messaging /> : <Navigate to="/login" />}
+          element={loggedUser ? <Messaging /> : <Navigate to="/login" />}
         />
       </Routes>
     </BrowserRouter>
