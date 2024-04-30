@@ -1,6 +1,7 @@
 package com.groofycode.GroofyCode.config;
 
 import com.groofycode.GroofyCode.filter.JwtFilter;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,13 +37,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/login", "/register").permitAll();
+                    auth.requestMatchers("/login", "/register", "/socket/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .cors(c -> c.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowCredentials(true);
                     configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-                    configuration.setAllowedMethods(List.of("*"));
+                    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     configuration.setAllowedHeaders(List.of("*"));
                     return configuration;
                 }))

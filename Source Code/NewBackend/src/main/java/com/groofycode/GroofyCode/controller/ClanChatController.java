@@ -18,15 +18,15 @@ public class ClanChatController {
     @Autowired
     private MessageService messageService;
 
-    // Handle messages sent by users to a specific clan chat
-    @MessageMapping("/clan/{clanId}/sendMessage")
-    public void sendMessageToClan(@Payload String message, @DestinationVariable("clanId") Long clanId) {
-        // Send the message to all subscribers of the clan
-        System.out.println(message);
-        messagingTemplate.convertAndSend("/topic/clan/" + clanId, message);
-    }
-
-
+//    // Handle messages sent by users to a specific clan chat
+//    @MessageMapping("/clan/{clanId}/sendMessage")
+//    public void sendMessageToClan(@Payload String message, @DestinationVariable("clanId") Long clanId) {
+//        // Send the message to all subscribers of the clan
+//        System.out.println(message);
+//        messagingTemplate.convertAndSend("/topic/clan/" + clanId, message);
+//    }
+//
+//
 
     // Handle messages sent by users to a specific clan chat
     @MessageMapping("/clan/{clanId}/sendMessage")

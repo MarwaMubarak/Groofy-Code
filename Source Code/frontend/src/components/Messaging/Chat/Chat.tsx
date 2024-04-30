@@ -1,10 +1,12 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import { MenuItem } from "primereact/menuitem";
 import { ChatProps } from "../../../shared/types";
 import classes from "./scss/chat.module.css";
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 const Chat = (props: ChatProps) => {
   const menu = useRef<any>(null);
@@ -48,8 +50,39 @@ const Chat = (props: ChatProps) => {
       icon: "bi bi-ban",
     },
   ];
+
+  const [messages, setMessages] = useState<any>([]);
+  const [stompClient, setStompClient] = useState<any>(null);
+
+  useEffect(() => {
+    const socket = new SockJS("http://localhost:8080/socket");
+    const client = Stomp.over(socket);
+    // client.debug = () => {};
+
+    client.connect(
+      { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      function (frame: any) {
+        client.subscribe("/topic/return-to", function (message) {
+          setMessages((prev: any) => [...prev, message.body]);
+        });
+      }
+    );
+
+    setStompClient(client as any);
+    return () => client.disconnect();
+  }, []);
+
+  const sendMessage = (msg: any) => {
+    stompClient.send(
+      "/app/message",
+      { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      "Hello, world!"
+    );
+  };
+
   return (
     <div className={classes.chat_container}>
+      <button onClick={sendMessage}></button>
       <TieredMenu
         model={items}
         popup
