@@ -1,23 +1,52 @@
 import { TcR, GBtn } from "../..";
 import classes from "./scss/codingsection.module.css";
+import CodeMirror from "@uiw/react-codemirror";
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { cpp } from "@codemirror/lang-cpp";
+import { python } from "@codemirror/lang-python";
+import { javascript } from "@codemirror/lang-javascript";
+import { java } from "@codemirror/lang-java";
+import { useState } from "react";
+
+const languages: any = {
+  "c++": {
+    ext: cpp(),
+    val: `#include <iostream>\n\nusing namespace std;\n\nint main() {\n\tcout << "Hello world!";\n}\n`,
+  },
+  js: { ext: javascript(), val: `console.log("Hello world!");\n` },
+  jar: {
+    ext: java(),
+    val: `public class Main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello world!");\n\t}\n}\n`,
+  },
+  py: { ext: python(), val: `print("Hello world!")\n` },
+};
 
 const CodingSection = () => {
+  const [currentLang, setCurrentLang] = useState("c++");
   return (
     <div className={classes.esec}>
       <div className={classes.coding_sec}>
         <div className={classes.lng}>
           <span className={classes.cl_title}>Language:</span>
-          <select value={"c++"}>
+          <select
+            value={currentLang}
+            onChange={(e) => setCurrentLang(e.target.value)}
+          >
             <option disabled>Select a Language</option>
             <option value="c++">C++</option>
-            <option value="c">C</option>
             <option value="js">JavaScript</option>
             <option value="jar">Java</option>
             <option value="py">Python</option>
           </select>
         </div>
         <div className={classes.editor}>
-          <textarea></textarea>
+          <CodeMirror
+            extensions={[languages[currentLang].ext]}
+            theme={vscodeDark}
+            value={languages[currentLang].val}
+            height="400px"
+            style={{ fontSize: "16px" }}
+          />
         </div>
         <div className={classes.compiling_btns}>
           <GBtn
