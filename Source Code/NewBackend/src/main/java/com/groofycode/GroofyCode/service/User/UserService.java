@@ -2,7 +2,6 @@ package com.groofycode.GroofyCode.service.User;
 
 import com.groofycode.GroofyCode.dto.User.*;
 import com.groofycode.GroofyCode.model.UserModel;
-import com.groofycode.GroofyCode.model.UserSession;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
@@ -168,18 +167,5 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("This Username[" + username + "] Not Found");
         }
         return userModel;
-    }
-
-    public void storeSessionId(String username, String sessionId) {
-        UserModel user = userRepository.findByUsername(username);
-        if (user != null) {
-            UserSession userSession = new UserSession();
-            userSession.setUser(user);
-            userSession.setSessionId(sessionId);
-            // You may need to map additional fields from the DTO to the entity here
-
-            user.getSessions().add(userSession);
-            userRepository.save(user);
-        }
     }
 }

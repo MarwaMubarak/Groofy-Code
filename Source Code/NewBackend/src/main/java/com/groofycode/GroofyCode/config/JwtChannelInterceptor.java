@@ -1,6 +1,9 @@
 package com.groofycode.GroofyCode.config;
 
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.UserModel;
+import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.service.User.UserService;
 import com.groofycode.GroofyCode.utilities.SecretKeyReader;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -20,8 +23,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 import javax.crypto.SecretKey;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,14 +35,20 @@ import java.util.List;
 
 @Component
 public class JwtChannelInterceptor implements ChannelInterceptor {
-    @Value("${auth.secret}")
-    private String tokenSecretKey;
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private SecretKeyReader secretKeyReader;
 
-    JwtChannelInterceptor(SecretKeyReader secretKeyReader) {
+
+    JwtChannelInterceptor(SecretKeyReader secretKeyReader, UserService userService, UserRepository userRepository) {
         this.secretKeyReader = secretKeyReader;
+        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override

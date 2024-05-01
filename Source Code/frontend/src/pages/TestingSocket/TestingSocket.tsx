@@ -14,11 +14,14 @@ const TestingSocket = () => {
     client.connect(
       { Authorization: `Bearer ${localStorage.getItem("token")}` },
       function (frame: any) {
-        client.subscribe("/topic/return-to", function (message) {
-          setMessages((prev: any) => [...prev, message.body]);
-        });
+        client.subscribe("/clan", onMessage);
+        // client.subscribe(`/user`, onMessage);
+        client.subscribe(`/clan/hazemadel/asd`, onMessage);
       }
     );
+    const onMessage = (message: any) => {
+      console.log("Message", JSON.parse(message.body));
+    };
 
     setStompClient(client as any);
     return () => client.disconnect();

@@ -3,6 +3,7 @@ package com.groofycode.GroofyCode.model;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -68,11 +69,6 @@ public class UserModel implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "badges_users", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "badge_id"))
     private List<BadgeModel> badges;
-
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserSession> sessions;
-
 
     @CreationTimestamp
     private Date createdAt;
