@@ -69,6 +69,11 @@ public class UserModel implements UserDetails {
     @JoinTable(name = "badges_users", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "badge_id"))
     private List<BadgeModel> badges;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserSession> sessions;
+
+
     @CreationTimestamp
     private Date createdAt;
 
