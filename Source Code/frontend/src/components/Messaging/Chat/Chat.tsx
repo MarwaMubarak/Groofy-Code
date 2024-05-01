@@ -72,17 +72,25 @@ const Chat = (props: ChatProps) => {
     return () => client.disconnect();
   }, []);
 
-  const sendMessage = (msg: any) => {
+  const sendMessage = (clanId: any, msg: any) => {
+    const data = {
+      userId: 2,
+      content: msg,
+    };
     stompClient.send(
-      "/app/message",
+      `/app/clan/${clanId}/sendMessage`,
       { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      "Hello, world!"
+      JSON.stringify(data)
     );
   };
 
   return (
     <div className={classes.chat_container}>
-      <button onClick={sendMessage}></button>
+      <button
+        onClick={() => {
+          sendMessage(1, "Hello Socket");
+        }}
+      ></button>
       <TieredMenu
         model={items}
         popup

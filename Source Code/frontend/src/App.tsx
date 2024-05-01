@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { userThunks } from "./store/actions";
 import { useEffect } from "react";
+import TestingSocket from "./pages/TestingSocket/TestingSocket";
 
 function App() {
   const loggedUser = useSelector((state: any) => state.auth.user);
@@ -84,6 +85,7 @@ function App() {
           path="/user/message"
           element={loggedUser ? <Messaging /> : <Navigate to="/login" />}
         />
+        <Route path="/testingsocket" element={<TestingSocket />} />
       </Routes>
     </BrowserRouter>
   );

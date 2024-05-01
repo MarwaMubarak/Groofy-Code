@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.service;
 
+import com.groofycode.GroofyCode.dto.MessageDTO;
 import com.groofycode.GroofyCode.model.ClanModel;
 import com.groofycode.GroofyCode.model.Message;
 import com.groofycode.GroofyCode.model.UserModel;
@@ -22,14 +23,18 @@ public class MessageService {
     private MessageRepository messageRepository;
 
 
-    public void sendMessageToClan(Message message, Long clanId) {
+    public void sendMessageToClan(MessageDTO messageDTO, Long clanId) {
         // Set the clan for the message
         ClanModel clan = clanRepository.findById(clanId).orElseThrow(() -> new RuntimeException("Clan not found"));
+        Message message = new Message();
+
         message.setClan(clan);
 
         // Set the user for the message (You need to get the authenticated user here)
-        UserModel user = userRepository.findById(1L).orElseThrow(() -> new RuntimeException("User not found"));
+        UserModel user = userRepository.findById(messageDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         message.setUser(user);
+
+        message.setContent(messageDTO.getContent());
 
         // Save the message to the database
         messageRepository.save(message);
