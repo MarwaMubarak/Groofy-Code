@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.model;
 
+import com.groofycode.GroofyCode.model.Match.UserMatch;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import jakarta.persistence.*;
 
@@ -42,7 +43,9 @@ public class UserModel implements UserDetails {
     @Column(columnDefinition = "TEXT")
     private String photoUrl;
 
-    private Integer totalMatches = 0;
+    private Integer status;
+
+    private Integer totalMatches;
 
     private Integer wins;
 
@@ -70,6 +73,9 @@ public class UserModel implements UserDetails {
     @JoinTable(name = "badges_users", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "badge_id"))
     private List<BadgeModel> badges;
 
+    @OneToMany(mappedBy = "userModel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserMatch> userMatches;
+
     @CreationTimestamp
     private Date createdAt;
 
@@ -82,6 +88,8 @@ public class UserModel implements UserDetails {
         this.wins = 0;
         this.draws = 0;
         this.losses = 0;
+        this.status = 0;
+        this.userMatches = new ArrayList<>();
     }
 
     @Override

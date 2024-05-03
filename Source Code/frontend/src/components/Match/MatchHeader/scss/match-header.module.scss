@@ -60,19 +60,50 @@
   }
   .user_area {
     @include center;
-    user-select: none;
-    gap: 0 3px;
-    .h_usn {
-      color: #fff;
-      font-weight: 400;
-      font-size: 18px;
-      margin-right: 10px;
+    .finish_match {
+      margin-right: 30px;
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -17px;
+        width: 2px;
+        height: 30px;
+        background-color: rgb(59, 67, 85);
+      }
+      .finish_btn {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: $greenColor;
+        padding: 8px 25px;
+        border: none;
+        border-radius: 6px;
+        user-select: none;
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover {
+          background-color: #28b01b;
+        }
+      }
     }
-    .h_imgbox {
-      .pr_ph {
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
+    .info {
+      @include center;
+      user-select: none;
+      gap: 0 3px;
+      .h_usn {
+        color: #fff;
+        font-weight: 400;
+        font-size: 18px;
+        margin-right: 10px;
+      }
+      .h_imgbox {
+        .pr_ph {
+          border-radius: 50%;
+          width: 45px;
+          height: 45px;
+        }
       }
     }
   }

@@ -38,7 +38,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/login", "/register", "/socket/**", "/submit-code").permitAll();
+                    auth.requestMatchers("/login", "/register", "/socket/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .cors(c -> c.configurationSource(request -> {

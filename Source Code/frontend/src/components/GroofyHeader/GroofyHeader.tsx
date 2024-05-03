@@ -26,6 +26,7 @@ const GroofyHeader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
+  const userMatchStatus = useSelector((state: any) => state.auth.status);
   const op = useRef<OverlayPanel>(null);
   const [searchText, setSearchText] = useState<string>("");
   const [counterToFetch, setCounterToFetch] = useState<number>(2);
@@ -33,6 +34,7 @@ const GroofyHeader = () => {
   const componentRefProfileArea = useRef(null);
   const componentRefNotifyArea = useRef(null);
   const [searchActive, setSearchActive] = useState(false);
+  const [inMatch, setInMatch] = useState(userMatchStatus === 1);
 
   useClickOutside(componentRefProfileArea, () => {
     setProfileActive(false);
@@ -78,6 +80,15 @@ const GroofyHeader = () => {
       }
     }
   }, [counterToFetch, dispatch, searchText]);
+
+  useEffect(() => {
+    if (userMatchStatus === 1) {
+      setInMatch(true);
+    } else {
+      setInMatch(false);
+    }
+  }, [userMatchStatus]);
+
   const [notifyActive, setNotifyActive] = useState(false);
   const [notifyNewCnt, setNotifyNewCnt] = useState(15);
   const [notifyCnt, setNotifyCnt] = useState(4);
@@ -269,6 +280,12 @@ const GroofyHeader = () => {
         </OverlayPanel>
       </div>
       <div className={classes.header_user_area}>
+        {inMatch && (
+          <div className={classes.ongoing_match}>
+            <span>Match in progress</span>
+            <Link to="/match">View match</Link>
+          </div>
+        )}
         <div className={classes.header_h_imgbox}>
           <ActionButton
             count={friendsNewCnt}

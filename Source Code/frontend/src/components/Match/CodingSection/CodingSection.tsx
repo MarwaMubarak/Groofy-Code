@@ -6,7 +6,10 @@ import { cpp } from "@codemirror/lang-cpp";
 import { python } from "@codemirror/lang-python";
 import { javascript } from "@codemirror/lang-javascript";
 import { java } from "@codemirror/lang-java";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { matchThunks } from "../../../store/actions";
+import { Toast } from "primereact/toast";
 
 const languages: any = {
   "c++": {
@@ -23,8 +26,27 @@ const languages: any = {
 
 const CodingSection = () => {
   const [currentLang, setCurrentLang] = useState("c++");
+  const [currentCode, setCurrentCode] = useState(languages[currentLang].val);
+  const dispatch = useDispatch();
+  const isSubmitting = useSelector((state: any) => state.submission.isLoading);
+  const toast = useRef<Toast>(null);
+  console.log(isSubmitting);
+
+  const submitCode = async () => {
+    return await dispatch(
+      matchThunks.submitCode({
+        code: currentCode,
+        language: "GNU G++17 7.3.0",
+        problemUrl: "https://codeforces.com/problemset/problem/71/A",
+      }) as any
+    );
+  };
+  console.log("Current code: ", currentCode);
+  console.log("Is Submitting: ", isSubmitting);
+
   return (
     <div className={classes.esec}>
+      <Toast ref={toast} style={{ padding: "0.75rem" }} />
       <div className={classes.coding_sec}>
         <div className={classes.lng}>
           <span className={classes.cl_title}>Language:</span>
@@ -43,7 +65,8 @@ const CodingSection = () => {
           <CodeMirror
             extensions={[languages[currentLang].ext]}
             theme={vscodeDark}
-            value={languages[currentLang].val}
+            value={currentCode}
+            onChange={(val) => setCurrentCode(val)}
             height="400px"
             style={{ fontSize: "16px" }}
           />
@@ -57,7 +80,26 @@ const CodingSection = () => {
           <GBtn
             btnText="Submit"
             icnSrc="/Assets/SVG/submit.svg"
-            clickEvent={() => {}}
+            btnState={isSubmitting}
+            clickEvent={() => {
+              submitCode()
+                .then((res: any) => {
+                  toast.current?.show({
+                    severity: res.body === "Accepted" ? "success" : "error",
+                    summary: res.status,
+                    detail: res.body,
+                    life: 3000,
+                  });
+                })
+                .catch((err: any) => {
+                  toast.current?.show({
+                    severity: "error",
+                    summary: err.status,
+                    detail: err.message,
+                    life: 3000,
+                  });
+                });
+            }}
           />
         </div>
       </div>

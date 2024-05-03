@@ -16,6 +16,8 @@ public class UserDTO {
 
     private String email;
 
+    private Integer status;
+
     private String country;
 
     private String bio;

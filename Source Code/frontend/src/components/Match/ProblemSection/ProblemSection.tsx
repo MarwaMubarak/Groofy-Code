@@ -24,7 +24,7 @@ const ProblemSection = () => {
         <span className={classes.tch}>Testcases</span>
         <div className={classes.tcs_container}>
           {[1, 2, 3].map((i) => (
-            <div className={classes.tc_box}>
+            <div className={classes.tc_box} key={i}>
               <span className={classes.tc_num}>Testcase {i}:</span>
               <Testcase />
             </div>

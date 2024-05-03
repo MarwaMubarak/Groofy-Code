@@ -9,10 +9,16 @@ const GBtn = (props: btnProps) => {
       onClick={props.clickEvent}
       type={`${props.btnType ? "submit" : "button"}`}
     >
-      {props.icnSrc && (
+      {props.icnSrc && !props.btnState && (
         <img className={classes.btn_icn} src={`${props.icnSrc}`} alt="Run" />
       )}
-      <span className={classes.btn_text}>{props.btnText}</span>
+      <span className={classes.btn_text}>
+        {props.btnState ? (
+          <i className="pi pi-spin pi-spinner" style={{ fontSize: "24px" }}></i>
+        ) : (
+          props.btnText
+        )}
+      </span>
     </button>
   );
 };

@@ -69,18 +69,53 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.header_div .user_area .finish_match {
+  margin-right: 30px;
+  position: relative;
+}
+.header_div .user_area .finish_match::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -17px;
+  width: 2px;
+  height: 30px;
+  background-color: rgb(59, 67, 85);
+}
+.header_div .user_area .finish_match .finish_btn {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  background-color: #18cf08;
+  padding: 8px 25px;
+  border: none;
+  border-radius: 6px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.header_div .user_area .finish_match .finish_btn:hover {
+  background-color: #28b01b;
+}
+.header_div .user_area .info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
   gap: 0 3px;
 }
-.header_div .user_area .h_usn {
+.header_div .user_area .info .h_usn {
   color: #fff;
   font-weight: 400;
   font-size: 18px;
   margin-right: 10px;
 }
-.header_div .user_area .h_imgbox .pr_ph {
+.header_div .user_area .info .h_imgbox .pr_ph {
   border-radius: 50%;
   width: 45px;
   height: 45px;

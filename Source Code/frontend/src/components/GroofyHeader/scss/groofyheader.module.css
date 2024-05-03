@@ -255,6 +255,28 @@
           user-select: none;
   position: relative;
 }
+.header_container .header_user_area .ongoing_match {
+  margin-right: 20px;
+}
+.header_container .header_user_area .ongoing_match span {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  margin-right: 10px;
+}
+.header_container .header_user_area .ongoing_match a {
+  background-color: #e69a1f;
+  padding: 10px 15px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.header_container .header_user_area .ongoing_match a:hover {
+  background-color: #feb139;
+}
 .header_container .header_user_area .header_h_usn {
   color: #fff;
   font-weight: 400;

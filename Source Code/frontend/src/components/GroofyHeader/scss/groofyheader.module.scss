@@ -214,6 +214,28 @@
     @include center;
     user-select: none;
     position: relative;
+    .ongoing_match {
+      margin-right: 20px;
+      span {
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+        margin-right: 10px;
+      }
+      a {
+        background-color: #e69a1f;
+        padding: 10px 15px;
+        border-radius: 12px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: 0.3s;
+        &:hover {
+          background-color: $btnColor;
+        }
+      }
+    }
     .header_h_usn {
       color: #fff;
       font-weight: 400;

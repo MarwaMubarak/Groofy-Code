@@ -5,7 +5,7 @@ import { RefObject } from "react";
 export interface btnProps {
   btnText: string;
   icnSrc?: string;
-  clickEvent?: any;
+  clickEvent?: () => void;
   btnType?: boolean;
   btnState?: boolean;
 }
@@ -192,4 +192,11 @@ export interface PInfoProps {
 // Chat Props
 export interface ChatProps {
   type?: string;
+}
+
+// Submission Props
+export interface SubmissionProps {
+  problemUrl?: string;
+  language?: string;
+  code: string;
 }

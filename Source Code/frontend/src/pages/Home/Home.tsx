@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
 import {
   GroofyHeader,
@@ -7,15 +7,22 @@ import {
   PostsContainer,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
+import { matchThunks } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import classes from "./scss/home.module.css";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
+  const matchLoading = useSelector((state: any) => state.match.isLoading);
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
+  const createMatch = async () => {
+    return await dispatch(matchThunks.createSoloMatch() as any);
+  };
   return (
     <div className={classes.home_container}>
       <Toast ref={toast} style={{ padding: "0.75rem" }} />
@@ -53,7 +60,20 @@ const Home = () => {
                   title="Solo Practice"
                   description="Sharpen your skills and prepare for battle by practicing against a computer opponent."
                   img="/Assets/Images/lightbulb.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    createMatch()
+                      .then(() => {
+                        navigate("/match");
+                      })
+                      .catch((err: any) => {
+                        toast.current?.show({
+                          severity: "error",
+                          summary: err.status,
+                          detail: err.message,
+                          life: 3000,
+                        });
+                      });
+                  }}
                 />
               </div>
             </div>
@@ -82,7 +102,20 @@ const Home = () => {
                   id="solo_practice_play_card"
                   title="Solo Practice"
                   img="/Assets/Images/lightbulb.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    createMatch()
+                      .then(() => {
+                        navigate("/match");
+                      })
+                      .catch((err: any) => {
+                        toast.current?.show({
+                          severity: "error",
+                          summary: err.status,
+                          detail: err.message,
+                          life: 3000,
+                        });
+                      });
+                  }}
                 />
                 <Gamemode
                   id="casual_match_card"

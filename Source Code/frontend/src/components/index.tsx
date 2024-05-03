@@ -40,6 +40,7 @@ import GroofyWrapper from "./GroofyWrapper/GroofyWrapper";
 import ClanResult from "./Search/Clan/ClanResult";
 import Chat from "./Messaging/Chat/Chat";
 import ChatUsers from "./Messaging/ChatUsers/ChatUsers";
+import History from "./Profile/History/History";
 
 export {
   MatchHeader,
@@ -84,4 +85,5 @@ export {
   ClanResult,
   Chat,
   ChatUsers,
+  History,
 };
