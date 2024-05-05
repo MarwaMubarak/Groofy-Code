@@ -14,9 +14,9 @@ const TestingSocket = () => {
     client.connect(
       { Authorization: `Bearer ${localStorage.getItem("token")}` },
       function (frame: any) {
-        client.subscribe("/clan", onMessage);
+        client.subscribe("/clan", onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
         // client.subscribe(`/user`, onMessage);
-        client.subscribe(`/clan/hazemadel/asd`, onMessage);
+        client.subscribe(`/clan/hazemadel/asd`, onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
       }
     );
     const onMessage = (message: any) => {

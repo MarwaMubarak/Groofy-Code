@@ -60,6 +60,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(new JwtChannelInterceptor(secretKeyReader, userService, userRepository)); // Add your interceptor here
         ThreadPoolTaskExecutor executor = ExecutorConfigUtility.createConfiguredExecutor();
         registration.taskExecutor(executor);
+        registration.interceptors(new WebSocketSubscriptionInterceptor());
+
     }
 
     @Override
@@ -67,4 +69,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         ThreadPoolTaskExecutor executor = ExecutorConfigUtility.createConfiguredExecutor();
         registration.taskExecutor(executor);
     }
+
+
+
 }
