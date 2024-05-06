@@ -4,7 +4,7 @@ import com.groofycode.GroofyCode.dto.PostDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Post.LikeModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
-import com.groofycode.GroofyCode.model.UserModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.LikeRepository;
 import com.groofycode.GroofyCode.repository.PostRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;

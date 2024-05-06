@@ -1,10 +1,10 @@
 package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.MessageDTO;
-import com.groofycode.GroofyCode.model.ClanModel;
+import com.groofycode.GroofyCode.model.Clan.ClanModel;
 import com.groofycode.GroofyCode.model.Message;
-import com.groofycode.GroofyCode.model.UserModel;
-import com.groofycode.GroofyCode.repository.ClanRepository;
+import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.MessageRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

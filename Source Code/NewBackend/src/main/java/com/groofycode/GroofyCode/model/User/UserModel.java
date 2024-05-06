@@ -1,6 +1,10 @@
-package com.groofycode.GroofyCode.model;
+package com.groofycode.GroofyCode.model.User;
 
+import com.groofycode.GroofyCode.model.BadgeModel;
+import com.groofycode.GroofyCode.model.Clan.ClanMember;
+import com.groofycode.GroofyCode.model.Clan.ClanRequest;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
+import com.groofycode.GroofyCode.model.Message;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import jakarta.persistence.*;
 
@@ -65,9 +69,11 @@ public class UserModel implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PostModel> posts;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "clan_id")
-    private ClanModel clan;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ClanMember clanMember;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ClanRequest clanRequest;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "badges_users", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "badge_id"))

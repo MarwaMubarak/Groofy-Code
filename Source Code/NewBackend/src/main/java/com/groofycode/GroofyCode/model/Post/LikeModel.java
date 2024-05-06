@@ -2,7 +2,7 @@ package com.groofycode.GroofyCode.model.Post;
 
 import java.util.Date;
 
-import com.groofycode.GroofyCode.model.UserModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

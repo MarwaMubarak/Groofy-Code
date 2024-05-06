@@ -40,9 +40,11 @@
     .clan_card {
       @include center;
       flex-direction: column;
-      padding: 15px;
+      padding: 0 15px;
       border-radius: 6px;
       background-color: #fff;
+      width: 388px;
+      height: 190px;
       .clan_info {
         @include center;
         .clan_img {
@@ -63,9 +65,13 @@
             margin-bottom: 10px;
           }
           .clan_tags {
-            @include center;
+            @include around;
+            flex-wrap: wrap;
             span {
-              margin-right: 10px;
+              margin-bottom: 10px;
+              &:nth-child(odd) {
+                margin-right: 10px;
+              }
             }
           }
         }

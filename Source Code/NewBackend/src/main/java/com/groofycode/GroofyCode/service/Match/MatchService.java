@@ -5,7 +5,7 @@ import com.groofycode.GroofyCode.dto.Match.UserMatchDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Match.Match;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
-import com.groofycode.GroofyCode.model.UserModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Match.MatchRepository;
 import com.groofycode.GroofyCode.repository.Match.UserMatchRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;

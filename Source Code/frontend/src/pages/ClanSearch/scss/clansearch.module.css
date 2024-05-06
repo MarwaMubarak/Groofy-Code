@@ -40,9 +40,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 15px;
+  padding: 0 15px;
   border-radius: 6px;
   background-color: #fff;
+  width: 388px;
+  height: 190px;
 }
 .clan_search .clan_results .clan_card .clan_info {
   display: flex;
@@ -71,10 +73,14 @@
 }
 .clan_search .clan_results .clan_card .clan_info .clan_details .clan_tags {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
 }
 .clan_search .clan_results .clan_card .clan_info .clan_details .clan_tags span {
+  margin-bottom: 10px;
+}
+.clan_search .clan_results .clan_card .clan_info .clan_details .clan_tags span:nth-child(odd) {
   margin-right: 10px;
 }
 .clan_search .clan_results .clan_card .clan_actions {

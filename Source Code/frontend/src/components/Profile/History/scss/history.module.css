@@ -39,6 +39,9 @@
 .history_container table tr td.status.l {
   background-color: #df7777;
 }
+.history_container table .empty_history {
+  color: #fff;
+}
 .history_container .paginator {
   background-color: #242526;
 }

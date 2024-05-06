@@ -1,7 +1,7 @@
 package com.groofycode.GroofyCode.service.User;
 
 import com.groofycode.GroofyCode.dto.User.*;
-import com.groofycode.GroofyCode.model.UserModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
