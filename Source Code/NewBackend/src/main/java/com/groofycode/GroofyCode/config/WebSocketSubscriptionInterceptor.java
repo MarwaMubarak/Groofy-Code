@@ -18,20 +18,25 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@Component
 public class WebSocketSubscriptionInterceptor implements ChannelInterceptor {
 
-    @Autowired
+
     private SecretKeyReader secretKeyReader;
 
-    @Value("${auth.secret}")
-    private String tokenSecretKey;
+
+    WebSocketSubscriptionInterceptor(SecretKeyReader secretKeyReader) {
+        this.secretKeyReader = secretKeyReader;
+    }
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -40,18 +45,35 @@ public class WebSocketSubscriptionInterceptor implements ChannelInterceptor {
         // Check if the message is a subscription message
         if (accessor.getCommand() == StompCommand.SUBSCRIBE) {
             // Extract the token from the subscription message headers
-            String token = accessor.getFirstNativeHeader("Authorization");
+            String authToken = accessor.getFirstNativeHeader("Authorization");
 
-//             Implement authentication and authorization logic based on the token
-//            boolean isAuthenticated =
-            isAuthenticated(token);
 
-            // If authentication fails, deny the subscription request
-//            if (!isAuthenticated) {
-//                 Throw an exception or handle the denial as per your application's requirements
-//                System.out.println("Unauthorized access");
-//                throw new Exception("Unauthorized access");
-//            }
+            if (authToken != null && authToken.startsWith("Bearer ")) {
+                authToken = authToken.substring(7);
+                isAuthenticated(authToken);
+            }
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String url = message.getHeaders().get("simpDestination").toString();
+            Pattern pattern = Pattern.compile("^/clans/([^/]+)/asd$");
+
+            // Match the input string against the pattern
+            Matcher matcher = pattern.matcher(url);
+
+            // Check if the input matches the pattern
+            if (matcher.matches()) {
+                // Extract the username
+                String username = matcher.group(1);
+                if (!userInfo.getUsername().equals(username)) {
+//                    Throw an exception or handle the denial as per your application's requirements
+                    System.out.println("Unauthorized access");
+                    throw new RuntimeException("Unauthorized access");
+                }
+                System.out.println("Username: " + username);
+            } else {
+                System.out.println("Input does not match the pattern.");
+            }
+
         }
 
         // Allow the subscription request to proceed
@@ -59,9 +81,9 @@ public class WebSocketSubscriptionInterceptor implements ChannelInterceptor {
     }
 
     private void isAuthenticated(String token) {
-        try {
 
-            SecretKey secretKey = Keys.hmacShaKeyFor(tokenSecretKey.getBytes(StandardCharsets.UTF_8));
+        try {
+            SecretKey secretKey = Keys.hmacShaKeyFor(secretKeyReader.tokenSecretKey.getBytes(StandardCharsets.UTF_8));
             Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
             String username = claims.get("username", String.class);
             UserInfo userInfo = new UserInfo(username, null);
@@ -71,6 +93,7 @@ public class WebSocketSubscriptionInterceptor implements ChannelInterceptor {
             System.out.println(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
+
     }
 
 

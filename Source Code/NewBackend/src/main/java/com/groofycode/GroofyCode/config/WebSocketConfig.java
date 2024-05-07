@@ -51,7 +51,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableSimpleBroker( "/clan", "/user");
-        registry.setUserDestinationPrefix("/clan");
+        registry.setUserDestinationPrefix("/userTCP");
 
     }
 
@@ -60,7 +60,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(new JwtChannelInterceptor(secretKeyReader, userService, userRepository)); // Add your interceptor here
         ThreadPoolTaskExecutor executor = ExecutorConfigUtility.createConfiguredExecutor();
         registration.taskExecutor(executor);
-        registration.interceptors(new WebSocketSubscriptionInterceptor());
+        registration.interceptors(new WebSocketSubscriptionInterceptor(secretKeyReader));
 
     }
 

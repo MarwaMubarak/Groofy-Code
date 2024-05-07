@@ -1,26 +1,30 @@
 import { useState, useEffect } from "react";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { useSelector } from "react-redux";
 
 const TestingSocket = () => {
   const [messages, setMessages] = useState<any>([]);
   const [stompClient, setStompClient] = useState<any>(null);
+  const loggedUser = useSelector((state: any) => state.auth.user);
 
   useEffect(() => {
     const socket = new SockJS("http://localhost:8080/socket");
     const client = Stomp.over(socket);
     // client.debug = () => {};
+    
 
     client.connect(
       { Authorization: `Bearer ${localStorage.getItem("token")}` },
       function (frame: any) {
-        client.subscribe("/clan", onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
+        // client.subscribe("/clans", onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
         // client.subscribe(`/user`, onMessage);
-        client.subscribe(`/clan/hazemadel/asd`, onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
+        client.subscribe(`/userTCP/${loggedUser.username}/notification`, onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
       }
     );
     const onMessage = (message: any) => {
-      console.log("Message", JSON.parse(message.body));
+      console.log("Message", message.body);
+      // console.log("Message", JSON.parse(message.body));
     };
 
     setStompClient(client as any);

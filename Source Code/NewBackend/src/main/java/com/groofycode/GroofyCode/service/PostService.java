@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +29,15 @@ public class PostService {
     private final LikeRepository likeRepository;
     private final ModelMapper modelMapper;
 
+    private SimpMessagingTemplate messagingTemplate;
+
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, ModelMapper modelMapper, LikeRepository likeRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, ModelMapper modelMapper, LikeRepository likeRepository, SimpMessagingTemplate messagingTemplate) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
         this.modelMapper = modelMapper;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public ResponseEntity<Object> createPost(PostDTO postDTO) throws Exception {
@@ -128,6 +132,9 @@ public class PostService {
                 likeRepository.save(like);
                 post.setLikesCnt(post.getLikesCnt() + 1);
                 postRepository.save(post);
+                if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
+                    messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", "someone likes your post");
+                }
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Post liked successfully", null));
             }
         } catch (Exception e) {
