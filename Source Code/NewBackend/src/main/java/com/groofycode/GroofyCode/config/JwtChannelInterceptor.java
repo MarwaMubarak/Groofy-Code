@@ -1,7 +1,6 @@
 package com.groofycode.GroofyCode.config;
 
 import com.groofycode.GroofyCode.dto.User.UserInfo;
-import com.groofycode.GroofyCode.model.UserModel;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.User.UserService;
 import com.groofycode.GroofyCode.utilities.SecretKeyReader;
@@ -10,8 +9,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -23,11 +20,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
 import javax.crypto.SecretKey;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groofycode.GroofyCode.dto.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
-import com.groofycode.GroofyCode.model.UserModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Match.UserMatchRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.MatchStatusMapper;

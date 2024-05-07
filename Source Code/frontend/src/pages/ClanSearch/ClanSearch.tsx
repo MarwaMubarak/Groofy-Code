@@ -36,15 +36,12 @@ const ClanSearch = () => {
                   <div className={classes.clan_tags}>
                     <span>Members: 4/10</span>
                     <span>World Rank: #10</span>
+                    <span>Wins: 10</span>
+                    <span>Losses: 7</span>
                   </div>
                 </div>
               </div>
               <div className={classes.clan_actions}>
-                <Button
-                  label="View"
-                  icon="bi bi-eye"
-                  className={classes.view_btn}
-                />
                 <Button
                   label="Join"
                   icon="bi bi-plus-lg"

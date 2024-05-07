@@ -1,6 +1,6 @@
 package com.groofycode.GroofyCode.service.User;
 
-import com.groofycode.GroofyCode.model.UserModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.dto.User.LoginRequestDTO;
 import com.groofycode.GroofyCode.dto.User.LoggedUserDTO;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;

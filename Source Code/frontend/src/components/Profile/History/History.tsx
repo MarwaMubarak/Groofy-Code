@@ -106,20 +106,26 @@ const History = () => {
           </tr>
         </thead>
         <tbody>
-          {userMatches.map((match: any) => (
-            <tr>
-              <td>Solo Match</td>
-              <td className={`${classes.state} ${classes.f}`}>{match.state}</td>
-              <td
-                className={`${classes.status} ${
-                  match.status === "Accepted" ? classes.w : classes.l
-                }`}
-              >
-                {match.status}
-              </td>
-              <td>{formatDate(match.createdAt)}</td>
-            </tr>
-          ))}
+          {userMatches.length === 0 && (
+            <tr className={classes.empty_history}>No matches available</tr>
+          )}
+          {userMatches.length > 0 &&
+            userMatches.map((match: any) => (
+              <tr>
+                <td>Solo Match</td>
+                <td className={`${classes.state} ${classes.f}`}>
+                  {match.state}
+                </td>
+                <td
+                  className={`${classes.status} ${
+                    match.status === "Accepted" ? classes.w : classes.l
+                  }`}
+                >
+                  {match.status}
+                </td>
+                <td>{formatDate(match.createdAt)}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <Paginator

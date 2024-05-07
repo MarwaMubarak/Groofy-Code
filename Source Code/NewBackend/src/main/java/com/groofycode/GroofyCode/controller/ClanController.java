@@ -1,11 +1,14 @@
 package com.groofycode.GroofyCode.controller;
 
-import com.groofycode.GroofyCode.dto.ClanDTO;
+import com.groofycode.GroofyCode.dto.Clan.ClanDTO;
+import com.groofycode.GroofyCode.dto.Clan.ClanRequestActionDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.groofycode.GroofyCode.service.ClanService;
+
+import javax.annotation.Nullable;
 
 @RestController
 @RequestMapping("/clans")
@@ -17,19 +20,30 @@ public class ClanController {
         this.clanService = clanService;
     }
 
-    @PostMapping
-    public ResponseEntity<Object> createClan(@Valid @RequestBody ClanDTO clanDTO) throws Exception {
-        return clanService.create(clanDTO);
-    }
-
     @GetMapping
-    public ResponseEntity<Object> getAllClans() throws Exception {
-        return clanService.getAll();
+    public ResponseEntity<Object> getAllClans(@RequestParam("p") @Nullable Integer page, @RequestParam("s") @Nullable Integer size) throws Exception {
+        return clanService.getAll(page, size);
     }
 
     @GetMapping("/{clanId}")
     public ResponseEntity<Object> getClanById(@PathVariable Long clanId) throws Exception {
         return clanService.getById(clanId);
+    }
+
+    @GetMapping("/requests")
+    public ResponseEntity<Object> getClanRequests(@RequestParam("p") @Nullable Integer page, @RequestParam("s") @Nullable Integer size) throws Exception {
+        return clanService.getClanRequests(page, size);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Object> searchClans(@RequestParam("name") String name, @RequestParam("p") @Nullable Integer page,
+                                              @RequestParam("s") @Nullable Integer size) throws Exception {
+        return clanService.searchForClan(name, page, size);
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> createClan(@Valid @RequestBody ClanDTO clanDTO) throws Exception {
+        return clanService.create(clanDTO);
     }
 
     @PutMapping("/{clanId}")
@@ -42,13 +56,18 @@ public class ClanController {
         return clanService.delete(clanId);
     }
 
-    @PutMapping("/join/{clanId}")
-    public ResponseEntity<Object> joinClan(@PathVariable Long clanId) throws Exception {
-        return clanService.joinClan(clanId);
+    @PostMapping("/request/{clanId}")
+    public ResponseEntity<Object> ClanRequest(@PathVariable Long clanId) throws Exception {
+        return clanService.clanRequest(clanId);
     }
 
-    @PutMapping("/leave/{clanId}")
-    public ResponseEntity<?> leaveClan(@PathVariable Long clanId) throws Exception {
+    @PostMapping("/requests")
+    public ResponseEntity<Object> ClanRequestAction(@RequestBody ClanRequestActionDTO clanRequestActionDTO) throws Exception {
+        return clanService.clanRequestAction(clanRequestActionDTO);
+    }
+
+    @PostMapping("/leave/{clanId}")
+    public ResponseEntity<Object> leaveClan(@PathVariable Long clanId) throws Exception {
         return clanService.leaveClan(clanId);
     }
 }

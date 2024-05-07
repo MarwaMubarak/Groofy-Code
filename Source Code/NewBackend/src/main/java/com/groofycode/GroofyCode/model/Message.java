@@ -1,5 +1,7 @@
 package com.groofycode.GroofyCode.model;
 
+import com.groofycode.GroofyCode.model.Clan.ClanModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
 
