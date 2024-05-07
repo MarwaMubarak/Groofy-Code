@@ -5,6 +5,7 @@ import {
   userReducer,
   matchReducer,
   submissionReducer,
+  socketReducer,
 } from "./slices";
 import axios from "axios";
 
@@ -15,7 +16,12 @@ const store = configureStore({
     user: userReducer,
     match: matchReducer,
     submission: submissionReducer,
+    socket: socketReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export const reqInstance = axios.create({ baseURL: "http://localhost:8080" });

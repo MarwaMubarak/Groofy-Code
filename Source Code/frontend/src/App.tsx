@@ -12,8 +12,10 @@ import {
   ClanSearch,
   Messaging,
 } from "./pages";
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 import { useDispatch, useSelector } from "react-redux";
-import { userThunks } from "./store/actions";
+import { userThunks, socketThunks } from "./store/actions";
 import { useEffect } from "react";
 import TestingSocket from "./pages/TestingSocket/TestingSocket";
 
@@ -26,6 +28,32 @@ function App() {
     };
     if (!loggedUser) {
       getProfile();
+    }
+  }, [dispatch, loggedUser]);
+
+  useEffect(() => {
+    if (loggedUser) {
+      const socket = new SockJS("http://localhost:8080/socket");
+      const client = Stomp.over(socket);
+
+      client.connect(
+        { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        function (frame: any) {
+          client.subscribe(
+            `/userTCP/${loggedUser.username}/notification`,
+            onMessage,
+            { Authorization: `Bearer ${localStorage.getItem("token")}` }
+          );
+          client.subscribe(`/clanTCP/testClan/chat`, onMessage, {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          });
+        }
+      );
+      const onMessage = (message: any) => {
+        console.log("Message", JSON.parse(message.body));
+      };
+      dispatch(socketThunks.changeStompClient(client) as any);
+      return () => client.disconnect();
     }
   }, [dispatch, loggedUser]);
 

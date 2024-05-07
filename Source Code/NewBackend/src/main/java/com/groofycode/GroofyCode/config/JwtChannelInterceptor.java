@@ -30,19 +30,10 @@ import java.util.List;
 @Component
 public class JwtChannelInterceptor implements ChannelInterceptor {
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private SecretKeyReader secretKeyReader;
 
-
-    JwtChannelInterceptor(SecretKeyReader secretKeyReader, UserService userService, UserRepository userRepository) {
+    JwtChannelInterceptor(SecretKeyReader secretKeyReader) {
         this.secretKeyReader = secretKeyReader;
-        this.userService = userService;
-        this.userRepository = userRepository;
     }
 
     @Override

@@ -28,8 +28,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final ModelMapper modelMapper;
-
-    private SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     public PostService(PostRepository postRepository, UserRepository userRepository, ModelMapper modelMapper, LikeRepository likeRepository, SimpMessagingTemplate messagingTemplate) {
@@ -134,6 +133,7 @@ public class PostService {
                 postRepository.save(post);
                 if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
                     messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", "someone likes your post");
+                    // @TODO -> Store buffered notifications in the database until it's opened
                 }
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Post liked successfully", null));
             }

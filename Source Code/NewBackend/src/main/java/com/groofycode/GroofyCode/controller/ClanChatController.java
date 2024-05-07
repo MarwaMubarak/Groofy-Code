@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,9 +21,9 @@ public class ClanChatController {
     private SimpMessagingTemplate messagingTemplate;
 
     // Handle messages sent by users to a specific clan chat
-    @MessageMapping("/clan/{clanId}/sendMessage")
-    public void sendMessageToClan(@Payload MessageDTO message, @DestinationVariable Long clanId) {
+    @MessageMapping("/clan/{clanName}/sendMessage")
+    public void sendMessageToClan(@Payload MessageDTO message, @DestinationVariable String clanName) {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        messagingTemplate.convertAndSendToUser(userInfo.getUsername(), "/asd", message);
+        messagingTemplate.convertAndSend(String.format("/clanTCP/%s/chat", clanName), message);
     }
 }

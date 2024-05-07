@@ -3,6 +3,7 @@ import postReducer from "./post-slice";
 import userReducer from "./user-slice";
 import matchReducer from "./match-slice";
 import submissionReducer from "./submission-slice";
+import socketReducer from "./socket-slice";
 
 export {
   authReducer,
@@ -10,4 +11,5 @@ export {
   userReducer,
   matchReducer,
   submissionReducer,
+  socketReducer,
 };

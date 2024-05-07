@@ -2,6 +2,7 @@ package com.groofycode.GroofyCode.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groofycode.GroofyCode.filter.JwtFilter;
+import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.User.UserService;
 import com.groofycode.GroofyCode.utilities.SecretKeyReader;
@@ -37,10 +38,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private SecretKeyReader secretKeyReader;
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private ClanRepository clanRepository;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -50,18 +51,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker( "/clan", "/user");
+        registry.enableSimpleBroker("/clan", "/user");
         registry.setUserDestinationPrefix("/userTCP");
 
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new JwtChannelInterceptor(secretKeyReader, userService, userRepository)); // Add your interceptor here
+        registration.interceptors(new JwtChannelInterceptor(secretKeyReader)); // Add your interceptor here
         ThreadPoolTaskExecutor executor = ExecutorConfigUtility.createConfiguredExecutor();
         registration.taskExecutor(executor);
-        registration.interceptors(new WebSocketSubscriptionInterceptor(secretKeyReader));
-
+        registration.interceptors(new WebSocketSubscriptionInterceptor(secretKeyReader, userRepository, clanRepository));
     }
 
     @Override
@@ -69,7 +69,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         ThreadPoolTaskExecutor executor = ExecutorConfigUtility.createConfiguredExecutor();
         registration.taskExecutor(executor);
     }
-
 
 
 }

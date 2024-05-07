@@ -1,50 +1,55 @@
 import { useState, useEffect } from "react";
-import { Stomp } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 import { useSelector } from "react-redux";
+// import { Stomp } from "@stomp/stompjs";
+// import SockJS from "sockjs-client";
 
 const TestingSocket = () => {
   const [messages, setMessages] = useState<any>([]);
-  const [stompClient, setStompClient] = useState<any>(null);
+  const stompClient = useSelector((state: any) => state.socket.stompClient);
   const loggedUser = useSelector((state: any) => state.auth.user);
+  // useEffect(() => {
+  //   const socket = new SockJS("http://localhost:8080/socket");
+  //   const client = Stomp.over(socket);
+  //   // client.debug = () => {};
 
-  useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/socket");
-    const client = Stomp.over(socket);
-    // client.debug = () => {};
-    
+  //   client.connect(
+  //     { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  //     function (frame: any) {
+  //       // client.subscribe("/clans", onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
+  //       // client.subscribe(`/user`, onMessage);
+  //       client.subscribe(
+  //         `/userTCP/${loggedUser.username}/notification`,
+  //         onMessage,
+  //         { Authorization: `Bearer ${localStorage.getItem("token")}` }
+  //       );
+  //       client.subscribe(`/clanTCP/testClan/chat`, onMessage, {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       });
+  //     }
+  //   );
+  //   const onMessage = (message: any) => {
+  //     // console.log("Message", message.body);
+  //     console.log("Message", JSON.parse(message.body));
+  //   };
 
-    client.connect(
-      { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      function (frame: any) {
-        // client.subscribe("/clans", onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
-        // client.subscribe(`/user`, onMessage);
-        client.subscribe(`/userTCP/${loggedUser.username}/notification`, onMessage, { Authorization: `Bearer ${localStorage.getItem("token")}` });
-      }
-    );
-    const onMessage = (message: any) => {
-      console.log("Message", message.body);
-      // console.log("Message", JSON.parse(message.body));
-    };
+  //   setStompClient(client as any);
+  //   return () => client.disconnect();
+  // }, [loggedUser.username]);
 
-    setStompClient(client as any);
-    return () => client.disconnect();
-  }, []);
-
-  const sendMessage = (clanId: any, msg: any) => {
+  const sendMessage = (clanName: string, msg: any) => {
     const data = {
-      userId: 2,
+      userId: loggedUser.id,
       content: msg,
     };
     stompClient.send(
-      `/app/clan/${clanId}/sendMessage`,
+      `/app/clan/${clanName}/sendMessage`,
       { Authorization: `Bearer ${localStorage.getItem("token")}` },
       JSON.stringify(data)
     );
   };
   return (
     <div>
-      <button onClick={() => sendMessage(1, "Hello")}>Send</button>
+      <button onClick={() => sendMessage("testClan", "Hello")}>Send</button>
     </div>
   );
 };

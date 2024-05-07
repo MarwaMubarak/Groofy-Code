@@ -1,6 +1,10 @@
 package com.groofycode.GroofyCode.config;
 
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.Clan.ClanModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
+import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.SecretKeyReader;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -29,13 +33,14 @@ import java.util.regex.Pattern;
 
 @Component
 public class WebSocketSubscriptionInterceptor implements ChannelInterceptor {
+    private final SecretKeyReader secretKeyReader;
+    private final UserRepository userRepository;
+    private final ClanRepository clanRepository;
 
-
-    private SecretKeyReader secretKeyReader;
-
-
-    WebSocketSubscriptionInterceptor(SecretKeyReader secretKeyReader) {
+    WebSocketSubscriptionInterceptor(SecretKeyReader secretKeyReader, UserRepository userRepository, ClanRepository clanRepository) {
         this.secretKeyReader = secretKeyReader;
+        this.userRepository = userRepository;
+        this.clanRepository = clanRepository;
     }
 
     @Override
@@ -55,25 +60,33 @@ public class WebSocketSubscriptionInterceptor implements ChannelInterceptor {
 
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String url = message.getHeaders().get("simpDestination").toString();
-            Pattern pattern = Pattern.compile("^/clans/([^/]+)/asd$");
+            Pattern userPattern = Pattern.compile("^/userTCP/([^/]+)/[^/]+$");
+            Pattern clanPattern = Pattern.compile("^/clanTCP/([^/]+)/[^/]+$");
 
             // Match the input string against the pattern
-            Matcher matcher = pattern.matcher(url);
+            Matcher userMatcher = userPattern.matcher(url);
+            Matcher clanMatcher = clanPattern.matcher(url);
 
             // Check if the input matches the pattern
-            if (matcher.matches()) {
+            if (userMatcher.matches()) {
                 // Extract the username
-                String username = matcher.group(1);
+                String username = userMatcher.group(1);
                 if (!userInfo.getUsername().equals(username)) {
 //                    Throw an exception or handle the denial as per your application's requirements
                     System.out.println("Unauthorized access");
                     throw new RuntimeException("Unauthorized access");
                 }
                 System.out.println("Username: " + username);
+            } else if (clanMatcher.matches()) {
+                String clanName = clanMatcher.group(1);
+                UserModel userModel = userRepository.fetchUserWithClanMemberByUsername(userInfo.getUsername());
+                ClanModel clanModel = clanRepository.findByNameIgnoreCase(clanName);
+                if (userModel.getClanMember() == null || !userModel.getClanMember().getClan().getId().equals(clanModel.getId())) {
+                    throw new RuntimeException("Unauthorized access");
+                }
             } else {
                 System.out.println("Input does not match the pattern.");
             }
-
         }
 
         // Allow the subscription request to proceed
