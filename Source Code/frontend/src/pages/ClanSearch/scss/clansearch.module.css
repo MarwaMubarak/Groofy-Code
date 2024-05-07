@@ -32,79 +32,14 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  gap: 18px;
   flex-wrap: wrap;
   margin-top: 30px;
+  margin-bottom: 30px;
 }
-.clan_search .clan_results .clan_card {
+.clan_search .paginator {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  padding: 0 15px;
-  border-radius: 6px;
-  background-color: #fff;
-  width: 388px;
-  height: 190px;
-}
-.clan_search .clan_results .clan_card .clan_info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.clan_search .clan_results .clan_card .clan_info .clan_img {
-  margin-right: 10px;
-}
-.clan_search .clan_results .clan_card .clan_info .clan_img img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-.clan_search .clan_results .clan_card .clan_info .clan_details {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.clan_search .clan_results .clan_card .clan_info .clan_details .clan_name {
-  width: 100%;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.clan_search .clan_results .clan_card .clan_info .clan_details .clan_tags {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.clan_search .clan_results .clan_card .clan_info .clan_details .clan_tags span {
-  margin-bottom: 10px;
-}
-.clan_search .clan_results .clan_card .clan_info .clan_details .clan_tags span:nth-child(odd) {
-  margin-right: 10px;
-}
-.clan_search .clan_results .clan_card .clan_actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  gap: 0 10px;
-}
-.clan_search .clan_results .clan_card .clan_actions .view_btn {
-  background-color: #27b7ff;
-  border-color: #27b7ff;
-}
-.clan_search .clan_results .clan_card .clan_actions .view_btn:hover, .clan_search .clan_results .clan_card .clan_actions .view_btn:active, .clan_search .clan_results .clan_card .clan_actions .view_btn:focus {
-  box-shadow: none;
-  background-color: #00aaff;
-  border-color: #00aaff;
-}
-.clan_search .clan_results .clan_card .clan_actions .join_btn {
-  background-color: #fabf60;
-  border-color: #fabf60;
-}
-.clan_search .clan_results .clan_card .clan_actions .join_btn:hover, .clan_search .clan_results .clan_card .clan_actions .join_btn:active, .clan_search .clan_results .clan_card .clan_actions .join_btn:focus {
-  box-shadow: none;
-  background-color: #feb139;
-  border-color: #feb139;
+  padding-bottom: 30px;
 }/*# sourceMappingURL=clansearch.module.css.map */

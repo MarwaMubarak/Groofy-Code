@@ -1,12 +1,10 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import { MenuItem } from "primereact/menuitem";
 import { ChatProps } from "../../../shared/types";
 import classes from "./scss/chat.module.css";
-import { Stomp } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 
 const Chat = (props: ChatProps) => {
   const menu = useRef<any>(null);
@@ -51,46 +49,8 @@ const Chat = (props: ChatProps) => {
     },
   ];
 
-  const [messages, setMessages] = useState<any>([]);
-  const [stompClient, setStompClient] = useState<any>(null);
-
-  useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/socket");
-    const client = Stomp.over(socket);
-    // client.debug = () => {};
-
-    client.connect(
-      { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      function (frame: any) {
-        client.subscribe("/topic/return-to", function (message) {
-          setMessages((prev: any) => [...prev, message.body]);
-        });
-      }
-    );
-
-    setStompClient(client as any);
-    return () => client.disconnect();
-  }, []);
-
-  const sendMessage = (clanId: any, msg: any) => {
-    const data = {
-      userId: 2,
-      content: msg,
-    };
-    stompClient.send(
-      `/app/clan/${clanId}/sendMessage`,
-      { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      JSON.stringify(data)
-    );
-  };
-
   return (
     <div className={classes.chat_container}>
-      <button
-        onClick={() => {
-          sendMessage(1, "Hello Socket");
-        }}
-      ></button>
       <TieredMenu
         model={items}
         popup

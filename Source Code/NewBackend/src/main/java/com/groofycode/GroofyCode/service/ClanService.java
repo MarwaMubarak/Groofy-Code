@@ -51,10 +51,12 @@ public class ClanService {
             clanDTO.setMembersCount(membersCnt);
             if (currentUser.getClanRequest() != null && currentUser.getClanRequest().getClan().getId().equals(clan.getId())) {
                 clanDTO.setRequestStatus(0); // pending --> able to cancel request
-            } else if (currentUser.getClanMember() != null && currentUser.getClanMember().getClan().getId().equals(clan.getId())) {
-                clanDTO.setRequestStatus(1); // member --> able to view clan
+            } else if (currentUser.getClanRequest() == null && currentUser.getClanMember() == null) {
+                clanDTO.setRequestStatus(1); // able to request
+            } else if (currentUser.getClanMember().getClan().getId().equals(clan.getId())) {
+                clanDTO.setRequestStatus(2); // member --> able to view clan
             } else {
-                clanDTO.setRequestStatus(2); // forbidden to cancel request and view clan
+                clanDTO.setRequestStatus(3); // forbidden to cancel request and view clan
             }
             return clanDTO;
         }).toList();
@@ -85,20 +87,17 @@ public class ClanService {
         }
     }
 
-    public ResponseEntity<Object> getById(Long id) throws Exception {
+    public ResponseEntity<Object> getClan() throws Exception {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Optional<ClanModel> clanModel = clanRepository.findById(id);
-            if (clanModel.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Clan not Found", null));
-            }
             UserModel currentUser = userRepository.fetchUserWithClanMemberByUsername(userInfo.getUsername());
-            if (!clanModel.get().IsMember(currentUser.getClanMember())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You are not a member of this clan.", null));
+            if (currentUser.getClanMember() == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("You are not a member of any clan.", null));
             }
+            ClanModel clanModel = currentUser.getClanMember().getClan();
 
             PageRequest pageRequest = PageRequest.of(0, 8);
-            List<ClanMember> clanMembers = clanMembersRepository.findByClanId(id, pageRequest).getContent();
+            List<ClanMember> clanMembers = clanMembersRepository.findByClanId(clanModel.getId(), pageRequest).getContent();
             List<ClanMemberDTO> clanMemberDTOS = clanMembers.stream().map(member -> {
                 UserModel userModel = member.getUser();
                 return new ClanMemberDTO(userModel.getUsername(), userModel.getPhotoUrl(), userModel.getStatus(), member.getRole());
@@ -106,7 +105,7 @@ public class ClanService {
 
             ClanDTO clanDTO = modelMapper.map(clanModel, ClanDTO.class);
             clanDTO.setMembers(clanMemberDTOS);
-            clanDTO.setMembersCount(clanRepository.countMembersById(id));
+            clanDTO.setMembersCount(clanRepository.countMembersById(clanModel.getId()));
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Clan retrieved successfully", clanDTO));
         } catch (Exception e) {
             throw new Exception(e);
@@ -352,38 +351,35 @@ public class ClanService {
         }
     }
 
-    public ResponseEntity<Object> leaveClan(Long clanId) throws Exception {
+    public ResponseEntity<Object> leaveClan() throws Exception {
         try {
-            Optional<ClanModel> clanModel = clanRepository.findById(clanId);
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currentUser = userRepository.fetchUserWithClanMemberByUsername(userInfo.getUsername());
 
-            if (clanModel.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Clan not found.", null));
-            }
-
             if (currentUser.getClanMember() == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("You are not a member in this clan.", null));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("You are not a member of any clan.", null));
             }
 
-            if (currentUser.getClanMember().getRole().equals("leader") && clanModel.get().getMembers().size() > 1) {
+            ClanModel clanModel = currentUser.getClanMember().getClan();
+
+            if (currentUser.getClanMember().getRole().equals("leader") && clanModel.getMembers().size() > 1) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("You can't leave the clan, you are the leader.", null));
             }
 
-            if (currentUser.getClanMember().getRole().equals("leader") && clanModel.get().getMembers().size() == 1) {
+            if (currentUser.getClanMember().getRole().equals("leader") && clanModel.getMembers().size() == 1) {
                 currentUser.setClanMember(null);
-                clanRepository.delete(clanModel.get());
+                clanRepository.delete(clanModel);
                 return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Clan deleted successfully.", null));
             }
 
-            boolean isRemoved = clanModel.get().RemoveFromClan(currentUser.getClanMember());
+            boolean isRemoved = clanModel.RemoveFromClan(currentUser.getClanMember());
             if (!isRemoved) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("You are not a member in this clan.", null));
             }
             ClanMember clanMember = currentUser.getClanMember();
             currentUser.setClanMember(null);
             clanMembersRepository.delete(clanMember);
-            clanRepository.save(clanModel.get());
+            clanRepository.save(clanModel);
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Left clan successfully.", null));
         } catch (Exception e) {

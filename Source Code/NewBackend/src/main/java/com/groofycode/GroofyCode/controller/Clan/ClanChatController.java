@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.controller;
+package com.groofycode.GroofyCode.controller.Clan;
 
 import com.groofycode.GroofyCode.dto.MessageDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;

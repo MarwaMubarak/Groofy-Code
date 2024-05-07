@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
     UserModel findByUsername(String username);
 
     UserModel findByEmailOrUsername(String email, String username);
+    @Query("SELECT u FROM UserModel u LEFT JOIN FETCH u.clanMember WHERE u.email=:data OR u.username=:data")
+    UserModel fetchByEmailOrUsernameWithClanMember(String data);
 
     @Query("SELECT u FROM UserModel u LEFT JOIN FETCH u.clanMember WHERE u.username=:username")
     UserModel fetchUserWithClanMemberByUsername(@Param("username") String username);

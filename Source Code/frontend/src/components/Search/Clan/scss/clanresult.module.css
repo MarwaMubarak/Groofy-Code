@@ -1,22 +1,91 @@
-.clan_result {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.clan_result .clan_img {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 25px;
-}
-.clan_result .clan_img img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-.clan_result .clan_info {
+.clan_card {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 0 15px;
+  border-radius: 6px;
+  background-color: #fff;
+  width: 388px;
+  height: 190px;
+}
+.clan_card .clan_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clan_card .clan_info .clan_img {
+  margin-right: 10px;
+}
+.clan_card .clan_info .clan_img img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.clan_card .clan_info .clan_details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.clan_card .clan_info .clan_details .clan_name {
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.clan_card .clan_info .clan_details .clan_tags {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.clan_card .clan_info .clan_details .clan_tags span {
+  margin-bottom: 10px;
+}
+.clan_card .clan_info .clan_details .clan_tags span:nth-child(odd) {
+  margin-right: 10px;
+}
+.clan_card .clan_actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  gap: 0 10px;
+}
+.clan_card .clan_actions .view_btn {
+  background-color: #27b7ff;
+  border-color: #27b7ff;
+}
+.clan_card .clan_actions .view_btn:hover, .clan_card .clan_actions .view_btn:active, .clan_card .clan_actions .view_btn:focus {
+  box-shadow: none;
+  background-color: #00aaff;
+  border-color: #00aaff;
+}
+.clan_card .clan_actions .cr_btn.cancel {
+  background-color: #ff3d3d;
+  border-color: #ff3d3d;
+}
+.clan_card .clan_actions .cr_btn.cancel:hover, .clan_card .clan_actions .cr_btn.cancel:active, .clan_card .clan_actions .cr_btn.cancel:focus {
+  box-shadow: none;
+  background-color: #f55353;
+  border-color: #f55353;
+}
+.clan_card .clan_actions .cr_btn.join {
+  background-color: #16b308;
+  border-color: #16b308;
+}
+.clan_card .clan_actions .cr_btn.join:hover, .clan_card .clan_actions .cr_btn.join:active, .clan_card .clan_actions .cr_btn.join:focus {
+  box-shadow: none;
+  background-color: #18cf08;
+  border-color: #18cf08;
+}
+.clan_card .clan_actions .cr_btn.view {
+  background-color: #27b7ff;
+  border-color: #27b7ff;
+}
+.clan_card .clan_actions .cr_btn.view:hover, .clan_card .clan_actions .cr_btn.view:active, .clan_card .clan_actions .cr_btn.view:focus {
+  box-shadow: none;
+  background-color: #00aaff;
+  border-color: #00aaff;
 }/*# sourceMappingURL=clanresult.module.css.map */

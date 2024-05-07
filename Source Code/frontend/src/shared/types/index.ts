@@ -200,3 +200,30 @@ export interface SubmissionProps {
   language?: string;
   code: string;
 }
+
+// Clan Result Props
+export interface ClanResultProps {
+  clanId: number;
+  clanName: string;
+  members: number;
+  worldRank: number;
+  wins: number;
+  losses: number;
+  status: number;
+}
+
+// Clan Requests Props
+export interface ClanRequestsProps {
+  clanId: number;
+  clanReqVisible: boolean;
+  setClanReqVisible: (val: boolean) => void;
+  fetchClan: boolean;
+  setFetchClan: (val: boolean) => void;
+}
+
+// Clan Request Action
+export interface ClanRequestAction {
+  clanId: number;
+  clanRequestId: number;
+  action: string;
+}

@@ -135,22 +135,17 @@
 .clan_div .c_info .c_box .m_box .member .m_info .m_usn {
   font-size: 15px;
 }
-.clan_div .c_info .c_box .m_box .member .m_online {
-  font-size: 12px;
+.clan_div .c_info .c_box .m_box .member .m_rank {
+  font-size: 13px;
   font-weight: bold;
-  color: #18cf08;
   position: relative;
+  text-transform: capitalize;
 }
-.clan_div .c_info .c_box .m_box .member .m_online::before {
-  content: "";
-  position: absolute;
-  height: 6px;
-  width: 6px;
-  background-color: #18cf08;
-  border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-  left: -10px;
+.clan_div .c_info .c_box .m_box .member .m_rank.l {
+  color: #feb139;
+}
+.clan_div .c_info .c_box .m_box .member .m_rank.m {
+  color: #00aaff;
 }
 .clan_div .c_info .c_box .rm_box {
   display: flex;

@@ -41,6 +41,7 @@ import ClanResult from "./Search/Clan/ClanResult";
 import Chat from "./Messaging/Chat/Chat";
 import ChatUsers from "./Messaging/ChatUsers/ChatUsers";
 import History from "./Profile/History/History";
+import ClanRequests from "./Clan/ClanRequests/ClanRequests";
 
 export {
   MatchHeader,
@@ -86,4 +87,5 @@ export {
   Chat,
   ChatUsers,
   History,
+  ClanRequests,
 };

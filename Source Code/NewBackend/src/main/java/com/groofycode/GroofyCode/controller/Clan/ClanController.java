@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.controller;
+package com.groofycode.GroofyCode.controller.Clan;
 
 import com.groofycode.GroofyCode.dto.Clan.ClanDTO;
 import com.groofycode.GroofyCode.dto.Clan.ClanRequestActionDTO;
@@ -25,9 +25,9 @@ public class ClanController {
         return clanService.getAll(page, size);
     }
 
-    @GetMapping("/{clanId}")
-    public ResponseEntity<Object> getClanById(@PathVariable Long clanId) throws Exception {
-        return clanService.getById(clanId);
+    @GetMapping("/user")
+    public ResponseEntity<Object> getClanById() throws Exception {
+        return clanService.getClan();
     }
 
     @GetMapping("/requests")
@@ -66,8 +66,8 @@ public class ClanController {
         return clanService.clanRequestAction(clanRequestActionDTO);
     }
 
-    @PostMapping("/leave/{clanId}")
-    public ResponseEntity<Object> leaveClan(@PathVariable Long clanId) throws Exception {
-        return clanService.leaveClan(clanId);
+    @PostMapping("/leave")
+    public ResponseEntity<Object> leaveClan() throws Exception {
+        return clanService.leaveClan();
     }
 }

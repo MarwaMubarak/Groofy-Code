@@ -118,22 +118,28 @@
               font-size: 15px;
             }
           }
-          .m_online {
-            font-size: 12px;
+          .m_rank {
+            font-size: 13px;
             font-weight: bold;
-            color: $greenColor;
             position: relative;
-            &::before {
-              content: "";
-              position: absolute;
-              height: 6px;
-              width: 6px;
-              background-color: $greenColor;
-              border-radius: 50%;
-              top: 50%;
-              transform: translateY(-50%);
-              left: -10px;
+            text-transform: capitalize;
+            &.l {
+              color: $btnColor;
             }
+            &.m {
+              color: $blueColor;
+            }
+            // &::before {
+            //   content: "";
+            //   position: absolute;
+            //   height: 6px;
+            //   width: 6px;
+            //   background-color: $greenColor;
+            //   border-radius: 50%;
+            //   top: 50%;
+            //   transform: translateY(-50%);
+            //   left: -10px;
+            // }
           }
         }
       }
