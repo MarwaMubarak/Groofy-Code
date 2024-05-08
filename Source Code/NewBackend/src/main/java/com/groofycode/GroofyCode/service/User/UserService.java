@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
     public ResponseEntity<Object> getProfile() throws Exception {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
+            UserModel userModel = userRepository.fetchUserWithClanMemberByUsername(userInfo.getUsername());
             UserDTO userDTO = modelMapper.map(userModel, UserDTO.class);
             return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
         } catch (Exception e) {

@@ -153,6 +153,7 @@ public class ClanService {
 
             ClanModel clan = new ClanModel();
             clan.setName(clanDTO.getName());
+            clan.setLeader(currentUser.getUsername());
             ClanMember clanMember = new ClanMember(currentUser, clan, "leader");
             currentUser.setClanMember(clanMember);
             clan.AddToClan(currentUser.getClanMember());

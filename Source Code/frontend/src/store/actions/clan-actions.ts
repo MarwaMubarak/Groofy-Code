@@ -55,6 +55,7 @@ const getClan = () => {
           })
         );
         dispatch(clanActions.setIsLoading(false));
+        dispatch(clanActions.setClan(null));
       }
     }
   };
@@ -119,6 +120,7 @@ const createClan = (clanName: string) => {
           })
         );
         dispatch(clanActions.setIsLoading(false));
+        dispatch(clanActions.setClan(response.data.body));
         return response.data;
       } catch (error: any) {
         dispatch(
@@ -168,6 +170,12 @@ const leaveClan = () => {
         return error.response.data;
       }
     }
+  };
+};
+
+const clearClan = () => {
+  return (dispatch: any) => {
+    dispatch(clanActions.setClan(null));
   };
 };
 
@@ -283,6 +291,7 @@ const clanThunks = {
   requestJoinClan,
   createClan,
   leaveClan,
+  clearClan,
   clanRequest,
   getClanRequests,
   clanRequestAction,

@@ -26,6 +26,7 @@ const Clan = () => {
   }, [dispatch, fetchClan]);
 
   console.log("User", loggedUser);
+  console.log("Clan", clan);
 
   const leaveClan = async () => {
     return await dispatch(clanThunks.leaveClan() as any);
@@ -47,10 +48,12 @@ const Clan = () => {
                 detail: res.message,
                 life: 3000,
               });
-              setTimeout(() => {
-                navigate("/");
-              }, 1000);
             }
+          })
+          .then(() => {
+            setTimeout(() => {
+              dispatch(clanThunks.clearClan() as any);
+            }, 1000);
           })
           .catch((error: any) => {
             console.log("Error: ", error);
@@ -64,6 +67,10 @@ const Clan = () => {
       reject: () => null,
     });
   };
+
+  if (!clan && !isLoading) {
+    navigate("/clan-search");
+  }
 
   return (
     <GroofyWrapper idx={3}>
@@ -87,7 +94,7 @@ const Clan = () => {
                   <span>{clan.name}</span>
                 </div>
                 <div className={classes.c_actions}>
-                  {loggedUser.leader && (
+                  {clan.leader === loggedUser.username && (
                     <i
                       className="bi bi-person-plus-fill"
                       onClick={() => setRequestsVisible(true)}

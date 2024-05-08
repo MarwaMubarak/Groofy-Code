@@ -61,8 +61,6 @@ public class AuthService {
 
             LoggedUserDTO loggedUserDTO = modelMapper.map(userDetails, LoggedUserDTO.class);
             loggedUserDTO.setToken(token);
-            loggedUserDTO.setInClan(userDetails.getClanMember() != null);
-            loggedUserDTO.setLeader(userDetails.getClanMember().getRole().equals("leader"));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

@@ -17,7 +17,8 @@ const login = (loginInfo: LoginProps) => {
       });
       dispatch(authActions.setErrorMessage(""));
       localStorage.setItem("token", response.data.body.token);
-      dispatch(authActions.login(response.data.body));
+      const { token, ...body } = response.data.body;
+      dispatch(authActions.login(body));
     } catch (error: any) {
       throw error;
     }

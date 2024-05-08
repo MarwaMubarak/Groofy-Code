@@ -16,6 +16,7 @@ const ClanSearch = () => {
   const [clanName, setClanName] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [searchTouched, setSearchTouched] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
   const [size, setSize] = useState<number>(10);
   const totalClans: number = useSelector((state: any) => state.clan.totalClans);
@@ -33,6 +34,7 @@ const ClanSearch = () => {
 
     if (searchText === "") {
       setIsTyping(false);
+      setSearchTouched(false);
       dispatch(clanThunks.clearSearchedClans() as any);
       return;
     }
@@ -44,6 +46,7 @@ const ClanSearch = () => {
   }, [dispatch, searchText, page, size]);
 
   const handleSearchChange = (e: any) => {
+    setSearchTouched(true);
     setIsTyping(true);
     setSearchText(e.target.value);
   };
@@ -133,8 +136,11 @@ const ClanSearch = () => {
                   borderRadius="6px"
                 />
               ))}
-            {searchedClans.length === 0 && !isTyping && (
-              <div>No clans found</div>
+            {searchedClans.length === 0 && !isTyping && searchTouched && (
+              <div style={{ color: "#fff" }}>No clans found</div>
+            )}
+            {searchedClans.length === 0 && !isTyping && !searchTouched && (
+              <div style={{ color: "#fff" }}>Search for clans</div>
             )}
             {searchedClans.length > 0 &&
               !isTyping &&

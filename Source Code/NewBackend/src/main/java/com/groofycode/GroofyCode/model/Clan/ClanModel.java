@@ -20,6 +20,9 @@ public class ClanModel {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = false, unique = true)
+    private String leader;
+
     private Integer wins;
 
     private Integer losses;

@@ -22,8 +22,6 @@ public class UserDTO {
 
     private String bio;
 
-    private Long clanId;
-
     private String photoUrl;
 
     private Integer totalMatches;

@@ -19,6 +19,8 @@ public class ClanDTO {
     @Size(min = 4, max = 100, message = "Name length must be between 4 and 100")
     private String name;
 
+    private String leader;
+
     private Integer membersCount;
 
     private Integer wins;
