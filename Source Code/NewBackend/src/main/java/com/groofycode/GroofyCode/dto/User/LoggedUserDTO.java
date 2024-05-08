@@ -18,6 +18,7 @@ public class LoggedUserDTO {
     private String[] selectedBadges;
     private String[] friends;
     private boolean status;
+    private String clanName;
     private boolean isOnline;
     private int Trophies;
     private String token;

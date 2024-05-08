@@ -22,7 +22,6 @@ const Match = () => {
 
     getCurrentMatch();
   }, [dispatch]);
-  console.log("Loading:", isLoading);
   return isLoading ? (
     <div>Loading...</div>
   ) : status === "failure" ? (

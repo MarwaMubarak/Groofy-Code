@@ -25,9 +25,6 @@ const Clan = () => {
     getClan();
   }, [dispatch, fetchClan]);
 
-  console.log("User", loggedUser);
-  console.log("Clan", clan);
-
   const leaveClan = async () => {
     return await dispatch(clanThunks.leaveClan() as any);
   };
@@ -40,7 +37,6 @@ const Clan = () => {
       accept: () =>
         leaveClan()
           .then((res: any) => {
-            console.log("Response:", res);
             if (res.status === "success") {
               toast.current?.show({
                 severity: "success",
@@ -56,7 +52,6 @@ const Clan = () => {
             }, 1000);
           })
           .catch((error: any) => {
-            console.log("Error: ", error);
             toast.current?.show({
               severity: "error",
               summary: error.status,

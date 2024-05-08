@@ -44,13 +44,19 @@ function App() {
             onMessage,
             { Authorization: `Bearer ${localStorage.getItem("token")}` }
           );
-          client.subscribe(`/clanTCP/testClan/chat`, onMessage, {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          });
+          if (loggedUser.clanName !== null) {
+            client.subscribe(
+              `/clanTCP/${loggedUser.clanName}/chat`,
+              onMessage,
+              {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              }
+            );
+          }
         }
       );
       const onMessage = (message: any) => {
-        console.log("Message", JSON.parse(message.body));
+        console.log("Recieved message: ", message.body);
       };
       dispatch(socketThunks.changeStompClient(client) as any);
       return () => client.disconnect();

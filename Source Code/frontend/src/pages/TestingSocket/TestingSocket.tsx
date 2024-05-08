@@ -49,7 +49,9 @@ const TestingSocket = () => {
   };
   return (
     <div>
-      <button onClick={() => sendMessage("testClan", "Hello")}>Send</button>
+      <button onClick={() => sendMessage(loggedUser.clanName, "Hello")}>
+        Send
+      </button>
     </div>
   );
 };

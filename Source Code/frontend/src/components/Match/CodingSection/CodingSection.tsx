@@ -30,7 +30,6 @@ const CodingSection = () => {
   const dispatch = useDispatch();
   const isSubmitting = useSelector((state: any) => state.submission.isLoading);
   const toast = useRef<Toast>(null);
-  console.log(isSubmitting);
 
   const submitCode = async () => {
     return await dispatch(
@@ -41,8 +40,6 @@ const CodingSection = () => {
       }) as any
     );
   };
-  console.log("Current code: ", currentCode);
-  console.log("Is Submitting: ", isSubmitting);
 
   return (
     <div className={classes.esec}>

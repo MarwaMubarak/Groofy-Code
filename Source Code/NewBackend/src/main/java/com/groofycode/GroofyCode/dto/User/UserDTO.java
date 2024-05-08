@@ -24,6 +24,8 @@ public class UserDTO {
 
     private String photoUrl;
 
+    private String clanName;
+
     private Integer totalMatches;
 
     private Integer wins;

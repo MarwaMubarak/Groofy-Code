@@ -44,6 +44,9 @@ public class UserService implements UserDetailsService {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel userModel = userRepository.fetchUserWithClanMemberByUsername(userInfo.getUsername());
             UserDTO userDTO = modelMapper.map(userModel, UserDTO.class);
+            if (userModel.getClanMember() != null) {
+                userDTO.setClanName(userModel.getClanMember().getClan().getName());
+            }
             return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
         } catch (Exception e) {
             throw new Exception(e);

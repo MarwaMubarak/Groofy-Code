@@ -94,6 +94,7 @@ public class PostService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ResponseUtils.unsuccessfulRes("You are not allowed to delete this post", null));
             }
+            likeRepository.deleteByPostId(id);
             postRepository.deleteById(id);
             return ResponseEntity.ok(ResponseUtils.successfulRes("Post deleted successfully", null));
         } catch (Exception e) {
