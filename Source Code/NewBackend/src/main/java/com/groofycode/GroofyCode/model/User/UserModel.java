@@ -5,6 +5,7 @@ import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
 import com.groofycode.GroofyCode.model.Message;
+import com.groofycode.GroofyCode.model.Notification.NotificationModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import jakarta.persistence.*;
 
@@ -81,6 +82,10 @@ public class UserModel implements UserDetails {
 
     @OneToMany(mappedBy = "userModel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserMatch> userMatches;
+
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<NotificationModel> notifications;
+
 
     @CreationTimestamp
     private Date createdAt;

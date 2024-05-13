@@ -1,7 +1,9 @@
 package com.groofycode.GroofyCode.service;
 
+import com.groofycode.GroofyCode.dto.NotificationDTO;
 import com.groofycode.GroofyCode.dto.PostDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Post.LikeModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
@@ -13,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +29,15 @@ public class PostService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final ModelMapper modelMapper;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final NotificationService notificationService;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, ModelMapper modelMapper, LikeRepository likeRepository, SimpMessagingTemplate messagingTemplate) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, ModelMapper modelMapper, LikeRepository likeRepository, NotificationService notificationService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
         this.modelMapper = modelMapper;
-        this.messagingTemplate = messagingTemplate;
+        this.notificationService = notificationService;
     }
 
     public ResponseEntity<Object> createPost(PostDTO postDTO) throws Exception {
@@ -133,7 +134,12 @@ public class PostService {
                 post.setLikesCnt(post.getLikesCnt() + 1);
                 postRepository.save(post);
                 if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
-                    messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", "someone likes your post");
+                    NotificationDTO notificationDTO = new NotificationDTO();
+                    notificationDTO.setBody("Someone likes your post");
+                    notificationDTO.setSender(currentUser.getUsername());
+                    notificationDTO.setNotificationType(NotificationType.SEND_LIKE);
+                    notificationDTO.setCreatedAt(new Date());
+                    notificationService.createNotification(notificationDTO,post.getUser());
                     // @TODO -> Store buffered notifications in the database until it's opened
                 }
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Post liked successfully", null));
