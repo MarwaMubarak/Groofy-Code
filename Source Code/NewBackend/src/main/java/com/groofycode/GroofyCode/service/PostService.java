@@ -135,7 +135,7 @@ public class PostService {
                 postRepository.save(post);
                 if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
                     NotificationDTO notificationDTO = new NotificationDTO();
-                    notificationDTO.setBody("Someone likes your post");
+                    notificationDTO.setBody( currentUser.getUsername()+"likes your post");
                     notificationDTO.setSender(currentUser.getUsername());
                     notificationDTO.setNotificationType(NotificationType.SEND_LIKE);
                     notificationDTO.setCreatedAt(new Date());
