@@ -1,26 +1,25 @@
 package com.groofycode.GroofyCode.service;
 
-import com.groofycode.GroofyCode.dto.NotificationDTO;
 import com.groofycode.GroofyCode.dto.PostDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.Notification.LikeNotificationModel;
+import com.groofycode.GroofyCode.model.Notification.NotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Post.LikeModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
-import com.groofycode.GroofyCode.repository.LikeRepository;
-import com.groofycode.GroofyCode.repository.PostRepository;
-import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.repository.*;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import java.util.Optional;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,16 +27,24 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private final NotificationRepository notificationRepository;
+
+    private final LikeNotificationRepository likeNotificationRepository;
     private final ModelMapper modelMapper;
-    private final NotificationService notificationService;
+
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, ModelMapper modelMapper, LikeRepository likeRepository, NotificationService notificationService) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate, NotificationRepository notificationRepository, ModelMapper modelMapper, LikeRepository likeRepository, LikeNotificationRepository likeNotificationRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.messagingTemplate = messagingTemplate;
+        this.notificationRepository = notificationRepository;
         this.likeRepository = likeRepository;
         this.modelMapper = modelMapper;
-        this.notificationService = notificationService;
+        this.likeNotificationRepository = likeNotificationRepository;
     }
 
     public ResponseEntity<Object> createPost(PostDTO postDTO) throws Exception {
@@ -108,14 +115,15 @@ public class PostService {
             // Get the current user who is liking the post
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
+
             // Retrieve the post from the database
             Optional<PostModel> optionalPost = postRepository.findById(postId);
-
             if (optionalPost.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ResponseUtils.unsuccessfulRes("Post not found", null));
             }
             PostModel post = optionalPost.get();
+            
             // Check if the user has already liked the post
             LikeModel existingLike = likeRepository.findByUserIdAndPostId(currentUser.getId(), postId);
             if (existingLike != null) {
@@ -123,6 +131,12 @@ public class PostService {
                 likeRepository.delete(existingLike);
                 post.setLikesCnt(post.getLikesCnt() - 1);
                 postRepository.save(post);
+                // Delete the associated like notification, if it exists
+                NotificationModel likeNotification = likeNotificationRepository.findByPostAndSender(post, currentUser.getUsername());
+                if(likeNotification!=null)
+                    notificationRepository.delete(likeNotification);
+
+
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Post unliked successfully", null));
             } else {
                 // User has not liked the post, so add the like
@@ -133,13 +147,18 @@ public class PostService {
                 likeRepository.save(like);
                 post.setLikesCnt(post.getLikesCnt() + 1);
                 postRepository.save(post);
+
                 if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
-                    NotificationDTO notificationDTO = new NotificationDTO();
-                    notificationDTO.setBody( currentUser.getUsername()+"likes your post");
-                    notificationDTO.setSender(currentUser.getUsername());
-                    notificationDTO.setNotificationType(NotificationType.SEND_LIKE);
-                    notificationDTO.setCreatedAt(new Date());
-                    notificationService.createNotification(notificationDTO,post.getUser());
+                    // Create and save the like notification
+                    LikeNotificationModel likeNotification = new LikeNotificationModel();
+                    likeNotification.setBody(currentUser.getUsername() + " likes your post");
+                    likeNotification.setSender(currentUser.getUsername());
+                    likeNotification.setCreatedAt(new Date());
+                    likeNotification.setReceiver(post.getUser());
+                    likeNotification.setPost(post); // Set the associated post
+                    likeNotification.setNotificationType(NotificationType.SEND_LIKE);
+                    notificationRepository.save(likeNotification);
+                    messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", likeNotification.getBody());
                     // @TODO -> Store buffered notifications in the database until it's opened
                 }
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Post liked successfully", null));
@@ -148,6 +167,9 @@ public class PostService {
             throw new Exception(e);
         }
     }
+
+
+
 
     public ResponseEntity<Object> getUserPosts(Long userId) throws Exception {
         try {

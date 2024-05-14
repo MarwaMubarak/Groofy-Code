@@ -1,13 +1,16 @@
 package com.groofycode.GroofyCode.model.Notification;
+
 import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+
 import java.util.Date;
 
 @Entity
 @Table(name = "notifications")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
 @Setter
 public class NotificationModel {
@@ -15,9 +18,7 @@ public class NotificationModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String Sender;
-
-    private NotificationType notificationType;
+    private String sender;
 
     private String body;
 
@@ -28,4 +29,6 @@ public class NotificationModel {
     @CreationTimestamp
     private Date createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
 }
