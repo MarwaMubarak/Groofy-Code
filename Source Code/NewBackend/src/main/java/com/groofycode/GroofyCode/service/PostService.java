@@ -176,12 +176,11 @@ public class PostService {
             List<PostModel> posts = postRepository.findByUserId(userId);
             List<PostDTO> postDTOs = posts.stream()
                     .map(p -> {
+                        UserModel userModel = p.getUser();
                         PostDTO postDTO = modelMapper.map(p, PostDTO.class);
-                        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                        UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
-                        LikeModel existingLike = likeRepository.findByUserIdAndPostId(currentUser.getId(), p.getId());
+                        LikeModel existingLike = likeRepository.findByUserIdAndPostId(userModel.getId(), p.getId());
                         postDTO.setIsLiked(existingLike != null ? 1 : 0);
-                        postDTO.setPostUserId(currentUser.getId());
+                        postDTO.setPostUserId(userModel.getId());
                         return postDTO;
                     })
                     .collect(Collectors.toList());

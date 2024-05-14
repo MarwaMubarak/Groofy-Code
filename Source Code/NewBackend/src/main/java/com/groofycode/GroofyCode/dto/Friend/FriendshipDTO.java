@@ -1,6 +1,5 @@
-package com.groofycode.GroofyCode.dto;
+package com.groofycode.GroofyCode.dto.Friend;
 
-import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.Getter;
@@ -16,5 +15,4 @@ public class FriendshipDTO {
     private Long receiverId;
     @NotBlank(message = "Status is required")
     private String status;
-
 }

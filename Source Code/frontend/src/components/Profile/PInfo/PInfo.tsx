@@ -1,8 +1,21 @@
+import { useDispatch, useSelector } from "react-redux";
 import { PInfoProps } from "../../../shared/types";
+import { useEffect } from "react";
+import { friendThunks } from "../../../store/actions";
 import classes from "./scss/pinfo.module.css";
 
 const PInfo = (props: PInfoProps) => {
-  console.log("Profile User", props.profileUser);
+  const dispatch = useDispatch();
+  const friendsCnt = useSelector((state: any) => state.friend.friendsCnt);
+
+  useEffect(() => {
+    const getFriendsCnt = async () => {
+      await dispatch(friendThunks.GetFriendsCount(props.profileUser.id) as any);
+    };
+
+    getFriendsCnt();
+  }, [dispatch, props.profileUser.id]);
+
   return (
     <div className={classes.up_side_right}>
       <div className={classes.profile_section}>
@@ -29,9 +42,7 @@ const PInfo = (props: PInfoProps) => {
             <div className={classes.psi_single_details}>
               <span>
                 Friends:
-                <span className={classes.friends}>
-                  {props.profileUser.friends?.length || 0}
-                </span>
+                <span className={classes.friends}>{friendsCnt}</span>
               </span>
             </div>
           </div>

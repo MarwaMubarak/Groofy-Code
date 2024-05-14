@@ -13,8 +13,6 @@ import ProfilePicture from "./Profile/ProfilePicture/ProfilePicture";
 import GroofyHeader from "./GroofyHeader/GroofyHeader";
 import GroofyFooter from "./GroofyFooter/GroofyFooter";
 import GroofyField from "./Auth/GroofyField/GroofyField";
-import Friends from "./Friends/Friends";
-import SingleFriend from "./Friends/SingleFriend/SingleFriend";
 import NotifyBox from "./GroofyHeader/NotifyBox/NotifyBox";
 import Blog from "./HomePage/Blog/Blog";
 import UserPopUp from "./UserPopUP/UserPopUp";
@@ -42,6 +40,9 @@ import Chat from "./Messaging/Chat/Chat";
 import ChatUsers from "./Messaging/ChatUsers/ChatUsers";
 import History from "./Profile/History/History";
 import ClanRequests from "./Clan/ClanRequests/ClanRequests";
+import Friends from "./Profile/Friends/Friends";
+import Friend from "./Profile/Friends/Friend/Friend";
+import ProfileImage from "./ProfileImage/ProfileImage";
 
 export {
   MatchHeader,
@@ -59,8 +60,6 @@ export {
   GroofyHeader,
   GroofyFooter,
   GroofyField,
-  Friends,
-  SingleFriend,
   NotifyBox,
   Blog,
   UserPopUp,
@@ -88,4 +87,7 @@ export {
   ChatUsers,
   History,
   ClanRequests,
+  Friends,
+  Friend,
+  ProfileImage,
 };

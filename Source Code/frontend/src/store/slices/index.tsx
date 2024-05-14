@@ -5,6 +5,7 @@ import matchReducer from "./match-slice";
 import submissionReducer from "./submission-slice";
 import socketReducer from "./socket-slice";
 import clanReducer from "./clan-slice";
+import friendReducer from "./friend-slice";
 
 export {
   authReducer,
@@ -14,4 +15,5 @@ export {
   submissionReducer,
   socketReducer,
   clanReducer,
+  friendReducer,
 };

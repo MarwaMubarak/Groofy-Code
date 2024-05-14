@@ -16,6 +16,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import ReactCountryFlag from "react-country-flag";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import useClickOutside from "../../shared/functions/handleClickOutside";
+import ProfileImage from "../ProfileImage/ProfileImage";
 
 interface Country {
   name: string;
@@ -152,7 +153,24 @@ const GroofyHeader = () => {
         ref={componentRefProfileArea}
       >
         <div className={classes.pa_info}>
-          <img src={user.photoUrl} alt="ProfilePicture" />
+          <ProfileImage
+            exec={() => {
+              setProfileActive((state) => !state);
+              setNotifyActive(false);
+            }}
+            photoUrl={user.photoUrl}
+            username={user.username}
+            style={{
+              cursor: "pointer",
+              backgroundColor: user.accountColor,
+              width: "40px",
+              height: "40px",
+              fontSize: "18px",
+              marginRight: "5px",
+              marginLeft: "5px",
+            }}
+            canClick={true}
+          />
           <span>{user.username}</span>
         </div>
         <Link to={`/profile/${user.username}`}>
@@ -243,7 +261,22 @@ const GroofyHeader = () => {
                   {searchedUsers.map((user) => (
                     <Link to={`/profile/${user.username}`}>
                       <div className={styles.search_player}>
-                        <img src={user.photoUrl} alt="ProfilePicture" />
+                        {user.photoUrl !== null ? (
+                          <img src={user.photoUrl} alt="profile_photo" />
+                        ) : (
+                          <ProfileImage
+                            photoUrl={user.photoUrl}
+                            username={user.username}
+                            style={{
+                              backgroundColor: user.accountColor,
+                              width: "40px",
+                              height: "40px",
+                              fontSize: "18px",
+                              marginRight: "10px",
+                            }}
+                            canClick={false}
+                          />
+                        )}
                         <span>{user.username}</span>
                         {user.country && user.country !== "" && (
                           <ReactCountryFlag
@@ -314,20 +347,22 @@ const GroofyHeader = () => {
               setNotifyNewCnt(0);
             }}
           />
-
-          <div
-            className={classes.pr_ph}
-            onClick={() => {
+          <ProfileImage
+            exec={() => {
               setProfileActive((state) => !state);
               setNotifyActive(false);
             }}
-          >
-            <img
-              className={classes.header_pr_ph}
-              src={user.photoUrl}
-              alt="ProfilePhoto"
-            />
-          </div>
+            photoUrl={user.photoUrl}
+            username={user.username}
+            style={{
+              cursor: "pointer",
+              backgroundColor: user.accountColor,
+              width: "45px",
+              height: "45px",
+              fontSize: "20px",
+            }}
+            canClick={true}
+          />
         </div>
       </div>
     </div>

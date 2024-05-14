@@ -6,6 +6,7 @@ import { SinglePostProps } from "../../../shared/types";
 import FormatDate from "../../../shared/functions/format-date";
 import postThunks from "../../../store/actions/post-actions";
 import "./scss/singlepost.css";
+import ProfileImage from "../../ProfileImage/ProfileImage";
 
 const SinglePost = (props: SinglePostProps) => {
   const dispatch = useDispatch();
@@ -111,10 +112,17 @@ const SinglePost = (props: SinglePostProps) => {
       <Toast ref={toast} />
       <div className="single-post-info">
         <div className="single-post-info-div">
-          <img
-            className="s-p-img"
-            src={props.postUserImg}
-            alt="ProfilePicture"
+          <ProfileImage
+            photoUrl={props.postUserImg}
+            username={props.postUser}
+            style={{
+              backgroundColor: props.postUserColor,
+              width: "55px",
+              height: "55px",
+              marginRight: "10px",
+              fontSize: "24px",
+            }}
+            canClick={false}
           />
           <div className="s-p-details">
             <h3>{props.postUser}</h3>

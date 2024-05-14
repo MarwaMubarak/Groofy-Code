@@ -1,10 +1,15 @@
-import { useState } from "react";
-import { History, PostsContainer } from "../..";
+import { useEffect, useState } from "react";
+import { Friends, History, PostsContainer } from "../..";
 import { PSocialProps } from "../../../shared/types";
 import classes from "./scss/psocial.module.css";
 
 const PSocial = (props: PSocialProps) => {
   const [activeTab, setActiveTab] = useState<number>(0);
+
+  useEffect(() => {
+    setActiveTab(0);
+  }, [props.profName]);
+
   return (
     <div className={classes.up_side_left}>
       <div className={classes.media_section}>
@@ -48,7 +53,7 @@ const PSocial = (props: PSocialProps) => {
             self={false}
           />
         )}
-        {activeTab === 1 && <div>Friends</div>}
+        {activeTab === 1 && <Friends />}
         {activeTab === 2 && <div>Clan</div>}
         {activeTab === 3 && <History />}
       </div>

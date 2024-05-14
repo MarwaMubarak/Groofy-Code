@@ -71,6 +71,51 @@ const updateUser = (editInfo: EditInfo) => {
   };
 };
 
+const changePhoto = (userPhoto: File | null) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        if (userPhoto !== null) {
+          dispatch(authActions.setIsUploading(true));
+        } else {
+          dispatch(authActions.setIsDeleting(true));
+        }
+        const formData = new FormData();
+        if (userPhoto !== null) {
+          formData.append("user_photo", userPhoto);
+        }
+        const response = await reqInstance.post(
+          `/user/change-photo`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Response: ", response);
+        dispatch(authActions.updateUserPhoto(response.data.body));
+        if (userPhoto !== null) {
+          dispatch(authActions.setIsUploading(false));
+        } else {
+          dispatch(authActions.setIsDeleting(false));
+        }
+        return response.data;
+      } catch (error: any) {
+        console.log("Error: ", error);
+        if (userPhoto !== null) {
+          dispatch(authActions.setIsUploading(false));
+        } else {
+          dispatch(authActions.setIsDeleting(false));
+        }
+        throw error.response.data;
+      }
+    }
+  };
+};
+
 const changePassword = (
   currentPassword: string,
   password: string,
@@ -119,6 +164,7 @@ const userThunks = {
   getUser,
   getProfile,
   updateUser,
+  changePhoto,
   changePassword,
   searchForUsers,
 };

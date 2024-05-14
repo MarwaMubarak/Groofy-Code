@@ -40,7 +40,7 @@ public class FriendshipController {
     }
 
     @GetMapping("/accepted")
-    public ResponseEntity<Object> getAcceptedPage( @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
+    public ResponseEntity<Object> getAcceptedPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
         return friendshipService.getAcceptedPage(page,size);
     }
 
@@ -54,9 +54,9 @@ public class FriendshipController {
         return friendshipService.getAllPage(  page,size);
     }
 
-    @GetMapping("/accepted_cnt")
-    public ResponseEntity<Object> getAcceptedCount() throws Exception {
-        return friendshipService.getAcceptedCount();
+    @GetMapping("/accepted_cnt/{friendId}")
+    public ResponseEntity<Object> getAcceptedCount(@PathVariable Long friendId) throws Exception {
+        return friendshipService.getAcceptedCount(friendId);
     }
 
     @GetMapping("/pending_cnt")

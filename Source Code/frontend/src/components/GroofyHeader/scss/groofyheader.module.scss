@@ -246,18 +246,6 @@
       @include center;
       position: relative;
       margin-right: 10px;
-      .pr_ph {
-        @include center;
-        .header_pr_ph {
-          border-radius: 50%;
-          width: 45px;
-          height: 45px;
-          cursor: pointer;
-          &:active {
-            transform: scale(0.95);
-          }
-        }
-      }
     }
   }
 }

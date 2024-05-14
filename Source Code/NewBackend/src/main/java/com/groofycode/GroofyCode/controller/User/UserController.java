@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class UserController {
@@ -33,8 +34,13 @@ public class UserController {
         return userService.createUser(registerDTO);
     }
 
+    @PostMapping("/user/change-photo")
+    public ResponseEntity<Object> changePhoto(@RequestPart(value = "user_photo",required = false) MultipartFile userPhoto) throws Exception {
+        return userService.changePhoto(userPhoto);
+    }
+
     @PutMapping("/users")
-    public ResponseEntity<Object> updatedUser(@RequestBody @Valid UpdatedUserDTO updatedUserDTO) throws Exception {
+    public ResponseEntity<Object> updatedUser(@RequestPart("user_data") @Valid UpdatedUserDTO updatedUserDTO) throws Exception {
         return userService.updatedUser(updatedUserDTO);
     }
 

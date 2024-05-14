@@ -54,9 +54,10 @@ public class JwtChannelInterceptor implements ChannelInterceptor {
         try {
             SecretKey secretKey = Keys.hmacShaKeyFor(secretKeyReader.tokenSecretKey.getBytes(StandardCharsets.UTF_8));
             Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
+            Long userId = claims.get("userId", Long.class);
             String username = claims.get("username", String.class);
-            UserInfo userInfo = new UserInfo(username,null);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userInfo,null, new ArrayList<>());
+            UserInfo userInfo = new UserInfo(userId, username, null);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userInfo, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException | IllegalArgumentException e) {
             System.out.println(e.getMessage());

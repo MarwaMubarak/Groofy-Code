@@ -1,8 +1,11 @@
 package com.groofycode.GroofyCode.service.User;
 
 import com.groofycode.GroofyCode.dto.User.*;
+import com.groofycode.GroofyCode.model.FriendshipModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.FriendshipRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.utilities.FirebaseManager;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +16,55 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final FriendshipRepository friendshipRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final FirebaseManager firebaseManager;
 
     @Autowired
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, FriendshipRepository friendshipRepository, ModelMapper modelMapper,
+                       PasswordEncoder passwordEncoder, FirebaseManager firebaseManager) {
         this.userRepository = userRepository;
+        this.friendshipRepository = friendshipRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
+        this.firebaseManager = firebaseManager;
+    }
+
+    private static String getRandomColor() {
+        // Create a Random object
+        Random random = new Random();
+
+        // Generate random values for each RGB component
+        int r = random.nextInt(256);
+        int g = random.nextInt(256);
+        int b = random.nextInt(256);
+
+        // Convert decimal to hexadecimal
+        String rHex = Integer.toHexString(r).toUpperCase();
+        String gHex = Integer.toHexString(g).toUpperCase();
+        String bHex = Integer.toHexString(b).toUpperCase();
+
+        // Pad single-digit hexadecimal numbers with a leading zero
+        rHex = padWithZero(rHex);
+        gHex = padWithZero(gHex);
+        bHex = padWithZero(bHex);
+
+
+        return "#" + rHex + gHex + bHex;
+    }
+
+    // Helper method to pad single-digit hexadecimal numbers with a leading zero
+    private static String padWithZero(String hex) {
+        return hex.length() == 1 ? "0" + hex : hex;
     }
 
     public ResponseEntity<Object> getAllUsers() throws Exception {
@@ -70,6 +108,7 @@ public class UserService implements UserDetailsService {
             registerDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
 
             UserModel newUser = modelMapper.map(registerDTO, UserModel.class);
+            newUser.setAccountColor(getRandomColor());
             newUser = userRepository.save(newUser);
             modelMapper.map(registerDTO, newUser);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -88,6 +127,31 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.ok(ResponseUtils.successfulRes("User info updated successfully", null));
         } catch (Exception e) {
             throw new Exception(e);
+        }
+    }
+
+    public ResponseEntity<Object> changePhoto(MultipartFile userPhoto) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
+            if (userPhoto != null) {
+                if (userModel.getPhotoUrl() != null) {
+                    firebaseManager.deletePhoto(userModel.getPhotoUrl(), "users");
+                }
+                String photoUrl = firebaseManager.uploadPhoto(userPhoto, "users");
+                userModel.setPhotoUrl(photoUrl);
+                userRepository.save(userModel);
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Photo updated successfully", photoUrl));
+            }
+            if (userModel.getPhotoUrl() != null) {
+                firebaseManager.deletePhoto(userModel.getPhotoUrl(), "users");
+                userModel.setPhotoUrl(null);
+                userRepository.save(userModel);
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Photo deleted successfully", null));
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("No photo provided", null));
+        } catch (Exception e) {
+            throw new Exception("Failed to update profile photo");
         }
     }
 
@@ -126,12 +190,39 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<Object> getUserByUsername(String username) throws Exception {
         try {
-            UserModel currentUser = userRepository.findByUsername(username);
-            if (currentUser == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseUtils.unsuccessfulRes("User not found", null));
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel;
+            UserDTO userDTO = new UserDTO();
+            if (userInfo.getUsername().equals(username)) {
+                userModel = userRepository.fetchUserWithClanMemberByUsername(username);
+                if (userModel == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(ResponseUtils.unsuccessfulRes("User not found", null));
+                }
+            } else {
+                userModel = userRepository.fetchUserWithClanMemberByUsername(username);
+                if (userModel == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(ResponseUtils.unsuccessfulRes("User not found", null));
+                }
+                FriendshipModel friendshipModel = friendshipRepository.getUserFriendshipStatus(userInfo.getUserId(), userModel.getId());
+                if (friendshipModel != null) {
+                    if (!friendshipModel.getStatus().equals("accepted")) {
+                        if (friendshipModel.getSenderId().equals(userInfo.getUserId())) {
+                            userDTO.setFriendshipStatus("pending");
+                        } else {
+                            userDTO.setFriendshipStatus("requested");
+                        }
+                    } else {
+                        userDTO.setFriendshipStatus(friendshipModel.getStatus());
+                    }
+                }
             }
-            UserDTO userDTO = modelMapper.map(currentUser, UserDTO.class);
+
+            modelMapper.map(userModel, userDTO);
+            if (userModel.getClanMember() != null) {
+                userDTO.setClanName(userModel.getClanMember().getClan().getName());
+            }
             return ResponseEntity.status(HttpStatus.OK)
                     .body(ResponseUtils.successfulRes("User retrieved successfully", userDTO));
         } catch (Exception e) {

@@ -7,6 +7,7 @@ import {
   submissionReducer,
   socketReducer,
   clanReducer,
+  friendReducer,
 } from "./slices";
 import axios from "axios";
 
@@ -19,6 +20,7 @@ const store = configureStore({
     submission: submissionReducer,
     socket: socketReducer,
     clan: clanReducer,
+    friend: friendReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

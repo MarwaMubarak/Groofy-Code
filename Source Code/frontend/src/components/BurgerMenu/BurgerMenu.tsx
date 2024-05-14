@@ -3,6 +3,7 @@ import { Sidebar } from "primereact/sidebar";
 import classes from "./scss/burgermenu.module.css";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { ProfileImage } from "..";
 
 export default function BurgerMenu() {
   const [visible, setVisible] = useState<boolean>(false);
@@ -15,7 +16,22 @@ export default function BurgerMenu() {
         onHide={() => setVisible(false)}
         header={
           <div className={classes.burger_header}>
-            <img src={user.photoUrl} alt="ProfilePhoto" />
+            {user.photoUrl !== null ? (
+              <img src={user.photoUrl} alt="profile_photo" />
+            ) : (
+              <ProfileImage
+                photoUrl={user.photoUrl}
+                username={user.username}
+                style={{
+                  backgroundColor: user.accountColor,
+                  width: "42px",
+                  height: "42px",
+                  fontSize: "18px",
+                  marginRight: "10px",
+                }}
+                canClick={false}
+              />
+            )}
             <span>{user.username}</span>
           </div>
         }

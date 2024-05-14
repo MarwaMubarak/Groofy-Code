@@ -139,6 +139,7 @@ export interface SinglePostProps {
   postUser: string;
   postUserImg: string;
   postContent: string;
+  postUserColor: string;
   postTime: string;
   postID: string;
   postLikesCnt: number;
@@ -226,4 +227,20 @@ export interface ClanRequestAction {
   clanId: number;
   clanRequestId: number;
   action: string;
+}
+
+// Single Friend Props
+export interface FriendProps {
+  userId: number;
+  username: string;
+  photoUrl: string;
+}
+
+// Profile Image Props
+export interface ProfileImageProps {
+  username: string;
+  photoUrl: string;
+  style: any;
+  canClick: boolean;
+  exec?: any;
 }

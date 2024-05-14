@@ -78,6 +78,7 @@ const Posts = (props: PostsProps) => {
       );
     },
   };
+
   return (
     <div className={classes.posts}>
       {props.posts && props.posts.length > 0 ? (
@@ -93,6 +94,7 @@ const Posts = (props: PostsProps) => {
                 userid={props.loggedUser}
                 postUser={props.user.username}
                 postUserImg={props.user.photoUrl}
+                postUserColor={props.user.accountColor}
                 postContent={post.content}
                 postTime={post.createdAt}
                 postID={post.id}

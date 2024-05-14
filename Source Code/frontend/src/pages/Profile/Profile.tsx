@@ -1,11 +1,17 @@
 import { useEffect, useRef } from "react";
-import { SideBar, GroofyHeader, PSocial, PInfo } from "../../components";
+import {
+  SideBar,
+  GroofyHeader,
+  PSocial,
+  PInfo,
+  ProfileImage,
+} from "../../components";
 import { useSelector } from "react-redux";
 import ReactCountryFlag from "react-country-flag";
 import { Toast } from "primereact/toast";
 import { Image } from "primereact/image";
 import { postActions } from "../../store/slices/post-slice";
-import { userThunks } from "../../store/actions";
+import { userThunks, friendThunks } from "../../store/actions";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import classes from "./scss/profile.module.css";
@@ -45,6 +51,26 @@ const Profile = () => {
     getUser();
   }, [dispatch, userProfile]);
 
+  console.log(profileUser);
+
+  const friendRequestAction = async () => {
+    if (profileUser.friendshipStatus !== "accepted") {
+      if (profileUser.friendshipStatus === "pending") {
+        return await dispatch(
+          friendThunks.CancelFriendRequest(profileUser.id) as any
+        );
+      } else if (profileUser.friendshipStatus === "requested") {
+        return await dispatch(
+          friendThunks.AcceptFriendRequest(profileUser.id) as any
+        );
+      } else {
+        return await dispatch(friendThunks.AddFriend(profileUser.id) as any);
+      }
+    } else {
+      return await dispatch(friendThunks.RemoveFriend(profileUser.id) as any);
+    }
+  };
+
   return (
     <div className={classes.newprofile_container}>
       <Toast ref={toast} />
@@ -56,12 +82,23 @@ const Profile = () => {
             <div className={classes.up_info}>
               <div className={classes.left_up_info}>
                 <div className={classes.up_info_img}>
-                  <Image
-                    src={profileUser.photoUrl}
-                    alt="Image"
-                    width="180"
-                    preview
-                  />
+                  {profileUser.photoUrl !== null ? (
+                    <Image
+                      src={profileUser.photoUrl}
+                      alt="Image"
+                      width="180"
+                      preview
+                    />
+                  ) : (
+                    <div
+                      className={classes.account_color}
+                      style={{ backgroundColor: profileUser.accountColor }}
+                    >
+                      <span>
+                        {profileUser.username.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className={classes.up_info_details}>
                   <div className={classes.up_info_d_box}>
@@ -104,9 +141,32 @@ const Profile = () => {
                           }
                         />
                         <button
-                          className={
-                            "bi bi-person-plus-fill " + classes.user_action_btn
-                          }
+                          className={` ${
+                            profileUser.friendshipStatus === "pending"
+                              ? `bi bi-person-fill-x ${classes.pending}`
+                              : profileUser.friendshipStatus === "requested"
+                              ? `bi bi-person-check-fill ${classes.requested}`
+                              : profileUser.friendshipStatus === "accepted"
+                              ? `bi bi-person-dash-fill ${classes.accepted}`
+                              : "bi bi-person-plus-fill"
+                          } ${classes.user_action_btn}`}
+                          onClick={() => {
+                            friendRequestAction()
+                              .then((res: any) => {
+                                toast.current?.show({
+                                  severity: "success",
+                                  summary: res.status,
+                                  detail: res.message,
+                                });
+                              })
+                              .catch((error: any) => {
+                                toast.current?.show({
+                                  severity: "error",
+                                  summary: error.status,
+                                  detail: error.message,
+                                });
+                              });
+                          }}
                         />
                       </div>
                     )}
@@ -174,7 +234,11 @@ const Profile = () => {
                       <img src="/Assets/Badges/Badge1.svg" alt="ClanImg" />
                       <div className={classes.wrapper}>
                         <span>Clan</span>
-                        <h3>Ghosts</h3>
+                        <h3>
+                          {profileUser.clanName === null
+                            ? "No clan"
+                            : profileUser.clanName}
+                        </h3>
                       </div>
                     </div>
                   </div>

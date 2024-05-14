@@ -39,6 +39,14 @@
             max-height: 100%;
             border-radius: 6px;
           }
+          .account_color {
+            @include center;
+            border-radius: 6px;
+            width: 180px;
+            height: 100%;
+            font-size: 70px;
+            color: #fff;
+          }
         }
         .up_info_details {
           width: 100%;
@@ -154,6 +162,24 @@
                 cursor: pointer;
                 &:hover {
                   background-color: #008ace;
+                }
+                &.pending {
+                  background-color: #f93535;
+                  &:hover {
+                    background-color: #d33232;
+                  }
+                }
+                &.requested {
+                  background-color: $btnColor;
+                  &:hover {
+                    background-color: #cc8f2d;
+                  }
+                }
+                &.accepted {
+                  background-color: $greenColor;
+                  &:hover {
+                    background-color: #2aaf1e;
+                  }
                 }
               }
             }

@@ -44,6 +44,16 @@
   max-height: 100%;
   border-radius: 6px;
 }
+.newprofile_container .userprofile .up_info .left_up_info .up_info_img .account_color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  width: 180px;
+  height: 100%;
+  font-size: 70px;
+  color: #fff;
+}
 .newprofile_container .userprofile .up_info .left_up_info .up_info_details {
   width: 100%;
   height: 100%;
@@ -174,6 +184,24 @@
 }
 .newprofile_container .userprofile .up_info .left_up_info .up_info_details .up_info_d_box .up_info_details_controls .user_action_btn:hover {
   background-color: #008ace;
+}
+.newprofile_container .userprofile .up_info .left_up_info .up_info_details .up_info_d_box .up_info_details_controls .user_action_btn.pending {
+  background-color: #f93535;
+}
+.newprofile_container .userprofile .up_info .left_up_info .up_info_details .up_info_d_box .up_info_details_controls .user_action_btn.pending:hover {
+  background-color: #d33232;
+}
+.newprofile_container .userprofile .up_info .left_up_info .up_info_details .up_info_d_box .up_info_details_controls .user_action_btn.requested {
+  background-color: #feb139;
+}
+.newprofile_container .userprofile .up_info .left_up_info .up_info_details .up_info_d_box .up_info_details_controls .user_action_btn.requested:hover {
+  background-color: #cc8f2d;
+}
+.newprofile_container .userprofile .up_info .left_up_info .up_info_details .up_info_d_box .up_info_details_controls .user_action_btn.accepted {
+  background-color: #18cf08;
+}
+.newprofile_container .userprofile .up_info .left_up_info .up_info_details .up_info_d_box .up_info_details_controls .user_action_btn.accepted:hover {
+  background-color: #2aaf1e;
 }
 .newprofile_container .userprofile .up_info .left_up_info .up_info_details h4 {
   color: rgba(255, 255, 255, 0.7215686275);

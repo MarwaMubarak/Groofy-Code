@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GBtn, GroofyTA, Posts } from "..";
+import { GBtn, GroofyTA, Posts, ProfileImage } from "..";
 import { useDispatch, useSelector } from "react-redux";
 import postThunks from "../../store/actions/post-actions";
 import { PostsContainerProps } from "../../shared/types";
@@ -71,10 +71,17 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
       >
         {self && user && (
           <div className={classes.post_row}>
-            <img
-              src={user.photoUrl}
-              alt="UserPhoto"
-              className={classes.post_row_img}
+            <ProfileImage
+              photoUrl={loggedUser.photoUrl}
+              username={loggedUser.username}
+              style={{
+                backgroundColor: loggedUser.accountColor,
+                width: "50px",
+                height: "50px",
+                marginRight: "10px",
+                fontSize: "20px",
+              }}
+              canClick={false}
             />
             <GroofyTA
               taValue={newPostContent}
@@ -90,10 +97,17 @@ const PostsContainer = ({ user, toast, self }: PostsContainerProps) => {
         )}
         {!self && loggedUser.username === user.username && (
           <div className={classes.post_row}>
-            <img
-              src={user.photoUrl}
-              alt="UserPhoto"
-              className={classes.post_row_img}
+            <ProfileImage
+              photoUrl={loggedUser.photoUrl}
+              username={loggedUser.username}
+              style={{
+                backgroundColor: loggedUser.accountColor,
+                width: "50px",
+                height: "50px",
+                marginRight: "10px",
+                fontSize: "20px",
+              }}
+              canClick={false}
             />
             <GroofyTA
               taValue={newPostContent}

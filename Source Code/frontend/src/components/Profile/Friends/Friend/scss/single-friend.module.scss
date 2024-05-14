@@ -1,0 +1,51 @@
+@use "../../../../../shared/styles/colors" as *;
+@use "../../../../../shared/styles/mixins" as *;
+
+.single_friend {
+  width: 100%;
+  @include between;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid $mainColor2;
+  }
+  .friend_info {
+    @include center;
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+    span {
+      font-size: 18px;
+      color: #fff;
+    }
+  }
+  .friend_actions {
+    .friend_btn {
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      i {
+        margin-right: 7px;
+      }
+      &:not(:last-of-type) {
+        margin-right: 10px;
+      }
+      &.msg_btn {
+        background-color: $blueColor;
+        &:hover {
+          background-color: $blueHighColor;
+        }
+      }
+      &.remove_btn {
+        background-color: $redColor;
+        &:hover {
+          background-color: #ca3c3c;
+        }
+      }
+    }
+  }
+}

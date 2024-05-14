@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { userSchema } from "../../../shared/schemas/user-schema";
 import GroofyField from "../../Auth/GroofyField/GroofyField";
@@ -12,7 +12,9 @@ import { AxiosError } from "axios";
 import classes from "./scss/personaldetails.module.css";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import styles from "./scss/dropdown.module.css";
+import { ProfileImage } from "../..";
 
 interface Country {
   name: string;
@@ -21,7 +23,10 @@ interface Country {
 
 const PersonalDetails = () => {
   const toast = useRef<Toast>(null);
+  const [expanded, setExpanded] = useState(false);
   const user = useSelector((state: any) => state.auth.user);
+  const isUploading = useSelector((state: any) => state.auth.isUploading);
+  const isDeleting = useSelector((state: any) => state.auth.isDeleting);
   const dispatch = useDispatch();
   const countries: Country[] = [
     { name: "Australia", code: "AU" },
@@ -35,7 +40,6 @@ const PersonalDetails = () => {
     { name: "Spain", code: "ES" },
     { name: "United States", code: "US" },
   ];
-
   const formikHandle = useFormik({
     initialValues: {
       displayName: user.displayName,
@@ -97,21 +101,129 @@ const PersonalDetails = () => {
     textarea.style.height = "auto";
     textarea.style.height = textarea.scrollHeight + "px";
   };
+
+  const handleDeletePhoto = async () => {
+    return await dispatch(userThunks.changePhoto(null) as any);
+  };
+
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const userPhoto = e.target.files![0];
+    return await dispatch(userThunks.changePhoto(userPhoto) as any);
+  };
+
+  const confirmDeletePhoto = () => {
+    confirmDialog({
+      message: "Are you sure you want to delete your profile photo ?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () =>
+        handleDeletePhoto()
+          .then((res: any) => {
+            if (res.status === "success") {
+              toast.current?.show({
+                severity: "success",
+                summary: res.status,
+                detail: res.message,
+                life: 3000,
+              });
+            }
+          })
+          .catch((error: any) => {
+            toast.current?.show({
+              severity: "error",
+              summary: error.status,
+              detail: error.message,
+              life: 3000,
+            });
+          }),
+      reject: () => null,
+    });
+  };
+
   return (
     <div className={classes.edit_info}>
       <Toast ref={toast} />
+      <ConfirmDialog />
       <h3 className={classes.edit_header}>Personal Details</h3>
       <form
         className={classes.edit_content}
         onSubmit={formikHandle.handleSubmit}
       >
         <div className={classes.editprofile_photo}>
-          <img src={user.photoUrl} alt="profile_photo" />
-          <input id="upload" type="file" hidden />
-          <label htmlFor="upload">
-            <i className="pi pi-upload" />
-            Upload photo
-          </label>
+          {user.photoUrl !== null ? (
+            <img src={user.photoUrl} alt="profile_photo" />
+          ) : (
+            <ProfileImage
+              photoUrl={user.photoUrl}
+              username={user.username}
+              style={{
+                backgroundColor: user.accountColor,
+                width: "170px",
+                height: "170px",
+                fontSize: "60px",
+                marginBottom: "25px",
+              }}
+              canClick={false}
+            />
+          )}
+
+          <div
+            className={`${classes.change_photo_btn} ${expanded && classes.y}`}
+            onClick={() => setExpanded(!expanded)}
+          >
+            Change photo
+          </div>
+          <div className={`${classes.photo_menu} ${expanded && classes.y}`}>
+            <input
+              type="file"
+              id="up-btn"
+              style={{ display: "none" }}
+              disabled={isUploading || isDeleting}
+              onChange={(e: any) => {
+                handleFileUpload(e)
+                  .then((res: any) => {
+                    (toast.current as any)?.show({
+                      severity: "success",
+                      summary: res.status,
+                      detail: res.message,
+                      life: 3000,
+                    });
+                  })
+                  .catch((err: any) => {
+                    (toast.current as any)?.show({
+                      severity: "error",
+                      summary: err.status,
+                      detail: err.message,
+                      life: 3000,
+                    });
+                  });
+              }}
+            />
+            <label
+              className={`${classes.photo_menu_item} ${
+                isUploading && classes.dis
+              }`}
+              htmlFor="up-btn"
+            >
+              <i
+                className={`${
+                  isUploading ? "pi pi-spin pi-spinner" : "bi bi-upload"
+                }`}
+              ></i>
+              <span>{isUploading ? "Uploading..." : "Upload"}</span>
+            </label>
+            <div
+              className={classes.photo_menu_item}
+              onClick={confirmDeletePhoto}
+            >
+              <i
+                className={`${
+                  isDeleting ? "pi pi-spin pi-spinner" : "bi bi-trash3"
+                }`}
+              ></i>
+              <span>{isDeleting ? "Removing..." : "Remove"}</span>
+            </div>
+          </div>
         </div>
         <GroofyField
           giText="Display name"

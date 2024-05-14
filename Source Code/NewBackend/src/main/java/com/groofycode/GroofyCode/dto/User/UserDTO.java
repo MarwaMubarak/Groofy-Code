@@ -1,12 +1,14 @@
 package com.groofycode.GroofyCode.dto.User;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserDTO {
     private Long id;
 
@@ -24,6 +26,8 @@ public class UserDTO {
 
     private String photoUrl;
 
+    private String accountColor;
+
     private String clanName;
 
     private Integer totalMatches;
@@ -39,6 +43,8 @@ public class UserDTO {
     private Integer worldRank;
 
     private Integer maxRating;
+
+    private String friendshipStatus;
 
     private Date createdAt;
 }

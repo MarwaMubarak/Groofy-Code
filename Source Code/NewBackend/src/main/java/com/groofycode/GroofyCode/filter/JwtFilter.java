@@ -35,9 +35,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 jwtTokenHeader = jwtTokenHeader.substring(7);
                 SecretKey secretKey = Keys.hmacShaKeyFor(tokenSecretKey.getBytes(StandardCharsets.UTF_8));
                 Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(jwtTokenHeader).getPayload();
+                Long userId = claims.get("userId", Long.class);
                 String username = claims.get("username", String.class);
-                UserInfo userInfo = new UserInfo(username,null);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userInfo,null, new ArrayList<>());
+                UserInfo userInfo = new UserInfo(userId, username, null);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userInfo, null, new ArrayList<>());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (JwtException | IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -46,6 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return request.getServletPath().equals("/login") || request.getServletPath().equals("/register");

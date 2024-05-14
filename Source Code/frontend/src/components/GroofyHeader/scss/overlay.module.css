@@ -45,9 +45,9 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  margin-right: 10px;
 }
 .search_overlay > [class=p-overlaypanel-content] .search_container .search_player span {
-  margin-left: 10px;
   font-size: 16px;
   text-align: center;
   font-weight: bold;
