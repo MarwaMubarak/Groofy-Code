@@ -102,6 +102,7 @@ public class PostService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ResponseUtils.unsuccessfulRes("You are not allowed to delete this post", null));
             }
+            likeNotificationRepository.deleteNotificationByPostId(id);
             likeRepository.deleteByPostId(id);
             postRepository.deleteById(id);
             return ResponseEntity.ok(ResponseUtils.successfulRes("Post deleted successfully", null));
@@ -168,19 +169,18 @@ public class PostService {
         }
     }
 
-
-
-
     public ResponseEntity<Object> getUserPosts(Long userId) throws Exception {
         try {
-            List<PostModel> posts = postRepository.findByUserId(userId);
+            List<PostModel> posts = postRepository.findByUserIdOrderByCreatedAtDesc(userId);
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
             List<PostDTO> postDTOs = posts.stream()
                     .map(p -> {
-                        UserModel userModel = p.getUser();
+                        UserModel postUser = p.getUser();
                         PostDTO postDTO = modelMapper.map(p, PostDTO.class);
                         LikeModel existingLike = likeRepository.findByUserIdAndPostId(userModel.getId(), p.getId());
                         postDTO.setIsLiked(existingLike != null ? 1 : 0);
-                        postDTO.setPostUserId(userModel.getId());
+                        postDTO.setPostUserId(postUser.getId());
                         return postDTO;
                     })
                     .collect(Collectors.toList());
