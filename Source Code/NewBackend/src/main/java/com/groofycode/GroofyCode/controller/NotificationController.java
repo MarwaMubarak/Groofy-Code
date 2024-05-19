@@ -1,7 +1,6 @@
 package com.groofycode.GroofyCode.controller;
 
-import com.groofycode.GroofyCode.dto.NotificationDTO;
-import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
 import com.groofycode.GroofyCode.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +25,16 @@ public class NotificationController {
 //////        return ResponseEntity.ok(createdNotification);
 ////    }
 
-    @GetMapping("/user")
-    public ResponseEntity<List<NotificationDTO>> getUserNotifications() {
+
+    @GetMapping("/like")
+    public ResponseEntity<List<NotificationDTO>> getUserLikeNotifications() {
         System.out.println("dohhaaa");
-        List<NotificationDTO> userNotifications = notificationService.getUserNotifications();
+        List<NotificationDTO> userNotifications = notificationService.getUserLikes();
         return ResponseEntity.ok(userNotifications);
+    }
+    @PutMapping("/markRead/{notificationId}")
+    public ResponseEntity<Void> markRead(@PathVariable Long notificationId) {
+        notificationService.markRead(notificationId);
+        return ResponseEntity.ok().build();
     }
 }

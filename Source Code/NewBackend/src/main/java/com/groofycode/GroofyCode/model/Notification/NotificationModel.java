@@ -22,6 +22,8 @@ public class NotificationModel {
 
     private String body;
 
+    private boolean isRead = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserModel receiver;
@@ -30,5 +32,7 @@ public class NotificationModel {
     private Date createdAt;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 255)  // Ensure this matches the altered column length
     private NotificationType notificationType;
+
 }

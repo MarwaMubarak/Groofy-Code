@@ -5,8 +5,11 @@ import com.groofycode.GroofyCode.dto.Friend.FriendDTO;
 import com.groofycode.GroofyCode.dto.Friend.FriendshipDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.FriendshipModel;
+import com.groofycode.GroofyCode.model.Notification.FriendNotificationModel;
+import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.FriendshipRepository;
+import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
@@ -16,9 +19,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,12 +31,23 @@ import java.util.stream.Collectors;
 @Service
 public class FriendshipService {
 
-    @Autowired
     private FriendshipRepository friendshipRepository;
-    @Autowired
     private ModelMapper modelMapper;
-    @Autowired
     private UserRepository userRepository;
+    private NotificationRepository notificationRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final  NotificationService notificationService;
+
+
+    @Autowired
+    public FriendshipService(FriendshipRepository friendshipRepository, ModelMapper modelMapper, UserRepository userRepository, NotificationRepository notificationRepository, SimpMessagingTemplate messagingTemplate, NotificationService notificationService) {
+        this.friendshipRepository = friendshipRepository;
+        this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
+        this.notificationRepository = notificationRepository;
+        this.messagingTemplate = messagingTemplate;
+        this.notificationService = notificationService;
+    }
 
 
     public ResponseEntity<Object> getAcceptedPage(int page, int size) throws Exception {
@@ -218,6 +234,15 @@ public class FriendshipService {
             friendshipModel.setReceiverId(receiverId);
             friendshipModel = friendshipRepository.save(friendshipModel);
             FriendshipDTO friendshipDTO = modelMapper.map(friendshipModel, FriendshipDTO.class);
+
+            FriendNotificationModel friendNotification = new FriendNotificationModel();
+            friendNotification.setBody(currUser.getUsername() + " Send to you Friend Request");
+            friendNotification.setSender(currUser.getUsername());
+            friendNotification.setCreatedAt(new Date());
+            friendNotification.setReceiver(friend.get());
+            friendNotification.setNotificationType(NotificationType.FRIEND_REQUEST);
+            notificationRepository.save(friendNotification);
+            messagingTemplate.convertAndSendToUser(friend.get().getUsername(), "/notification",notificationService.mapEntityToFriendDTO(friendNotification));
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("You sent a Friend Request Successfully!", friendshipDTO));
         } catch (Exception e) {
             throw new Exception(e);
@@ -245,6 +270,14 @@ public class FriendshipService {
 
                 FriendshipDTO friendshipDTO = modelMapper.map(friendshipModel, FriendshipDTO.class);
                 System.out.println(friendshipDTO.getSenderId() + "////////////////////////////////////////////////////////////////");
+                FriendNotificationModel friendNotification = new FriendNotificationModel();
+                friendNotification.setBody( userModel.getUsername()+ " Accept your Friend Request");
+                friendNotification.setSender(userModel.getUsername());
+                friendNotification.setCreatedAt(new Date());
+                friendNotification.setReceiver(friend.get());
+                friendNotification.setNotificationType(NotificationType.FRIEND_ACCEPT);
+                notificationRepository.save(friendNotification);
+                messagingTemplate.convertAndSendToUser(friend.get().getUsername(), "/notification",notificationService.mapEntityToFriendDTO(friendNotification));
                 return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Accepted Successfully...", friendshipDTO));
             }
 

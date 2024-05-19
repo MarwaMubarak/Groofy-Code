@@ -33,11 +33,14 @@ public class PostService {
     private final NotificationRepository notificationRepository;
 
     private final LikeNotificationRepository likeNotificationRepository;
+
     private final ModelMapper modelMapper;
+
+    private final  NotificationService notificationService;
 
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate, NotificationRepository notificationRepository, ModelMapper modelMapper, LikeRepository likeRepository, LikeNotificationRepository likeNotificationRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate, NotificationRepository notificationRepository, ModelMapper modelMapper, LikeRepository likeRepository, LikeNotificationRepository likeNotificationRepository, NotificationService notificationService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.messagingTemplate = messagingTemplate;
@@ -45,6 +48,7 @@ public class PostService {
         this.likeRepository = likeRepository;
         this.modelMapper = modelMapper;
         this.likeNotificationRepository = likeNotificationRepository;
+        this.notificationService = notificationService;
     }
 
     public ResponseEntity<Object> createPost(PostDTO postDTO) throws Exception {
@@ -159,7 +163,8 @@ public class PostService {
                     likeNotification.setPost(post); // Set the associated post
                     likeNotification.setNotificationType(NotificationType.SEND_LIKE);
                     notificationRepository.save(likeNotification);
-                    messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", likeNotification.getBody());
+                    messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", notificationService.mapEntityToLikeDTO(likeNotification));
+
                     // @TODO -> Store buffered notifications in the database until it's opened
                 }
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Post liked successfully", null));

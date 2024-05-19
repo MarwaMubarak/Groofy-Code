@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.dto;
+package com.groofycode.GroofyCode.dto.Notification;
 
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import lombok.Data;
@@ -16,5 +16,7 @@ public class NotificationDTO {
     private String sender;
     private NotificationType notificationType;
     private Date createdAt;
+    private boolean read;
+    private long id;
 
 }
