@@ -5,14 +5,12 @@ import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
 import com.groofycode.GroofyCode.model.Message;
+import com.groofycode.GroofyCode.model.NewMatch.MatchModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -87,6 +85,12 @@ public class UserModel implements UserDetails {
 
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<NotificationModel> notifications;
+
+    @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MatchModel> matchesAsUser1 = new HashSet<>();
+
+    @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MatchModel> matchesAsUser2 = new HashSet<>();
 
 
     @CreationTimestamp
