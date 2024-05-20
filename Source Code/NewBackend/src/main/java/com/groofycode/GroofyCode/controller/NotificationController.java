@@ -32,6 +32,11 @@ public class NotificationController {
         List<NotificationDTO> userNotifications = notificationService.getUserLikes();
         return ResponseEntity.ok(userNotifications);
     }
+    @GetMapping("/friend")
+    public ResponseEntity<List<NotificationDTO>> getUserFriendNotifications() {
+        List<NotificationDTO> friendNotifications = notificationService.getUserFriendNotifications();
+        return ResponseEntity.ok(friendNotifications);
+    }
     @PutMapping("/markRead/{notificationId}")
     public ResponseEntity<Void> markRead(@PathVariable Long notificationId) {
         notificationService.markRead(notificationId);

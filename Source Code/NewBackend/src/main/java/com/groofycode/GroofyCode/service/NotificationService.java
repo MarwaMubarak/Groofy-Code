@@ -7,6 +7,7 @@ import com.groofycode.GroofyCode.model.Notification.FriendNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.LikeNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.FriendNotificationRepository;
 import com.groofycode.GroofyCode.repository.LikeNotificationRepository;
 import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
@@ -28,14 +29,17 @@ public class NotificationService {
     private final UserRepository userRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
+    private final FriendNotificationRepository friendNotificationRepository;
+
 
     @Autowired
-    public NotificationService(NotificationRepository notificationRepository, LikeNotificationRepository likeNotificationRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate) {
+    public NotificationService(NotificationRepository notificationRepository, LikeNotificationRepository likeNotificationRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate, FriendNotificationRepository friendNotificationRepository) {
         this.notificationRepository = notificationRepository;
         this.likeNotificationRepository = likeNotificationRepository;
         this.userRepository = userRepository;
         this.messagingTemplate = messagingTemplate;
 
+        this.friendNotificationRepository = friendNotificationRepository;
     }
 
     public void createNotification(NotificationDTO notificationDTO,UserModel receiver) {
@@ -57,6 +61,13 @@ public class NotificationService {
         UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
         List<LikeNotificationModel> notifications = likeNotificationRepository.findByReceiver(userModel);
         return notifications.stream().map(this::mapEntityToLikeDTO).collect(Collectors.toList());
+    }
+
+    public List<NotificationDTO> getUserFriendNotifications() {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
+        List<FriendNotificationModel> notifications = friendNotificationRepository.findByReceiver(userModel);
+        return notifications.stream().map(this::mapEntityToFriendDTO).collect(Collectors.toList());
     }
 
     public void markRead(Long notificationId) {
