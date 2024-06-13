@@ -1,7 +1,7 @@
 package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.BadgeDTO;
-import com.groofycode.GroofyCode.model.BadgeModel;
+import com.groofycode.GroofyCode.model.Badge.BadgeModel;
 import com.groofycode.GroofyCode.repository.BadgeRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;

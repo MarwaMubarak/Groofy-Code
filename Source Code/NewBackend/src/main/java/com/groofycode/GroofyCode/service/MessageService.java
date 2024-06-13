@@ -2,7 +2,7 @@ package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.MessageDTO;
 import com.groofycode.GroofyCode.model.Clan.ClanModel;
-import com.groofycode.GroofyCode.model.Message;
+import com.groofycode.GroofyCode.model.Chat.Message;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.MessageRepository;

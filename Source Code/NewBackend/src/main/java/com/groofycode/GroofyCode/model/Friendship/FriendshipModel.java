@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.model;
+package com.groofycode.GroofyCode.model.Friendship;
 
 
 import jakarta.persistence.*;

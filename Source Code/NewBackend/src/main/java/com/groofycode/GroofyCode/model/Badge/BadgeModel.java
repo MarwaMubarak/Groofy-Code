@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.model;
+package com.groofycode.GroofyCode.model.Badge;
 
 import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.*;

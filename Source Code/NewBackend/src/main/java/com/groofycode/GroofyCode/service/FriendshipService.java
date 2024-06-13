@@ -4,7 +4,7 @@ package com.groofycode.GroofyCode.service;
 import com.groofycode.GroofyCode.dto.Friend.FriendDTO;
 import com.groofycode.GroofyCode.dto.Friend.FriendshipDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
-import com.groofycode.GroofyCode.model.FriendshipModel;
+import com.groofycode.GroofyCode.model.Friendship.FriendshipModel;
 import com.groofycode.GroofyCode.model.Notification.FriendNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.User.UserModel;

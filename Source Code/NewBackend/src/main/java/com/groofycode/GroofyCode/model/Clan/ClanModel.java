@@ -1,6 +1,6 @@
 package com.groofycode.GroofyCode.model.Clan;
 
-import com.groofycode.GroofyCode.model.Message;
+import com.groofycode.GroofyCode.model.Chat.Message;
 import jakarta.persistence.*;
 import lombok.*;
 
