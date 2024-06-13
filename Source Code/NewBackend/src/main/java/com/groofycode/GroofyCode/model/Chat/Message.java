@@ -9,7 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "messages")
+@Data
+//@Table(name = "messages")
 @Getter
 @Setter
 @NoArgsConstructor

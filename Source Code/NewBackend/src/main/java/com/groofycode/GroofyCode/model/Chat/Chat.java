@@ -15,7 +15,6 @@ import java.util.Vector;
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,18 +29,15 @@ public class Chat {
     @Column
     private List<Long> userIds;
 
-    @Column
-    private List<Message> messages;
+
+    public  Chat(){
+        userIds = new ArrayList<>();
+    }
 
     public  void  adduser(Long userId){
         if(userIds.isEmpty())
             userIds = new ArrayList<>();
         userIds.add(userId);
-    }
-    public void sendMessage(Message message){
-        if(messages.isEmpty())
-            messages = new ArrayList<>();
-        messages.add(message);
     }
     public boolean checkUserExist(Long userId){
         return userIds.contains(userId);

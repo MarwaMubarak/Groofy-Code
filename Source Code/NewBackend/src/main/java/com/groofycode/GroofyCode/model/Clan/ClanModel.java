@@ -31,8 +31,8 @@ public class ClanModel {
 
     private Integer worldRank;
 
-    @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Message> messages;
+//    @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<Message> messages;
 
     @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ClanMember> members;
@@ -42,7 +42,7 @@ public class ClanModel {
 
     public ClanModel() {
         this.members = new ArrayList<>();
-        this.messages = new ArrayList<>();
+//        this.messages = new ArrayList<>();
         this.clanRequests = new ArrayList<>();
         this.wins = 0;
         this.losses = 0;

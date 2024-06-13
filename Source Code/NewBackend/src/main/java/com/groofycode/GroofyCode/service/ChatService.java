@@ -104,31 +104,6 @@ public class ChatService {
         }
     }
 
-    public ResponseEntity<Object> sendMessage(Long chatId, String content) throws Exception{
-        try {
-
-            //check if the chat exist
-            Optional<Chat> chatModel = chatRepository.findById(chatId);
-            if (chatModel.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Chat not found", null));
-
-            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            //send message
-            Message message = new Message();
-            message.setUserId(userInfo.getUserId());
-            message.setContent(content);
-            message.setChatId(chatId);
-
-            Chat chat = chatModel.get();
-            chat.sendMessage(message);
-            chatRepository.save(chat);
-            ChatDTO chatDTO = modelMapper.map(chat,ChatDTO.class);
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Message Sent Successfully!", chatDTO));
-
-        }catch (Exception e){
-            throw new Exception(e);
-        }
-    }
 
 
 
