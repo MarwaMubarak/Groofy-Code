@@ -2,6 +2,7 @@ package com.groofycode.GroofyCode.controller.Clan;
 
 import com.groofycode.GroofyCode.dto.Clan.ClanDTO;
 import com.groofycode.GroofyCode.dto.Clan.ClanRequestActionDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.groofycode.GroofyCode.service.ClanService;
 
 import javax.annotation.Nullable;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/clans")
 public class ClanController {

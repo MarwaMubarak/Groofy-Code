@@ -1,10 +1,12 @@
 package com.groofycode.GroofyCode.controller;
 import com.groofycode.GroofyCode.service.FriendshipService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/friends")
 public class FriendshipController {

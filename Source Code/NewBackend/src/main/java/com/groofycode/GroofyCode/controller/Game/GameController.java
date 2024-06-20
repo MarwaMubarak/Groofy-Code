@@ -6,12 +6,13 @@ import com.groofycode.GroofyCode.model.Game.Game;
 import com.groofycode.GroofyCode.model.Game.RankedMatch;
 import com.groofycode.GroofyCode.model.Game.SoloMatch;
 import com.groofycode.GroofyCode.service.Game.GameService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/games")
 public class GameController {

@@ -19,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
@@ -49,6 +52,11 @@ public class MessageService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Chat not found", null));
 
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            //if user part of the chat
+            if(!chatModel.get().checkUserExist(userInfo.getUserId()))
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("User Not Allowed To Send Message!!", null));
+
+
             //send message
             Message message = new Message();
             message.setUserId(userInfo.getUserId());
@@ -58,6 +66,39 @@ public class MessageService {
             messageRepository.save(message);
             MessageDTO messageDTO = modelMapper.map(message,MessageDTO.class);
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Message Sent Successfully!", messageDTO));
+
+        }catch (Exception e){
+            throw new Exception(e);
+        }
+    }
+
+    public ResponseEntity<Object> getMessagesChat(Long chatId) throws Exception{
+        try {
+
+            //check if the chat exist
+            Optional<Chat> chatModel = chatRepository.findById(chatId);
+            if (chatModel.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Chat not found", null));
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            //if user part of the chat
+            if(!chatModel.get().checkUserExist(userInfo.getUserId()))
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("User Not Allowed To Get The Chat!!", null));
+
+            // get chat
+            List<Message> chatMessages = messageRepository.findByChatId(chatId);
+
+            //sort chat based on thr date
+            chatMessages.sort(Comparator.comparing(Message::getCreatedAt));
+
+            List<MessageDTO> chatMessagesDTO = chatMessages.stream()
+                    .map(message -> modelMapper.map(message, MessageDTO.class)).toList();
+
+            if (chatMessagesDTO.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Empty Chat!", chatMessagesDTO));
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Chat retrieved Successfully!", chatMessagesDTO));
 
         }catch (Exception e){
             throw new Exception(e);

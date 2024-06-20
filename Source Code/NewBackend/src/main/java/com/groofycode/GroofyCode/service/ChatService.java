@@ -1,11 +1,13 @@
 package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.ChatDTO;
+import com.groofycode.GroofyCode.dto.MessageDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Chat.Chat;
 import com.groofycode.GroofyCode.model.Chat.Message;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.ChatRepository;
+import com.groofycode.GroofyCode.repository.MessageRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
@@ -25,6 +27,8 @@ public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
     @Autowired
+    private MessageRepository messageRepository;
+    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private UserRepository userRepository;
@@ -32,11 +36,24 @@ public class ChatService {
     public ResponseEntity<Object> getById(Long id) throws Exception {
         try {
             Optional<Chat> chatOptional = chatRepository.findById(id);
+
             if (chatOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Chat not found", null));
             }
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            //if user part of the chat
+            if(!chatOptional.get().checkUserExist(userInfo.getUserId()))
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("User Not Allowed To Get The Chat!!", null));
+
             ChatDTO chatDTO = modelMapper.map(chatOptional.get(), ChatDTO.class);
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Badge retrieved successfully", chatDTO));
+
+            List<Message> chatMessages = messageRepository.findByChatId(id);
+            List<MessageDTO> messagesDTO = chatMessages.stream()
+                    .map(message -> modelMapper.map(message, MessageDTO.class)).toList();
+            chatDTO.setMessages(messagesDTO);
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Chat retrieved successfully",chatDTO ));
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -55,18 +72,6 @@ public class ChatService {
             chatRepository.save(chat);
             ChatDTO chatDTO = modelMapper.map(chat, ChatDTO.class);
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Chat Created Successfully!", chatDTO));
-        } catch (Exception e) {
-            throw new Exception(e);
-        }
-    }
-
-    public ResponseEntity<Object> delete(Long id) throws Exception {
-        try {
-            Optional<Chat> chatModel = chatRepository.findById(id);
-            if (chatModel.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Chat not found", null));
-            chatRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Chat Deleted Successfully!", null));
         } catch (Exception e) {
             throw new Exception(e);
         }

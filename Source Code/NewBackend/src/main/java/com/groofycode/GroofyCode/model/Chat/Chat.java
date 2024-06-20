@@ -7,13 +7,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 @Table(name = "chats")
 @Entity
-@Data
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 public class Chat {
     @Id

@@ -2,30 +2,26 @@ package com.groofycode.GroofyCode.controller;
 
 import com.groofycode.GroofyCode.service.BadgeService;
 import com.groofycode.GroofyCode.service.ChatService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/chats")
 public class ChatController {
 
     @Autowired
     private ChatService chatService;
 
     @PostMapping()
-    ResponseEntity<Object>createChat(@RequestBody String name) throws Exception {
+    ResponseEntity<Object>create(@RequestBody String name) throws Exception {
         return chatService.create(name);
     }
 
     @GetMapping("/{chatId}")
     ResponseEntity<Object>getById(@PathVariable Long chatId) throws Exception {
         return chatService.getById(chatId);
-    }
-
-    @DeleteMapping("/{chatId}")
-    ResponseEntity<Object>delete(@PathVariable Long chatId) throws Exception {
-        return chatService.delete(chatId);
     }
 
 

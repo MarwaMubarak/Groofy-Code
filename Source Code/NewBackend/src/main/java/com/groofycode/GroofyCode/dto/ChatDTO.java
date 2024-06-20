@@ -21,6 +21,7 @@ public class ChatDTO {
 
     private List<Long> userIds;
 
-    private List<Message> messages;
+    private List<MessageDTO> messages;
+
 
 }
