@@ -7,6 +7,7 @@ import com.groofycode.GroofyCode.model.Match.UserMatch;
 import com.groofycode.GroofyCode.model.Chat.Message;
 import com.groofycode.GroofyCode.model.Notification.NotificationModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
+import com.groofycode.GroofyCode.model.Team.TeamMember;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -62,6 +63,10 @@ public class UserModel implements UserDetails {
     private Integer worldRank;
 
     private Integer maxRating;
+    // Define the relationship with TeamMember
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TeamMember> teamMembers;
+
 
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    private List<Message> messages;
