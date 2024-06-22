@@ -2,6 +2,12 @@
 
 .notify_box {
   @include between;
+  padding: 10px;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    background-color: #ddd;
+  }
   &:not(:last-of-type) {
     margin-bottom: 10px;
     border-bottom: 1px solid #eee;

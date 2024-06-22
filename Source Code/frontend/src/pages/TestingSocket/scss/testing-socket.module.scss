@@ -1,0 +1,19 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.toast_testing {
+  @include start;
+  background-color: #eee;
+  border-radius: 6px;
+  padding: 10px 20px;
+  width: 200px;
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  span {
+    color: red;
+  }
+}

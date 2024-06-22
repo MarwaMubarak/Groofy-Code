@@ -15,7 +15,7 @@ import {
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { useDispatch, useSelector } from "react-redux";
-import { userThunks, socketThunks } from "./store/actions";
+import { userThunks, socketThunks, notifyThunks } from "./store/actions";
 import { useEffect } from "react";
 import TestingSocket from "./pages/TestingSocket/TestingSocket";
 
@@ -56,7 +56,9 @@ function App() {
         }
       );
       const onMessage = (message: any) => {
-        console.log("Recieved message: ", message.body);
+        const msg = JSON.parse(message.body);
+        console.log("Recieved message: ", msg);
+        dispatch(notifyThunks.socketNotification(msg) as any);
       };
       dispatch(socketThunks.changeStompClient(client) as any);
       return () => client.disconnect();

@@ -61,7 +61,9 @@ export interface GroofyInputProps {
 export interface NotifyBoxProps {
   nuImg: string;
   nusn: string;
+  nbody: string;
   ntime: string;
+  nType: string;
 }
 
 // Single Friend Props

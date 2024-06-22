@@ -2,6 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.notify_box:hover {
+  background-color: #ddd;
 }
 .notify_box:not(:last-of-type) {
   margin-bottom: 10px;

@@ -4,7 +4,7 @@ import NotifyBox from "./NotifyBox/NotifyBox";
 import ActionButton from "./ActionButton/ActionButton";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { authThunks, userThunks } from "../../store/actions";
+import { authThunks, notifyThunks, userThunks } from "../../store/actions";
 import { postActions } from "../../store/slices/post-slice";
 import classes from "./scss/groofyheader.module.css";
 import { OverlayPanel } from "primereact/overlaypanel";
@@ -17,6 +17,7 @@ import ReactCountryFlag from "react-country-flag";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import useClickOutside from "../../shared/functions/handleClickOutside";
 import ProfileImage from "../ProfileImage/ProfileImage";
+import FormatDate from "../../shared/functions/format-date";
 
 interface Country {
   name: string;
@@ -28,6 +29,10 @@ const GroofyHeader = () => {
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
   const userMatchStatus = useSelector((state: any) => state.auth.status);
+  const notifications: any[] = useSelector(
+    (state: any) => state.notify.notifications
+  );
+  const notificationsCnt = useSelector((state: any) => state.notify.notifyCnt);
   const op = useRef<OverlayPanel>(null);
   const [searchText, setSearchText] = useState<string>("");
   const [counterToFetch, setCounterToFetch] = useState<number>(2);
@@ -91,7 +96,6 @@ const GroofyHeader = () => {
   }, [userMatchStatus]);
 
   const [notifyActive, setNotifyActive] = useState(false);
-  const [notifyNewCnt, setNotifyNewCnt] = useState(15);
   const [notifyCnt, setNotifyCnt] = useState(4);
 
   const [messageActive, setMessageActive] = useState(false);
@@ -108,6 +112,15 @@ const GroofyHeader = () => {
     dispatch(postActions.setMessage(""));
     navigate("/login");
   };
+
+  const getAllNotifications = async () => {
+    await dispatch(notifyThunks.getAllNotifications() as any);
+  };
+
+  console.log(notifications);
+
+  console.log("Notification Cnt: ", notificationsCnt);
+
   return (
     <div className={classes.header_container}>
       <div
@@ -128,12 +141,17 @@ const GroofyHeader = () => {
           </abbr>
         </div>
         <div className={classes.na_content}>
-          {notifyCnt > 0 ? (
-            <NotifyBox
-              nuImg="/Assets/Images/tourist.jpg"
-              nusn="tourist"
-              ntime="3 Minutes ago."
-            />
+          {notifications.length > 0 ? (
+            notifications.map((notify, idx) => (
+              <NotifyBox
+                key={idx}
+                nuImg={notify.img}
+                nusn={notify.sender}
+                nbody={notify.body}
+                ntime={FormatDate(notify.createdAt) ?? "Some time ago"}
+                nType={notify.notificationType}
+              />
+            ))
           ) : (
             <div className={classes.empty_box}>
               <img
@@ -339,12 +357,12 @@ const GroofyHeader = () => {
             }}
           />
           <ActionButton
-            count={notifyNewCnt}
+            count={notificationsCnt}
             img="/Assets/SVG/notificationsIcon.svg"
             clickEvent={() => {
               setNotifyActive((prev) => !prev);
               setProfileActive(false);
-              setNotifyNewCnt(0);
+              getAllNotifications();
             }}
           />
           <ProfileImage

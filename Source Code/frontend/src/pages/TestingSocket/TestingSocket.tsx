@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
+import classes from "./scss/testing-socket.module.css";
 // import { Stomp } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 
@@ -47,11 +49,29 @@ const TestingSocket = () => {
       JSON.stringify(data)
     );
   };
+
+  const getToast = () =>
+    toast.custom(
+      <div className={classes.toast_testing}>
+        <img src="./Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
+        <span>Hello</span>
+      </div>
+    );
+
+  const getToast2 = () => toast.success("Hello");
+
   return (
     <div>
       <button onClick={() => sendMessage(loggedUser.clanName, "Hello")}>
         Send
       </button>
+      <br />
+      <br />
+      <button onClick={getToast}>Toast 1</button>
+      <br />
+      <br />
+      <button onClick={getToast2}>Toast 2</button>
+      <Toaster />
     </div>
   );
 };
