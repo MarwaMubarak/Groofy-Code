@@ -5,6 +5,9 @@ public enum NotificationType {
     GAME_INVITATION,
     FRIEND_REQUEST,
     FRIEND_ACCEPT,
-
+    Leave_Game,
+    GAME_ENDED,
+    SUBMIT_CODE,
     TEAM_INVITATION
+    
 }

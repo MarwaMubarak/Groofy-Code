@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.model.Game;
 
+import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -13,7 +14,7 @@ public class SoloMatch extends Game {
         setGameType(GameType.SOLO);
     }
 
-    public SoloMatch(String player1, LocalDateTime startTime) {
+    public SoloMatch(UserModel player1, LocalDateTime startTime) {
         super(player1, null, startTime);
         setGameType(GameType.SOLO);
 
