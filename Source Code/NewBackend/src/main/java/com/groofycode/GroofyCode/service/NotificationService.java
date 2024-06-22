@@ -1,4 +1,5 @@
 package com.groofycode.GroofyCode.service;
+
 import com.groofycode.GroofyCode.dto.Notification.FriendNotificationDTO;
 import com.groofycode.GroofyCode.dto.Notification.LikeNotificationDTO;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
@@ -13,7 +14,12 @@ import com.groofycode.GroofyCode.repository.FriendNotificationRepository;
 import com.groofycode.GroofyCode.repository.LikeNotificationRepository;
 import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.utilities.ResponseUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,36 +32,43 @@ import java.util.stream.Collectors;
 @Service
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-
     private final LikeNotificationRepository likeNotificationRepository;
     private final UserRepository userRepository;
-    private final SimpMessagingTemplate messagingTemplate;
-
     private final FriendNotificationRepository friendNotificationRepository;
+    private final ModelMapper modelMapper;
 
 
     @Autowired
-    public NotificationService(NotificationRepository notificationRepository, LikeNotificationRepository likeNotificationRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate, FriendNotificationRepository friendNotificationRepository) {
+    public NotificationService(NotificationRepository notificationRepository, LikeNotificationRepository likeNotificationRepository,
+                               UserRepository userRepository, FriendNotificationRepository friendNotificationRepository, ModelMapper modelMapper) {
         this.notificationRepository = notificationRepository;
         this.likeNotificationRepository = likeNotificationRepository;
         this.userRepository = userRepository;
-        this.messagingTemplate = messagingTemplate;
+        this.modelMapper = modelMapper;
 
         this.friendNotificationRepository = friendNotificationRepository;
     }
 
-    public void createNotification(NotificationDTO notificationDTO,UserModel receiver) {
-
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String sender = userInfo.getUsername();
-        NotificationModel notification = new NotificationModel();
-        notification.setBody(notificationDTO.getBody());
-        notification.setReceiver(receiver);
-        notification.setNotificationType(notificationDTO.getNotificationType());
-        notification.setCreatedAt(new Date());
-        notification.setSender(sender);
-        notificationRepository.save(notification);
-        messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", notificationDTO.getBody());
+    public ResponseEntity<Object> getAllNotifications(Integer page) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (page == null || page < 0) page = 0;
+            Pageable pageRequest = PageRequest.of(page, 6);
+            List<NotificationModel> notifications = notificationRepository.findByUserId(userInfo.getUserId(), pageRequest);
+            List<NotificationDTO> notificationsDTOS = notifications.stream().map(notification -> {
+                if (!notification.isRetrieved()) {
+                    notification.setRetrieved(true);
+                    notificationRepository.save(notification);
+                }
+                NotificationDTO notificationDTO = modelMapper.map(notification, NotificationDTO.class);
+                notificationDTO.setSender(notification.getSender().getUsername());
+                notificationDTO.setImg(notification.getSender().getPhotoUrl());
+                return notificationDTO;
+            }).toList();
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Notifications retrieved successfully", notificationsDTOS));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     public List<NotificationDTO> getUserLikes() {
@@ -86,7 +99,7 @@ public class NotificationService {
     public NotificationDTO mapEntityToLikeDTO(LikeNotificationModel notification) {
         LikeNotificationDTO dto = new LikeNotificationDTO();
         dto.setBody(notification.getBody());
-        dto.setSender(notification.getSender());
+        dto.setSender(notification.getSender().getUsername());
         dto.setNotificationType(notification.getNotificationType());
         dto.setCreatedAt(notification.getCreatedAt());
         dto.setContent(notification.getPost().getContent());
@@ -95,10 +108,11 @@ public class NotificationService {
         // Map other fields if needed
         return dto;
     }
+
     public NotificationDTO mapEntityToFriendDTO(FriendNotificationModel notification) {
         FriendNotificationDTO dto = new FriendNotificationDTO();
         dto.setBody(notification.getBody());
-        dto.setSender(notification.getSender());
+        dto.setSender(notification.getSender().getUsername());
         dto.setNotificationType(notification.getNotificationType());
         dto.setCreatedAt(notification.getCreatedAt());
         dto.setRead(notification.isRead());
@@ -109,7 +123,7 @@ public class NotificationService {
     public NotificationDTO mapEntityToTeamDTO(TeamNotificationModel notification) {
         TeamNotificationDTO dto = new TeamNotificationDTO();
         dto.setBody(notification.getBody());
-        dto.setSender(notification.getSender());
+        dto.setSender(notification.getSender().getUsername());
         dto.setNotificationType(notification.getNotificationType());
         dto.setCreatedAt(notification.getCreatedAt());
         dto.setRead(notification.isRead());

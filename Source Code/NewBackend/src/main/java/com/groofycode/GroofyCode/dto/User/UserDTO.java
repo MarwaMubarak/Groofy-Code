@@ -32,6 +32,8 @@ public class UserDTO {
 
     private Integer totalMatches;
 
+    private String notifyCnt;
+
     private Integer wins;
 
     private Integer draws;

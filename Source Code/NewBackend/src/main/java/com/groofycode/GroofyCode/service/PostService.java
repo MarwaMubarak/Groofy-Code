@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.service;
 
+import com.groofycode.GroofyCode.dto.Notification.LikeNotificationDTO;
 import com.groofycode.GroofyCode.dto.PostDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Notification.LikeNotificationModel;
@@ -36,11 +37,11 @@ public class PostService {
 
     private final ModelMapper modelMapper;
 
-    private final  NotificationService notificationService;
-
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate, NotificationRepository notificationRepository, ModelMapper modelMapper, LikeRepository likeRepository, LikeNotificationRepository likeNotificationRepository, NotificationService notificationService) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate,
+                       NotificationRepository notificationRepository, ModelMapper modelMapper, LikeRepository likeRepository,
+                       LikeNotificationRepository likeNotificationRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.messagingTemplate = messagingTemplate;
@@ -48,7 +49,6 @@ public class PostService {
         this.likeRepository = likeRepository;
         this.modelMapper = modelMapper;
         this.likeNotificationRepository = likeNotificationRepository;
-        this.notificationService = notificationService;
     }
 
     public ResponseEntity<Object> createPost(PostDTO postDTO) throws Exception {
@@ -137,7 +137,7 @@ public class PostService {
                 post.setLikesCnt(post.getLikesCnt() - 1);
                 postRepository.save(post);
                 // Delete the associated like notification, if it exists
-                NotificationModel likeNotification = likeNotificationRepository.findByPostAndSender(post, currentUser.getUsername());
+                NotificationModel likeNotification = likeNotificationRepository.findByPostAndSender(post, currentUser);
                 if(likeNotification!=null)
                     notificationRepository.delete(likeNotification);
 
@@ -156,14 +156,21 @@ public class PostService {
                 if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
                     // Create and save the like notification
                     LikeNotificationModel likeNotification = new LikeNotificationModel();
-                    likeNotification.setBody(currentUser.getUsername() + " likes your post");
-                    likeNotification.setSender(currentUser.getUsername());
+                    likeNotification.setBody("liked your post");
+                    likeNotification.setSender(currentUser);
                     likeNotification.setCreatedAt(new Date());
                     likeNotification.setReceiver(post.getUser());
                     likeNotification.setPost(post); // Set the associated post
                     likeNotification.setNotificationType(NotificationType.SEND_LIKE);
                     notificationRepository.save(likeNotification);
-                    messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", notificationService.mapEntityToLikeDTO(likeNotification));
+                    LikeNotificationDTO likeNotificationDTO = modelMapper.map(likeNotification, LikeNotificationDTO.class);
+                    likeNotificationDTO.setSender(currentUser.getUsername());
+                    likeNotificationDTO.setContent(post.getContent());
+                    likeNotificationDTO.setImg(post.getUser().getPhotoUrl());
+                    likeNotificationDTO.setPostId(post.getId());
+                    Integer notifyCnt = notificationRepository.countUnRetrievedByReceiver(post.getUser());
+                    likeNotificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+                    messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", likeNotificationDTO);
 
                     // @TODO -> Store buffered notifications in the database until it's opened
                 }

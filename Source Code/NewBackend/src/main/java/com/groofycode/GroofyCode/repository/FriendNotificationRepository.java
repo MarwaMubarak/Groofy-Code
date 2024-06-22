@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface FriendNotificationRepository extends JpaRepository<FriendNotificationModel, Long> {
     List<FriendNotificationModel> findByReceiver(UserModel receiver);
-    FriendNotificationModel findBySenderAndReceiverAndNotificationType(String sender, UserModel receiver, NotificationType notificationType);
+    FriendNotificationModel findBySenderAndReceiverAndNotificationType(UserModel sender, UserModel receiver, NotificationType notificationType);
 
 }

@@ -12,11 +12,12 @@ import java.util.Date;
 @Getter
 @Data
 public class NotificationDTO {
+    private long id;
     private String body;
     private String sender;
+    private String img;
     private NotificationType notificationType;
     private Date createdAt;
-    private boolean read;
-    private long id;
-
+    private boolean isRead;
+    private String notifyCnt;
 }

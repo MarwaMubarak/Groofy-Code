@@ -4,6 +4,7 @@ import com.groofycode.GroofyCode.dto.User.*;
 import com.groofycode.GroofyCode.model.Friendship.FriendshipModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.FriendshipRepository;
+import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.FirebaseManager;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
@@ -25,18 +26,20 @@ import java.util.Random;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
+    private final NotificationRepository notificationRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final FirebaseManager firebaseManager;
 
     @Autowired
     public UserService(UserRepository userRepository, FriendshipRepository friendshipRepository, ModelMapper modelMapper,
-                       PasswordEncoder passwordEncoder, FirebaseManager firebaseManager) {
+                       PasswordEncoder passwordEncoder, FirebaseManager firebaseManager, NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.friendshipRepository = friendshipRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.firebaseManager = firebaseManager;
+        this.notificationRepository = notificationRepository;
     }
 
     private static String getRandomColor() {
@@ -85,6 +88,8 @@ public class UserService implements UserDetailsService {
             if (userModel.getClanMember() != null) {
                 userDTO.setClanName(userModel.getClanMember().getClan().getName());
             }
+            Integer notifyCnt = notificationRepository.countUnRetrievedByReceiver(userModel);
+            userDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
             return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
         } catch (Exception e) {
             throw new Exception(e);

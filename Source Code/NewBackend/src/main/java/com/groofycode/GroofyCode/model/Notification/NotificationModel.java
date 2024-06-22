@@ -4,6 +4,7 @@ import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -18,14 +19,19 @@ public class NotificationModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sender;
-
     private String body;
 
     private boolean isRead = false;
 
+    @ColumnDefault("0")
+    private boolean isRetrieved;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "sender_id")
+    private UserModel sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
     private UserModel receiver;
 
     @CreationTimestamp

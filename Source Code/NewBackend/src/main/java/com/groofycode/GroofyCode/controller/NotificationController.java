@@ -26,6 +26,10 @@ public class NotificationController {
 //////        return ResponseEntity.ok(createdNotification);
 ////    }
 
+    @GetMapping
+    public ResponseEntity<Object> getAllNotifications(@RequestParam(value = "p", required = false) Integer page) throws Exception {
+        return notificationService.getAllNotifications(page);
+    }
 
     @GetMapping("/like")
     public ResponseEntity<List<NotificationDTO>> getUserLikeNotifications() {

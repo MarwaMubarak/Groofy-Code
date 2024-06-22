@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface LikeNotificationRepository extends JpaRepository<LikeNotificationModel, Long> {
-    NotificationModel findByPostAndSender(PostModel post, String sender);
+    NotificationModel findByPostAndSender(PostModel post, UserModel sender);
     List<LikeNotificationModel> findByReceiver(UserModel user);
 
 

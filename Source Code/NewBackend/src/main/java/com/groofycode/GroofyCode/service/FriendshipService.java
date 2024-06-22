@@ -241,7 +241,7 @@ public class FriendshipService {
 
             FriendNotificationModel friendNotification = new FriendNotificationModel();
             friendNotification.setBody(currUser.getUsername() + " Send to you Friend Request");
-            friendNotification.setSender(currUser.getUsername());
+            friendNotification.setSender(currUser);
             friendNotification.setCreatedAt(new Date());
             friendNotification.setReceiver(friend.get());
             friendNotification.setNotificationType(NotificationType.FRIEND_REQUEST);
@@ -272,14 +272,14 @@ public class FriendshipService {
                 friendshipRepository.save(friendshipModel);
                 // Delete the corresponding notification
                 FriendNotificationModel foundNotification = friendNotificationRepository.findBySenderAndReceiverAndNotificationType(
-                        friend.get().getUsername(), userModel, NotificationType.FRIEND_REQUEST);
+                        friend.get(), userModel, NotificationType.FRIEND_REQUEST);
                 if (foundNotification != null) {
                     friendNotificationRepository.delete(foundNotification);
                 }
                 FriendshipDTO friendshipDTO = modelMapper.map(friendshipModel, FriendshipDTO.class);
                 FriendNotificationModel friendNotification = new FriendNotificationModel();
                 friendNotification.setBody( userModel.getUsername()+ " Accept your Friend Request");
-                friendNotification.setSender(userModel.getUsername());
+                friendNotification.setSender(userModel);
                 friendNotification.setCreatedAt(new Date());
                 friendNotification.setReceiver(friend.get());
                 friendNotification.setNotificationType(NotificationType.FRIEND_ACCEPT);
@@ -326,12 +326,12 @@ public class FriendshipService {
                 friendshipRepository.delete(checkPendingRequest.get());
                 // Delete the corresponding notification
                 FriendNotificationModel foundNotification = friendNotificationRepository.findBySenderAndReceiverAndNotificationType(
-                        friend.get().getUsername(), currentUser, NotificationType.FRIEND_REQUEST);
+                        friend.get(), currentUser, NotificationType.FRIEND_REQUEST);
                 if (foundNotification != null) {
                     friendNotificationRepository.delete(foundNotification);
                 }
                 FriendNotificationModel foundNotification2 = friendNotificationRepository.findBySenderAndReceiverAndNotificationType(
-                        currentUser.getUsername(), friend.get(), NotificationType.FRIEND_ACCEPT);
+                        currentUser, friend.get(), NotificationType.FRIEND_ACCEPT);
                 if (foundNotification2 != null) {
                     friendNotificationRepository.delete(foundNotification2);
                 }
@@ -375,13 +375,13 @@ public class FriendshipService {
                 friendshipRepository.delete(friendshipModel.get());
                 // Delete the corresponding notification
                 FriendNotificationModel foundNotification1 = friendNotificationRepository.findBySenderAndReceiverAndNotificationType(
-                        friend.get().getUsername(), userModel, NotificationType.FRIEND_ACCEPT);
+                        friend.get(), userModel, NotificationType.FRIEND_ACCEPT);
                 if (foundNotification1 != null) {
                     friendNotificationRepository.delete(foundNotification1);
                 }
                 // because we don't know any user that accept
                 FriendNotificationModel foundNotification2 = friendNotificationRepository.findBySenderAndReceiverAndNotificationType(
-                        userModel.getUsername(), friend.get(), NotificationType.FRIEND_ACCEPT);
+                        userModel, friend.get(), NotificationType.FRIEND_ACCEPT);
                 if (foundNotification2 != null) {
                     friendNotificationRepository.delete(foundNotification2);
                 }
@@ -426,7 +426,7 @@ public class FriendshipService {
                 friendshipRepository.delete(checkPendingRequest.get());
                 // Delete the corresponding notification
                 FriendNotificationModel foundNotification = friendNotificationRepository.findBySenderAndReceiverAndNotificationType(
-                        userModel.getUsername(), friend.get(), NotificationType.FRIEND_REQUEST);
+                        userModel, friend.get(), NotificationType.FRIEND_REQUEST);
                 if (foundNotification != null) {
                     friendNotificationRepository.delete(foundNotification);
                 }

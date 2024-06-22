@@ -159,7 +159,7 @@ public class GameService {
         // Create and save the notification
         MatchNotificationModel matchNotification = new MatchNotificationModel();
         matchNotification.setBody("Your opponent has left the match.");
-        matchNotification.setSender(leavingPlayer.getUsername());
+        matchNotification.setSender(leavingPlayer);
         matchNotification.setCreatedAt(new Date());
         matchNotification.setReceiver(remainingPlayer);
         matchNotification.setGame(game);
@@ -175,7 +175,7 @@ public class GameService {
         // Create and send the notification DTO using setters
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setBody(matchNotification.getBody());
-        notificationDTO.setSender(matchNotification.getSender());
+        notificationDTO.setSender(matchNotification.getSender().getUsername());
         notificationDTO.setNotificationType(matchNotification.getNotificationType());
         notificationDTO.setCreatedAt(matchNotification.getCreatedAt());
         notificationDTO.setRead(matchNotification.isRead());
@@ -256,7 +256,7 @@ public class GameService {
     private MatchNotificationModel createNotification(String body, UserModel sender, UserModel receiver, Game game, NotificationType type) {
         MatchNotificationModel notification = new MatchNotificationModel();
         notification.setBody(body);
-        notification.setSender(sender.getUsername());
+        notification.setSender(sender);
         notification.setCreatedAt(new Date());
         notification.setReceiver(receiver);
         notification.setGame(game);
@@ -268,7 +268,7 @@ public class GameService {
     private NotificationDTO convertToDTO(MatchNotificationModel notification) {
         NotificationDTO dto = new NotificationDTO();
         dto.setBody(notification.getBody());
-        dto.setSender(notification.getSender());
+        dto.setSender(notification.getSender().getUsername());
         dto.setNotificationType(notification.getNotificationType());
         dto.setCreatedAt(notification.getCreatedAt());
         dto.setRead(notification.isRead());

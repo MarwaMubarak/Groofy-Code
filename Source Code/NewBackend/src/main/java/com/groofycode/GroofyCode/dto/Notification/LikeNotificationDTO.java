@@ -9,5 +9,5 @@ import lombok.Setter;
 @Data
 public class LikeNotificationDTO extends NotificationDTO {
     private String content;
-
+    private Long postId;
 }
