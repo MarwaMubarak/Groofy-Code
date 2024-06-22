@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.model.Game;
 
+import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -13,7 +14,7 @@ public class RankedMatch extends Game {
         setGameType(GameType.RANKED);
     }
 
-    public RankedMatch(String player1, String player2, LocalDateTime startTime) {
+    public RankedMatch(UserModel player1, UserModel player2, LocalDateTime startTime) {
         super(player1, player2, startTime);
         setGameType(GameType.RANKED);
 

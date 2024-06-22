@@ -4,5 +4,8 @@ public enum NotificationType {
     SEND_LIKE,
     GAME_INVITATION,
     FRIEND_REQUEST,
-    FRIEND_ACCEPT
+    FRIEND_ACCEPT,
+    Leave_Game,
+    GAME_ENDED,
+    SUBMIT_CODE,
 }
