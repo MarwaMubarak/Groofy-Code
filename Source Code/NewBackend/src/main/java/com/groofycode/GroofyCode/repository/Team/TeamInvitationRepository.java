@@ -19,4 +19,6 @@ public interface TeamInvitationRepository extends JpaRepository<TeamInvitation, 
     void deleteAllByTeam(TeamModel team);
 
     List<TeamInvitation> findByTeam(TeamModel team);
+    List<TeamInvitation> findAllByTeam(TeamModel team);
+
 }

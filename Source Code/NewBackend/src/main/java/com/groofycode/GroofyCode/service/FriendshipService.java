@@ -274,7 +274,6 @@ public class FriendshipService {
                 FriendNotificationModel foundNotification = friendNotificationRepository.findBySenderAndReceiverAndNotificationType(
                         friend.get().getUsername(), userModel, NotificationType.FRIEND_REQUEST);
                 if (foundNotification != null) {
-                    System.out.println("amaaaa n4oooooooof");
                     friendNotificationRepository.delete(foundNotification);
                 }
                 FriendshipDTO friendshipDTO = modelMapper.map(friendshipModel, FriendshipDTO.class);

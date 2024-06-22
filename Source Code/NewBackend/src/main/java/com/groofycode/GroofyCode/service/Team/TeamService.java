@@ -4,23 +4,30 @@ import com.groofycode.GroofyCode.dto.Team.MemberDTO;
 import com.groofycode.GroofyCode.dto.Team.TeamDTO;
 import com.groofycode.GroofyCode.dto.Team.TeamInvitationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.Notification.NotificationType;
+import com.groofycode.GroofyCode.model.Notification.TeamNotificationModel;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.Team.TeamMember;
 import com.groofycode.GroofyCode.model.Team.TeamInvitation;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamMembersRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamInvitationRepository;
+import com.groofycode.GroofyCode.repository.TeamNotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,15 +39,25 @@ public class TeamService {
     private final TeamInvitationRepository teamInvitationRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final NotificationRepository notificationRepository;
+
+    private final TeamNotificationRepository teamNotificationRepository;
+
+    private final SimpMessagingTemplate messagingTemplate;
+    private final NotificationService notificationService;
 
     @Autowired
     public TeamService(TeamRepository teamRepository, TeamMembersRepository teamMembersRepository, TeamInvitationRepository teamInvitationRepository,
-                       UserRepository userRepository, ModelMapper modelMapper) {
+                       UserRepository userRepository, ModelMapper modelMapper, NotificationRepository notificationRepository, TeamNotificationRepository teamNotificationRepository, SimpMessagingTemplate messagingTemplate, NotificationService notificationService) {
         this.teamRepository = teamRepository;
         this.teamMembersRepository = teamMembersRepository;
         this.teamInvitationRepository = teamInvitationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.notificationRepository = notificationRepository;
+        this.teamNotificationRepository = teamNotificationRepository;
+        this.messagingTemplate = messagingTemplate;
+        this.notificationService = notificationService;
     }
 
     public ResponseEntity<Object> getAll() {
@@ -238,6 +255,20 @@ public class TeamService {
             teamInvitationDTO.setTeamName(teamInvitation.getTeam().getName());
             teamInvitationDTO.setSenderUsername(teamInvitation.getSender().getUsername());
 
+            // Create and save the notification
+            TeamNotificationModel teamNotification = new TeamNotificationModel();
+            teamNotification.setBody(currUser.getUsername() + " has invited you to join the team " + team.get().getName());
+            teamNotification.setSender(currUser.getUsername());
+            teamNotification.setCreatedAt(new Date());
+            teamNotification.setReceiver(receiver);
+            teamNotification.setNotificationType(NotificationType.TEAM_INVITATION);
+            teamNotification.setTeam(teamInvitation.getTeam());
+            teamNotification.setTeamName(teamInvitation.getTeam().getName());
+            notificationRepository.save(teamNotification);
+
+            // Send the notification via WebSocket
+            messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", notificationService.mapEntityToTeamDTO(teamNotification));
+
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Team invitation sent successfully!", teamInvitationDTO));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to send invitation", null));
@@ -258,6 +289,15 @@ public class TeamService {
             TeamInvitation teamInvitation = teaminvitationOpt.get();
             if (!teamInvitation.getReceiver().getId().equals(currUser.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot accept this invitation!", null));
+            }
+
+            // Find the team invitation notification associated with the user
+            TeamNotificationModel teamNotification = teamNotificationRepository.findByReceiverAndTeam(currUser, teamInvitation.getTeam());
+
+            // Check if the notification exists
+            if (teamNotification != null) {
+                // Delete the notification
+                teamNotificationRepository.delete(teamNotification);
             }
 
 
@@ -294,6 +334,13 @@ public class TeamService {
 
             teamInvitationRepository.delete(teamInvitation);
 
+            // Delete the corresponding notification
+            TeamNotificationModel teamNotification = teamNotificationRepository.findByReceiverAndTeam(currUser, teamInvitation.getTeam());
+            if (teamNotification != null) {
+                teamNotificationRepository.delete(teamNotification);
+            }
+
+
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("invitation rejected successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to reject invitation", null));
@@ -318,6 +365,12 @@ public class TeamService {
 
             teamInvitationRepository.delete(teamInvitation);
 
+            // Delete the corresponding notification for the receiver
+            TeamNotificationModel teamNotification = teamNotificationRepository.findByReceiverAndTeam(teamInvitation.getReceiver(), teamInvitation.getTeam());
+            if (teamNotification != null) {
+                teamNotificationRepository.delete(teamNotification);
+            }
+
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("invitation canceled successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to cancel invitation", null));
@@ -339,6 +392,16 @@ public class TeamService {
 
             if (!team.getCreator().equals(currentUser)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You are not authorized to delete this team!", null));
+            }
+
+            List<TeamInvitation> teamInvitations = teamInvitationRepository.findAllByTeam(team);
+
+            // Delete notifications corresponding to these invitations for all users who received them
+            for (TeamInvitation teamInvitation : teamInvitations) {
+                TeamNotificationModel teamNotification = teamNotificationRepository.findByReceiverAndTeam(teamInvitation.getReceiver(), team);
+                if (teamNotification != null) {
+                    teamNotificationRepository.delete(teamNotification);
+                }
             }
 
             teamMembersRepository.deleteAllByTeam(team);
