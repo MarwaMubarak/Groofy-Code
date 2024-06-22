@@ -73,4 +73,15 @@ public class TeamController {
     public ResponseEntity<Object> leaveTeam(@RequestParam Long teamId) {
         return teamService.leaveTeam(teamId);
     }
+
+    @DeleteMapping("/removeMember")
+    public ResponseEntity<Object> removeMember(@RequestParam Long teamId, @RequestParam String memberUsername) {
+        return teamService.removeMember(teamId, memberUsername);
+    }
+
+    @PutMapping("/updateName")
+    public ResponseEntity<Object> updateTeamName(@RequestParam Long teamId, @RequestParam String newTeamName) {
+        return teamService.updateTeamName(teamId, newTeamName);
+    }
+
 }

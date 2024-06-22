@@ -159,7 +159,6 @@ public class TeamService {
     }
 
 
-
     public ResponseEntity<Object> create(TeamDTO teamDTO) {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -233,7 +232,6 @@ public class TeamService {
             TeamInvitation teamInvitation = new TeamInvitation(team.get(), currUser, receiver);
             teamInvitationRepository.save(teamInvitation);
 
-            // Create TeaminvitationDTO and populate it with data
             TeamInvitationDTO teamInvitationDTO = new TeamInvitationDTO();
             teamInvitationDTO.setInvitationId(teamInvitation.getId());
             teamInvitationDTO.setReceiverUsername(receiver.getUsername());
@@ -385,7 +383,68 @@ public class TeamService {
         }
     }
 
-    
+    public ResponseEntity<Object> removeMember(Long teamId, String memberUsername) {
+        try {
+            Optional<TeamModel> teamOptional = teamRepository.findById(teamId);
+            if (teamOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Team not found!", null));
+            }
+
+            TeamModel team = teamOptional.get();
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
+
+            if (!team.getCreator().equals(currentUser)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You are not authorized to remove members from this team!", null));
+            }
+
+            UserModel memberToRemove = userRepository.findByUsername(memberUsername);
+            if (memberToRemove == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("User not found!", null));
+            }
+
+            if (team.getCreator().equals(memberToRemove)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("You cannot remove yourself from the team as you are the creator!", null));
+            }
+
+            Optional<TeamMember> teamMemberOptional = teamMembersRepository.findByUserAndTeam(memberToRemove, team);
+            if (teamMemberOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("User is not a member of this team!", null));
+            }
+
+            teamMembersRepository.delete(teamMemberOptional.get());
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Member removed successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to remove member", null));
+        }
+    }
+
+    public ResponseEntity<Object> updateTeamName(Long teamId, String newTeamName) {
+        try {
+            Optional<TeamModel> teamOptional = teamRepository.findById(teamId);
+            if (teamOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Team not found!", null));
+            }
+
+            TeamModel team = teamOptional.get();
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
+
+            if (!team.getCreator().equals(currentUser)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You are not authorized to update this team!", null));
+            }
+
+            team.setName(newTeamName);
+            teamRepository.save(team);
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Team name updated successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to update team name", null));
+        }
+    }
 
 
 }
