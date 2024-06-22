@@ -1,10 +1,11 @@
 package com.groofycode.GroofyCode.controller.Match;
 
 import com.groofycode.GroofyCode.service.Match.MatchService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/matches")
 public class MatchController {

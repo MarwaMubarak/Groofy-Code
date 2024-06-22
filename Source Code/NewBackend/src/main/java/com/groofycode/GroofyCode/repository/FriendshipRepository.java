@@ -1,6 +1,6 @@
 package com.groofycode.GroofyCode.repository;
 
-import com.groofycode.GroofyCode.model.FriendshipModel;
+import com.groofycode.GroofyCode.model.Friendship.FriendshipModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

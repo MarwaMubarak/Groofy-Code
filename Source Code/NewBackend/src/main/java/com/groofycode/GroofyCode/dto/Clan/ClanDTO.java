@@ -1,8 +1,6 @@
 package com.groofycode.GroofyCode.dto.Clan;
 
-import com.groofycode.GroofyCode.dto.User.UserDTO;
-import com.groofycode.GroofyCode.model.BadgeModel;
-import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.model.Badge.BadgeModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;

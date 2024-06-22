@@ -1,6 +1,6 @@
 package com.groofycode.GroofyCode.repository;
 
-import com.groofycode.GroofyCode.model.BadgeModel;
+import com.groofycode.GroofyCode.model.Badge.BadgeModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

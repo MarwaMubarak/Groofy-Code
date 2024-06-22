@@ -2,12 +2,13 @@ package com.groofycode.GroofyCode.controller;
 
 import com.groofycode.GroofyCode.dto.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.service.CodeforcesSubmissionService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 public class CodeforcesSubmissionController {
     private final CodeforcesSubmissionService codeforcesSubmissionService;

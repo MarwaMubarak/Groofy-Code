@@ -2,11 +2,12 @@ package com.groofycode.GroofyCode.controller;
 
 import com.groofycode.GroofyCode.dto.BadgeDTO;
 import com.groofycode.GroofyCode.service.BadgeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/badges")
 public class BadgeController {

@@ -1,12 +1,13 @@
 package com.groofycode.GroofyCode.model.User;
 
-import com.groofycode.GroofyCode.model.BadgeModel;
+import com.groofycode.GroofyCode.model.Badge.BadgeModel;
 import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
-import com.groofycode.GroofyCode.model.Message;
+import com.groofycode.GroofyCode.model.Chat.Message;
 import com.groofycode.GroofyCode.model.Notification.NotificationModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
+import com.groofycode.GroofyCode.model.Team.TeamMember;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -62,9 +63,13 @@ public class UserModel implements UserDetails {
     private Integer worldRank;
 
     private Integer maxRating;
-
+    // Define the relationship with TeamMember
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Message> messages;
+    private List<TeamMember> teamMembers;
+
+
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<Message> messages;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PostModel> posts;
