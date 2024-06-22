@@ -23,7 +23,7 @@ public class Match {
 
     private Integer duration;
 
-    // @TODO -> Problem model relation
+    // @TODO -> ProblemSubmit model relation
 
     @OneToMany(mappedBy = "match", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserMatch> users;

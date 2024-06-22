@@ -15,8 +15,8 @@ public class CasualMatch extends Game {
         setGameType(GameType.CASUAL);
     }
 
-    public CasualMatch(UserModel player1, UserModel player2, LocalDateTime startTime) {
-        super(player1, player2, startTime);
+    public CasualMatch(UserModel player1, UserModel player2, LocalDateTime startTime, String problemUrl) {
+        super(player1, player2, startTime, problemUrl);
         setGameType(GameType.CASUAL);
     }
 

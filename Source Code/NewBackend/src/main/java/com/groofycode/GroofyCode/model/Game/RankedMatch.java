@@ -14,11 +14,8 @@ public class RankedMatch extends Game {
         setGameType(GameType.RANKED);
     }
 
-    public RankedMatch(UserModel player1, UserModel player2, LocalDateTime startTime) {
-        super(player1, player2, startTime);
+    public RankedMatch(UserModel player1, UserModel player2, LocalDateTime startTime, String problemUrl) {
+        super(player1, player2, startTime,problemUrl);
         setGameType(GameType.RANKED);
-
     }
-
-
 }

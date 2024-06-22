@@ -15,7 +15,6 @@ import java.util.List;
 @Setter
 @Getter
 public abstract class Game {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +25,10 @@ public abstract class Game {
     @ManyToOne
     private UserModel player2;
 
+    private String problemUrl;
+
     private LocalDateTime startTime;
+
     private LocalDateTime endTime;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -35,8 +37,7 @@ public abstract class Game {
     @Transient
     private GameType gameType;
 
-
-    @Transient
+    @Enumerated(EnumType.STRING)
     private GameStatus gameStatus;
 
     // Constructors, getters, and setters
@@ -44,10 +45,11 @@ public abstract class Game {
 
     }
 
-    public Game(UserModel player1, UserModel player2, LocalDateTime startTime) {
+    public Game(UserModel player1, UserModel player2, LocalDateTime startTime, String problemUrl) {
         this.player1 = player1;
         this.player2 = player2;
         this.startTime = startTime;
+        this.problemUrl = problemUrl;
 
         setGameStatus(GameStatus.ONGOING);
     }

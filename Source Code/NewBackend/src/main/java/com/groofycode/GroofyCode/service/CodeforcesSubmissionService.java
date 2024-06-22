@@ -2,14 +2,8 @@ package com.groofycode.GroofyCode.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.groofycode.GroofyCode.dto.ProblemSubmitDTO;
-import com.groofycode.GroofyCode.dto.User.UserInfo;
-import com.groofycode.GroofyCode.model.Match.UserMatch;
-import com.groofycode.GroofyCode.model.User.UserModel;
-import com.groofycode.GroofyCode.repository.Match.UserMatchRepository;
-import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.utilities.MatchStatusMapper;
-import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,10 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedWriter;
@@ -30,19 +21,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
 
-@Service
+@Component
 public class CodeforcesSubmissionService {
-    private final UserRepository userRepository;
-    private final UserMatchRepository userMatchRepository;
     private final MatchStatusMapper matchStatusMapper;
     private final WebDriver driver;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public CodeforcesSubmissionService(UserRepository userRepository, UserMatchRepository userMatchRepository, MatchStatusMapper matchStatusMapper) {
-        this.userRepository = userRepository;
-        this.userMatchRepository = userMatchRepository;
+    public CodeforcesSubmissionService(MatchStatusMapper matchStatusMapper) {
         this.matchStatusMapper = matchStatusMapper;
         // Set the path to your ChromeDriver executable
 //        System.setProperty("webdriver.chrome.driver", "C:/Program Files/Google/Chrome/Application/chrome.exe");
@@ -78,12 +65,7 @@ public class CodeforcesSubmissionService {
         passwordField.submit();
     }
 
-    public ResponseEntity<Object> submitCode(ProblemSubmitDTO problemSubmitDTO) throws Exception {
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
-        if (userModel.getStatus() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("User is not in a match", null));
-        }
+    public Integer submitCode(String problemUrl, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         // Navigate to the Codeforces login page
         driver.get("https://codeforces.com/enter");
         // Find the username and password input fields, and fill them with your credentials
@@ -103,7 +85,7 @@ public class CodeforcesSubmissionService {
             e.printStackTrace();
         }
         // Navigate to the problem page
-        driver.get(problemSubmitDTO.getProblemUrl());
+        driver.get(problemUrl);
 
         // Find the language dropdown and select the desired language
         WebElement languageDropdown = driver.findElement(By.name("programTypeId"));
@@ -137,7 +119,7 @@ public class CodeforcesSubmissionService {
         WebElement submitButton = driver.findElement(By.xpath("//input[@value='Submit']"));
         submitButton.submit();
 
-        if (driver.getCurrentUrl().startsWith(problemSubmitDTO.getProblemUrl())) {
+        if (driver.getCurrentUrl().startsWith(problemUrl)) {
             throw new Exception("Failed to submit code");
         }
 
@@ -167,11 +149,8 @@ public class CodeforcesSubmissionService {
 
         } while (verdict.equals("TESTING"));
         System.out.println(verdict);
-        UserMatch userMatch = userMatchRepository.fetchUserMatchByUsername(userModel.getUsername());
-        userMatch.setStatus(matchStatusMapper.getStatusStringToInt().get(verdict));
-        userMatchRepository.save(userMatch);
         file.delete();
-        return ResponseEntity.ok(ResponseUtils.successfulRes("Submission successful", matchStatusMapper.getStatusIntToString().get(userMatch.getStatus())));
+        return matchStatusMapper.getStatusStringToInt().get(verdict);
 
         // Close the browser after submission
         //        driver.quit();

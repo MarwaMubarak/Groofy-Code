@@ -1,6 +1,7 @@
 package com.groofycode.GroofyCode.controller.Game;
 
 
+import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
 import com.groofycode.GroofyCode.model.Game.CasualMatch;
 import com.groofycode.GroofyCode.model.Game.Game;
@@ -68,14 +69,14 @@ public class GameController {
         return gameService.getRankedMatch(id);
     }
 
-    @PutMapping("{gameId}/leave")
+    @PutMapping("/{gameId}/leave")
     public ResponseEntity<Object> leaveMatch(@PathVariable Long gameId) {
         return gameService.leaveMatch(gameId);
     }
 
-    @PostMapping("{gameId}/submit")
-    public ResponseEntity<Object> submitCode(@PathVariable Long gameId, @RequestBody String sourceCode) {
-        return gameService.submitCode(gameId, sourceCode);
+    @PostMapping("/{gameId}/submit")
+    public ResponseEntity<Object> submitCode(@PathVariable Long gameId, @RequestBody ProblemSubmitDTO problemSubmitDTO) throws Exception {
+        return gameService.submitCode(gameId, problemSubmitDTO);
     }
 
 //    @PostMapping("/join")

@@ -4,6 +4,7 @@ package com.groofycode.GroofyCode.service.Game;
 import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
 import com.groofycode.GroofyCode.dto.Game.SoloMatchDTO;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
+import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Game.*;
 import com.groofycode.GroofyCode.model.Notification.MatchNotificationModel;
@@ -11,10 +12,11 @@ import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Game.GameRepository;
 import com.groofycode.GroofyCode.repository.Game.SubmissionRepository;
-import com.groofycode.GroofyCode.repository.MatchNotificationRepository;
 import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.service.CodeforcesSubmissionService;
 import com.groofycode.GroofyCode.service.NotificationService;
+import com.groofycode.GroofyCode.utilities.MatchStatusMapper;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +33,11 @@ import java.util.Optional;
 
 @Service
 public class GameService {
-
     @Autowired
     private GameRepository gameRepository;
 
     @Autowired
     private UserRepository userRepository; // Assuming you have a UserRepository
-
 
     @Autowired
     private PlayerSelection playerSelection;
@@ -54,14 +54,18 @@ public class GameService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private CodeforcesSubmissionService codeforcesSubmissionService;
+
+    @Autowired
+    private MatchStatusMapper matchStatusMapper;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     public List<Game> findAllGames() {
         return gameRepository.findAll();
     }
-
-    public Game saveGame(Game game) {
-        return gameRepository.save(game);
-    }
-
 
     public ResponseEntity<Object> findRankedMatch() {
 
@@ -71,7 +75,7 @@ public class GameService {
         UserModel opponent = playerSelection.findFirstPlayerAndRemove(player1.getId());
         if (opponent != null) {
             try {
-                RankedMatch rankedMatch = new RankedMatch(player1, opponent, LocalDateTime.now());
+                RankedMatch rankedMatch = new RankedMatch(player1, opponent, LocalDateTime.now(), "https://codeforces.com/contest/4/problem/A");
                 playerSelection.removePlayer(player1);  // Remove the user from the waiting list
                 rankedMatch = gameRepository.save(rankedMatch);
 
@@ -91,7 +95,7 @@ public class GameService {
         UserModel player1 = userRepository.findByUsername(userInfo.getUsername());
         try {
             // Create a new SoloMatch and save it to the repository
-            SoloMatch soloMatch = new SoloMatch(player1, LocalDateTime.now());
+            SoloMatch soloMatch = new SoloMatch(player1, LocalDateTime.now(),"https://codeforces.com/contest/4/problem/A");
             soloMatch = gameRepository.save(soloMatch);
 
             // Convert the SoloMatch entity to its corresponding DTO
@@ -104,7 +108,6 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error starting match", e.getMessage()));
         }
     }
-
 
     public ResponseEntity<Object> getRankedMatch(Long id) {
         if (id == null) {
@@ -186,10 +189,14 @@ public class GameService {
         return ResponseEntity.ok(ResponseUtils.successfulRes("Left the match successfully", notificationDTO));
     }
 
-    public ResponseEntity<Object> submitCode(Long gameId, String sourceCode) {
+    public ResponseEntity<Object> submitCode(Long gameId, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         Game game = gameRepository.findById(gameId).orElse(null);
         if (game == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Match not found", null));
+        }
+
+        if (game.getGameStatus() != null && game.getGameStatus() == GameStatus.FINISHED.ordinal()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Match is already finished", null));
         }
 
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -198,17 +205,13 @@ public class GameService {
         UserModel player1 = game.getPlayer1();
         UserModel player2 = game.getPlayer2();
 
-        if (player1 == null || player2 == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Match is already incomplete", null));
-        }
-
         UserModel remainingPlayer = (submittingPlayer.getId().equals(player1.getId())) ? player2 : player1;
-
         ////TODO: Simulate committing code and receiving a response from Code Forces
+        Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
 
-        String codeForceResponse = "Time Limited Exceed"; // default response, simulate the actual submission process
+        String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
 
-        Submission submission = new Submission(game, submittingPlayer, sourceCode, LocalDateTime.now(), codeForceResponse);
+        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
 
         // Notify the submitting player

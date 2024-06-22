@@ -24,21 +24,22 @@ public class Submission {
     @JoinColumn(name = "user_id")
     private UserModel user;
 
-    @Lob
-    private String sourceCode;
+    private String language;
+
+    private String code;
 
     private LocalDateTime submissionTime;
 
-    private String result;
+    private Integer result;
 
     // Constructors, getters, and setters
     public Submission() {
     }
 
-    public Submission(Game game, UserModel user, String sourceCode, LocalDateTime submissionTime, String result) {
+    public Submission(Game game, UserModel user, String code, LocalDateTime submissionTime, Integer result) {
         this.game = game;
         this.user = user;
-        this.sourceCode = sourceCode;
+        this.code = code;
         this.submissionTime = submissionTime;
         this.result = result;
     }
