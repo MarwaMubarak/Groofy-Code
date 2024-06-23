@@ -64,7 +64,7 @@ public class ProblemParser {
     // Helper method to replace $$$ with MathJax tags
     private String replaceMathSymbols(String text) {
         String pattern = "\\$\\$\\$(.+?)\\$\\$\\$";
-        return text.replaceAll(pattern, "<MathJax>{\"$1\"}</MathJax>");
+        return text.replaceAll(pattern, "<MathJax>$$ $1 $$</MathJax>");
     }
 
     private List<List<String>> getSampleTests(Document doc) {
