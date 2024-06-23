@@ -28,6 +28,10 @@ body {
   color: black;
   background-color: #242526;
 }
+mjx-container {
+  display: inline-block !important;
+  margin: 0 !important;
+}
 ul {
   list-style: none;
 }

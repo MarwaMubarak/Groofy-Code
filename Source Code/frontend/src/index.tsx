@@ -9,6 +9,7 @@ import "primereact/resources/themes/lara-dark-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { MathJaxContext } from "better-react-mathjax";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -17,7 +18,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PrimeReactProvider>
-        <App />
+        <MathJaxContext>
+          <App />
+        </MathJaxContext>
       </PrimeReactProvider>
     </Provider>
   </React.StrictMode>

@@ -246,3 +246,8 @@ export interface ProfileImageProps {
   canClick: boolean;
   exec?: any;
 }
+
+export interface TestcaseProps {
+  input: string;
+  output: string;
+}

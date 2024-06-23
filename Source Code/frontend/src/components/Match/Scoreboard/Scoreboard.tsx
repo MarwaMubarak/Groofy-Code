@@ -1,6 +1,8 @@
+import { useSelector } from "react-redux";
 import classes from "./scss/scoreboard.module.css";
 
 const Scoreboard = () => {
+  const loggedUser = useSelector((state: any) => state.auth.user);
   return (
     <div className={classes.scoreboard}>
       <div className={classes.m_infobox}>
@@ -11,9 +13,9 @@ const Scoreboard = () => {
         <div className={classes.player}>
           <div className={classes.first_status}></div>
           <div className={classes.info}>
-            <div className={classes.usn}>Hazem Adel</div>
+            <div className={classes.usn}>{loggedUser.username}</div>
             <div className={classes.img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="ProfilePhoto" />
+              <img src={loggedUser.photoUrl} alt="ProfilePhoto" />
             </div>
           </div>
           {/* <div className={classes.pr_st + " " + classes.first}>

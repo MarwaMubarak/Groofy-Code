@@ -9,6 +9,7 @@ import {
   clanReducer,
   friendReducer,
   notifyReducer,
+  problemReducer,
 } from "./slices";
 import axios from "axios";
 
@@ -23,6 +24,7 @@ const store = configureStore({
     clan: clanReducer,
     friend: friendReducer,
     notify: notifyReducer,
+    problem: problemReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
