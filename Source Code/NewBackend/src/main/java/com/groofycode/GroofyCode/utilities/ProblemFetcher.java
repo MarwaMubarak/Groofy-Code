@@ -29,10 +29,10 @@ public class ProblemFetcher {
     }
 
 
-    public ResponseEntity<Object> fetchProblems() throws Exception {
-        String csvFile = "problems5.csv";
+    public ResponseEntity<Object> tempFetchProblems() throws Exception {
+        String csvFile = "problems1.csv";
         CSVWriter writer = new CSVWriter(new FileWriter(csvFile));
-        String[] header = { "name", "solvedCount", "contestId", "index" };
+        String[] header = { "name", "solvedCount", "contestId", "index"};
         writer.writeNext(header);
 
         String apiUrl = "https://codeforces.com/api/contest.list?gym=false";
@@ -88,4 +88,26 @@ public class ProblemFetcher {
         return ResponseEntity.ok("DONE");
     }
 
+    public ResponseEntity<Object> fetchProblems() throws Exception {
+        String csvFile = "problems.csv";
+        CSVWriter writer = new CSVWriter(new FileWriter(csvFile));
+        String[] header = { "name", "solvedCount", "contestId", "index", "rating"};
+        writer.writeNext(header);
+
+
+        String apiUrl = "https://codeforces.com/api/problemset.problems";
+        String response = restTemplate.getForObject(apiUrl, String.class);
+        JsonNode jsonResponse = objectMapper.readTree(response);
+        JsonNode problemsJSON = jsonResponse.get("result").get("problems");
+        JsonNode problemStatisticsJSON = jsonResponse.get("result").get("problemStatistics");
+        for(int i = 0; i < problemsJSON.size(); i++){
+            if(problemsJSON.get(i).get("rating") == null)continue;
+            JsonNode problem = problemsJSON.get(i);
+            JsonNode problemStatistics = problemStatisticsJSON.get(i);
+            String[] data = {problem.get("name").asText(), problemStatistics.get("solvedCount").asText(), problem.get("contestId").asText(), problem.get("index").asText(), problem.get("rating").asText()};
+            writer.writeNext(data);
+        }
+        writer.close();
+        return ResponseEntity.ok("DONE");
+    }
 }

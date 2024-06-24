@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.utilities;
+package com.groofycode.GroofyCode.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Problem {
+public class ProblemDTO {
     private String name;
     private Integer solvedCount;
     private String contestId;
     private String index;
+    private Integer rating;
 }
