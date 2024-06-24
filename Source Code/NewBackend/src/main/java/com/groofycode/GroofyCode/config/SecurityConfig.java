@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/login", "/register", "/socket/**",
                             "/swagger-ui/**","/swagger-ui.html/**","/v3/api-docs/**",
-                            "/v3/api-docs/swagger-config#/**", "/problemset/problem/pick").permitAll();
+                            "/v3/api-docs/swagger-config#/**", "/problemset/problem/pick", "/games/solo").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .cors(c -> c.configurationSource(request -> {

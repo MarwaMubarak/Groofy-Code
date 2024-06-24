@@ -3,6 +3,7 @@ package com.groofycode.GroofyCode.controller.Game;
 
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
+import com.groofycode.GroofyCode.dto.ProblemPickerDTO;
 import com.groofycode.GroofyCode.model.Game.CasualMatch;
 import com.groofycode.GroofyCode.model.Game.Game;
 import com.groofycode.GroofyCode.model.Game.RankedMatch;
@@ -37,8 +38,8 @@ public class GameController {
     }
 
     @PostMapping("/solo")
-    public ResponseEntity<Object> createSoloMatch() {
-        return gameService.findSoloMatch();
+    public ResponseEntity<Object> createSoloMatch(@RequestBody ProblemPickerDTO problemPickerDTO) {
+        return gameService.findSoloMatch(problemPickerDTO);
     }
 
 //    @PostMapping("/ranked")

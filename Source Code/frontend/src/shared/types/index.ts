@@ -202,6 +202,7 @@ export interface SubmissionProps {
   problemUrl?: string;
   language?: string;
   code: string;
+  gameID: string;
 }
 
 // Clan Result Props

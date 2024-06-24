@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.utilities;
 
+import com.groofycode.GroofyCode.dto.ProblemDTO;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,7 +14,7 @@ import java.util.*;
 @Service
 public class ProblemParser {
 
-    public ResponseEntity<Object> parseFullProblem(Integer contestId, String problemId) throws Exception {
+    public ResponseEntity<Object> parseFullProblem(String contestId, String problemId) throws Exception {
         // Connect to the URL and parse the HTML document
         Document doc = Jsoup.connect("https://codeforces.com/problemset/problem/" + contestId + "/" + problemId).get();
 
@@ -156,5 +157,34 @@ public class ProblemParser {
             }
         }
 
+    }
+
+    public ProblemDTO parseCodeforcesUrl(String url) {
+        String baseUrl = "https://codeforces.com/contest/";
+
+        // Check if the URL starts with the expected base URL
+        if (!url.startsWith(baseUrl)) {
+            throw new IllegalArgumentException("Invalid Codeforces URL: " + url);
+        }
+
+        // Remove the base URL part
+        String remainingUrl = url.substring(baseUrl.length());
+
+        // Split the remaining URL by "/problem/"
+        String[] parts = remainingUrl.split("/problem/");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid Codeforces URL: " + url);
+        }
+
+        try {
+            String contestId = parts[0];
+            String problemIndex = parts[1];
+            ProblemDTO problemDTO = new ProblemDTO();
+            problemDTO.setContestId(contestId);
+            problemDTO.setIndex(problemIndex);
+            return problemDTO;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid contest ID in URL: " + url, e);
+        }
     }
 }

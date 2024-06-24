@@ -26,7 +26,7 @@ public class ProblemController {
     }
 
     @GetMapping("/problemset/problem/{contestId}/{problemId}")
-    public ResponseEntity<Object> testProblem(@PathVariable Integer contestId, @PathVariable String problemId) throws Exception{
+    public ResponseEntity<Object> testProblem(@PathVariable String contestId, @PathVariable String problemId) throws Exception{
         return problemParser.parseFullProblem(contestId, problemId);
     }
 

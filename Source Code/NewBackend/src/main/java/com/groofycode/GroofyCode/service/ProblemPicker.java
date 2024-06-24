@@ -47,7 +47,7 @@ public class ProblemPicker {
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 list -> {
-                                    list.sort(Comparator.comparingInt(ProblemDTO::getSolvedCount));
+                                    list.sort(Comparator.comparingInt(ProblemDTO::getSolvedCount).reversed());
                                     return list;
                                 }
                         )

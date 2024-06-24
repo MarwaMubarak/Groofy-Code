@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   problem: null,
+  problemURL: null,
+  gameID: null,
   isLoading: false,
   error: null,
 };
@@ -18,6 +20,12 @@ const problemSlice = createSlice({
     },
     setError(state, action) {
       state.error = action.payload;
+    },
+    setProblemURL(state, action) {
+      state.problemURL = action.payload;
+    },
+    setGameID(state, action) {
+      state.gameID = action.payload;
     },
   },
 });
