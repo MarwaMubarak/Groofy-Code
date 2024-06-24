@@ -95,7 +95,7 @@ public class GameService {
         UserModel player1 = userRepository.findByUsername(userInfo.getUsername());
         try {
             // Create a new SoloMatch and save it to the repository
-            SoloMatch soloMatch = new SoloMatch(player1, LocalDateTime.now(),"https://codeforces.com/contest/4/problem/A");
+            SoloMatch soloMatch = new SoloMatch(player1, LocalDateTime.now(), "https://codeforces.com/contest/4/problem/A");
             soloMatch = gameRepository.save(soloMatch);
 
             // Convert the SoloMatch entity to its corresponding DTO
@@ -199,6 +199,61 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Match is already finished", null));
         }
 
+        if (game instanceof RankedMatch) {
+            return submitCodep2p(game, problemSubmitDTO);
+        } else if (game instanceof SoloMatch) {
+            return submitCodeSolo(game, problemSubmitDTO);
+        } else return null  ;
+    }
+
+    public ResponseEntity<Object> submitCodeSolo(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
+
+        // Ensure that the submitting player is one of the players in the game
+        if (!game.getPlayer1().getId().equals(submittingPlayer.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You do not own this game", null));
+        }
+
+        Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
+        String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
+
+        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
+        submissionRepository.save(submission);
+
+        // Notify the submitting player
+        MatchNotificationModel submitNotification = createNotification(
+                "You submitted the code. Result: " + codeForceResponse,
+                submittingPlayer,
+                submittingPlayer,
+                game,
+                NotificationType.SUBMIT_CODE
+        );
+        NotificationDTO submitNotificationDTO = convertToDTO(submitNotification);
+
+        if (codeForceResponse.equals("Accepted")) {
+            // End the game
+            game.setGameStatus(GameStatus.FINISHED);
+            game.setEndTime(LocalDateTime.now());
+            gameRepository.save(game);
+
+            // Notify the player that they won
+            MatchNotificationModel winNotification = createNotification(
+                    "Your code was accepted. You win!",
+                    submittingPlayer,
+                    submittingPlayer,
+                    game,
+                    NotificationType.GAME_ENDED
+            );
+            NotificationDTO winNotificationDTO = convertToDTO(winNotification);
+            messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/notification", winNotificationDTO);
+        }
+
+        return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", submitNotificationDTO));
+    }
+
+
+    ResponseEntity<Object> submitCodep2p(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
 
@@ -206,7 +261,7 @@ public class GameService {
         UserModel player2 = game.getPlayer2();
 
         UserModel remainingPlayer = (submittingPlayer.getId().equals(player1.getId())) ? player2 : player1;
-        ////TODO: Simulate committing code and receiving a response from Code Forces
+
         Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
 
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
@@ -252,7 +307,6 @@ public class GameService {
             NotificationDTO loseNotificationDTO = convertToDTO(loseNotification);
             messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", loseNotificationDTO);
         }
-
         return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", submitNotificationDTO));
     }
 
