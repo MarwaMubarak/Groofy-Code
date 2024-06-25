@@ -25,4 +25,9 @@ public class MessageController {
         return messageService.getMessagesChat(chatId);
     }
 
+    @GetMapping("/{chatId}/pagination")
+    ResponseEntity<Object> getMessagesChatPage(@PathVariable Long chatId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
+        return messageService.getMessagesChatPage(chatId, page,size);
+    }
+
 }

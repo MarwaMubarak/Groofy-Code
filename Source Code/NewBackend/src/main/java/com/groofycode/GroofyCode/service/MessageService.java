@@ -14,6 +14,9 @@ import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -105,7 +108,40 @@ public class MessageService {
         }
     }
 
+    public ResponseEntity<Object> getMessagesChatPage(Long chatId, int page,int size) throws Exception{
+        try {
 
+            //check if the chat exist
+            Optional<Chat> chatModel = chatRepository.findById(chatId);
+            if (chatModel.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Chat not found", null));
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            //if user part of the chat
+            if(!chatModel.get().checkUserExist(userInfo.getUserId()))
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("User Not Allowed To Get The Chat!!", null));
+
+
+            Pageable pageable = PageRequest.of(page, size);
+            // get chat
+            Page<Message> chatMessages = messageRepository.findByChatId(chatId,pageable);
+
+            //sort chat based on thr date
+            //chatMessages.sort(Comparator.comparing(Message::getCreatedAt));
+
+            List<MessageDTO> chatMessagesDTO = chatMessages.stream()
+                    .map(message -> modelMapper.map(message, MessageDTO.class)).toList();
+
+            if (chatMessagesDTO.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Empty Chat!", chatMessagesDTO));
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Chat retrieved Successfully!", chatMessagesDTO));
+
+        }catch (Exception e){
+            throw new Exception(e);
+        }
+    }
 
 //    public void sendMessageToClan(MessageDTO messageDTO, Long clanId) {
 //        // Set the clan for the message
