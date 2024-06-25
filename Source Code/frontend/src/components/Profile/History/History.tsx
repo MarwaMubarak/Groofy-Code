@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import classes from "./scss/history.module.css";
 import styles from "./scss/dropdown.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { matchThunks } from "../../../store/actions";
+import { gameThunks } from "../../../store/actions";
 
 const History = () => {
   const dispatch = useDispatch();
@@ -82,7 +82,7 @@ const History = () => {
 
   useEffect(() => {
     const getMatches = async (page: number, size: number) => {
-      await dispatch(matchThunks.getAllUserMatches(page, size) as any);
+      await dispatch(gameThunks.getAllUserGames(page) as any);
     };
 
     getMatches(first, rows);

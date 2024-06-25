@@ -27,8 +27,7 @@ interface Country {
 const GroofyHeader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state: any) => state.auth.user);
-  const userMatchStatus = useSelector((state: any) => state.auth.status);
+  const loggedUser = useSelector((state: any) => state.auth.user);
   const notifications: any[] = useSelector(
     (state: any) => state.notify.notifications
   );
@@ -40,7 +39,6 @@ const GroofyHeader = () => {
   const componentRefProfileArea = useRef(null);
   const componentRefNotifyArea = useRef(null);
   const [searchActive, setSearchActive] = useState(false);
-  const [inMatch, setInMatch] = useState(userMatchStatus === 1);
 
   useClickOutside(componentRefProfileArea, () => {
     setProfileActive(false);
@@ -86,14 +84,6 @@ const GroofyHeader = () => {
       }
     }
   }, [counterToFetch, dispatch, searchText]);
-
-  useEffect(() => {
-    if (userMatchStatus === 1) {
-      setInMatch(true);
-    } else {
-      setInMatch(false);
-    }
-  }, [userMatchStatus]);
 
   const [notifyActive, setNotifyActive] = useState(false);
   const [notifyCnt, setNotifyCnt] = useState(4);
@@ -176,11 +166,11 @@ const GroofyHeader = () => {
               setProfileActive((state) => !state);
               setNotifyActive(false);
             }}
-            photoUrl={user.photoUrl}
-            username={user.username}
+            photoUrl={loggedUser.photoUrl}
+            username={loggedUser.username}
             style={{
               cursor: "pointer",
-              backgroundColor: user.accountColor,
+              backgroundColor: loggedUser.accountColor,
               width: "40px",
               height: "40px",
               fontSize: "18px",
@@ -189,9 +179,9 @@ const GroofyHeader = () => {
             }}
             canClick={true}
           />
-          <span>{user.username}</span>
+          <span>{loggedUser.username}</span>
         </div>
-        <Link to={`/profile/${user.username}`}>
+        <Link to={`/profile/${loggedUser.username}`}>
           <div className={classes.pa_menu}>
             <img src="/Assets/SVG/ProfileIconBlack.svg" alt="ProfilePicture" />
             <span>Profile</span>
@@ -331,10 +321,10 @@ const GroofyHeader = () => {
         </OverlayPanel>
       </div>
       <div className={classes.header_user_area}>
-        {inMatch && (
+        {loggedUser.existingGameId && (
           <div className={classes.ongoing_match}>
-            <span>Match in progress</span>
-            <Link to="/match">View match</Link>
+            <span>Game in progress</span>
+            <Link to={`/game/${loggedUser.existingGameId}`}>View game</Link>
           </div>
         )}
         <div className={classes.header_h_imgbox}>
@@ -370,11 +360,11 @@ const GroofyHeader = () => {
               setProfileActive((state) => !state);
               setNotifyActive(false);
             }}
-            photoUrl={user.photoUrl}
-            username={user.username}
+            photoUrl={loggedUser.photoUrl}
+            username={loggedUser.username}
             style={{
               cursor: "pointer",
-              backgroundColor: user.accountColor,
+              backgroundColor: loggedUser.accountColor,
               width: "45px",
               height: "45px",
               fontSize: "20px",

@@ -1,22 +1,32 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Testcase } from "../..";
 import classes from "./scss/problemsection.module.css";
-import { useEffect } from "react";
-import { problemThunks } from "../../../store/actions";
+import { useContext, useEffect, useRef } from "react";
 import { MathJax } from "better-react-mathjax";
+import { MathJaxBaseContext } from "better-react-mathjax";
 
 const ProblemSection = () => {
-  const dispatch = useDispatch();
-  const problem = useSelector((state: any) => state.problem.problem);
+  const problem = useSelector((state: any) => state.game.problemStatement);
   const user = useSelector((state: any) => state.auth.user);
+  const mathJax = useContext(MathJaxBaseContext);
+  const mathElementRef = useRef(null);
 
   useEffect(() => {
-    const getProblem = async () => {
-      await dispatch(problemThunks.getProblem(user) as any);
-    };
+    if (mathJax && mathElementRef.current) {
+      mathJax.promise.then((MathJaxObject: any) => {
+        MathJaxObject.typesetPromise([mathElementRef.current]);
+      });
+    }
 
-    getProblem();
-  }, [dispatch]);
+    return () => {
+      // Cleanup: Tell MathJax to stop processing if the element is removed
+      if (mathJax && mathElementRef.current) {
+        mathJax.promise.then((MathJaxObject: any) => {
+          MathJaxObject.typesetPromise([mathElementRef.current]);
+        });
+      }
+    };
+  }, [mathJax]);
 
   console.log(problem);
 
@@ -50,10 +60,11 @@ const ProblemSection = () => {
               );
             }
             return (
-              <MathJax
+              <div
                 dangerouslySetInnerHTML={{ __html: row }}
+                ref={mathElementRef}
                 style={{ lineHeight: "1.8", color: "white" }}
-              ></MathJax>
+              ></div>
             );
           })}
         </p>
@@ -65,10 +76,11 @@ const ProblemSection = () => {
             {problem?.input.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
-                  <MathJax
+                  <div
                     dangerouslySetInnerHTML={{ __html: row }}
+                    ref={mathElementRef}
                     style={{ lineHeight: "1.8" }}
-                  ></MathJax>
+                  ></div>
                 );
               }
               return null;
@@ -84,10 +96,11 @@ const ProblemSection = () => {
             {problem?.output.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
-                  <MathJax
+                  <div
                     dangerouslySetInnerHTML={{ __html: row }}
-                    style={{ lineHeight: "1.8" }}
-                  ></MathJax>
+                    ref={mathElementRef}
+                    style={{ lineHeight: "1.8", color: "white" }}
+                  ></div>
                 );
               }
               return null;
@@ -116,10 +129,11 @@ const ProblemSection = () => {
             {problem?.notes.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
-                  <MathJax
+                  <div
                     dangerouslySetInnerHTML={{ __html: row }}
-                    style={{ lineHeight: "1.8" }}
-                  ></MathJax>
+                    ref={mathElementRef}
+                    style={{ lineHeight: "1.8", color: "white" }}
+                  ></div>
                 );
               }
               return null;

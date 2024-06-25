@@ -24,6 +24,7 @@ import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.parsing.Problem;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -64,14 +65,14 @@ public class GameService {
 
     private final ProblemPicker problemPicker;
 
-    private final MatchScheduler matchScheduler;
+//    private final MatchScheduler matchScheduler;
 
     @Autowired
     public GameService(GameRepository gameRepository, UserRepository userRepository, PlayerSelection playerSelection,
                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
-                       ProblemPicker problemPicker, MatchScheduler matchScheduler) {
+                       ProblemPicker problemPicker) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -85,11 +86,19 @@ public class GameService {
         this.matchStatusMapper = matchStatusMapper;
         this.modelMapper = modelMapper;
         this.problemPicker = problemPicker;
-        this.matchScheduler = matchScheduler;
+//        this.matchScheduler = matchScheduler;
     }
 
-    public List<Game> findAllGames() {
-        return gameRepository.findAll();
+    public ResponseEntity<Object> findAllGames(Integer page) throws Exception {
+        try {
+            if (page == null || page < 0) page = 0;
+            PageRequest pageRequest = PageRequest.of(page, 10);
+            List<Game> games = gameRepository.findAll(pageRequest).getContent();
+            List<GameDTO> gameDTOS = games.stream().map(game -> modelMapper.map(game, GameDTO.class)).toList();
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Games retrieved successfully", gameDTOS));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     public ResponseEntity<Object> findRankedMatch() {
@@ -113,9 +122,9 @@ public class GameService {
                 userRepository.save(player1);
                 userRepository.save(opponent);
 
-                matchScheduler.scheduleRankCalculation(rankedMatch);
+//                matchScheduler.scheduleRankCalculation(rankedMatch);
 
-                messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/notification", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
+                messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/games", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error creating match", e.getMessage()));
@@ -232,7 +241,7 @@ public class GameService {
         List<UserModel> players2 = game.getPlayers2();
 
         // Check if both sides have at least one player
-        if (players1.isEmpty() || players2.isEmpty()) {
+        if ((players1.isEmpty() || players2.isEmpty()) && game.getGameType() != GameType.SOLO.ordinal()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseUtils.unsuccessfulRes("Match is already incomplete", null));
         }
@@ -286,7 +295,7 @@ public class GameService {
             messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
         }
 
-        for (UserModel lp: leavingPlayers) {
+        for (UserModel lp : leavingPlayers) {
             lp.setExistingGameId(null);
             userRepository.save(lp);
         }

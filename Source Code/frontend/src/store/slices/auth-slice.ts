@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const authInitialState = {
   user: null,
-  status: null,
+  existingGameId: null,
   errorMessage: "",
   isUploading: false,
   isDeleting: false,
@@ -14,15 +14,15 @@ const authSlice = createSlice({
   reducers: {
     login(state, action) {
       state.user = action.payload;
-      state.status = (state.user as any)?.status;
+      state.existingGameId = (state.user as any)?.existingGameId;
     },
     logout(state) {
       state.user = null;
-      state.status = null;
+      state.existingGameId = null;
     },
     setUser(state, action) {
       state.user = { ...(state.user || {}), ...action.payload };
-      state.status = (state.user as any)?.status;
+      state.existingGameId = (state.user as any)?.existingGameId;
     },
     updateUserPhoto(state, action) {
       (state.user! as any).photoUrl = action.payload;
@@ -36,8 +36,9 @@ const authSlice = createSlice({
     setErrorMessage(state, action) {
       state.errorMessage = action.payload;
     },
-    setStatus(state, action) {
-      state.status = action.payload;
+    setUserGameId(state, action) {
+      (state.user! as any).existingGameId = action.payload;
+      state.existingGameId = action.payload;
     },
   },
 });
