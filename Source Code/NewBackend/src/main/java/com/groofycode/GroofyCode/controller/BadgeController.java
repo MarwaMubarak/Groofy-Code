@@ -23,6 +23,11 @@ public class BadgeController {
         return badgeService.getAllBadges();
     }
 
+    @GetMapping("/pagination")
+    public ResponseEntity<Object> getBadgesPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
+        return badgeService.getBadgesPage(page,size);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBadgeById(@PathVariable Long id) throws Exception {
         return badgeService.getBadgeById(id);

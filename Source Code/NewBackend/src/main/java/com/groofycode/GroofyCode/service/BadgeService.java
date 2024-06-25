@@ -6,6 +6,9 @@ import com.groofycode.GroofyCode.repository.BadgeRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,22 @@ public class BadgeService {
     public ResponseEntity<Object> getAllBadges() throws Exception {
         try {
             List<BadgeModel> badges = badgeRepository.findAll();
+
+            List<BadgeDTO> badgeDTOList = badges.stream()
+                    .map(bm -> modelMapper.map(bm, BadgeDTO.class))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Badges retrieved successfully", badgeDTOList));
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
+    public ResponseEntity<Object> getBadgesPage(int page,int size) throws Exception {
+        try {
+
+            Pageable pageable = PageRequest.of(page, size);
+            Page<BadgeModel> badges = badgeRepository.findAll(pageable);
 
             List<BadgeDTO> badgeDTOList = badges.stream()
                     .map(bm -> modelMapper.map(bm, BadgeDTO.class))
