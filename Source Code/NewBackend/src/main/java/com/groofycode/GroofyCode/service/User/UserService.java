@@ -10,6 +10,9 @@ import com.groofycode.GroofyCode.utilities.FirebaseManager;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -258,6 +261,32 @@ public class UserService implements UserDetailsService {
             throw new Exception(e);
         }
     }
+
+    public ResponseEntity<Object> searchUsersByPrefixPage(String prefix, int page, int size ) throws Exception {
+        try {
+            // Validate if prefix is provided
+            if (prefix.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Prefix parameter is required", null));
+            }
+
+            Pageable pageable = PageRequest.of(page, size);
+            // Perform case-insensitive search for usernames starting with the given prefix
+            Page<UserModel> users = userRepository.findByUsernameStartingWithIgnoreCase(prefix,pageable);
+
+            if (users.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("No users found with the provided prefix", null));
+            }
+
+            // Extract desired information (username, country, photo) for each user
+            List<UserDTO> userDTOS = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Users found", userDTOS));
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
 
     @Override
     public UserModel loadUserByUsername(String username) throws UsernameNotFoundException {

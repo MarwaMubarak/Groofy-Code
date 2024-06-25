@@ -4,6 +4,7 @@ import com.groofycode.GroofyCode.dto.User.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.User.RegisterDTO;
 import com.groofycode.GroofyCode.dto.User.UpdatedUserDTO;
 import com.groofycode.GroofyCode.service.User.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private final UserService userService;
 
@@ -64,5 +66,9 @@ public class UserController {
     @GetMapping("/users/search/{prefix}")
     public ResponseEntity<Object> searchUsersByPrefix(@PathVariable String prefix) throws Exception {
         return userService.searchUsersByPrefix(prefix);
+    }
+    @GetMapping("/users/search/{prefix}/pagination")
+    public ResponseEntity<Object> searchUsersByPrefixPage(@PathVariable String prefix, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
+        return userService.searchUsersByPrefixPage(prefix,page,size);
     }
 }
