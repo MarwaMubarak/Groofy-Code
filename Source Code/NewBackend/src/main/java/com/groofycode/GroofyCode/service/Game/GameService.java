@@ -64,12 +64,14 @@ public class GameService {
 
     private final ProblemPicker problemPicker;
 
+    private final MatchScheduler matchScheduler;
+
     @Autowired
     public GameService(GameRepository gameRepository, UserRepository userRepository, PlayerSelection playerSelection,
                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
-                       ProblemPicker problemPicker) {
+                       ProblemPicker problemPicker, MatchScheduler matchScheduler) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -83,6 +85,7 @@ public class GameService {
         this.matchStatusMapper = matchStatusMapper;
         this.modelMapper = modelMapper;
         this.problemPicker = problemPicker;
+        this.matchScheduler = matchScheduler;
     }
 
     public List<Game> findAllGames() {
@@ -109,6 +112,10 @@ public class GameService {
                 opponent.setExistingGameId(rankedMatch.getId());
                 userRepository.save(player1);
                 userRepository.save(opponent);
+
+                matchScheduler.scheduleRankCalculation(rankedMatch);
+
+                messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/notification", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error creating match", e.getMessage()));
@@ -351,6 +358,21 @@ public class GameService {
         return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
     }
 
+    public void calculateRank(RankedMatch rankedMatch) {
+        // Implement the logic to calculate rank for each user
+        List<UserModel> players1 = rankedMatch.getPlayers1();
+        List<UserModel> players2 = rankedMatch.getPlayers2();
+
+        // Example rank calculation logic
+        for (UserModel player : players1) {
+//            player.setRank(player.getRank() + 10);  // Increase rank by 10 points
+            userRepository.save(player);
+        }
+        for (UserModel player : players2) {
+//            player.setRank(player.getRank() + 5);  // Increase rank by 5 points
+            userRepository.save(player);
+        }
+    }
 
     ResponseEntity<Object> submitCodeteam2team(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
