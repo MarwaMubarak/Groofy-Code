@@ -38,8 +38,8 @@ public class GameController {
     }
 
     @PostMapping("/solo")
-    public ResponseEntity<Object> createSoloMatch(@RequestBody ProblemPickerDTO problemPickerDTO) {
-        return gameService.findSoloMatch(problemPickerDTO);
+    public ResponseEntity<Object> createSoloMatch() {
+        return gameService.findSoloMatch();
     }
 
 //    @PostMapping("/ranked")

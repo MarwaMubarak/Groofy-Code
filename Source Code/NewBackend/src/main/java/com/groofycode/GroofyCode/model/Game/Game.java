@@ -1,8 +1,8 @@
 package com.groofycode.GroofyCode.model.Game;
 
-
 import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,22 +14,35 @@ import java.util.List;
 @DiscriminatorColumn(name = "game_type", discriminatorType = DiscriminatorType.STRING)
 @Setter
 @Getter
+@AllArgsConstructor
 public abstract class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // This signifies a Many-To-One relationship with the User model
-    private UserModel player1;
+    @ManyToMany // Many-To-Many relationship to handle multiple players on both sides
+    @JoinTable(
+            name = "game_players",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserModel> players1;
 
-    @ManyToOne
-    private UserModel player2;
+    @ManyToMany
+    @JoinTable(
+            name = "game_opponents",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserModel> players2;
 
     private String problemUrl;
 
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
+
+    private double duration;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Submission> submissions;
@@ -43,15 +56,6 @@ public abstract class Game {
     // Constructors, getters, and setters
     public Game() {
 
-    }
-
-    public Game(UserModel player1, UserModel player2, LocalDateTime startTime, String problemUrl) {
-        this.player1 = player1;
-        this.player2 = player2;
-        this.startTime = startTime;
-        this.problemUrl = problemUrl;
-
-        setGameStatus(GameStatus.ONGOING);
     }
 
     public Integer getGameType() {

@@ -5,6 +5,7 @@ import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
 import com.groofycode.GroofyCode.dto.Game.SoloMatchDTO;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
+import com.groofycode.GroofyCode.dto.PlayerDTO;
 import com.groofycode.GroofyCode.dto.ProblemDTO;
 import com.groofycode.GroofyCode.dto.ProblemPickerDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
@@ -24,6 +25,7 @@ import com.groofycode.GroofyCode.utilities.ProblemParser;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.parsing.Problem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -35,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -64,11 +67,11 @@ public class GameService {
     private final ProblemPicker problemPicker;
 
     @Autowired
-    public GameService (GameRepository gameRepository, UserRepository userRepository, PlayerSelection playerSelection,
-                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
-                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
-                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
-                        ProblemPicker problemPicker) {
+    public GameService(GameRepository gameRepository, UserRepository userRepository, PlayerSelection playerSelection,
+                       NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
+                       ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
+                       NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
+                       ProblemPicker problemPicker) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -96,11 +99,14 @@ public class GameService {
         UserModel opponent = playerSelection.findFirstPlayerAndRemove(player1.getId());
         if (opponent != null) {
             try {
-                RankedMatch rankedMatch = new RankedMatch(player1, opponent, LocalDateTime.now(), "https://codeforces.com/contest/4/problem/A");
+                List<UserModel> players1 = List.of(player1);
+                List<UserModel> players2 = List.of(opponent);
+                RankedMatch rankedMatch = new RankedMatch(players1, players2, "https://codeforces.com/contest/4/problem/A", LocalDateTime.now(), LocalDateTime.now().plusMinutes(60), 60.0);
+//                RankedMatch rankedMatch = new RankedMatch(player1, opponent, LocalDateTime.now(), "https://codeforces.com/contest/4/problem/A");
                 playerSelection.removePlayer(player1);  // Remove the user from the waiting list
                 rankedMatch = gameRepository.save(rankedMatch);
 
-                RankedMatchDTO rankedMatchDTO = convertToDTO(rankedMatch);
+                RankedMatchDTO rankedMatchDTO = new RankedMatchDTO(rankedMatch, null);
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error creating match", e.getMessage()));
@@ -111,15 +117,25 @@ public class GameService {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
     }
 
-    public ResponseEntity<Object> findSoloMatch(ProblemPickerDTO problemPickerDTO) {
+    public ResponseEntity<Object> findSoloMatch() {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player1 = userRepository.findByUsername(userInfo.getUsername());
         try {
 
-            String problemURL = (String) problemPicker.pickProblem(problemPickerDTO.getPlayer(), problemPickerDTO.getSolvedProblems()).getBody();
+            PlayerDTO playerDTO = modelMapper.map(player1, PlayerDTO.class);
+            List<ProgProblem> problemsFromUserModel = player1.getSolvedProblems();
+
+            List<ProblemDTO> problemDTOs = mapProblemsToDTOs(problemsFromUserModel);
+
+//            problemDTOs.add(new ProblemDTO("A", 0, "4", "A", 800));
+
+            String problemURL = (String) problemPicker.pickProblem(playerDTO, problemDTOs).getBody();
+            List<UserModel> players1 = List.of(player1);
 
             // Create a new SoloMatch and save it to the repository
-            SoloMatch soloMatch = new SoloMatch(player1, LocalDateTime.now(), problemURL);
+            LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
+            SoloMatch soloMatch = new SoloMatch(players1, problemURL, LocalDateTime.now(), endTime, 60.0);
+
             soloMatch = gameRepository.save(soloMatch);
 
             ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
@@ -127,7 +143,7 @@ public class GameService {
             ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
 
             // Convert the SoloMatch entity to its corresponding DTO
-            SoloMatchDTO soloMatchDTO = convertToDTO(soloMatch, problemParsed.getBody());
+            SoloMatchDTO soloMatchDTO = new SoloMatchDTO(soloMatch, problemParsed.getBody());
 
             // Return a success response with the SoloMatchDTO
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", soloMatchDTO));
@@ -153,7 +169,7 @@ public class GameService {
         }
 
         RankedMatch rankedMatch = (RankedMatch) game;
-        RankedMatchDTO rankedMatchDTO = convertToDTO(rankedMatch);
+        RankedMatchDTO rankedMatchDTO = new RankedMatchDTO(rankedMatch, null);
 
         return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
     }
@@ -161,38 +177,42 @@ public class GameService {
     public ResponseEntity<Object> leaveMatch(Long gameId) {
         Game game = gameRepository.findById(gameId).orElse(null);
         if (game == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Match not found", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResponseUtils.unsuccessfulRes("Match not found", null));
         }
 
-        UserModel player1 = game.getPlayer1();
-        UserModel player2 = game.getPlayer2();
+        List<UserModel> players1 = game.getPlayers1();
+        List<UserModel> players2 = game.getPlayers2();
 
-        if (player1 == null || player2 == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Match is already incomplete", null));
+        // Check if both sides have at least one player
+        if (players1.isEmpty() || players2.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ResponseUtils.unsuccessfulRes("Match is already incomplete", null));
         }
 
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel leavingPlayer = userRepository.findByUsername(userInfo.getUsername());
 
-        UserModel remainingPlayer;
+        List<UserModel> remainingPlayers;
+        List<UserModel> leavingPlayers;
 
-        if (player1.getId().equals(leavingPlayer.getId())) {
-            leavingPlayer = player1;
-            remainingPlayer = player2;
-        } else if (player2.getId().equals(leavingPlayer.getId())) {
-            leavingPlayer = player2;
-            remainingPlayer = player1;
+        // Determine which side the leaving player is on
+        if (players1.contains(leavingPlayer)) {
+            leavingPlayers = players1;
+            remainingPlayers = players2;
+        } else if (players2.contains(leavingPlayer)) {
+            leavingPlayers = players2;
+            remainingPlayers = players1;
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player is not part of this match", null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ResponseUtils.unsuccessfulRes("Player is not part of this match", null));
         }
-
 
         // Create and save the notification
         MatchNotificationModel matchNotification = new MatchNotificationModel();
         matchNotification.setBody("Your opponent has left the match.");
         matchNotification.setSender(leavingPlayer);
         matchNotification.setCreatedAt(new Date());
-        matchNotification.setReceiver(remainingPlayer);
         matchNotification.setGame(game);
         matchNotification.setNotificationType(NotificationType.Leave_Game);
 
@@ -212,10 +232,14 @@ public class GameService {
         notificationDTO.setRead(matchNotification.isRead());
         notificationDTO.setId(matchNotification.getId());
 
-        messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
+        // Send notification to remaining players
+        for (UserModel remainingPlayer : remainingPlayers) {
+            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
+        }
 
         return ResponseEntity.ok(ResponseUtils.successfulRes("Left the match successfully", notificationDTO));
     }
+
 
     public ResponseEntity<Object> submitCode(Long gameId, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         Game game = gameRepository.findById(gameId).orElse(null);
@@ -228,10 +252,10 @@ public class GameService {
         }
 
         if (game instanceof RankedMatch) {
-            return submitCodep2p(game, problemSubmitDTO);
+            return submitCodeteam2team(game, problemSubmitDTO);
         } else if (game instanceof SoloMatch) {
             return submitCodeSolo(game, problemSubmitDTO);
-        } else return null  ;
+        } else return null;
     }
 
     public ResponseEntity<Object> submitCodeSolo(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
@@ -239,7 +263,7 @@ public class GameService {
         UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
 
         // Ensure that the submitting player is one of the players in the game
-        if (!game.getPlayer1().getId().equals(submittingPlayer.getId())) {
+        if (!game.getPlayers1().get(0).getId().equals(submittingPlayer.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You do not own this game", null));
         }
 
@@ -281,18 +305,30 @@ public class GameService {
     }
 
 
-    ResponseEntity<Object> submitCodep2p(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
+    ResponseEntity<Object> submitCodeteam2team(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
 
-        UserModel player1 = game.getPlayer1();
-        UserModel player2 = game.getPlayer2();
+        List<UserModel> players1 = game.getPlayers1();
+        List<UserModel> players2 = game.getPlayers2();
 
-        UserModel remainingPlayer = (submittingPlayer.getId().equals(player1.getId())) ? player2 : player1;
+        // Determine the remaining player
+        List<UserModel> remainingPlayers;
+        List<UserModel> submittingPlayers;
+
+        if (players1.contains(submittingPlayer)) {
+            submittingPlayers = players1;
+            remainingPlayers = players2;
+        } else if (players2.contains(submittingPlayer)) {
+            submittingPlayers = players2;
+            remainingPlayers = players1;
+        } else {
+            throw new IllegalArgumentException("Submitting player is not part of this game");
+        }
 
         Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
 
-        String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
+        String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // Default response, simulate the actual submission process
 
         Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
@@ -306,37 +342,41 @@ public class GameService {
                 NotificationType.SUBMIT_CODE
         );
         NotificationDTO submitNotificationDTO = convertToDTO(submitNotification);
-//        messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", submitNotificationDTO);
+        messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/notification", submitNotificationDTO);
 
-        // Notify the remaining player
-        MatchNotificationModel opponentNotification = createNotification(
-                "Your opponent has submitted the code. Result: " + codeForceResponse,
-                submittingPlayer,
-                remainingPlayer,
-                game,
-                NotificationType.SUBMIT_CODE
-        );
-        NotificationDTO opponentNotificationDTO = convertToDTO(opponentNotification);
-        messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", opponentNotificationDTO);
-
-        if (codeForceResponse.equals("Accepted")) {
-            // End the game and notify the remaining player that they lost
-            game.setGameStatus(GameStatus.FINISHED);
-            game.setEndTime(LocalDateTime.now());
-            gameRepository.save(game);
-
-            MatchNotificationModel loseNotification = createNotification(
-                    "Your opponent's code was accepted. You lose.",
+        // Notify the remaining players
+        for (UserModel remainingPlayer : remainingPlayers) {
+            MatchNotificationModel opponentNotification = createNotification(
+                    "Your opponent " + submittingPlayer.getUsername() + " has submitted the code. Result: " + codeForceResponse,
                     submittingPlayer,
                     remainingPlayer,
                     game,
-                    NotificationType.GAME_ENDED
+                    NotificationType.SUBMIT_CODE
             );
-            NotificationDTO loseNotificationDTO = convertToDTO(loseNotification);
-            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", loseNotificationDTO);
+            NotificationDTO opponentNotificationDTO = convertToDTO(opponentNotification);
+            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", opponentNotificationDTO);
+
+            if (codeForceResponse.equals("Accepted")) {
+                // End the game and notify the remaining player that they lost
+                game.setGameStatus(GameStatus.FINISHED);
+                game.setEndTime(LocalDateTime.now());
+                gameRepository.save(game);
+
+                MatchNotificationModel loseNotification = createNotification(
+                        "Your opponent's code was accepted. You lose.",
+                        submittingPlayer,
+                        remainingPlayer,
+                        game,
+                        NotificationType.GAME_ENDED
+                );
+                NotificationDTO loseNotificationDTO = convertToDTO(loseNotification);
+                messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", loseNotificationDTO);
+            }
         }
+
         return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", submitNotificationDTO));
     }
+
 
     private MatchNotificationModel createNotification(String body, UserModel sender, UserModel receiver, Game game, NotificationType type) {
         MatchNotificationModel notification = new MatchNotificationModel();
@@ -361,26 +401,32 @@ public class GameService {
         return dto;
     }
 
-    public RankedMatchDTO convertToDTO(RankedMatch match) {
-        if (match == null) return null;
-        return new RankedMatchDTO(
-                match.getId(),
-                match.getPlayer1().getId(),
-                match.getPlayer2().getId(),
-                match.getStartTime(),
-                match.getGameType().toString()
-        );
-    }
+//    public RankedMatchDTO convertToDTO(RankedMatch match) {
+//        if (match == null) return null;
+//        return new RankedMatchDTO(
+//                match.getId(),
+//                match.getPlayers1().getId(),
+//                match.getPlayers2().getId(),
+//                match.getStartTime(),
+//                match.getGameType().toString()
+//        );
+//    }
+//
+//    public SoloMatchDTO convertToDTO(SoloMatch match, Object problem) {
+//        if (match == null) return null;
+//        return new SoloMatchDTO(
+//                match.getId(),
+//                match.getPlayer1().getId(),
+//                match.getStartTime(),
+//                match.getGameType().toString(),
+//                problem,
+//                match.getProblemUrl()
+//        );
+//    }
 
-    public SoloMatchDTO convertToDTO(SoloMatch match, Object problem) {
-        if (match == null) return null;
-        return new SoloMatchDTO(
-                match.getId(),
-                match.getPlayer1().getId(),
-                match.getStartTime(),
-                match.getGameType().toString(),
-                problem,
-                match.getProblemUrl()
-        );
+    public List<ProblemDTO> mapProblemsToDTOs(List<ProgProblem> problems) {
+        return problems.stream()
+                .map(problem -> modelMapper.map(problem, ProblemDTO.class))
+                .collect(Collectors.toList());
     }
 }

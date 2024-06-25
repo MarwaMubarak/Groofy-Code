@@ -6,6 +6,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("CASUAL")
@@ -15,9 +16,15 @@ public class CasualMatch extends Game {
         setGameType(GameType.CASUAL);
     }
 
-    public CasualMatch(UserModel player1, UserModel player2, LocalDateTime startTime, String problemUrl) {
-        super(player1, player2, startTime, problemUrl);
+    public CasualMatch(List<UserModel> team1, List<UserModel> team2, String problemUrl, LocalDateTime startTime, LocalDateTime endTime, double duration) {
+        setPlayers1(team1);
+        setPlayers2(team2);
+        setProblemUrl(problemUrl);
+        setStartTime(startTime);
+        setEndTime(endTime);
+        setDuration(duration);
         setGameType(GameType.CASUAL);
+        setGameStatus(GameStatus.ONGOING);
     }
 
 }

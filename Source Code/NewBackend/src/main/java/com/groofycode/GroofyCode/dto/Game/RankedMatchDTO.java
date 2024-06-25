@@ -1,28 +1,34 @@
 package com.groofycode.GroofyCode.dto.Game;
 
+
+import com.groofycode.GroofyCode.model.Game.RankedMatch;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-@Setter
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
-public class RankedMatchDTO {
-    private Long id;
-    private Long player1Id;
-    private Long player2Id;
-    private LocalDateTime startTime;
-    private String gameType;
+@Setter
+@NoArgsConstructor
+public class RankedMatchDTO extends GameDTO {
 
-    // Constructors
-    public RankedMatchDTO() {}
-
-    public RankedMatchDTO(Long id, Long player1Id, Long player2Id, LocalDateTime startTime, String gameType) {
-        this.id = id;
-        this.player1Id = player1Id;
-        this.player2Id = player2Id;
-        this.startTime = startTime;
-        this.gameType = gameType;
+    public RankedMatchDTO(RankedMatch rankedMatch, Object problemStatement) {
+        super(
+                rankedMatch.getId(),
+                rankedMatch.getPlayers1().stream().map(UserModel::getId).collect(Collectors.toList()),
+                rankedMatch.getPlayers2().stream().map(UserModel::getId).collect(Collectors.toList()),
+                rankedMatch.getProblemUrl(),
+                rankedMatch.getStartTime(),
+                rankedMatch.getEndTime(),
+                rankedMatch.getDuration(),
+                rankedMatch.getGameType().toString(),
+                rankedMatch.getGameStatus().toString(),
+                null // assgin it later
+        );
+        setProblemStatement(problemStatement);
     }
-
-
 }

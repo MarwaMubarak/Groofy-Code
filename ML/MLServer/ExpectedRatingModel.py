@@ -16,7 +16,6 @@ def calculate_expected_rating(df):
         2800: 2.5, 2900: 2.6, 3000: 2.7, 3100: 2.8, 3200: 2.9,
         3300: 3.0, 3400: 3.1, 3500: 3.2
     }
-
     def calculate_performance_score(row):
         score = 0
         for rating in range(800, 3501, 100):

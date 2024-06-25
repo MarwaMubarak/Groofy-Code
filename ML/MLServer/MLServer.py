@@ -75,7 +75,7 @@ import joblib
 app = Flask(__name__)
 # Try to load the model, handle error if not found
 try:
-    model = joblib.load('MLServer/rating_prediction_rf_model.pkl')
+    model = joblib.load('D:\\Groofy codee\\GROOFYCODE\\Groofy-Code\\ML\\MLServer\\rating_prediction_rf_model.pkl')
 except FileNotFoundError:
     print("Model file not found. Please check the file path.")
     model = None

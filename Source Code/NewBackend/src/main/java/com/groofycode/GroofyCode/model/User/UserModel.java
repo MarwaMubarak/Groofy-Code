@@ -3,8 +3,8 @@ package com.groofycode.GroofyCode.model.User;
 import com.groofycode.GroofyCode.model.Badge.BadgeModel;
 import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
+import com.groofycode.GroofyCode.model.Game.ProgProblem;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
-import com.groofycode.GroofyCode.model.Chat.Message;
 import com.groofycode.GroofyCode.model.Notification.NotificationModel;
 import com.groofycode.GroofyCode.model.Post.PostModel;
 import com.groofycode.GroofyCode.model.Team.TeamMember;
@@ -58,11 +58,12 @@ public class UserModel implements UserDetails {
 
     private Integer losses;
 
-    private Integer currentTrophies;
+    private Integer user_rating;
 
     private Integer worldRank;
 
-    private Integer maxRating;
+    private Integer user_max_rating;
+
 
     private Integer rate_800_cnt;
     private Integer rate_900_cnt;
@@ -93,6 +94,9 @@ public class UserModel implements UserDetails {
     private Integer rate_3400_cnt;
     private Integer rate_3500_cnt;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ProgProblem> solvedProblems;
 
 
 
@@ -130,9 +134,9 @@ public class UserModel implements UserDetails {
 
     public UserModel() {
         this.accountColor = "#00aaff";
-        this.currentTrophies = 0;
+        this.user_rating = 1200;
         this.worldRank = 0;
-        this.maxRating = 0;
+        this.user_max_rating = 1200;
         this.totalMatches = 0;
         this.wins = 0;
         this.draws = 0;
