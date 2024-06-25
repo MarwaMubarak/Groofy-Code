@@ -13,6 +13,9 @@ import com.groofycode.GroofyCode.repository.*;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -184,6 +187,27 @@ public class PostService {
     public ResponseEntity<Object> getUserPosts(Long userId) throws Exception {
         try {
             List<PostModel> posts = postRepository.findByUserIdOrderByCreatedAtDesc(userId);
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
+            List<PostDTO> postDTOs = posts.stream()
+                    .map(p -> {
+                        UserModel postUser = p.getUser();
+                        PostDTO postDTO = modelMapper.map(p, PostDTO.class);
+                        LikeModel existingLike = likeRepository.findByUserIdAndPostId(userModel.getId(), p.getId());
+                        postDTO.setIsLiked(existingLike != null ? 1 : 0);
+                        postDTO.setPostUserId(postUser.getId());
+                        return postDTO;
+                    })
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(ResponseUtils.successfulRes("User posts retrieved successfully", postDTOs));
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+    public ResponseEntity<Object> getUserPostsPage(Long userId, int page,int size) throws Exception {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<PostModel> posts = postRepository.findByUserIdOrderByCreatedAtDesc(userId,pageable);
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
             List<PostDTO> postDTOs = posts.stream()

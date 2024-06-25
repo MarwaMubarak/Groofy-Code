@@ -39,6 +39,11 @@ public class PostController {
         return postService.getUserPosts(userId);
     }
 
+    @GetMapping("/{userId}/pagination")
+    public ResponseEntity<Object> getUserPostsPage(@PathVariable Long userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
+        return postService.getUserPostsPage(userId, page,size);
+    }
+
     @PostMapping("/{postId}/like")
     public ResponseEntity<Object> likePost(@PathVariable Long postId) throws Exception {
         return postService.likePost(postId);
