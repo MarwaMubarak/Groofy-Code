@@ -15,7 +15,12 @@ import {
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { useDispatch, useSelector } from "react-redux";
-import { userThunks, socketThunks, notifyThunks } from "./store/actions";
+import {
+  userThunks,
+  socketThunks,
+  notifyThunks,
+  gameThunks,
+} from "./store/actions";
 import { useEffect } from "react";
 import TestingSocket from "./pages/TestingSocket/TestingSocket";
 
@@ -44,6 +49,11 @@ function App() {
             onMessage,
             { Authorization: `Bearer ${localStorage.getItem("token")}` }
           );
+          client.subscribe(
+            `/userTCP/${loggedUser.username}/games`,
+            onGameMessage,
+            { Authorization: `Bearer ${localStorage.getItem("token")}` }
+          );
           if (loggedUser.clanName !== null) {
             client.subscribe(
               `/clanTCP/${loggedUser.clanName}/chat`,
@@ -55,11 +65,21 @@ function App() {
           }
         }
       );
+
       const onMessage = (message: any) => {
         const msg = JSON.parse(message.body);
         console.log("Recieved message: ", msg);
         dispatch(notifyThunks.socketNotification(msg) as any);
       };
+
+      const onGameMessage = (message: any) => {
+        const msg = JSON.parse(message.body);
+        console.log("Recieved game message: ", msg);
+        if (msg.id !== null) {
+          dispatch(gameThunks.updateGroofyGame(msg.id) as any);
+        }
+      };
+
       dispatch(socketThunks.changeStompClient(client) as any);
       return () => client.disconnect();
     }
@@ -106,7 +126,7 @@ function App() {
           element={loggedUser ? null : <Navigate to="/login" />}
         />
         <Route
-          path="/match"
+          path="/game/:gameId"
           element={loggedUser ? <Match /> : <Navigate to="/login" />}
         />
         <Route

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import classes from "./scss/match-header.module.css";
-import { matchThunks } from "../../../store/actions";
+import { gameThunks } from "../../../store/actions";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
@@ -9,8 +9,11 @@ const MatchHeader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
-  const finishMatch = async () => {
-    return await dispatch(matchThunks.finishMatch() as any);
+
+  const leaveGame = async () => {
+    return await dispatch(
+      gameThunks.leaveGame(loggedUser.existingGameId) as any
+    );
   };
 
   return (
@@ -20,7 +23,31 @@ const MatchHeader = () => {
         <div className={classes.logo}>
           <img src="/Assets/Images/GroofyLogoCover.png" alt="Logo" />
         </div>
-        <button className={classes.exit_btn}>
+        <button
+          className={classes.exit_btn}
+          onClick={() => {
+            leaveGame()
+              .then((res: any) => {
+                toast.current?.show({
+                  severity: "success",
+                  summary: res.status,
+                  detail: res.message,
+                  life: 3000,
+                });
+                setTimeout(() => {
+                  navigate("/");
+                }, 1200);
+              })
+              .catch((err: any) => {
+                toast.current?.show({
+                  severity: "error",
+                  summary: err.status,
+                  detail: err.message,
+                  life: 3000,
+                });
+              });
+          }}
+        >
           <img src="/Assets/SVG/exit.svg" alt="Exit" />
           <span>Leave</span>
         </button>
@@ -29,27 +56,6 @@ const MatchHeader = () => {
         <span>19:36</span> left
       </div>
       <div className={classes.user_area}>
-        <div className={classes.finish_match}>
-          <button
-            className={classes.finish_btn}
-            onClick={() => {
-              finishMatch()
-                .then((res: any) => {
-                  navigate("/");
-                })
-                .catch((err: any) => {
-                  toast.current?.show({
-                    severity: "error",
-                    summary: err.status,
-                    detail: err.message,
-                    life: 3000,
-                  });
-                });
-            }}
-          >
-            Finish
-          </button>
-        </div>
         <div className={classes.info}>
           <span className={classes.h_usn}>{loggedUser.username}</span>
           <div className={classes.h_imgbox}>

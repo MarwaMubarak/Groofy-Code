@@ -38,8 +38,8 @@ public class GameController {
     private GameService gameService;
 
     @GetMapping
-    public List<Game> getAllGames() {
-        return gameService.findAllGames();
+    public ResponseEntity<Object> getAllGames(@RequestParam(value = "p", required = false) Integer page) throws Exception{
+        return gameService.findAllGames(page);
     }
 
     @PostMapping("/solo")

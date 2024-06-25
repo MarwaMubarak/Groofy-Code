@@ -8,7 +8,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { java } from "@codemirror/lang-java";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { matchThunks } from "../../../store/actions";
+import { gameThunks } from "../../../store/actions";
 import { Toast } from "primereact/toast";
 
 const languages: any = {
@@ -30,15 +30,15 @@ const CodingSection = () => {
   const dispatch = useDispatch();
   const isSubmitting = useSelector((state: any) => state.submission.isLoading);
   const toast = useRef<Toast>(null);
-  const problemURL = useSelector((state: any) => state.problem.problemURL);
-  const gameID = useSelector((state: any) => state.problem.gameID);
+  const problemURL = useSelector((state: any) => state.game.problemUrl);
+  const gameID = useSelector((state: any) => state.game.gameID);
 
   const submitCode = async () => {
     console.log("my code", currentCode);
     console.log("problem url", problemURL);
     console.log("game id", gameID);
     return await dispatch(
-      matchThunks.submitCode({
+      gameThunks.submitCode({
         code: currentCode,
         language: "GNU G++17 7.3.0",
         problemUrl: problemURL,

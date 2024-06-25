@@ -26,6 +26,7 @@ import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.parsing.Problem;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -87,8 +88,16 @@ public class GameService {
 //        this.matchScheduler = matchScheduler;
     }
 
-    public List<Game> findAllGames() {
-        return gameRepository.findAll();
+    public ResponseEntity<Object> findAllGames(Integer page) throws Exception {
+        try {
+            if (page == null || page < 0) page = 0;
+            PageRequest pageRequest = PageRequest.of(page, 10);
+            List<Game> games = gameRepository.findAll(pageRequest).getContent();
+            List<GameDTO> gameDTOS = games.stream().map(game -> modelMapper.map(game, GameDTO.class)).toList();
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Games retrieved successfully", gameDTOS));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     public ResponseEntity<Object> findRankedMatch() {
@@ -114,7 +123,7 @@ public class GameService {
 
 //                matchScheduler.scheduleRankCalculation(rankedMatch);
 
-                messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/notification", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
+                messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/games", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error creating match", e.getMessage()));
@@ -231,7 +240,7 @@ public class GameService {
         List<UserModel> players2 = game.getPlayers2();
 
         // Check if both sides have at least one player
-        if (players1.isEmpty() || players2.isEmpty()) {
+        if ((players1.isEmpty() || players2.isEmpty()) && game.getGameType() != GameType.SOLO.ordinal()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseUtils.unsuccessfulRes("Match is already incomplete", null));
         }

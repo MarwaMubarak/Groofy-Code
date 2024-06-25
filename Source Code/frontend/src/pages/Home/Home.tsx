@@ -7,10 +7,11 @@ import {
   PostsContainer,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
-import { matchThunks } from "../../store/actions";
+import { gameThunks } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import classes from "./scss/home.module.css";
+import { Toaster, toast as hotToast } from "react-hot-toast";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -20,12 +21,19 @@ const Home = () => {
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
-  const createMatch = async () => {
-    return await dispatch(matchThunks.createSoloMatch() as any);
+
+  const createSoloGame = async () => {
+    return await dispatch(gameThunks.createSoloGame() as any);
   };
+
+  const createRankedGame = async () => {
+    return await dispatch(gameThunks.createRankedGame() as any);
+  };
+
   return (
     <div className={classes.home_container}>
       <Toast ref={toast} style={{ padding: "0.75rem" }} />
+      <Toaster />
       <SideBar idx={0} />
       <div className={classes.activity_section}>
         <GroofyHeader />
@@ -46,7 +54,22 @@ const Home = () => {
                   title="Ranked Match"
                   description="Climb the coding ranks in intense head-to-head battles. Prove your skills, rise to the top, and become the coding champion."
                   img="/Assets/Images/ranked.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    createRankedGame()
+                      .then((res: any) => {
+                        if (res.message === "Match started successfully") {
+                          console.log("Game Response: ", res);
+                          navigate(`/game/${res.gameId}`);
+                        } else {
+                          console.log("Waiting for opponent to join");
+                          return hotToast.success(
+                            "Waiting for opponent to join...",
+                            { position: "top-right" }
+                          );
+                        }
+                      })
+                      .catch((err: any) => {});
+                  }}
                 />
                 <Gamemode
                   id="clan_play_card"
@@ -61,9 +84,10 @@ const Home = () => {
                   description="Sharpen your skills and prepare for battle by practicing against a computer opponent."
                   img="/Assets/Images/lightbulb.png"
                   clickEvent={() => {
-                    createMatch()
-                      .then(() => {
-                        navigate("/match");
+                    createSoloGame()
+                      .then((res: any) => {
+                        console.log("Game Response: ", res);
+                        navigate(`/game/${res.body.id}`);
                       })
                       .catch((err: any) => {
                         toast.current?.show({
@@ -90,7 +114,22 @@ const Home = () => {
                   id="ranked_match_play_card"
                   title="Ranked Match"
                   img="/Assets/Images/ranked.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    createRankedGame()
+                      .then((res: any) => {
+                        if (res.message === "Match started successfully") {
+                          console.log("Game Response: ", res);
+                          navigate(`/game/${res.gameId}`);
+                        } else {
+                          console.log("Waiting for opponent to join");
+                          return hotToast.success(
+                            "Waiting for opponent to join...",
+                            { position: "top-right" }
+                          );
+                        }
+                      })
+                      .catch((err: any) => {});
+                  }}
                 />
                 <Gamemode
                   id="velocity_code_play_card"
@@ -103,9 +142,10 @@ const Home = () => {
                   title="Solo Practice"
                   img="/Assets/Images/lightbulb.png"
                   clickEvent={() => {
-                    createMatch()
-                      .then(() => {
-                        navigate("/match");
+                    createSoloGame()
+                      .then((res: any) => {
+                        console.log("Game Response: ", res);
+                        navigate(`/game/${res.body.id}`);
                       })
                       .catch((err: any) => {
                         toast.current?.show({
