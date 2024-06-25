@@ -65,6 +65,11 @@ public class GameController {
         }
     }
 
+    @PostMapping("/leaveRankedQueue")
+    public ResponseEntity<Object> leaveQueue() {
+        return gameService.leaveRankedQueue();
+    }
+
     @GetMapping("/{matchId}")
     public ResponseEntity<Object> getMatch(@PathVariable Long matchId) {
         return gameService.getMatch(matchId);

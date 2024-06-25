@@ -16,6 +16,11 @@ public class PlayerSelection {
         }
     }
 
+    public synchronized boolean isInQueue(Long playerId) {
+        return waitingPlayers.contains(playerId);
+    }
+
+
     public synchronized UserModel findFirstPlayerAndRemove(Long userId) {
         for (UserModel user : waitingPlayers) {
             if (!user.getId().equals(userId)) {

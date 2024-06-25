@@ -158,6 +158,22 @@ public class GameService {
         }
     }
 
+    public ResponseEntity<Object> leaveRankedQueue() {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel player = userRepository.findByUsername(userInfo.getUsername());
+
+            if (playerSelection.isInQueue(player.getId())) {
+                playerSelection.removePlayer(player);
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Player removed from queue successfully", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player not in queue", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error removing player from queue", e.getMessage()));
+        }
+    }
+
     public ResponseEntity<Object> getMatch(Long id) {
         if (id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("ID must not be null", null));
