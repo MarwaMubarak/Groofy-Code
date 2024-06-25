@@ -109,6 +109,8 @@ public class GameService {
                 opponent.setExistingGameId(rankedMatch.getId());
                 userRepository.save(player1);
                 userRepository.save(opponent);
+
+                messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/notification", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error creating match", e.getMessage()));
