@@ -105,6 +105,10 @@ public class GameService {
                 rankedMatch = gameRepository.save(rankedMatch);
 
                 RankedMatchDTO rankedMatchDTO = new RankedMatchDTO(rankedMatch, null);
+                player1.setExistingGameId(rankedMatch.getId());
+                opponent.setExistingGameId(rankedMatch.getId());
+                userRepository.save(player1);
+                userRepository.save(opponent);
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error creating match", e.getMessage()));
@@ -142,6 +146,9 @@ public class GameService {
 
             // Convert the SoloMatch entity to its corresponding DTO
             SoloMatchDTO soloMatchDTO = new SoloMatchDTO(soloMatch, problemParsed.getBody());
+
+            player1.setExistingGameId(soloMatch.getId());
+            userRepository.save(player1);
 
             // Return a success response with the SoloMatchDTO
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", soloMatchDTO));
@@ -251,7 +258,14 @@ public class GameService {
 
         // Send notification to remaining players
         for (UserModel remainingPlayer : remainingPlayers) {
+            remainingPlayer.setExistingGameId(null);
+            userRepository.save(remainingPlayer);
             messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
+        }
+
+        for (UserModel lp: leavingPlayers) {
+            lp.setExistingGameId(null);
+            userRepository.save(lp);
         }
 
         return ResponseEntity.ok(ResponseUtils.successfulRes("Left the match successfully", notificationDTO));
@@ -318,7 +332,7 @@ public class GameService {
             messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/notification", winNotificationDTO);
         }
 
-        return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", submitNotificationDTO));
+        return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
     }
 
 
@@ -391,7 +405,7 @@ public class GameService {
             }
         }
 
-        return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", submitNotificationDTO));
+        return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
     }
 
 

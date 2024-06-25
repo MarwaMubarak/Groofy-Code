@@ -50,6 +50,8 @@ public class UserDTO {
 
     private Date createdAt;
 
+    private Long existingGameId;
+
     private Integer rate_800_cnt;
     private Integer rate_900_cnt;
     private Integer rate_1000_cnt;

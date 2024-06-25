@@ -64,6 +64,8 @@ public class UserModel implements UserDetails {
 
     private Integer user_max_rating;
 
+    private Long existingGameId;
+
 
     private Integer rate_800_cnt;
     private Integer rate_900_cnt;

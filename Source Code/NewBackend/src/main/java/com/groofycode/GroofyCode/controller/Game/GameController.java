@@ -26,7 +26,7 @@ import java.util.List;
 
 @SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("/games")
+@RequestMapping("/game")
 public class GameController {
 
     @Autowired
