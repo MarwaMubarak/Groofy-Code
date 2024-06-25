@@ -10,6 +10,8 @@ import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Game.*;
 import com.groofycode.GroofyCode.model.Notification.MatchNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
+import com.groofycode.GroofyCode.model.Team.TeamMember;
+import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Game.GameRepository;
 import com.groofycode.GroofyCode.repository.Game.SubmissionRepository;
@@ -31,10 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,14 +63,14 @@ public class GameService {
 
     private final ProblemPicker problemPicker;
 
-    private final MatchScheduler matchScheduler;
+//    private final MatchScheduler matchScheduler;
 
     @Autowired
     public GameService(GameRepository gameRepository, UserRepository userRepository, PlayerSelection playerSelection,
                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
-                       ProblemPicker problemPicker, MatchScheduler matchScheduler) {
+                       ProblemPicker problemPicker) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -85,7 +84,7 @@ public class GameService {
         this.matchStatusMapper = matchStatusMapper;
         this.modelMapper = modelMapper;
         this.problemPicker = problemPicker;
-        this.matchScheduler = matchScheduler;
+//        this.matchScheduler = matchScheduler;
     }
 
     public List<Game> findAllGames() {
@@ -113,7 +112,7 @@ public class GameService {
                 userRepository.save(player1);
                 userRepository.save(opponent);
 
-                matchScheduler.scheduleRankCalculation(rankedMatch);
+//                matchScheduler.scheduleRankCalculation(rankedMatch);
 
                 messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/notification", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
@@ -286,7 +285,7 @@ public class GameService {
             messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
         }
 
-        for (UserModel lp: leavingPlayers) {
+        for (UserModel lp : leavingPlayers) {
             lp.setExistingGameId(null);
             userRepository.save(lp);
         }
@@ -458,6 +457,143 @@ public class GameService {
         notificationRepository.save(notification);
         return notification;
     }
+
+    public ResponseEntity<Object> createTeamMatch(TeamModel team1, TeamModel team2) {
+        try {
+            List<UserModel> team1Users = team1.getMembers().stream()
+                    .map(TeamMember::getUser)
+                    .collect(Collectors.toList());
+            List<UserModel> team2Users = team2.getMembers().stream()
+                    .map(TeamMember::getUser)
+                    .collect(Collectors.toList());
+
+            if (team1Users.isEmpty() || team2Users.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Teams cannot be empty", null));
+            }
+
+            // Calculate average PlayerDTO attributes for both teams
+            PlayerDTO averagePlayerDTO = calculateAveragePlayerDTO(team1Users, team2Users);
+
+            // Combine all solved problems from both teams
+            List<ProgProblem> combinedProblems = new ArrayList<>();
+            team1Users.forEach(user -> combinedProblems.addAll(user.getSolvedProblems()));
+            team2Users.forEach(user -> combinedProblems.addAll(user.getSolvedProblems()));
+
+            List<ProblemDTO> problemDTOs = mapProblemsToDTOs(combinedProblems);
+            String problemURL = (String) problemPicker.pickProblem(averagePlayerDTO, problemDTOs).getBody();
+
+            // Create the TeamMatch
+            LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
+            final TeamMatch teamMatch = new TeamMatch(team1, team2, problemURL, LocalDateTime.now(), endTime, 60.0);
+            gameRepository.save(teamMatch); // Save the team match immediately
+
+            // Update each player's existing game ID
+            team1Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
+            team2Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
+            userRepository.saveAll(team1Users);
+            userRepository.saveAll(team2Users);
+
+            // Convert the TeamMatch entity to its corresponding DTO
+            ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
+            ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
+            TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody());
+
+            // Notify all players about the match start
+            team1Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                    ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
+            team2Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                    ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));
+        }
+    }
+
+    private PlayerDTO calculateAveragePlayerDTO(List<UserModel> team1Users, List<UserModel> team2Users) {
+        List<UserModel> allUsers = new ArrayList<>();
+        allUsers.addAll(team1Users);
+        allUsers.addAll(team2Users);
+
+        int userRatingSum = allUsers.stream().mapToInt(UserModel::getUser_rating).sum();
+        int userMaxRatingSum = allUsers.stream().mapToInt(UserModel::getUser_max_rating).sum();
+        int winsSum = allUsers.stream().mapToInt(UserModel::getWins).sum();
+        int drawsSum = allUsers.stream().mapToInt(UserModel::getDraws).sum();
+        int lossesSum = allUsers.stream().mapToInt(UserModel::getLosses).sum();
+
+        int[] rateCountsSum = new int[31];
+        for (UserModel user : allUsers) {
+            PlayerDTO playerDTO = modelMapper.map(user, PlayerDTO.class);
+            rateCountsSum[0] += playerDTO.getRate_800_cnt();
+            rateCountsSum[1] += playerDTO.getRate_900_cnt();
+            rateCountsSum[2] += playerDTO.getRate_1000_cnt();
+            rateCountsSum[3] += playerDTO.getRate_1100_cnt();
+            rateCountsSum[4] += playerDTO.getRate_1200_cnt();
+            rateCountsSum[5] += playerDTO.getRate_1300_cnt();
+            rateCountsSum[6] += playerDTO.getRate_1400_cnt();
+            rateCountsSum[7] += playerDTO.getRate_1500_cnt();
+            rateCountsSum[8] += playerDTO.getRate_1600_cnt();
+            rateCountsSum[9] += playerDTO.getRate_1700_cnt();
+            rateCountsSum[10] += playerDTO.getRate_1800_cnt();
+            rateCountsSum[11] += playerDTO.getRate_1900_cnt();
+            rateCountsSum[12] += playerDTO.getRate_2000_cnt();
+            rateCountsSum[13] += playerDTO.getRate_2100_cnt();
+            rateCountsSum[14] += playerDTO.getRate_2200_cnt();
+            rateCountsSum[15] += playerDTO.getRate_2300_cnt();
+            rateCountsSum[16] += playerDTO.getRate_2400_cnt();
+            rateCountsSum[17] += playerDTO.getRate_2500_cnt();
+            rateCountsSum[18] += playerDTO.getRate_2600_cnt();
+            rateCountsSum[19] += playerDTO.getRate_2700_cnt();
+            rateCountsSum[20] += playerDTO.getRate_2800_cnt();
+            rateCountsSum[21] += playerDTO.getRate_2900_cnt();
+            rateCountsSum[22] += playerDTO.getRate_3000_cnt();
+            rateCountsSum[23] += playerDTO.getRate_3100_cnt();
+            rateCountsSum[24] += playerDTO.getRate_3200_cnt();
+            rateCountsSum[25] += playerDTO.getRate_3300_cnt();
+            rateCountsSum[26] += playerDTO.getRate_3400_cnt();
+            rateCountsSum[27] += playerDTO.getRate_3500_cnt();
+        }
+
+        int userCount = allUsers.size();
+        return new PlayerDTO(
+                userRatingSum / userCount,
+                userMaxRatingSum / userCount,
+                winsSum / userCount,
+                drawsSum / userCount,
+                lossesSum / userCount,
+                rateCountsSum[0] / userCount,
+                rateCountsSum[1] / userCount,
+                rateCountsSum[2] / userCount,
+                rateCountsSum[3] / userCount,
+                rateCountsSum[4] / userCount,
+                rateCountsSum[5] / userCount,
+                rateCountsSum[6] / userCount,
+                rateCountsSum[7] / userCount,
+                rateCountsSum[8] / userCount,
+                rateCountsSum[9] / userCount,
+                rateCountsSum[10] / userCount,
+                rateCountsSum[11] / userCount,
+                rateCountsSum[12] / userCount,
+                rateCountsSum[13] / userCount,
+                rateCountsSum[14] / userCount,
+                rateCountsSum[15] / userCount,
+                rateCountsSum[16] / userCount,
+                rateCountsSum[17] / userCount,
+                rateCountsSum[18] / userCount,
+                rateCountsSum[19] / userCount,
+                rateCountsSum[20] / userCount,
+                rateCountsSum[21] / userCount,
+                rateCountsSum[22] / userCount,
+                rateCountsSum[23] / userCount,
+                rateCountsSum[24] / userCount,
+                rateCountsSum[25] / userCount,
+                rateCountsSum[26] / userCount,
+                rateCountsSum[27] / userCount
+        );
+    }
+
 
     private NotificationDTO convertToDTO(MatchNotificationModel notification) {
         NotificationDTO dto = new NotificationDTO();

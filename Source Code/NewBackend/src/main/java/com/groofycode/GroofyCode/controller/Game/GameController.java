@@ -3,12 +3,15 @@ package com.groofycode.GroofyCode.controller.Game;
 
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
+import com.groofycode.GroofyCode.dto.Game.TeamMatchDTO;
 import com.groofycode.GroofyCode.dto.ProblemPickerDTO;
 import com.groofycode.GroofyCode.model.Game.CasualMatch;
 import com.groofycode.GroofyCode.model.Game.Game;
 import com.groofycode.GroofyCode.model.Game.RankedMatch;
 import com.groofycode.GroofyCode.model.Game.SoloMatch;
+import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.service.Game.GameService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/game")
 public class GameController {
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Autowired
     private GameService gameService;
@@ -85,6 +90,26 @@ public class GameController {
     public ResponseEntity<Object> submitCode(@PathVariable Long gameId, @RequestBody ProblemSubmitDTO problemSubmitDTO) throws Exception {
         return gameService.submitCode(gameId, problemSubmitDTO);
     }
+
+    @PostMapping("/team-match")
+    public ResponseEntity<Object> createTeamMatch(
+            @RequestParam("team1Id") Long team1Id,
+            @RequestParam("team2Id") Long team2Id
+    ) {
+        try {
+            // Retrieve TeamModel objects from the provided IDs
+            TeamModel team1 = teamRepository.findById(team1Id).get();
+            TeamModel team2 = teamRepository.findById(team2Id).get();
+
+            // Pass the TeamModel objects to the service method
+           return gameService.createTeamMatch(team1, team2);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));
+        }
+    }
+
+
 
 //    @PostMapping("/join")
 //    public ResponseEntity<Void> joinGame(@RequestBody UserModel user) {
