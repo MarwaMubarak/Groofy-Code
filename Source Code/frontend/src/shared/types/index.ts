@@ -202,6 +202,7 @@ export interface SubmissionProps {
   problemUrl?: string;
   language?: string;
   code: string;
+  gameID: string;
 }
 
 // Clan Result Props
@@ -245,4 +246,9 @@ export interface ProfileImageProps {
   style: any;
   canClick: boolean;
   exec?: any;
+}
+
+export interface TestcaseProps {
+  input: string;
+  output: string;
 }

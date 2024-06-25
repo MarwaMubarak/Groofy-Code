@@ -78,7 +78,7 @@ const submitCode = (submission: SubmissionProps) => {
       try {
         dispatch(submissionActions.setIsLoading(true));
         const response = await reqInstance.post(
-          "/submit-code",
+          "/games/" + submission.gameID + "/submit",
           { ...submission },
           {
             headers: {

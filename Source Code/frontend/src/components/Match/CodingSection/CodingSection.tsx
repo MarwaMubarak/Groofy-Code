@@ -30,13 +30,19 @@ const CodingSection = () => {
   const dispatch = useDispatch();
   const isSubmitting = useSelector((state: any) => state.submission.isLoading);
   const toast = useRef<Toast>(null);
+  const problemURL = useSelector((state: any) => state.problem.problemURL);
+  const gameID = useSelector((state: any) => state.problem.gameID);
 
   const submitCode = async () => {
+    console.log("my code", currentCode);
+    console.log("problem url", problemURL);
+    console.log("game id", gameID);
     return await dispatch(
       matchThunks.submitCode({
         code: currentCode,
         language: "GNU G++17 7.3.0",
-        problemUrl: "https://codeforces.com/problemset/problem/71/A",
+        problemUrl: problemURL,
+        gameID: gameID,
       }) as any
     );
   };

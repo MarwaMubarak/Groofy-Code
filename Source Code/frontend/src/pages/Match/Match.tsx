@@ -15,6 +15,7 @@ const Match = () => {
   const status = useSelector((state: any) => state.match.status);
   const message = useSelector((state: any) => state.match.message);
   const match = useSelector((state: any) => state.match.match);
+
   useEffect(() => {
     const getCurrentMatch = async () => {
       await dispatch(matchThunks.getCurrentMatch() as any);
@@ -22,6 +23,7 @@ const Match = () => {
 
     getCurrentMatch();
   }, [dispatch]);
+
   return isLoading ? (
     <div>Loading...</div>
   ) : status === "failure" ? (

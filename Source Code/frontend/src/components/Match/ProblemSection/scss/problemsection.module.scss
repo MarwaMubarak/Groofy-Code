@@ -14,6 +14,10 @@
     border-radius: 12px;
     box-shadow: $cardShadow;
     padding: 15px;
+    &:nth-of-type(2),
+    &:nth-of-type(3) {
+      margin-top: 20px;
+    }
     .ptitle {
       display: flex;
       justify-content: center;
@@ -22,6 +26,19 @@
       position: relative;
       color: #fff;
       @include bottomSeparator(250px, 40px, 0, 1);
+    }
+    .complexity {
+      display: block;
+      width: 100%;
+      margin-top: 30px;
+      text-align: center;
+      p {
+        font-size: 14px;
+        color: #ddd;
+        &:not(:last-of-type) {
+          margin-bottom: 5px;
+        }
+      }
     }
     .pdisc {
       margin-top: 25px;

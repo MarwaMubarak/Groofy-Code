@@ -4,6 +4,7 @@ import matchThunks from "./match-actions";
 import socketThunks from "./socket-actions";
 import friendThunks from "./friend-actions";
 import notifyThunks from "./notify-actions";
+import problemThunks from "./problem-actions";
 
 export {
   authThunks,
@@ -12,4 +13,5 @@ export {
   socketThunks,
   friendThunks,
   notifyThunks,
+  problemThunks,
 };

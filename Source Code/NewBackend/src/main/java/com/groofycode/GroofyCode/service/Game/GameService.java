@@ -5,6 +5,8 @@ import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
 import com.groofycode.GroofyCode.dto.Game.SoloMatchDTO;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
+import com.groofycode.GroofyCode.dto.ProblemDTO;
+import com.groofycode.GroofyCode.dto.ProblemPickerDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Game.*;
 import com.groofycode.GroofyCode.model.Notification.MatchNotificationModel;
@@ -16,7 +18,9 @@ import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.CodeforcesSubmissionService;
 import com.groofycode.GroofyCode.service.NotificationService;
+import com.groofycode.GroofyCode.service.ProblemPicker;
 import com.groofycode.GroofyCode.utilities.MatchStatusMapper;
+import com.groofycode.GroofyCode.utilities.ProblemParser;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,39 +33,56 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class GameService {
-    @Autowired
-    private GameRepository gameRepository;
+
+    private final GameRepository gameRepository;
+
+    private final UserRepository userRepository; // Assuming you have a UserRepository
+
+    private final PlayerSelection playerSelection;
+
+    private final NotificationService notificationService;
+
+    private final NotificationRepository notificationRepository;
+
+    private final SubmissionRepository submissionRepository;
+
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private final CodeforcesSubmissionService codeforcesSubmissionService;
+
+    private final MatchStatusMapper matchStatusMapper;
+
+    private final ModelMapper modelMapper;
+
+    private final ProblemParser problemParser;
+
+    private final ProblemPicker problemPicker;
 
     @Autowired
-    private UserRepository userRepository; // Assuming you have a UserRepository
+    public GameService (GameRepository gameRepository, UserRepository userRepository, PlayerSelection playerSelection,
+                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
+                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
+                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
+                        ProblemPicker problemPicker) {
 
-    @Autowired
-    private PlayerSelection playerSelection;
-
-    @Autowired
-    private NotificationService notificationService;
-
-    @Autowired
-    private NotificationRepository notificationRepository;
-
-    @Autowired
-    private SubmissionRepository submissionRepository;
-
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-
-    @Autowired
-    private CodeforcesSubmissionService codeforcesSubmissionService;
-
-    @Autowired
-    private MatchStatusMapper matchStatusMapper;
-
-    @Autowired
-    private ModelMapper modelMapper;
+        this.gameRepository = gameRepository;
+        this.userRepository = userRepository;
+        this.playerSelection = playerSelection;
+        this.notificationService = notificationService;
+        this.submissionRepository = submissionRepository;
+        this.messagingTemplate = messagingTemplate;
+        this.problemParser = problemParser;
+        this.codeforcesSubmissionService = codeforcesSubmissionService;
+        this.notificationRepository = notificationRepository;
+        this.matchStatusMapper = matchStatusMapper;
+        this.modelMapper = modelMapper;
+        this.problemPicker = problemPicker;
+    }
 
     public List<Game> findAllGames() {
         return gameRepository.findAll();
@@ -90,16 +111,23 @@ public class GameService {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
     }
 
-    public ResponseEntity<Object> findSoloMatch() {
+    public ResponseEntity<Object> findSoloMatch(ProblemPickerDTO problemPickerDTO) {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player1 = userRepository.findByUsername(userInfo.getUsername());
         try {
+
+            String problemURL = (String) problemPicker.pickProblem(problemPickerDTO.getPlayer(), problemPickerDTO.getSolvedProblems()).getBody();
+
             // Create a new SoloMatch and save it to the repository
-            SoloMatch soloMatch = new SoloMatch(player1, LocalDateTime.now(),"https://codeforces.com/contest/4/problem/A");
+            SoloMatch soloMatch = new SoloMatch(player1, LocalDateTime.now(), problemURL);
             soloMatch = gameRepository.save(soloMatch);
 
+            ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
+
+            ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
+
             // Convert the SoloMatch entity to its corresponding DTO
-            SoloMatchDTO soloMatchDTO = convertToDTO(soloMatch);
+            SoloMatchDTO soloMatchDTO = convertToDTO(soloMatch, problemParsed.getBody());
 
             // Return a success response with the SoloMatchDTO
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", soloMatchDTO));
@@ -199,6 +227,61 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Match is already finished", null));
         }
 
+        if (game instanceof RankedMatch) {
+            return submitCodep2p(game, problemSubmitDTO);
+        } else if (game instanceof SoloMatch) {
+            return submitCodeSolo(game, problemSubmitDTO);
+        } else return null  ;
+    }
+
+    public ResponseEntity<Object> submitCodeSolo(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
+
+        // Ensure that the submitting player is one of the players in the game
+        if (!game.getPlayer1().getId().equals(submittingPlayer.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You do not own this game", null));
+        }
+
+        Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
+        String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
+
+        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
+        submissionRepository.save(submission);
+
+        // Notify the submitting player
+        MatchNotificationModel submitNotification = createNotification(
+                "You submitted the code. Result: " + codeForceResponse,
+                submittingPlayer,
+                submittingPlayer,
+                game,
+                NotificationType.SUBMIT_CODE
+        );
+        NotificationDTO submitNotificationDTO = convertToDTO(submitNotification);
+
+        if (codeForceResponse.equals("Accepted")) {
+            // End the game
+            game.setGameStatus(GameStatus.FINISHED);
+            game.setEndTime(LocalDateTime.now());
+            gameRepository.save(game);
+
+            // Notify the player that they won
+            MatchNotificationModel winNotification = createNotification(
+                    "Your code was accepted. You win!",
+                    submittingPlayer,
+                    submittingPlayer,
+                    game,
+                    NotificationType.GAME_ENDED
+            );
+            NotificationDTO winNotificationDTO = convertToDTO(winNotification);
+            messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/notification", winNotificationDTO);
+        }
+
+        return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", submitNotificationDTO));
+    }
+
+
+    ResponseEntity<Object> submitCodep2p(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
 
@@ -206,7 +289,7 @@ public class GameService {
         UserModel player2 = game.getPlayer2();
 
         UserModel remainingPlayer = (submittingPlayer.getId().equals(player1.getId())) ? player2 : player1;
-        ////TODO: Simulate committing code and receiving a response from Code Forces
+
         Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
 
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
@@ -252,7 +335,6 @@ public class GameService {
             NotificationDTO loseNotificationDTO = convertToDTO(loseNotification);
             messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", loseNotificationDTO);
         }
-
         return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", submitNotificationDTO));
     }
 
@@ -290,13 +372,15 @@ public class GameService {
         );
     }
 
-    public SoloMatchDTO convertToDTO(SoloMatch match) {
+    public SoloMatchDTO convertToDTO(SoloMatch match, Object problem) {
         if (match == null) return null;
         return new SoloMatchDTO(
                 match.getId(),
                 match.getPlayer1().getId(),
                 match.getStartTime(),
-                match.getGameType().toString()
+                match.getGameType().toString(),
+                problem,
+                match.getProblemUrl()
         );
     }
 }

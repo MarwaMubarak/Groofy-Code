@@ -38,7 +38,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/login", "/register", "/socket/**", "/swagger-ui/**","/swagger-ui.html/**","/v3/api-docs/**","/v3/api-docs/swagger-config#/**").permitAll();
+                    auth.requestMatchers("/login", "/register", "/socket/**",
+                            "/swagger-ui/**","/swagger-ui.html/**","/v3/api-docs/**",
+                            "/v3/api-docs/swagger-config#/**", "/problemset/problem/pick", "/games/solo").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .cors(c -> c.configurationSource(request -> {

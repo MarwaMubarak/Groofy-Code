@@ -7,6 +7,7 @@ import socketReducer from "./socket-slice";
 import clanReducer from "./clan-slice";
 import friendReducer from "./friend-slice";
 import notifyReducer from "./notify-slice";
+import problemReducer from "./problem-slice";
 
 export {
   authReducer,
@@ -18,4 +19,5 @@ export {
   clanReducer,
   friendReducer,
   notifyReducer,
+  problemReducer,
 };
