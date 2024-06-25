@@ -20,6 +20,9 @@ import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -68,6 +71,39 @@ public class TeamService {
                 TeamDTO teamDTO = modelMapper.map(team, TeamDTO.class);
                 teamDTO.setMembersCount(team.getMembers().size());
                 teamDTO.setCreatorUsername(team.getCreator().getUsername());
+
+                // Set members in the TeamDTO
+                List<MemberDTO> memberDTOs = team.getMembers().stream()
+                        .map(tm -> {
+                            MemberDTO memberDTO = new MemberDTO();
+                            memberDTO.setUsername(tm.getUser().getUsername());
+                            memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            return memberDTO;
+                        })
+                        .collect(Collectors.toList());
+
+                teamDTO.setMembers(memberDTOs);
+                teamsDTOList.add(teamDTO);
+            });
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Teams retrieved successfully", teamsDTOList));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve teams", null));
+        }
+    }
+
+
+    public ResponseEntity<Object> getTeamsPage(int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<TeamModel> teams = teamRepository.findAll(pageable);
+            List<TeamDTO> teamsDTOList = new ArrayList<>();
+            teams.forEach(team -> {
+                TeamDTO teamDTO = modelMapper.map(team, TeamDTO.class);
+                teamDTO.setMembersCount(team.getMembers().size());
+                teamDTO.setCreatorUsername(team.getCreator().getUsername());
+
+
+
 
                 // Set members in the TeamDTO
                 List<MemberDTO> memberDTOs = team.getMembers().stream()

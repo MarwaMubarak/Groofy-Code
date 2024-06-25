@@ -24,6 +24,11 @@ public class TeamController {
         return teamService.getAll();
     }
 
+    @GetMapping("/pagination")
+    public ResponseEntity<Object> getTeamsPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return teamService.getTeamsPage(page,size);
+    }
+
     @GetMapping("/{teamId}")
     public ResponseEntity<Object> getTeamInfo(@PathVariable Long teamId) {
         return teamService.getTeamInfo(teamId);
