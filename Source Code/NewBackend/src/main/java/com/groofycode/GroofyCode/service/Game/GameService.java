@@ -1,10 +1,8 @@
 package com.groofycode.GroofyCode.service.Game;
 
 
-import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
-import com.groofycode.GroofyCode.dto.Game.SoloMatchDTO;
+import com.groofycode.GroofyCode.dto.Game.*;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
-import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.dto.PlayerDTO;
 import com.groofycode.GroofyCode.dto.ProblemDTO;
 import com.groofycode.GroofyCode.dto.ProblemPickerDTO;
@@ -153,7 +151,7 @@ public class GameService {
         }
     }
 
-    public ResponseEntity<Object> getRankedMatch(Long id) {
+    public ResponseEntity<Object> getMatch(Long id) {
         if (id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("ID must not be null", null));
         }
@@ -163,15 +161,34 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Game not found", null));
         }
 
-        Game game = optionalGame.get();
-        if (!(game instanceof RankedMatch)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Ranked match not found", null));
+        try {
+            Game game = optionalGame.get();
+
+            ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(game.getProblemUrl());
+
+            ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
+
+
+            GameDTO gameDTO;
+
+            if (game instanceof RankedMatch) {
+                gameDTO = new RankedMatchDTO((RankedMatch) game, problemParsed.getBody());
+            } else if (game instanceof SoloMatch) {
+                gameDTO = new SoloMatchDTO((SoloMatch) game, problemParsed.getBody());
+            } else if (game instanceof CasualMatch) {
+                gameDTO = new CasualMatchDTO((CasualMatch) game, problemParsed.getBody());
+
+            } else {
+                gameDTO = new GameDTO(game);
+            }
+
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
+        } catch (
+                Exception e) {
+            // Handle any exceptions that may occur during the match creation or saving process
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error getting match", e.getMessage()));
         }
-
-        RankedMatch rankedMatch = (RankedMatch) game;
-        RankedMatchDTO rankedMatchDTO = new RankedMatchDTO(rankedMatch, null);
-
-        return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
     }
 
     public ResponseEntity<Object> leaveMatch(Long gameId) {

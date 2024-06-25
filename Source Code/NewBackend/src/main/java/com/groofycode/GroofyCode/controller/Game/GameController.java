@@ -65,10 +65,11 @@ public class GameController {
         }
     }
 
-    @GetMapping("/ranked")
-    public ResponseEntity<Object> getRankedMatch(@RequestParam Long id) {
-        return gameService.getRankedMatch(id);
+    @GetMapping("/{matchId}")
+    public ResponseEntity<Object> getMatch(@PathVariable Long matchId) {
+        return gameService.getMatch(matchId);
     }
+
 
     @PutMapping("/{gameId}/leave")
     public ResponseEntity<Object> leaveMatch(@PathVariable Long gameId) {
