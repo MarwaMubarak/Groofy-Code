@@ -22,6 +22,7 @@ import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.service.ProblemPicker;
 import com.groofycode.GroofyCode.utilities.MatchStatusMapper;
 import com.groofycode.GroofyCode.utilities.ProblemParser;
+import com.groofycode.GroofyCode.utilities.RatingSystemCalculator;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,9 @@ public class GameService {
 
     private final ProblemPicker problemPicker;
 
+    private final RatingSystemCalculator ratingSystemCalculator;
+
+
 //    private final MatchScheduler matchScheduler;
 
     @Autowired
@@ -71,7 +75,7 @@ public class GameService {
                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
-                       ProblemPicker problemPicker) {
+                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -85,6 +89,7 @@ public class GameService {
         this.matchStatusMapper = matchStatusMapper;
         this.modelMapper = modelMapper;
         this.problemPicker = problemPicker;
+        this.ratingSystemCalculator = ratingSystemCalculator;
 //        this.matchScheduler = matchScheduler;
     }
 
@@ -108,10 +113,22 @@ public class GameService {
         UserModel opponent = playerSelection.findFirstPlayerAndRemove(player1.getId());
         if (opponent != null) {
             try {
+                opponent = userRepository.findById(opponent.getId()).orElse(null);
                 List<UserModel> players1 = List.of(player1);
                 List<UserModel> players2 = List.of(opponent);
-                RankedMatch rankedMatch = new RankedMatch(players1, players2, "https://codeforces.com/contest/4/problem/A", LocalDateTime.now(), LocalDateTime.now().plusMinutes(60), 60.0);
-//                RankedMatch rankedMatch = new RankedMatch(player1, opponent, LocalDateTime.now(), "https://codeforces.com/contest/4/problem/A");
+
+                PlayerDTO playerDTO = modelMapper.map(player1, PlayerDTO.class);
+                PlayerDTO opponentDTO = modelMapper.map(opponent, PlayerDTO.class);
+
+                List<ProblemDTO> solvedProblemsPlayer = player1.getSolvedProblems().stream().map(
+                        progProblem -> modelMapper.map(progProblem, ProblemDTO.class)).toList();
+                List<ProblemDTO> solvedProblemsOpponent = opponent.getSolvedProblems().stream().map(
+                        progProblem -> modelMapper.map(progProblem, ProblemDTO.class)).toList();
+
+                String problemUrl = (String) problemPicker.pickProblem(playerDTO, solvedProblemsPlayer, opponentDTO, solvedProblemsOpponent).getBody();
+
+                RankedMatch rankedMatch = new RankedMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusMinutes(60), 60.0);
+
                 playerSelection.removePlayer(player1);  // Remove the user from the waiting list
                 rankedMatch = gameRepository.save(rankedMatch);
 
@@ -278,6 +295,13 @@ public class GameService {
         game.setEndTime(LocalDateTime.now());
         gameRepository.save(game);
 
+
+        if(leavingPlayers.size() == 1 && remainingPlayers.size() == 1) {
+            // Update the player's rating and save
+            leavingPlayers.get(0).setUser_rating(leavingPlayers.get(0).getUser_rating() - 30);
+            userRepository.save(leavingPlayers.get(0));
+        }
+
         // Create and send the notification DTO using setters
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setBody(matchNotification.getBody());
@@ -438,6 +462,18 @@ public class GameService {
                 game.setGameStatus(GameStatus.FINISHED);
                 game.setEndTime(LocalDateTime.now());
                 gameRepository.save(game);
+
+                if(submittingPlayers.size() == 1 && remainingPlayers.size() == 1) {
+                    // Update delta of the players
+                    int player1Rating = submittingPlayers.get(0).getUser_rating();
+                    int player2Rating = remainingPlayers.get(0).getUser_rating();
+                    int newPlayer1Rating = ratingSystemCalculator.calculateDeltaRating(player2Rating - player1Rating, player1Rating, 'W');
+                    int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'L');
+                    submittingPlayers.get(0).setUser_rating(newPlayer1Rating);
+                    remainingPlayers.get(0).setUser_rating(newPlayer2Rating);
+                    userRepository.save(submittingPlayers.get(0));
+                    userRepository.save(remainingPlayers.get(0));
+                }
 
                 MatchNotificationModel loseNotification = createNotification(
                         "Your opponent's code was accepted. You lose.",
@@ -637,6 +673,16 @@ public class GameService {
 //                match.getProblemUrl()
 //        );
 //    }
+
+    public ResponseEntity<Object> getUserQueue(){
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+        if(playerSelection.isInQueue(player.getId())){
+            return ResponseEntity.ok(ResponseUtils.successfulRes("YES", null));
+        } else {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("NO", null));
+        }
+    }
 
     public List<ProblemDTO> mapProblemsToDTOs(List<ProgProblem> problems) {
         return problems.stream()

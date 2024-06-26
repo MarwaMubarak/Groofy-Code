@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groofycode.GroofyCode.dto.PlayerDTO;
 import com.groofycode.GroofyCode.dto.ProblemDTO;
+import com.groofycode.GroofyCode.model.Game.ProgProblem;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.Getter;
@@ -93,6 +94,41 @@ public class ProblemPicker {
         index = Math.min(Math.max(index, 0), unSolvedProblems.size() - 1);
 
         return ResponseEntity.ok("https://codeforces.com/contest/" + unSolvedProblems.get(index).getContestId() + "/problem/" + unSolvedProblems.get(index).getIndex());
+    }
+
+    public int expectedRatingPlayer(PlayerDTO playerDTO) throws Exception {
+        String apiUrl = "http://localhost:5000/predict";
+        String response = restTemplate.postForObject(apiUrl, playerDTO, String.class);
+        JsonNode jsonResponse = objectMapper.readTree(response);
+        double expectedRating = jsonResponse.get("expected_rating").asDouble();
+        int count = (int)expectedRating / 100;
+        if((int)expectedRating % 100 != 0)count++;
+        return 100 * count;
+    }
+
+    public ResponseEntity<Object> pickProblem(PlayerDTO playerDTO, List<ProblemDTO> solvedProblems, PlayerDTO opponentDTO, List<ProblemDTO> opponentSolvedProblems) throws Exception {
+        int playerRating = expectedRatingPlayer(playerDTO);
+        int opponentRating = expectedRatingPlayer(opponentDTO);
+        int averageRating = (playerRating + opponentRating) / 2;
+        int count = averageRating / 100;
+        if(averageRating % 100 != 0)count++;
+        int rating = 100 * count;
+        while(true){
+            List<ProblemDTO> problemsByRating = problems.get(rating);
+            List<ProblemDTO> unSolvedProblems = new ArrayList<>();
+            for(ProblemDTO problemDTO : problemsByRating) {
+                if(solvedProblems.contains(problemDTO) || opponentSolvedProblems.contains(problemDTO)) continue;
+                unSolvedProblems.add(problemDTO);
+            }
+            if(unSolvedProblems.isEmpty()){
+                rating += 100;
+                continue;
+            }
+            double percentile = (double) (solvedProblems.size() + opponentSolvedProblems.size()) / problemsByRating.size();
+            int index = (int) Math.round(percentile * unSolvedProblems.size());
+            index = Math.min(Math.max(index, 0), unSolvedProblems.size() - 1);
+            return ResponseEntity.ok("https://codeforces.com/contest/" + unSolvedProblems.get(index).getContestId() + "/problem/" + unSolvedProblems.get(index).getIndex());
+        }
     }
 
 }

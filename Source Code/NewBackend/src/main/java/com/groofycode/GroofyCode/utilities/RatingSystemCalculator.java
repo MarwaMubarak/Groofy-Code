@@ -24,7 +24,7 @@ public class RatingSystemCalculator {
     // DeltaA = calculateDeltaRating(RatingB - RatingA, RatingA, 'W')
     // DeltaB = calculateDeltaRating(RatingA - RatingB, RatingB, 'L')
 
-    int calculateDeltaRating(int differenceRating, int currentRating, char matchStatus) {
+    public int calculateDeltaRating(int differenceRating, int currentRating, char matchStatus) {
         double EloPlayerRating = 1.0 / (1 + Math.pow(10, (double) differenceRating / 400));
         if(currentRating >= 2400){
             return (int) (currentRating + adjustmentA * (ratingSystem.get(matchStatus) - EloPlayerRating));

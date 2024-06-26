@@ -19,11 +19,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,8 @@ public class MessageService {
     @Autowired
     private  ModelMapper modelMapper;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public ResponseEntity<Object> sendMessage(Long chatId, String content) throws Exception{
         try {
@@ -68,6 +72,14 @@ public class MessageService {
 
             messageRepository.save(message);
             MessageDTO messageDTO = modelMapper.map(message,MessageDTO.class);
+
+            List<Long> users = chatModel.get().getUserIds();
+            for(Long userId : users){
+                if(!Objects.equals(userId, userInfo.getUserId())){
+                    UserModel currentUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+                    messagingTemplate.convertAndSendToUser(currentUser.getUsername(), "/messages", ResponseUtils.successfulRes("New Message", messageDTO));
+                }
+            }
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Message Sent Successfully!", messageDTO));
 
         }catch (Exception e){

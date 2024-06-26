@@ -19,7 +19,7 @@ public class ProgProblem {
     private String contestId;
 
     @Column(name = "index_name", length = 255) // Escape reserved keyword "index"
-    private String indexName;
+    private String index;
 
     @Column(name = "name", length = 255)
     private String name;

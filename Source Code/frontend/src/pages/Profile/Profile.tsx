@@ -28,6 +28,9 @@ const Profile = () => {
   const loggedUser = useSelector((state: any) => state.auth.user);
   const profileUser = useSelector((state: any) => state.user.user);
   const profileRes = useSelector((state: any) => state.user.res);
+
+  console.log(loggedUser);
+
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
   const { username: userProfile } = useParams();
@@ -199,7 +202,7 @@ const Profile = () => {
                         src="/Assets/SVG/trophyIconYellow.svg"
                         alt="RankImg"
                       />
-                      <span>{profileUser.currentTrophies}</span>
+                      <span>{profileUser.user_rating}</span>
                     </div>
                   </div>
                 </div>
@@ -219,7 +222,7 @@ const Profile = () => {
                     <h3>Max Rating</h3>
                     <div className={classes.middle_down_box}>
                       <img src="/Assets/Badges/Badge6.svg" alt="RankImg" />
-                      <span>{profileUser.maxRating}</span>
+                      <span>{profileUser.user_max_rating}</span>
                     </div>
                   </div>
                 </div>

@@ -40,11 +40,11 @@ public class UserDTO {
 
     private Integer losses;
 
-    private Integer currentTrophies;
+    private Integer user_rating;
 
     private Integer worldRank;
 
-    private Integer maxRating;
+    private Integer user_max_rating;
 
     private String friendshipStatus;
 

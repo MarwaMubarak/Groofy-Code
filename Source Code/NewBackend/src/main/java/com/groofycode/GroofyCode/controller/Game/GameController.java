@@ -59,6 +59,11 @@ public class GameController {
 //        return gameService.saveGame(casualMatch);
 //    }
 
+    @GetMapping("/user-queue")
+    public ResponseEntity<Object> getUserQueue() {
+        return gameService.getUserQueue();
+    }
+
 
     @PostMapping("/ranked")
     public ResponseEntity<Object> findRankedMatch() {
