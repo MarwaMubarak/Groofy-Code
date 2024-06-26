@@ -59,6 +59,7 @@ const createSoloGame = () => {
             },
           }
         );
+        console.log("my response", response.data.body);
         dispatch(gameActions.setGame(response.data.body));
         dispatch(gameActions.setLoading(false));
         dispatch(authActions.setUserGameId(response.data.body.id));

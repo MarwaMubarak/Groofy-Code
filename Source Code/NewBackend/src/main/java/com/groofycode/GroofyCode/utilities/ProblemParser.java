@@ -26,7 +26,7 @@ public class ProblemParser {
         Map<String, Object> responseMap = new HashMap<>();
 
         // Populate the map with structured text data from different specifications
-        responseMap.put("header", getChildTexts(statement.selectFirst(".header")));
+        responseMap.put("header", getHeaderText(statement.selectFirst(".header")));
         responseMap.put("statement", getChildTexts(statement.child(1))); // Assuming the second child is required
         responseMap.put("input", getChildTexts(doc.selectFirst(".input-specification")));
         responseMap.put("output", getChildTexts(doc.selectFirst(".output-specification")));
@@ -36,7 +36,18 @@ public class ProblemParser {
         // Return the map as JSON
         return ResponseEntity.ok(responseMap);
     }
-
+    private List<String> getHeaderText(Element element) {
+        List<String> texts = new ArrayList<>();
+        if (element != null) {
+            Elements children = element.children();
+            for (int i = 0; i < children.size(); i++) {
+                Element titleElement = children.get(i);
+                String title = titleElement.text();
+                texts.add(title);
+            }
+        }
+        return texts;
+    }
     private List<String> getChildTexts(Element element) {
         List<String> texts = new ArrayList<>();
         if (element != null) {
