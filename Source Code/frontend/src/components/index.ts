@@ -43,6 +43,7 @@ import ClanRequests from "./Clan/ClanRequests/ClanRequests";
 import Friends from "./Profile/Friends/Friends";
 import Friend from "./Profile/Friends/Friend/Friend";
 import ProfileImage from "./ProfileImage/ProfileImage";
+import WebSocketConnection from "./WebSocketConnection/WebSocketConnection";
 
 export {
   MatchHeader,
@@ -90,4 +91,5 @@ export {
   Friends,
   Friend,
   ProfileImage,
+  WebSocketConnection,
 };

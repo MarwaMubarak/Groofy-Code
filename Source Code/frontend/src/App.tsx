@@ -1,4 +1,10 @@
-import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  BrowserRouter,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import {
   Home,
   Login,
@@ -12,21 +18,17 @@ import {
   ClanSearch,
   Messaging,
 } from "./pages";
-import { Stomp } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
+
 import { useDispatch, useSelector } from "react-redux";
-import {
-  userThunks,
-  socketThunks,
-  notifyThunks,
-  gameThunks,
-} from "./store/actions";
+import { userThunks } from "./store/actions";
 import { useEffect } from "react";
 import TestingSocket from "./pages/TestingSocket/TestingSocket";
+import { WebSocketConnection } from "./components";
 
 function App() {
   const loggedUser = useSelector((state: any) => state.auth.user);
   const dispatch = useDispatch();
+
   useEffect(() => {
     const getProfile = async () => {
       await dispatch(userThunks.getProfile() as any);
@@ -36,61 +38,13 @@ function App() {
     }
   }, [dispatch, loggedUser]);
 
-  useEffect(() => {
-    if (loggedUser) {
-      const socket = new SockJS("http://localhost:8080/socket");
-      const client = Stomp.over(socket);
-
-      client.connect(
-        { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        function (frame: any) {
-          client.subscribe(
-            `/userTCP/${loggedUser.username}/notification`,
-            onMessage,
-            { Authorization: `Bearer ${localStorage.getItem("token")}` }
-          );
-          client.subscribe(
-            `/userTCP/${loggedUser.username}/games`,
-            onGameMessage,
-            { Authorization: `Bearer ${localStorage.getItem("token")}` }
-          );
-          if (loggedUser.clanName !== null) {
-            client.subscribe(
-              `/clanTCP/${loggedUser.clanName}/chat`,
-              onMessage,
-              {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              }
-            );
-          }
-        }
-      );
-
-      const onMessage = (message: any) => {
-        const msg = JSON.parse(message.body);
-        console.log("Recieved message: ", msg);
-        dispatch(notifyThunks.socketNotification(msg) as any);
-      };
-
-      const onGameMessage = (message: any) => {
-        const msg = JSON.parse(message.body);
-        console.log("Recieved game message: ", msg);
-        if (msg.id !== null) {
-          dispatch(gameThunks.updateGroofyGame(msg.id) as any);
-        }
-      };
-
-      dispatch(socketThunks.changeStompClient(client) as any);
-      return () => client.disconnect();
-    }
-  }, [dispatch, loggedUser]);
-
   if (!loggedUser && localStorage.getItem("token")) {
     return <div>Loading...</div>;
   }
 
   return (
     <BrowserRouter>
+      <WebSocketConnection />
       <Routes>
         <Route
           path="/"
