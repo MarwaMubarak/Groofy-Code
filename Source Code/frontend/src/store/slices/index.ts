@@ -8,6 +8,7 @@ import clanReducer from "./clan-slice";
 import friendReducer from "./friend-slice";
 import notifyReducer from "./notify-slice";
 import gameReducer from "./game-slice";
+import toastReducer from "./toast-slice";
 
 export {
   authReducer,
@@ -20,4 +21,5 @@ export {
   friendReducer,
   notifyReducer,
   gameReducer,
+  toastReducer,
 };

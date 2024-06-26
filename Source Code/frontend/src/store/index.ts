@@ -10,6 +10,7 @@ import {
   friendReducer,
   notifyReducer,
   gameReducer,
+  toastReducer,
 } from "./slices";
 import axios from "axios";
 
@@ -25,6 +26,7 @@ const store = configureStore({
     friend: friendReducer,
     notify: notifyReducer,
     game: gameReducer,
+    toast: toastReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

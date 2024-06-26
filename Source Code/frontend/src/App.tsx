@@ -1,10 +1,4 @@
-import {
-  Route,
-  Routes,
-  BrowserRouter,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import {
   Home,
   Login,
@@ -20,23 +14,60 @@ import {
 } from "./pages";
 
 import { useDispatch, useSelector } from "react-redux";
-import { userThunks } from "./store/actions";
 import { useEffect } from "react";
 import TestingSocket from "./pages/TestingSocket/TestingSocket";
 import { WebSocketConnection } from "./components";
+import { userThunks, gameThunks } from "./store/actions";
+import toast, { Toaster } from "react-hot-toast";
+import classes from "./toast.module.css";
 
 function App() {
   const loggedUser = useSelector((state: any) => state.auth.user);
+  const toastShow = useSelector((state: any) => state.toast.toastShow);
+  const inQueue = useSelector((state: any) => state.game.inQueue);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getProfile = async () => {
       await dispatch(userThunks.getProfile() as any);
+      await dispatch(gameThunks.checkQueue() as any);
     };
     if (!loggedUser) {
       getProfile();
     }
   }, [dispatch, loggedUser]);
+
+  console.log("QUEUE", inQueue);
+
+  useEffect(() => {
+    const getToast = () =>
+      toast.custom(
+        (t) => (
+          <div className={classes.toast_testing}>
+            <div className={classes.top}>
+              <i className="pi pi-spin pi-spinner"></i>
+              <span>Finding opponent...</span>
+            </div>
+            <div
+              className={classes.cancel_btn}
+              onClick={() => {
+                dispatch(gameThunks.leaveQueue() as any);
+                toast.dismiss(t.id);
+              }}
+            >
+              Cancel
+            </div>
+          </div>
+        ),
+        {
+          duration: Infinity,
+          position: "bottom-right",
+        }
+      );
+    if (toastShow || inQueue) {
+      getToast();
+    }
+  }, [dispatch, inQueue, toastShow]);
 
   if (!loggedUser && localStorage.getItem("token")) {
     return <div>Loading...</div>;
@@ -45,6 +76,7 @@ function App() {
   return (
     <BrowserRouter>
       <WebSocketConnection />
+      <Toaster />
       <Routes>
         <Route
           path="/"

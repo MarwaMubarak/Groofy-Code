@@ -1,8 +1,7 @@
-@use "../../../shared/styles/colors" as *;
-@use "../../../shared/styles/mixins" as *;
-
 .toast_testing {
-  @include center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   background-color: #eee;
   border-radius: 6px;
@@ -15,14 +14,10 @@
   &.exit {
     animation: hide-animation 0.5s ease-in-out forwards;
   }
-  // &:not(.exit) {
-  //   animation: show-animation 0.5s ease-in-out;
-  // }
-  // &.exit {
-  //   animation: show-animation 0.5s ease-in-out reverse;
-  // }
   .top {
-    @include center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     height: 78%;
     i {
@@ -33,15 +28,17 @@
     }
   }
   .cancel_btn {
-    @include center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 22%;
-    border-top: 1px solid $redColor;
+    border-top: 1px solid #f55353;
     width: 100%;
-    color: $redColor;
+    color: #f55353;
     cursor: pointer;
     transition: 0.3s;
     &:hover {
-      background-color: $redColor;
+      background-color: #f55353;
       color: white;
     }
   }

@@ -9,6 +9,7 @@ const TestingSocket = () => {
   const [messages, setMessages] = useState<any>([]);
   const stompClient = useSelector((state: any) => state.socket.stompClient);
   const loggedUser = useSelector((state: any) => state.auth.user);
+  const [waitingPopup, setWaitingPopup] = useState(false);
   // useEffect(() => {
   //   const socket = new SockJS("http://localhost:8080/socket");
   //   const client = Stomp.over(socket);
@@ -52,10 +53,27 @@ const TestingSocket = () => {
 
   const getToast = () =>
     toast.custom(
-      <div className={classes.toast_testing}>
-        <img src="./Assets/Images/Hazem Adel.jpg" alt="ProfilePicture" />
-        <span>Hello</span>
-      </div>
+      (t) => (
+        <div className={classes.toast_testing}>
+          <div className={classes.top}>
+            <i className="pi pi-spin pi-spinner"></i>
+            <span>Finding opponent...</span>
+          </div>
+          <div
+            className={classes.cancel_btn}
+            onClick={() => {
+              setWaitingPopup(false);
+              toast.dismiss(t.id);
+            }}
+          >
+            Cancel
+          </div>
+        </div>
+      ),
+      {
+        duration: Infinity,
+        position: "top-right",
+      }
     );
 
   const getToast2 = () => toast.success("Hello");
@@ -67,10 +85,21 @@ const TestingSocket = () => {
       </button>
       <br />
       <br />
-      <button onClick={getToast}>Toast 1</button>
+      <button
+        onClick={() => {
+          if (!waitingPopup) {
+            setWaitingPopup(true);
+            getToast();
+          }
+        }}
+      >
+        Toast 1
+      </button>
       <br />
       <br />
       <button onClick={getToast2}>Toast 2</button>
+      <br />
+      <br />
       <Toaster />
     </div>
   );

@@ -3,6 +3,7 @@ import { SubmissionProps } from "../../shared/types";
 import { gameActions } from "../slices/game-slice";
 import { submissionActions } from "../slices/submission-slice";
 import { authActions } from "../slices/auth-slice";
+import { toastActions } from "../slices/toast-slice";
 
 const getAllUserGames = (page: number) => {
   return async (dispatch: any) => {
@@ -153,6 +154,43 @@ const leaveGame = (gameId: number) => {
   };
 };
 
+const checkQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get("/game/user-queue", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("RESPONSE", response.data);
+        dispatch(gameActions.setInQueue("YES"));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const leaveQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await reqInstance.post("/game/leaveRankedQueue", null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(toastActions.setToastShow(false));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
 const gameThunks = {
   getAllUserGames,
   getCurrentGame,
@@ -161,6 +199,8 @@ const gameThunks = {
   updateGroofyGame,
   submitCode,
   leaveGame,
+  checkQueue,
+  leaveQueue,
 };
 
 export default gameThunks;

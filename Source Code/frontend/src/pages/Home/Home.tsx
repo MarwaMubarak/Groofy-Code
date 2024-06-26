@@ -7,7 +7,7 @@ import {
   PostsContainer,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
-import { gameThunks } from "../../store/actions";
+import { gameThunks, toastThunks } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import classes from "./scss/home.module.css";
@@ -62,10 +62,7 @@ const Home = () => {
                           navigate(`/game/${res.gameId}`);
                         } else {
                           console.log("Waiting for opponent to join");
-                          return hotToast.success(
-                            "Waiting for opponent to join...",
-                            { position: "top-right" }
-                          );
+                          dispatch(toastThunks.changeToastShow(true) as any);
                         }
                       })
                       .catch((err: any) => {});
@@ -122,10 +119,7 @@ const Home = () => {
                           navigate(`/game/${res.gameId}`);
                         } else {
                           console.log("Waiting for opponent to join");
-                          return hotToast.success(
-                            "Waiting for opponent to join...",
-                            { position: "top-right" }
-                          );
+                          dispatch(toastThunks.changeToastShow(true) as any);
                         }
                       })
                       .catch((err: any) => {});

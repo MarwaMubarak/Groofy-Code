@@ -11,6 +11,7 @@ const initialState = {
   startTime: null,
   endTime: null,
   isLoading: false,
+  inQueue: false,
   players1Ids: [],
   players2Ids: [],
   responseStatus: null,
@@ -51,6 +52,9 @@ const gameSlice = createSlice({
     },
     setGameID(state, action) {
       state.gameID = action.payload;
+    },
+    setInQueue(state, action) {
+      state.inQueue = action.payload;
     },
   },
 });
