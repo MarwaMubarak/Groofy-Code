@@ -4,27 +4,53 @@
   align-items: center;
   flex-direction: column;
   background-color: #eee;
-  border-radius: 6px;
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 300px;
   overflow: hidden;
+  border: #f55353 4px solid;
+  background-image: url("/public/Assets/Images/background.jpg");
+  background-size: cover;
   &:not(.exit) {
     animation: show-animation 0.5s ease-in-out forwards;
   }
   &.exit {
     animation: hide-animation 0.5s ease-in-out forwards;
   }
+
+  .toast_header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    background-color: #f55353;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%);
+    padding: 15px 45px;
+  }
   .top {
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 78%;
-    i {
-      font-size: 30px;
-    }
-    span {
-      margin-top: 20px;
+    .top_title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      i {
+        font-size: 24px;
+        color: #f55353;
+        margin-right: 10px;
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: bold;
+        font-style: italic;
+      }
     }
   }
   .cancel_btn {
@@ -37,9 +63,11 @@
     color: #f55353;
     cursor: pointer;
     transition: 0.3s;
+    font-weight: bold;
+    color: white;
+
     &:hover {
       background-color: #f55353;
-      color: white;
     }
   }
 }
