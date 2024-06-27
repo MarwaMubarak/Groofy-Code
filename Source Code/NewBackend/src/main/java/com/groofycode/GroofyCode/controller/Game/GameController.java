@@ -66,7 +66,7 @@ public class GameController {
 
 
     @PostMapping("/ranked")
-    public ResponseEntity<Object> findRankedMatch() {
+    public ResponseEntity<Object> findRankedMatch() throws Exception {
         ResponseEntity<Object> match = gameService.findRankedMatch();
         if (match != null) {
             return match;

@@ -78,6 +78,16 @@ const TestingSocket = () => {
 
   const getToast2 = () => toast.success("Hello");
 
+  const getToast3 = () =>
+    toast.custom((t) => (
+      <button
+        onClick={() => toast.dismiss(t.id)}
+        className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        Close
+      </button>
+    ));
+
   return (
     <div>
       <button onClick={() => sendMessage(loggedUser.clanName, "Hello")}>
@@ -100,6 +110,8 @@ const TestingSocket = () => {
       <button onClick={getToast2}>Toast 2</button>
       <br />
       <br />
+      <button onClick={getToast3}>Toast 3</button>
+
       <Toaster />
     </div>
   );

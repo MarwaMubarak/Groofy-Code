@@ -44,6 +44,7 @@ function App() {
 
   const [message, setMessage] = useState(getRandomMessage());
   const [toastId, setToastId] = useState<string | null>(null);
+  const [exit, setExit] = useState(false);
 
   useEffect(() => {
     const getProfile = async () => {
@@ -64,35 +65,18 @@ function App() {
 
     if (toastShow || inQueue) {
       if (!toastId) {
-        const id = toast.custom(
-          (t) => (
-            <div className={classes.toast_testing}>
-              <div className={classes.top}>
-                <i className="pi pi-spin pi-spinner"></i>
-                <span>{message}</span>
-              </div>
-              <div
-                className={classes.cancel_btn}
-                onClick={() => {
-                  dispatch(gameThunks.leaveQueue() as any);
-                  toast.dismiss(t.id);
-                  setToastId(null);
-                }}
-              >
-                Cancel
-              </div>
-            </div>
-          ),
-          {
-            duration: Infinity,
-            position: "bottom-right",
-          }
-        );
+        const id = toast.loading("QUEUEING", {
+          position: "bottom-right",
+          duration: Infinity,
+        });
         setToastId(id);
+        setExit(false);
       } else {
         toast.custom(
           (t) => (
-            <div className={classes.toast_testing}>
+            <div
+              className={`${classes.toast_testing} ${exit ? classes.exit : ""}`}
+            >
               <div className={classes.toast_header}>
                 <h3>QUEUEING</h3>
               </div>
@@ -106,9 +90,11 @@ function App() {
               <div
                 className={classes.cancel_btn}
                 onClick={() => {
+                  setTimeout(() => {
+                    toast.remove(t.id);
+                  }, 1000);
                   dispatch(gameThunks.leaveQueue() as any);
-                  toast.dismiss(t.id);
-                  setToastId(null);
+                  setExit(true);
                 }}
               >
                 CANCEL
@@ -123,12 +109,14 @@ function App() {
         );
       }
     } else if (toastId) {
-      toast.dismiss(toastId);
+      setTimeout(() => {
+        toast.remove(toastId);
+      }, 1000);
       setToastId(null);
     }
 
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [dispatch, inQueue, message, toastShow, toastId]);
+  }, [dispatch, inQueue, message, toastShow, toastId, exit]);
 
   if (!loggedUser && localStorage.getItem("token")) {
     return <div>Loading...</div>;
@@ -189,6 +177,7 @@ function App() {
           element={loggedUser ? <Messaging /> : <Navigate to="/login" />}
         />
         <Route path="/testingsocket" element={<TestingSocket />} />
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

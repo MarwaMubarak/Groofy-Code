@@ -165,8 +165,7 @@ const checkQueue = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("RESPONSE", response.data);
-        dispatch(gameActions.setInQueue("YES"));
+        dispatch(gameActions.setInQueue(response.data.message === "YES"));
       } catch (error: any) {
         dispatch(gameActions.setResponse(error.response.data));
       }
@@ -185,10 +184,18 @@ const leaveQueue = () => {
           },
         });
         dispatch(toastActions.setToastShow(false));
+        dispatch(gameActions.setInQueue(false));
       } catch (error: any) {
         dispatch(gameActions.setResponse(error.response.data));
       }
     }
+  };
+};
+
+const dismissToast = () => {
+  return (dispatch: any) => {
+    dispatch(toastActions.setToastShow(false));
+    dispatch(gameActions.setInQueue(false));
   };
 };
 
@@ -202,6 +209,7 @@ const gameThunks = {
   leaveGame,
   checkQueue,
   leaveQueue,
+  dismissToast,
 };
 
 export default gameThunks;

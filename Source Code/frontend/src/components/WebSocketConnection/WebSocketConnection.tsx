@@ -52,6 +52,7 @@ const WebSocketConnection = () => {
         console.log("Recieved game message: ", msg);
         if (msg.body.id !== null) {
           dispatch(gameThunks.updateGroofyGame(msg.body.id) as any);
+          dispatch(gameThunks.dismissToast() as any);
           navigate(`/game/${msg.body.id}`);
         }
       };

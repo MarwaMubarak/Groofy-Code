@@ -2,6 +2,7 @@ package com.groofycode.GroofyCode.service.Game;
 
 
 import com.groofycode.GroofyCode.dto.Game.*;
+import com.groofycode.GroofyCode.dto.MatchPlayerDTO;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
 import com.groofycode.GroofyCode.dto.PlayerDTO;
 import com.groofycode.GroofyCode.dto.ProblemDTO;
@@ -105,49 +106,14 @@ public class GameService {
         }
     }
 
-    public ResponseEntity<Object> findRankedMatch() {
-
+    public ResponseEntity<Object> findRankedMatch() throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel player1 = userRepository.findByUsername(userInfo.getUsername());
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+        PlayerDTO playerDTO = modelMapper.map(player, PlayerDTO.class);
+        int expectedRating = problemPicker.expectedRatingPlayer(playerDTO);
+        MatchPlayerDTO matchPlayerDTO = new MatchPlayerDTO(player.getId(), expectedRating, expectedRating);
+        playerSelection.addPlayerToQueue(matchPlayerDTO);
 
-        UserModel opponent = playerSelection.findFirstPlayerAndRemove(player1.getId());
-        if (opponent != null) {
-            try {
-                opponent = userRepository.findById(opponent.getId()).orElse(null);
-                List<UserModel> players1 = List.of(player1);
-                List<UserModel> players2 = List.of(opponent);
-
-                PlayerDTO playerDTO = modelMapper.map(player1, PlayerDTO.class);
-                PlayerDTO opponentDTO = modelMapper.map(opponent, PlayerDTO.class);
-
-                List<ProblemDTO> solvedProblemsPlayer = player1.getSolvedProblems().stream().map(
-                        progProblem -> modelMapper.map(progProblem, ProblemDTO.class)).toList();
-                List<ProblemDTO> solvedProblemsOpponent = opponent.getSolvedProblems().stream().map(
-                        progProblem -> modelMapper.map(progProblem, ProblemDTO.class)).toList();
-
-                String problemUrl = (String) problemPicker.pickProblem(playerDTO, solvedProblemsPlayer, opponentDTO, solvedProblemsOpponent).getBody();
-
-                RankedMatch rankedMatch = new RankedMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusMinutes(60), 60.0);
-
-                playerSelection.removePlayer(player1);  // Remove the user from the waiting list
-                rankedMatch = gameRepository.save(rankedMatch);
-
-                RankedMatchDTO rankedMatchDTO = new RankedMatchDTO(rankedMatch, null);
-                player1.setExistingGameId(rankedMatch.getId());
-                opponent.setExistingGameId(rankedMatch.getId());
-                userRepository.save(player1);
-                userRepository.save(opponent);
-
-//                matchScheduler.scheduleRankCalculation(rankedMatch);
-
-                messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/games", ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
-                return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", rankedMatchDTO));
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error creating match", e.getMessage()));
-            }
-        }
-
-        playerSelection.addPlayer(player1); // Add the user to the waiting list
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
     }
 
@@ -196,7 +162,7 @@ public class GameService {
             UserModel player = userRepository.findByUsername(userInfo.getUsername());
 
             if (playerSelection.isInQueue(player.getId())) {
-                playerSelection.removePlayer(player);
+                playerSelection.leaveQueue(player.getId());
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Player removed from queue successfully", null));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player not in queue", null));
