@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.model.Clan;
 
+import com.groofycode.GroofyCode.model.Chat.Chat;
 import com.groofycode.GroofyCode.model.Chat.Message;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,6 +34,10 @@ public class ClanModel {
 
 //    @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    private List<Message> messages;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_id", referencedColumnName = "id")
+    private Chat chat;
 
     @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ClanMember> members;

@@ -31,6 +31,8 @@ public class ClanDTO {
 
     private Integer requestStatus;
 
+    private Long chatID;
+
     private List<ClanMemberDTO> members;
 
     private List<BadgeModel> badges;
