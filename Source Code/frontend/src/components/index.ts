@@ -44,6 +44,7 @@ import Friends from "./Profile/Friends/Friends";
 import Friend from "./Profile/Friends/Friend/Friend";
 import ProfileImage from "./ProfileImage/ProfileImage";
 import WebSocketConnection from "./WebSocketConnection/WebSocketConnection";
+import MatchPopup from "./MatchPopup/MatchPopup";
 
 export {
   MatchHeader,
@@ -92,4 +93,5 @@ export {
   Friend,
   ProfileImage,
   WebSocketConnection,
+  MatchPopup,
 };

@@ -1,0 +1,82 @@
+.match_overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(48, 48, 49, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.match_overlay .match_popup {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 12px;
+  width: 500px;
+  height: 300px;
+  animation: show-animation 0.5s ease-in-out forwards;
+}
+.match_overlay .match_popup .match_status {
+  text-align: center;
+}
+.match_overlay .match_popup .match_result {
+  margin: 12px 0 0;
+  text-align: center;
+}
+.match_overlay .match_popup .result_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.match_overlay .match_popup .result_box img {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+.match_overlay .match_popup .result_box .result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.match_overlay .match_popup .result_box .result i {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.match_overlay .match_popup .result_box .result h5 {
+  font-size: 16px;
+}
+.match_overlay .match_popup .result_box .result h5.win {
+  color: #18cf08;
+}
+.match_overlay .match_popup .match_stats {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+.match_overlay .match_popup .match_stats thead {
+  font-weight: bold;
+}
+.match_overlay .match_popup .btn_box {
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+}
+.match_overlay .match_popup .btn_box .match_btn {
+  padding: 10px 15px;
+  background-color: #00aaff;
+  color: #fff;
+  border-radius: 12px;
+}
+
+@keyframes show-animation {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}/*# sourceMappingURL=match-popup.module.css.map */

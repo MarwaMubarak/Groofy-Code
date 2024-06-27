@@ -1,0 +1,79 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.match_overlay {
+  @include center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($mainColorHover2, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  .match_popup {
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 12px;
+    width: 500px;
+    height: 300px;
+    animation: show-animation 0.5s ease-in-out forwards;
+    .match_status {
+      text-align: center;
+    }
+    .match_result {
+      margin: 12px 0 0;
+      text-align: center;
+    }
+    .result_box {
+      @include center;
+      img {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+      }
+      .result {
+        @include center;
+        i {
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+        h5 {
+          font-size: 16px;
+          &.win {
+            color: $greenColor;
+          }
+        }
+      }
+    }
+    .match_stats {
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+      thead {
+        font-weight: bold;
+      }
+    }
+    .btn_box {
+      width: 100%;
+      text-align: center;
+      margin-top: 40px;
+      .match_btn {
+        padding: 10px 15px;
+        background-color: $blueColor;
+        color: #fff;
+        border-radius: 12px;
+      }
+    }
+  }
+}
+
+@keyframes show-animation {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import classes from "./scss/testing-socket.module.css";
+import { createPortal } from "react-dom";
+import { MatchPopup } from "../../components";
 // import { Stomp } from "@stomp/stompjs";
 // import SockJS from "sockjs-client";
 
@@ -10,6 +12,7 @@ const TestingSocket = () => {
   const stompClient = useSelector((state: any) => state.socket.stompClient);
   const loggedUser = useSelector((state: any) => state.auth.user);
   const [waitingPopup, setWaitingPopup] = useState(false);
+  const [testPopUp, setTestPopup] = useState(false);
   // useEffect(() => {
   //   const socket = new SockJS("http://localhost:8080/socket");
   //   const client = Stomp.over(socket);
@@ -111,7 +114,11 @@ const TestingSocket = () => {
       <br />
       <br />
       <button onClick={getToast3}>Toast 3</button>
-
+      <br />
+      <br />
+      <button onClick={() => setTestPopup(true)}>Show popup</button>
+      {testPopUp &&
+        createPortal(<MatchPopup />, document.getElementById("root") as any)}
       <Toaster />
     </div>
   );
