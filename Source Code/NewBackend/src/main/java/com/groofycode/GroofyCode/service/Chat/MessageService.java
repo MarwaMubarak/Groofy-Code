@@ -1,6 +1,6 @@
-package com.groofycode.GroofyCode.service;
+package com.groofycode.GroofyCode.service.Chat;
 
-import com.groofycode.GroofyCode.dto.MessageDTO;
+import com.groofycode.GroofyCode.dto.Chat.MessageDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Chat.Chat;
 import com.groofycode.GroofyCode.model.Chat.Message;

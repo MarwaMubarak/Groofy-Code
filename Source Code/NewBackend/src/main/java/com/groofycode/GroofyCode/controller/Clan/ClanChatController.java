@@ -1,6 +1,6 @@
 package com.groofycode.GroofyCode.controller.Clan;
 
-import com.groofycode.GroofyCode.dto.MessageDTO;
+import com.groofycode.GroofyCode.dto.Chat.MessageDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;

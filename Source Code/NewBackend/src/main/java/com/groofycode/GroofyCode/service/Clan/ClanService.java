@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.service;
+package com.groofycode.GroofyCode.service.Clan;
 
 
 import com.groofycode.GroofyCode.dto.Clan.*;
@@ -13,6 +13,7 @@ import com.groofycode.GroofyCode.repository.Clan.ClanMembersRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRequestRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.service.Chat.ChatService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

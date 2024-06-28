@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.groofycode.GroofyCode.service.ClanService;
+import com.groofycode.GroofyCode.service.Clan.ClanService;
 
 import javax.annotation.Nullable;
 @SecurityRequirement(name = "bearerAuth")

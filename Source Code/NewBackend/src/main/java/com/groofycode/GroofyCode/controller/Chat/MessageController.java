@@ -1,7 +1,6 @@
-package com.groofycode.GroofyCode.controller;
+package com.groofycode.GroofyCode.controller.Chat;
 
-import com.groofycode.GroofyCode.dto.MessageDTO;
-import com.groofycode.GroofyCode.service.MessageService;
+import com.groofycode.GroofyCode.service.Chat.MessageService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,10 @@
-package com.groofycode.GroofyCode.dto;
+package com.groofycode.GroofyCode.dto.Post;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
 @Setter
 @Getter

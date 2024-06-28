@@ -2,16 +2,14 @@ package com.groofycode.GroofyCode.service.Game;
 
 import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
 import com.groofycode.GroofyCode.dto.MatchPlayerDTO;
-import com.groofycode.GroofyCode.dto.MatchPlayersDTO;
-import com.groofycode.GroofyCode.dto.PlayerDTO;
-import com.groofycode.GroofyCode.dto.ProblemDTO;
+import com.groofycode.GroofyCode.dto.Game.PlayerDTO;
+import com.groofycode.GroofyCode.dto.Game.ProblemDTO;
 import com.groofycode.GroofyCode.model.Game.RankedMatch;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Game.GameRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.ProblemPicker;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
-import lombok.Getter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

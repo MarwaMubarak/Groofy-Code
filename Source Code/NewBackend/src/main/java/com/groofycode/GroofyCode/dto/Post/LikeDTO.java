@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.dto;
+package com.groofycode.GroofyCode.dto.Post;
 
 import lombok.Getter;
 import lombok.Setter;

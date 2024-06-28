@@ -1,4 +1,4 @@
-package com.groofycode.GroofyCode.dto;
+package com.groofycode.GroofyCode.dto.Game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

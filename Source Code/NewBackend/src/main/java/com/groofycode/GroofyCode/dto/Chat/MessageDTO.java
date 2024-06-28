@@ -1,10 +1,6 @@
-package com.groofycode.GroofyCode.dto;
+package com.groofycode.GroofyCode.dto.Chat;
 
-import com.groofycode.GroofyCode.model.Chat.Chat;
-import com.groofycode.GroofyCode.model.User.UserModel;
-import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 

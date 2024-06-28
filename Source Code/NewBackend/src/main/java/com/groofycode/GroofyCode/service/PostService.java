@@ -1,7 +1,7 @@
 package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.Notification.LikeNotificationDTO;
-import com.groofycode.GroofyCode.dto.PostDTO;
+import com.groofycode.GroofyCode.dto.Post.PostDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Notification.LikeNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationModel;

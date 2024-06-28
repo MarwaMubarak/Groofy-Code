@@ -1,16 +1,12 @@
 package com.groofycode.GroofyCode.controller;
 
-import com.groofycode.GroofyCode.dto.PlayerDTO;
-import com.groofycode.GroofyCode.dto.ProblemDTO;
-import com.groofycode.GroofyCode.dto.ProblemPickerDTO;
+import com.groofycode.GroofyCode.dto.Game.ProblemPickerDTO;
 import com.groofycode.GroofyCode.service.ProblemPicker;
 import com.groofycode.GroofyCode.utilities.ProblemFetcher;
 import com.groofycode.GroofyCode.utilities.ProblemParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 @RestController
 public class ProblemController {
