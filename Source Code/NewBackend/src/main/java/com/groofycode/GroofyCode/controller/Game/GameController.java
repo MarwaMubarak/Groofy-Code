@@ -2,15 +2,7 @@ package com.groofycode.GroofyCode.controller.Game;
 
 
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
-import com.groofycode.GroofyCode.dto.Game.RankedMatchDTO;
-import com.groofycode.GroofyCode.dto.Game.TeamMatchDTO;
-import com.groofycode.GroofyCode.dto.ProblemPickerDTO;
-import com.groofycode.GroofyCode.model.Game.CasualMatch;
-import com.groofycode.GroofyCode.model.Game.Game;
-import com.groofycode.GroofyCode.model.Game.RankedMatch;
-import com.groofycode.GroofyCode.model.Game.SoloMatch;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
-import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.service.Game.GameService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
@@ -19,13 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @SecurityRequirement(name = "bearerAuth")
 @RestController

@@ -1,21 +1,16 @@
 package com.groofycode.GroofyCode.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.groofycode.GroofyCode.dto.PlayerDTO;
-import com.groofycode.GroofyCode.dto.ProblemDTO;
-import com.groofycode.GroofyCode.model.Game.ProgProblem;
+import com.groofycode.GroofyCode.dto.Game.PlayerDTO;
+import com.groofycode.GroofyCode.dto.Game.ProblemDTO;
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 

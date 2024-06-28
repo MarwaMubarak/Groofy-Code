@@ -1,6 +1,5 @@
 package com.groofycode.GroofyCode.dto.Chat;
 
-import com.groofycode.GroofyCode.dto.MessageDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
