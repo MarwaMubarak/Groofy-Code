@@ -136,6 +136,7 @@ const GroofyHeader = () => {
               <NotifyBox
                 key={idx}
                 nuImg={notify.img}
+                ncolor={notify.color}
                 nusn={notify.sender}
                 nbody={notify.body}
                 ntime={FormatDate(notify.createdAt) ?? "Some time ago"}

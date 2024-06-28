@@ -57,6 +57,7 @@ public class NotificationService {
                 NotificationDTO notificationDTO = modelMapper.map(notification, NotificationDTO.class);
                 notificationDTO.setSender(notification.getSender().getUsername());
                 notificationDTO.setImg(notification.getSender().getPhotoUrl());
+                notificationDTO.setColor(notification.getSender().getAccountColor());
                 return notificationDTO;
             }).toList();
             return ResponseEntity.ok(ResponseUtils.successfulRes("Notifications retrieved successfully", notificationsDTOS));

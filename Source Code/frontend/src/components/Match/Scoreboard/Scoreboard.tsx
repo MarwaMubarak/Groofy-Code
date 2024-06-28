@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import classes from "./scss/scoreboard.module.css";
+import ProfileImage from "../../ProfileImage/ProfileImage";
 
 const Scoreboard = () => {
   const loggedUser = useSelector((state: any) => state.auth.user);
@@ -15,7 +16,18 @@ const Scoreboard = () => {
           <div className={classes.info}>
             <div className={classes.usn}>{loggedUser.username}</div>
             <div className={classes.img}>
-              <img src={loggedUser.photoUrl} alt="ProfilePhoto" />
+              <ProfileImage
+                photoUrl={loggedUser.photoUrl}
+                username={loggedUser.username}
+                style={{
+                  cursor: "pointer",
+                  backgroundColor: loggedUser.accountColor,
+                  width: "45px",
+                  height: "45px",
+                  fontSize: "20px",
+                }}
+                canClick={false}
+              />
             </div>
           </div>
           {/* <div className={classes.pr_st + " " + classes.first}>

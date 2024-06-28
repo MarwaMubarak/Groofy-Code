@@ -29,6 +29,7 @@ const CodingSection = () => {
   const [currentCode, setCurrentCode] = useState(languages[currentLang].val);
   const dispatch = useDispatch();
   const isSubmitting = useSelector((state: any) => state.submission.isLoading);
+  const submitState = useSelector((state: any) => state.submission.submitState);
   const toast = useRef<Toast>(null);
   const problemURL = useSelector((state: any) => state.game.problemUrl);
   const gameID = useSelector((state: any) => state.game.gameID);
@@ -75,24 +76,26 @@ const CodingSection = () => {
           />
         </div>
         <div className={classes.compiling_btns}>
-          <GBtn
+          {/* <GBtn
             btnText="Run Testcases"
             icnSrc="/Assets/SVG/run-testcases.svg"
             clickEvent={() => {}}
-          />
+          /> */}
           <GBtn
-            btnText="Submit"
+            btnText={submitState !== "" ? submitState : "Submit"}
             icnSrc="/Assets/SVG/submit.svg"
             btnState={isSubmitting}
             clickEvent={() => {
               submitCode()
                 .then((res: any) => {
-                  toast.current?.show({
-                    severity: res.body === "Accepted" ? "success" : "error",
-                    summary: res.status,
-                    detail: res.body,
-                    life: 3000,
-                  });
+                  if (res.message !== "Match") {
+                    toast.current?.show({
+                      severity: res.body === "Accepted" ? "success" : "error",
+                      summary: res.status,
+                      detail: res.body,
+                      life: 3000,
+                    });
+                  }
                 })
                 .catch((err: any) => {
                   toast.current?.show({
@@ -106,7 +109,7 @@ const CodingSection = () => {
           />
         </div>
       </div>
-      <div className={classes.op_sec}>
+      {/* <div className={classes.op_sec}>
         <span className={classes.op_title}>Output:</span>
         <div className={classes.op_info}>
           <div className={classes.op_box}>
@@ -127,7 +130,7 @@ const CodingSection = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -61,6 +61,7 @@ export interface GroofyInputProps {
 export interface NotifyBoxProps {
   nuImg: string;
   nusn: string;
+  ncolor: string;
   nbody: string;
   ntime: string;
   nType: string;

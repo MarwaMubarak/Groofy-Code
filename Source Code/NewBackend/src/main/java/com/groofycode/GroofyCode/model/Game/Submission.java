@@ -36,10 +36,11 @@ public class Submission {
     public Submission() {
     }
 
-    public Submission(Game game, UserModel user, String code, LocalDateTime submissionTime, Integer result) {
+    public Submission(Game game, UserModel user, String code, String language ,LocalDateTime submissionTime, Integer result) {
         this.game = game;
         this.user = user;
         this.code = code;
+        this.language = language;
         this.submissionTime = submissionTime;
         this.result = result;
     }

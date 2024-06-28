@@ -1,3 +1,4 @@
+import { ProfileImage } from "../..";
 import { NotifyBoxProps } from "../../../shared/types";
 import classes from "./scss/notifybox.module.css";
 
@@ -6,7 +7,18 @@ const NotifyBox = (props: NotifyBoxProps) => {
     <div className={classes.notify_box}>
       <div className={classes.notify_info}>
         <div className={classes.notify_img}>
-          <img src={props.nuImg} alt="user" />
+          <ProfileImage
+            photoUrl={props.nuImg}
+            username={props.nusn}
+            style={{
+              cursor: "pointer",
+              backgroundColor: props.ncolor,
+              width: "45px",
+              height: "45px",
+              fontSize: "20px",
+            }}
+            canClick={false}
+          />
         </div>
         <div className={classes.notify_user}>
           <span>

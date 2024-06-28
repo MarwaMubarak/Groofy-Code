@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { gameThunks } from "../../store/actions";
+import { gameThunks, popupThunks } from "../../store/actions";
 import { notifyThunks, socketThunks } from "../../store/actions";
 
 const WebSocketConnection = () => {
@@ -29,6 +29,13 @@ const WebSocketConnection = () => {
             onGameMessage,
             { Authorization: `Bearer ${localStorage.getItem("token")}` }
           );
+          client.subscribe(
+            `/userTCP/${loggedUser.username}/code`,
+            onCodeMessage,
+            {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+          );
           if (loggedUser.clanName !== null) {
             client.subscribe(
               `/clanTCP/${loggedUser.clanName}/chat`,
@@ -50,11 +57,18 @@ const WebSocketConnection = () => {
       const onGameMessage = (message: any) => {
         const msg = JSON.parse(message.body);
         console.log("Recieved game message: ", msg);
-        if (msg.body.id !== null) {
+        if (msg.body && msg.body.id !== null) {
           dispatch(gameThunks.updateGroofyGame(msg.body.id) as any);
           dispatch(gameThunks.dismissToast() as any);
           navigate(`/game/${msg.body.id}`);
+        } else {
+          console.log("Game id is null");
+          dispatch(popupThunks.setPopUpState(true, msg) as any);
         }
+      };
+
+      const onCodeMessage = (message: any) => {
+        dispatch(gameThunks.changeSubmitState(message.body) as any);
       };
 
       dispatch(socketThunks.changeStompClient(client) as any);

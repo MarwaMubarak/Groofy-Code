@@ -3,12 +3,39 @@ import classes from "./scss/match-header.module.css";
 import { gameThunks } from "../../../store/actions";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ProfileImage } from "../..";
 const MatchHeader = () => {
   const loggedUser = useSelector((state: any) => state.auth.user);
+  const gameEndTime = useSelector((state: any) => state.game.endTime);
+  const [timeLeft, setTimeLeft] = useState("");
+  // const [timeLeft, setTimeLeft] = useState(
+  //   Date.now() - gameStartTime.getTime()
+  // );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
+
+  useEffect(() => {
+    setInterval(() => {
+      const now = Date.now();
+      const timeLeft = Math.max(new Date(gameEndTime).getTime() - now, 0);
+
+      const minutes = Math.floor(timeLeft / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      setTimeLeft(`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`);
+    }, 1000);
+  }, [gameEndTime]);
+
+  // console.log(
+  //   `Time Left: ,
+  //   ${Math.floor(
+  //     (new Date(gameEndTime).getTime() - Date.now()) / (1000 * 60)
+  //   )}:${Math.floor((new Date(gameEndTime).getTime() - Date.now()) / 1000)}`
+  // );
+  // console.log("Time Now: ", Date.now());
+  // console.log("Time Left: ", )
+  // console.log("Time Left: ", timeLeft);
 
   const leaveGame = async () => {
     return await dispatch(
@@ -53,18 +80,23 @@ const MatchHeader = () => {
         </button>
       </div>
       <div className={classes.m_dur}>
-        <span>19:36</span> left
+        <span>{timeLeft}</span> left
       </div>
       <div className={classes.user_area}>
         <div className={classes.info}>
           <span className={classes.h_usn}>{loggedUser.username}</span>
-          <div className={classes.h_imgbox}>
-            <img
-              className={classes.pr_ph}
-              src={loggedUser.photoUrl}
-              alt="ProfilePhoto"
-            />
-          </div>
+          <ProfileImage
+            photoUrl={loggedUser.photoUrl}
+            username={loggedUser.username}
+            style={{
+              cursor: "pointer",
+              backgroundColor: loggedUser.accountColor,
+              width: "45px",
+              height: "45px",
+              fontSize: "20px",
+            }}
+            canClick={false}
+          />
         </div>
       </div>
     </div>

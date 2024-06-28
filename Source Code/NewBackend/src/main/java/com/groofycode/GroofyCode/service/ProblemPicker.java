@@ -18,11 +18,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProblemPicker {
     private Map<Integer, List<ProblemDTO>> problems;
+    private Map<String, ProblemDTO> problemsByUrl;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
     public ProblemPicker() {
         this.restTemplate = new RestTemplate();
+        this.problemsByUrl = new HashMap<>();
         this.objectMapper = new ObjectMapper();
         try {
             problems = processProblems("problems.csv");
@@ -34,6 +36,11 @@ public class ProblemPicker {
 
     private Map<Integer, List<ProblemDTO>> processProblems(String filePath) throws Exception {
         List<ProblemDTO> problems = readCsv(filePath);
+
+        problems.forEach(problem -> {
+            String url = "https://codeforces.com/contest/" + problem.getContestId() + "/problem/" + problem.getIndex();
+            problemsByUrl.put(url, problem);
+        });
 
         // Group by rating and sort by solved count in increasing order
         return problems.stream()
@@ -48,6 +55,10 @@ public class ProblemPicker {
                                 }
                         )
                 ));
+    }
+
+    public ProblemDTO getProblemByUrl(String url) {
+        return problemsByUrl.get(url);
     }
 
     private List<ProblemDTO> readCsv(String filePath) throws Exception {

@@ -14,6 +14,7 @@ import com.groofycode.GroofyCode.model.Team.TeamMember;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Game.GameRepository;
+import com.groofycode.GroofyCode.repository.Game.ProgProblemRepository;
 import com.groofycode.GroofyCode.repository.Game.SubmissionRepository;
 import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
@@ -33,6 +34,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -66,6 +68,8 @@ public class GameService {
 
     private final RatingSystemCalculator ratingSystemCalculator;
 
+    private final ProgProblemRepository progProblemRepository;
+
 
 //    private final MatchScheduler matchScheduler;
 
@@ -74,7 +78,7 @@ public class GameService {
                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
-                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator) {
+                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, ProgProblemRepository progProblemRepository) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -89,6 +93,7 @@ public class GameService {
         this.modelMapper = modelMapper;
         this.problemPicker = problemPicker;
         this.ratingSystemCalculator = ratingSystemCalculator;
+        this.progProblemRepository = progProblemRepository;
 //        this.matchScheduler = matchScheduler;
     }
 
@@ -274,18 +279,28 @@ public class GameService {
         notificationDTO.setCreatedAt(matchNotification.getCreatedAt());
         notificationDTO.setRead(matchNotification.isRead());
         notificationDTO.setId(matchNotification.getId());
+        notificationDTO.setColor(matchNotification.getSender().getAccountColor());
+
+        String gameType;
+        if (game instanceof RankedMatch) {
+            gameType = "Ranked";
+        } else if (game instanceof SoloMatch) {
+            gameType = "Solo";
+        } else {
+            gameType = "Casual";
+        }
 
         // Send notification to remaining players
         for (UserModel remainingPlayer : remainingPlayers) {
             remainingPlayer.setExistingGameId(null);
             userRepository.save(remainingPlayer);
-            List<Submission> submissions = submissionRepository.findByUserId(remainingPlayer.getId());
+            List<Submission> submissions = submissionRepository.findByUserId(remainingPlayer.getId(), gameId);
             List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
                 SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
                 subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
                 return subDTO;
             }).toList();
-            GameResultDTO gameResultDTO = new GameResultDTO("Cancelled", remainingPlayer.getUser_rating(), submissionDTOS);
+            GameResultDTO gameResultDTO = new GameResultDTO(gameType, "Cancelled", remainingPlayer.getUser_rating(), submissionDTOS);
 //            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
             messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/games", gameResultDTO);
         }
@@ -297,14 +312,14 @@ public class GameService {
             lp.setUser_rating(lp.getUser_rating() - 30);
             userRepository.save(lp);
 
-            List<Submission> submissions = submissionRepository.findByUserId(lp.getId());
+            List<Submission> submissions = submissionRepository.findByUserId(lp.getId(), gameId);
             List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
                 SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
                 subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
                 return subDTO;
             }).toList();
 
-            GameResultDTO gameResultDTO = new GameResultDTO("Cancelled", lp.getUser_rating(), submissionDTOS);
+            GameResultDTO gameResultDTO = new GameResultDTO(gameType, "Cancelled", lp.getUser_rating(), submissionDTOS);
             if (!lp.getId().equals(leavingPlayer.getId())) {
                 messagingTemplate.convertAndSendToUser(lp.getUsername(), "/games", gameResultDTO);
             } else {
@@ -345,7 +360,7 @@ public class GameService {
         Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
 
-        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
+        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
 
 
@@ -355,13 +370,24 @@ public class GameService {
             game.setEndTime(LocalDateTime.now());
             gameRepository.save(game);
 
-            List<Submission> submissions = submissionRepository.findByUserId(submittingPlayer.getId());
+            ProblemDTO problemDTO = problemPicker.getProblemByUrl(game.getProblemUrl());
+
+            ProgProblem progProblem = modelMapper.map(problemDTO, ProgProblem.class);
+            progProblem.setUser(submittingPlayer);
+            submittingPlayer.getSolvedProblems().add(progProblem);
+
+            submittingPlayer.setExistingGameId(null);
+            userRepository.save(submittingPlayer);
+
+            List<Submission> submissions = submissionRepository.findByUserId(submittingPlayer.getId(), game.getId());
             List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
                 SubmissionDTO submissionDTO = modelMapper.map(sub, SubmissionDTO.class);
+                Duration duration = Duration.between(game.getStartTime(), sub.getSubmissionTime());
+                submissionDTO.setSubmissionTime(duration.getSeconds() / 60 + " min");
                 submissionDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
                 return submissionDTO;
             }).toList();
-            GameResultDTO gameResultDTO = new GameResultDTO("You Won", submittingPlayer.getUser_rating(), submissionDTOS);
+            GameResultDTO gameResultDTO = new GameResultDTO("Solo", "You Won", submittingPlayer.getUser_rating(), submissionDTOS);
 
             messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/games", gameResultDTO);
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match", null));
@@ -411,7 +437,7 @@ public class GameService {
 
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // Default response, simulate the actual submission process
 
-        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
+        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
         if (codeForceResponse.equals("Accepted")) {
             // End the game and notify the remaining player that they lost
@@ -427,6 +453,15 @@ public class GameService {
                 int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'L');
                 submittingPlayers.get(0).setUser_rating(newPlayer1Rating);
                 remainingPlayers.get(0).setUser_rating(newPlayer2Rating);
+                submittingPlayers.get(0).setExistingGameId(null);
+                remainingPlayers.get(0).setExistingGameId(null);
+
+                ProblemDTO problemDTO = problemPicker.getProblemByUrl(game.getProblemUrl());
+
+                ProgProblem progProblem = modelMapper.map(problemDTO, ProgProblem.class);
+                progProblem.setUser(submittingPlayers.get(0));
+                submittingPlayers.get(0).getSolvedProblems().add(progProblem);
+
                 userRepository.save(submittingPlayers.get(0));
                 userRepository.save(remainingPlayers.get(0));
 
@@ -436,6 +471,8 @@ public class GameService {
 
                 submissions.forEach(sub -> {
                     SubmissionDTO submissionDTO = modelMapper.map(sub, SubmissionDTO.class);
+                    Duration duration = Duration.between(game.getStartTime(), sub.getSubmissionTime());
+                    submissionDTO.setSubmissionTime(duration.getSeconds() / 60 + " min");
                     submissionDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
 
                     if (sub.getUser().getId().equals(submittingPlayers.get(0).getId())) {
@@ -445,33 +482,37 @@ public class GameService {
                     }
                 });
 
-                GameResultDTO player1GameResult = new GameResultDTO("You Won", newPlayer1Rating, player1Submissions);
-                GameResultDTO player2GameResult = new GameResultDTO("You Lost", newPlayer2Rating, player2Submissions);
+                GameResultDTO player1GameResult = new GameResultDTO("Ranked", "You Won", newPlayer1Rating, player1Submissions);
+                GameResultDTO player2GameResult = new GameResultDTO("Ranked", "You Lost", newPlayer2Rating, player2Submissions);
 
                 messagingTemplate.convertAndSendToUser(submittingPlayers.get(0).getUsername(), "/games", player1GameResult);
                 messagingTemplate.convertAndSendToUser(remainingPlayers.get(0).getUsername(), "/games", player2GameResult);
 
             } else {
                 for (UserModel sP : submittingPlayers) {
-                    List<Submission> submissions = submissionRepository.findByUserId(sP.getId());
+                    sP.setExistingGameId(null);
+                    userRepository.save(sP);
+                    List<Submission> submissions = submissionRepository.findByUserId(sP.getId(), game.getId());
                     List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
                         SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
                         subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
                         return subDTO;
                     }).toList();
 
-                    GameResultDTO gameResultDTO = new GameResultDTO("You Won", sP.getUser_rating(), submissionDTOS);
+                    GameResultDTO gameResultDTO = new GameResultDTO("Team", "You Won", sP.getUser_rating(), submissionDTOS);
                     messagingTemplate.convertAndSendToUser(sP.getUsername(), "/games", gameResultDTO);
                 }
                 for (UserModel rP : remainingPlayers) {
-                    List<Submission> submissions = submissionRepository.findByUserId(rP.getId());
+                    rP.setExistingGameId(null);
+                    userRepository.save(rP);
+                    List<Submission> submissions = submissionRepository.findByUserId(rP.getId(), game.getId());
                     List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
                         SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
                         subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
                         return subDTO;
                     }).toList();
 
-                    GameResultDTO gameResultDTO = new GameResultDTO("You Lost", rP.getUser_rating(), submissionDTOS);
+                    GameResultDTO gameResultDTO = new GameResultDTO("Team", "You Lost", rP.getUser_rating(), submissionDTOS);
                     messagingTemplate.convertAndSendToUser(rP.getUsername(), "/games", gameResultDTO);
                 }
             }

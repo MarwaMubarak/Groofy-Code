@@ -5,6 +5,7 @@ const submissionInitialState = {
   message: "",
   submission: "",
   isLoading: false,
+  submitState: "",
 };
 
 const submissionSlice = createSlice({
@@ -18,6 +19,9 @@ const submissionSlice = createSlice({
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
+    },
+    setSubmitState(state, action) {
+      state.submitState = action.payload;
     },
   },
 });

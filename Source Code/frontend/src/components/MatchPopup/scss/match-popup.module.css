@@ -8,6 +8,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 9999;
 }
 .match_overlay .match_popup {
   padding: 15px;
