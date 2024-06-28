@@ -3,10 +3,12 @@ package com.groofycode.GroofyCode.service;
 
 import com.groofycode.GroofyCode.dto.Clan.*;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.Chat.Chat;
 import com.groofycode.GroofyCode.model.Clan.ClanModel;
 import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.ChatRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanMembersRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRequestRepository;
@@ -32,15 +34,19 @@ public class ClanService {
     private final ClanRequestRepository clanRequestRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final ChatRepository chatRepository;
+    private final ChatService chatService;
 
     @Autowired
     public ClanService(ClanRepository clanRepository, ClanMembersRepository clanMembersRepository, ClanRequestRepository clanRequestRepository
-            , UserRepository userRepository, ModelMapper modelMapper) {
+            , UserRepository userRepository, ModelMapper modelMapper, ChatRepository chatRepository, ChatService chatService) {
         this.clanRepository = clanRepository;
         this.clanMembersRepository = clanMembersRepository;
         this.clanRequestRepository = clanRequestRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.chatRepository = chatRepository;
+        this.chatService = chatService;
     }
 
     private List<ClanDTO> getClanDtoList(List<ClanModel> clanModels, UserModel currentUser) {
@@ -104,6 +110,10 @@ public class ClanService {
             }).toList();
 
             ClanDTO clanDTO = modelMapper.map(clanModel, ClanDTO.class);
+
+            clanDTO.setChatID(clanModel.getChat().getId());    // Set chat id to DTO
+
+
             clanDTO.setMembers(clanMemberDTOS);
             clanDTO.setMembersCount(clanRepository.countMembersById(clanModel.getId()));
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Clan retrieved successfully", clanDTO));
@@ -144,29 +154,51 @@ public class ClanService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ResponseUtils.unsuccessfulRes("Clan with this name already exists.", null));
             }
+
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currentUser = userRepository.fetchUserWithClanMemberByUsername(userInfo.getUsername());
+
             if (currentUser.getClanMember() != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ResponseUtils.unsuccessfulRes("You are already a member of a clan.", null));
             }
 
+            // Create Clan
             ClanModel clan = new ClanModel();
             clan.setName(clanDTO.getName());
             clan.setLeader(currentUser.getUsername());
+
+
+            // Create Chat for the Clan
+            Chat chat = new Chat();
+            chat.setName("Clan Chat - " + clanDTO.getName()); // Example chat name
+            chatRepository.save(chat); // Save chat to generate chat id
+            chatService.addUser(chat.getId(), currentUser.getId()); // Add user to chat
+            clan.setChat(chat); // Associate chat with clan
+
+            // Create Clan Member
             ClanMember clanMember = new ClanMember(currentUser, clan, "leader");
             currentUser.setClanMember(clanMember);
             clan.AddToClan(currentUser.getClanMember());
+
+            // Save Clan
             ClanModel savedClan = clanRepository.save(clan);
 
+//            // Map to DTO
             modelMapper.map(savedClan, clanDTO);
+
+            clanDTO.setChatID(savedClan.getChat().getId());    // Set chat id to DTO
+
+
+            // Map Clan Members to DTOs
             List<ClanMemberDTO> clanMemberDTOS = savedClan.getMembers().stream().map(member -> {
                 UserModel userModel = member.getUser();
                 return new ClanMemberDTO(userModel.getUsername(), userModel.getPhotoUrl(), userModel.getStatus(), member.getRole());
             }).toList();
 
+            // Set DTO properties
             clanDTO.setMembers(clanMemberDTOS);
-            clanDTO.setMembersCount(1);
+            clanDTO.setMembersCount(1); // Assuming the leader counts as the first member
 
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Clan created successfully!", clanDTO));
         } catch (Exception e) {
@@ -339,6 +371,9 @@ public class ClanService {
                 clanMembersRepository.save(clanMember);
                 clanRequestRepository.delete(clanRequest);
 
+                chatService.addUser(clanModel.get().getChat().getId(), currentUser.getId()); // Add user to chat
+
+
                 return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Request accepted successfully", null));
             } else {
                 clanRequest.getUser().setClanRequest(null);
@@ -381,6 +416,8 @@ public class ClanService {
             currentUser.setClanMember(null);
             clanMembersRepository.delete(clanMember);
             clanRepository.save(clanModel);
+
+            ////TODO: Remove user from chat
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Left clan successfully.", null));
         } catch (Exception e) {

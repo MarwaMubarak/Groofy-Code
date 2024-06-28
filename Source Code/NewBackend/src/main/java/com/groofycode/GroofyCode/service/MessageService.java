@@ -1,10 +1,8 @@
 package com.groofycode.GroofyCode.service;
 
-import com.groofycode.GroofyCode.dto.ChatDTO;
 import com.groofycode.GroofyCode.dto.MessageDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Chat.Chat;
-import com.groofycode.GroofyCode.model.Clan.ClanModel;
 import com.groofycode.GroofyCode.model.Chat.Message;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.ChatRepository;
@@ -27,7 +25,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
