@@ -8,6 +8,7 @@ public enum NotificationType {
     Leave_Game,
     GAME_ENDED,
     SUBMIT_CODE,
-    TEAM_INVITATION
+    TEAM_INVITATION,
+    MATCH_INVITATION
     
 }

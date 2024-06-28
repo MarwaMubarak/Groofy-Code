@@ -1,14 +1,8 @@
 package com.groofycode.GroofyCode.service;
 
-import com.groofycode.GroofyCode.dto.Notification.FriendNotificationDTO;
-import com.groofycode.GroofyCode.dto.Notification.LikeNotificationDTO;
-import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
-import com.groofycode.GroofyCode.dto.Notification.TeamNotificationDTO;
+import com.groofycode.GroofyCode.dto.Notification.*;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
-import com.groofycode.GroofyCode.model.Notification.FriendNotificationModel;
-import com.groofycode.GroofyCode.model.Notification.LikeNotificationModel;
-import com.groofycode.GroofyCode.model.Notification.NotificationModel;
-import com.groofycode.GroofyCode.model.Notification.TeamNotificationModel;
+import com.groofycode.GroofyCode.model.Notification.*;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.FriendNotificationRepository;
 import com.groofycode.GroofyCode.repository.LikeNotificationRepository;
@@ -130,6 +124,17 @@ public class NotificationService {
         dto.setId(notification.getId());
         dto.setTeamId(notification.getTeam().getId());
         dto.setTeamName(notification.getTeam().getName());
+        return dto;
+    }
+
+    public MatchInvitationNotificationDTO mapEntityToDTO(MatchInvitationNotificationModel notification) {
+        MatchInvitationNotificationDTO dto = new MatchInvitationNotificationDTO();
+        dto.setId(notification.getId());
+        dto.setBody(notification.getBody());
+        dto.setSender(notification.getSender().getUsername());
+        dto.setNotificationType(notification.getNotificationType());
+        dto.setCreatedAt(notification.getCreatedAt());
+        dto.setGameId(notification.getGame().getId());
         return dto;
     }
 }
