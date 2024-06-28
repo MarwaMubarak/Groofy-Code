@@ -252,3 +252,11 @@ export interface TestcaseProps {
   input: string;
   output: string;
 }
+
+export interface MatchPopupProps {
+  matchResult: string;
+  matchType: string;
+  oldRank: number;
+  newRank: number;
+  submissions: any[];
+}

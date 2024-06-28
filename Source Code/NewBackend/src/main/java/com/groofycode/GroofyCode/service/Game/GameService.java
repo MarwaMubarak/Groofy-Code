@@ -260,11 +260,11 @@ public class GameService {
         gameRepository.save(game);
 
 
-        if(leavingPlayers.size() == 1 && remainingPlayers.size() == 1) {
-            // Update the player's rating and save
-            leavingPlayers.get(0).setUser_rating(leavingPlayers.get(0).getUser_rating() - 30);
-            userRepository.save(leavingPlayers.get(0));
-        }
+//        if(leavingPlayers.size() == 1 && remainingPlayers.size() == 1) {
+//            // Update the player's rating and save
+//            leavingPlayers.get(0).setUser_rating(leavingPlayers.get(0).getUser_rating() - 30);
+//            userRepository.save(leavingPlayers.get(0));
+//        }
 
         // Create and send the notification DTO using setters
         NotificationDTO notificationDTO = new NotificationDTO();
@@ -279,15 +279,40 @@ public class GameService {
         for (UserModel remainingPlayer : remainingPlayers) {
             remainingPlayer.setExistingGameId(null);
             userRepository.save(remainingPlayer);
-            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
+            List<Submission> submissions = submissionRepository.findByUserId(remainingPlayer.getId());
+            List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
+                SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
+                subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+                return subDTO;
+            }).toList();
+            GameResultDTO gameResultDTO = new GameResultDTO("Cancelled", remainingPlayer.getUser_rating(), submissionDTOS);
+//            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", notificationDTO);
+            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/games", gameResultDTO);
         }
+
+        GameResultDTO leavingPlayerGameResult = new GameResultDTO();
 
         for (UserModel lp : leavingPlayers) {
             lp.setExistingGameId(null);
+            lp.setUser_rating(lp.getUser_rating() - 30);
             userRepository.save(lp);
+
+            List<Submission> submissions = submissionRepository.findByUserId(lp.getId());
+            List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
+                SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
+                subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+                return subDTO;
+            }).toList();
+
+            GameResultDTO gameResultDTO = new GameResultDTO("Cancelled", lp.getUser_rating(), submissionDTOS);
+            if (!lp.getId().equals(leavingPlayer.getId())) {
+                messagingTemplate.convertAndSendToUser(lp.getUsername(), "/games", gameResultDTO);
+            } else {
+                leavingPlayerGameResult = gameResultDTO;
+            }
         }
 
-        return ResponseEntity.ok(ResponseUtils.successfulRes("Left the match successfully", notificationDTO));
+        return ResponseEntity.ok(ResponseUtils.successfulRes("Left the match successfully", leavingPlayerGameResult));
     }
 
 
@@ -308,7 +333,7 @@ public class GameService {
         } else return null;
     }
 
-    public ResponseEntity<Object> submitCodeSolo(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
+    private ResponseEntity<Object> submitCodeSolo(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
 
@@ -323,15 +348,6 @@ public class GameService {
         Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
 
-        // Notify the submitting player
-        MatchNotificationModel submitNotification = createNotification(
-                "You submitted the code. Result: " + codeForceResponse,
-                submittingPlayer,
-                submittingPlayer,
-                game,
-                NotificationType.SUBMIT_CODE
-        );
-        NotificationDTO submitNotificationDTO = convertToDTO(submitNotification);
 
         if (codeForceResponse.equals("Accepted")) {
             // End the game
@@ -339,16 +355,16 @@ public class GameService {
             game.setEndTime(LocalDateTime.now());
             gameRepository.save(game);
 
-            // Notify the player that they won
-            MatchNotificationModel winNotification = createNotification(
-                    "Your code was accepted. You win!",
-                    submittingPlayer,
-                    submittingPlayer,
-                    game,
-                    NotificationType.GAME_ENDED
-            );
-            NotificationDTO winNotificationDTO = convertToDTO(winNotification);
-            messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/notification", winNotificationDTO);
+            List<Submission> submissions = submissionRepository.findByUserId(submittingPlayer.getId());
+            List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
+                SubmissionDTO submissionDTO = modelMapper.map(sub, SubmissionDTO.class);
+                submissionDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+                return submissionDTO;
+            }).toList();
+            GameResultDTO gameResultDTO = new GameResultDTO("You Won", submittingPlayer.getUser_rating(), submissionDTOS);
+
+            messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/games", gameResultDTO);
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Match", null));
         }
 
         return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
@@ -370,7 +386,7 @@ public class GameService {
         }
     }
 
-    ResponseEntity<Object> submitCodeteam2team(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
+    private ResponseEntity<Object> submitCodeteam2team(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
 
@@ -397,61 +413,72 @@ public class GameService {
 
         Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
+        if (codeForceResponse.equals("Accepted")) {
+            // End the game and notify the remaining player that they lost
+            game.setGameStatus(GameStatus.FINISHED);
+            game.setEndTime(LocalDateTime.now());
+            gameRepository.save(game);
 
-        // Notify the submitting player
-        MatchNotificationModel submitNotification = createNotification(
-                "You submitted the code. Result: " + codeForceResponse,
-                submittingPlayer,
-                submittingPlayer,
-                game,
-                NotificationType.SUBMIT_CODE
-        );
-        NotificationDTO submitNotificationDTO = convertToDTO(submitNotification);
-        messagingTemplate.convertAndSendToUser(submittingPlayer.getUsername(), "/notification", submitNotificationDTO);
+            if (submittingPlayers.size() == 1 && remainingPlayers.size() == 1) {
+                // Update delta of the players
+                int player1Rating = submittingPlayers.get(0).getUser_rating();
+                int player2Rating = remainingPlayers.get(0).getUser_rating();
+                int newPlayer1Rating = ratingSystemCalculator.calculateDeltaRating(player2Rating - player1Rating, player1Rating, 'W');
+                int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'L');
+                submittingPlayers.get(0).setUser_rating(newPlayer1Rating);
+                remainingPlayers.get(0).setUser_rating(newPlayer2Rating);
+                userRepository.save(submittingPlayers.get(0));
+                userRepository.save(remainingPlayers.get(0));
 
-        // Notify the remaining players
-        for (UserModel remainingPlayer : remainingPlayers) {
-            MatchNotificationModel opponentNotification = createNotification(
-                    "Your opponent " + submittingPlayer.getUsername() + " has submitted the code. Result: " + codeForceResponse,
-                    submittingPlayer,
-                    remainingPlayer,
-                    game,
-                    NotificationType.SUBMIT_CODE
-            );
-            NotificationDTO opponentNotificationDTO = convertToDTO(opponentNotification);
-            messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", opponentNotificationDTO);
+                List<Submission> submissions = game.getSubmissions();
+                List<SubmissionDTO> player1Submissions = new ArrayList<>();
+                List<SubmissionDTO> player2Submissions = new ArrayList<>();
 
-            if (codeForceResponse.equals("Accepted")) {
-                // End the game and notify the remaining player that they lost
-                game.setGameStatus(GameStatus.FINISHED);
-                game.setEndTime(LocalDateTime.now());
-                gameRepository.save(game);
+                submissions.forEach(sub -> {
+                    SubmissionDTO submissionDTO = modelMapper.map(sub, SubmissionDTO.class);
+                    submissionDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
 
-                if(submittingPlayers.size() == 1 && remainingPlayers.size() == 1) {
-                    // Update delta of the players
-                    int player1Rating = submittingPlayers.get(0).getUser_rating();
-                    int player2Rating = remainingPlayers.get(0).getUser_rating();
-                    int newPlayer1Rating = ratingSystemCalculator.calculateDeltaRating(player2Rating - player1Rating, player1Rating, 'W');
-                    int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'L');
-                    submittingPlayers.get(0).setUser_rating(newPlayer1Rating);
-                    remainingPlayers.get(0).setUser_rating(newPlayer2Rating);
-                    userRepository.save(submittingPlayers.get(0));
-                    userRepository.save(remainingPlayers.get(0));
+                    if (sub.getUser().getId().equals(submittingPlayers.get(0).getId())) {
+                        player1Submissions.add(submissionDTO);
+                    } else {
+                        player2Submissions.add(submissionDTO);
+                    }
+                });
+
+                GameResultDTO player1GameResult = new GameResultDTO("You Won", newPlayer1Rating, player1Submissions);
+                GameResultDTO player2GameResult = new GameResultDTO("You Lost", newPlayer2Rating, player2Submissions);
+
+                messagingTemplate.convertAndSendToUser(submittingPlayers.get(0).getUsername(), "/games", player1GameResult);
+                messagingTemplate.convertAndSendToUser(remainingPlayers.get(0).getUsername(), "/games", player2GameResult);
+
+            } else {
+                for (UserModel sP : submittingPlayers) {
+                    List<Submission> submissions = submissionRepository.findByUserId(sP.getId());
+                    List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
+                        SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
+                        subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+                        return subDTO;
+                    }).toList();
+
+                    GameResultDTO gameResultDTO = new GameResultDTO("You Won", sP.getUser_rating(), submissionDTOS);
+                    messagingTemplate.convertAndSendToUser(sP.getUsername(), "/games", gameResultDTO);
                 }
+                for (UserModel rP : remainingPlayers) {
+                    List<Submission> submissions = submissionRepository.findByUserId(rP.getId());
+                    List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
+                        SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
+                        subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+                        return subDTO;
+                    }).toList();
 
-                MatchNotificationModel loseNotification = createNotification(
-                        "Your opponent's code was accepted. You lose.",
-                        submittingPlayer,
-                        remainingPlayer,
-                        game,
-                        NotificationType.GAME_ENDED
-                );
-                NotificationDTO loseNotificationDTO = convertToDTO(loseNotification);
-                messagingTemplate.convertAndSendToUser(remainingPlayer.getUsername(), "/notification", loseNotificationDTO);
+                    GameResultDTO gameResultDTO = new GameResultDTO("You Lost", rP.getUser_rating(), submissionDTOS);
+                    messagingTemplate.convertAndSendToUser(rP.getUsername(), "/games", gameResultDTO);
+                }
             }
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Match", null));
+        } else {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
         }
-
-        return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
     }
 
 
@@ -638,10 +665,10 @@ public class GameService {
 //        );
 //    }
 
-    public ResponseEntity<Object> getUserQueue(){
+    public ResponseEntity<Object> getUserQueue() {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());
-        if(playerSelection.isInQueue(player.getId())){
+        if (playerSelection.isInQueue(player.getId())) {
             return ResponseEntity.ok(ResponseUtils.successfulRes("YES", null));
         } else {
             return ResponseEntity.ok(ResponseUtils.successfulRes("NO", null));

@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import classes from "./scss/match-popup.module.css";
+import { MatchPopupProps } from "../../shared/types";
 
-const MatchPopup = () => {
+const MatchPopup = (props: MatchPopupProps) => {
   return (
     <div className={classes.match_overlay}>
       <div className={classes.match_popup}>
         <h2 className={classes.match_status}>Match Ended</h2>
-        <h4 className={classes.match_result}>You won</h4>
+        <h4 className={classes.match_result}>{props.matchResult}</h4>
         <div className={classes.result_box}>
           <img
             src="./Assets/SVG/trophyIconYellow.svg"
@@ -28,11 +29,13 @@ const MatchPopup = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>03:00</td>
-              <td>Accepted</td>
-              <td>C++</td>
-            </tr>
+            {props.submissions.map((submission, idx) => (
+              <tr>
+                <td>03:00</td>
+                <td>Accepted</td>
+                <td>C++</td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <div className={classes.btn_box}>

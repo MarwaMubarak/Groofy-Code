@@ -118,7 +118,16 @@ const TestingSocket = () => {
       <br />
       <button onClick={() => setTestPopup(true)}>Show popup</button>
       {testPopUp &&
-        createPortal(<MatchPopup />, document.getElementById("root") as any)}
+        createPortal(
+          <MatchPopup
+            matchResult=""
+            matchType=""
+            newRank={1200}
+            oldRank={1200}
+            submissions={[]}
+          />,
+          document.getElementById("root") as any
+        )}
       <Toaster />
     </div>
   );

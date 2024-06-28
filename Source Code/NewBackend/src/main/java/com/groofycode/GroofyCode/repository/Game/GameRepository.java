@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
+    @Query("SELECT g FROM Game g LEFT JOIN FETCH g.submissions WHERE g.id = ?1")
+    Game fetchById(Long id);
 }
