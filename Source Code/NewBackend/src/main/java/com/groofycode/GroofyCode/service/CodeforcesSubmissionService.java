@@ -3,6 +3,7 @@ package com.groofycode.GroofyCode.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
+import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.utilities.MatchStatusMapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +13,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,9 +30,10 @@ public class CodeforcesSubmissionService {
     private final WebDriver driver;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public CodeforcesSubmissionService(MatchStatusMapper matchStatusMapper) {
+    public CodeforcesSubmissionService(MatchStatusMapper matchStatusMapper, SimpMessagingTemplate messagingTemplate) {
         this.matchStatusMapper = matchStatusMapper;
         // Set the path to your ChromeDriver executable
 //        System.setProperty("webdriver.chrome.driver", "C:/Program Files/Google/Chrome/Application/chrome.exe");
@@ -44,6 +48,7 @@ public class CodeforcesSubmissionService {
         driver = new ChromeDriver(options);
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
+        this.messagingTemplate = messagingTemplate;
     }
 
     private boolean isLoggedIn() {
@@ -66,6 +71,8 @@ public class CodeforcesSubmissionService {
     }
 
     public Integer submitCode(String problemUrl, ProblemSubmitDTO problemSubmitDTO) throws Exception {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        messagingTemplate.convertAndSendToUser(userInfo.getUsername(), "/code", "Queueing...");
         // Navigate to the Codeforces login page
         driver.get("https://codeforces.com/enter");
         // Find the username and password input fields, and fill them with your credentials
@@ -115,13 +122,18 @@ public class CodeforcesSubmissionService {
         WebElement uploadFileBtn = driver.findElement(By.xpath("//input[@name='sourceFile']"));
         uploadFileBtn.sendKeys(file.getAbsolutePath());
 
+        messagingTemplate.convertAndSendToUser(userInfo.getUsername(), "/code", "Submitting...");
+
         // Submit the code
         WebElement submitButton = driver.findElement(By.xpath("//input[@value='Submit']"));
         submitButton.submit();
 
         if (driver.getCurrentUrl().startsWith(problemUrl)) {
-            throw new Exception("Failed to submit code");
+            messagingTemplate.convertAndSendToUser(userInfo.getUsername(), "/code", "");
+            throw new Exception("Duplicated source code. Please try again.");
         }
+
+        messagingTemplate.convertAndSendToUser(userInfo.getUsername(), "/code", "Testing...");
 
         String apiUrl = "https://codeforces.com/api/user.status?handle=GroofyCode&count=1";
         int timeoutInSeconds = 60; // Adjust timeout as needed
@@ -150,6 +162,8 @@ public class CodeforcesSubmissionService {
         } while (verdict.equals("TESTING"));
         System.out.println(verdict);
         file.delete();
+
+        messagingTemplate.convertAndSendToUser(userInfo.getUsername(), "/code", "");
         return matchStatusMapper.getStatusStringToInt().get(verdict);
 
         // Close the browser after submission

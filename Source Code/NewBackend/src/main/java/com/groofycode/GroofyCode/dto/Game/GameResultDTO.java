@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameResultDTO {
+    private String gameType;
+
     private String gameResult;
 
     private Integer newRank;

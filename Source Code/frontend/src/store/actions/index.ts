@@ -5,6 +5,7 @@ import friendThunks from "./friend-actions";
 import notifyThunks from "./notify-actions";
 import gameThunks from "./game-actions";
 import toastThunks from "./toast-actions";
+import popupThunks from "./popup-actions";
 
 export {
   authThunks,
@@ -14,4 +15,5 @@ export {
   notifyThunks,
   gameThunks,
   toastThunks,
+  popupThunks,
 };

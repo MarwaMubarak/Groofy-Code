@@ -2,10 +2,7 @@ package com.groofycode.GroofyCode.service.Game;
 
 import com.groofycode.GroofyCode.dto.Game.*;
 import com.groofycode.GroofyCode.dto.MatchPlayerDTO;
-import com.groofycode.GroofyCode.model.Game.Game;
-import com.groofycode.GroofyCode.model.Game.GameStatus;
-import com.groofycode.GroofyCode.model.Game.RankedMatch;
-import com.groofycode.GroofyCode.model.Game.Submission;
+import com.groofycode.GroofyCode.model.Game.*;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Game.GameRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
@@ -31,8 +28,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PlayerSelection {
     private final CopyOnWriteArrayList<MatchPlayerDTO> waitingPlayers = new CopyOnWriteArrayList<>();
     private RankedMatch schedulerRankedMatch;
+    private Game soloMatch;
     private final AtomicBoolean isProcessing = new AtomicBoolean(false);
-    private final AtomicBoolean startDuration = new AtomicBoolean(false);
+    private final AtomicBoolean startRankedDuration = new AtomicBoolean(false);
+    private final AtomicBoolean startSoloDuration = new AtomicBoolean(false);
     private final ProblemPicker problemPicker;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -78,6 +77,11 @@ public class PlayerSelection {
         }
     }
 
+    public void activeSoloDuration(Long soloGameId) {
+        startSoloDuration.set(true);
+        this.soloMatch = gameRepository.fetchById(soloGameId);
+    }
+
     @Scheduled(fixedDelay = 1000)
     public void processPlayers() throws Exception {
         if (!isProcessing.get() || waitingPlayers.isEmpty()) {
@@ -109,7 +113,7 @@ public class PlayerSelection {
 
             String problemUrl = (String) problemPicker.pickProblem(playerDTO, solvedProblemsPlayer, opponentDTO, solvedProblemsOpponent).getBody();
 
-            RankedMatch rankedMatch = new RankedMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusSeconds(1), 1.0);
+            RankedMatch rankedMatch = new RankedMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusHours(1), 1.0);
 
             rankedMatch = gameRepository.save(rankedMatch);
 
@@ -124,7 +128,7 @@ public class PlayerSelection {
 
             waitingPlayers.removeAll(matchedPlayers);
 
-            startDuration.set(true);
+            startRankedDuration.set(true);
             schedulerRankedMatch = rankedMatch;
         }
     }
@@ -144,18 +148,30 @@ public class PlayerSelection {
 
     @Scheduled(fixedDelay = 1000)
     public void startDuration() {
-        if (!startDuration.get()) {
+        if (!startRankedDuration.get()) {
             return;
         }
 
         Duration duration = Duration.between(LocalDateTime.now(), schedulerRankedMatch.getEndTime());
         if (duration.isNegative() || duration.isZero()) {
-            terminateMatch();
+            terminateRankedGame();
         }
     }
 
-    public void terminateMatch() {
-        startDuration.set(false);
+    @Scheduled(fixedDelay = 1000)
+    public void startSoloDuration() {
+        if (!startSoloDuration.get()) {
+            return;
+        }
+
+        Duration duration = Duration.between(LocalDateTime.now(), schedulerRankedMatch.getEndTime());
+        if (duration.isNegative() || duration.isZero()) {
+            terminateSoloGame();
+        }
+    }
+
+    public void terminateRankedGame() {
+        startRankedDuration.set(false);
         Game currentGame = gameRepository.fetchById(schedulerRankedMatch.getId());
 
         if (currentGame.getGameStatus().equals(GameStatus.FINISHED.ordinal())) {
@@ -189,6 +205,8 @@ public class PlayerSelection {
 
         submissions.forEach(sub -> {
             SubmissionDTO submissionDTO = modelMapper.map(sub, SubmissionDTO.class);
+            Duration duration = Duration.between(currentGame.getStartTime(), sub.getSubmissionTime());
+            submissionDTO.setSubmissionTime(duration.getSeconds() / 60 + " min");
             submissionDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
 
             if (sub.getUser().getId().equals(player1.getId())) {
@@ -198,11 +216,44 @@ public class PlayerSelection {
             }
         });
 
-        GameResultDTO player1GameResult = new GameResultDTO("Draw", newPlayer1Rating, player1Submissions);
-        GameResultDTO player2GameResult = new GameResultDTO("Draw", newPlayer2Rating, player2Submissions);
+        GameResultDTO player1GameResult = new GameResultDTO("Ranked", "Draw", newPlayer1Rating, player1Submissions);
+        GameResultDTO player2GameResult = new GameResultDTO("Ranked", "Draw", newPlayer2Rating, player2Submissions);
 
         messagingTemplate.convertAndSendToUser(player1.getUsername(), "/games", player1GameResult);
         messagingTemplate.convertAndSendToUser(opponent.getUsername(), "/games", player2GameResult);
+    }
+
+    public void terminateSoloGame() {
+        startSoloDuration.set(false);
+        Game currentGame = gameRepository.fetchById(soloMatch.getId());
+
+        if (currentGame.getGameStatus().equals(GameStatus.FINISHED.ordinal())) {
+            return;
+        }
+
+        UserModel player1 = userRepository.fetchById(soloMatch.getPlayers1().get(0).getId());
+
+        assert player1 != null;
+
+        player1.setExistingGameId(null);
+
+        userRepository.save(player1);
+
+        currentGame.setGameStatus(GameStatus.FINISHED);
+        gameRepository.save(currentGame);
+
+        List<Submission> submissions = currentGame.getSubmissions();
+        List<SubmissionDTO> playerSubmissions = new ArrayList<>();
+
+        submissions.forEach(sub -> {
+            SubmissionDTO submissionDTO = modelMapper.map(sub, SubmissionDTO.class);
+            submissionDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+            playerSubmissions.add(submissionDTO);
+        });
+
+        GameResultDTO player1GameResult = new GameResultDTO("Solo", null, player1.getUser_rating(), playerSubmissions);
+
+        messagingTemplate.convertAndSendToUser(player1.getUsername(), "/games", player1GameResult);
     }
 
     private List<MatchPlayerDTO> selectPlayersForMatch() {

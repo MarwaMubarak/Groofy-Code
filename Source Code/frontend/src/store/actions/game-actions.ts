@@ -34,6 +34,7 @@ const getCurrentGame = (gameId: number) => {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log("Game: ", response.data.body);
         dispatch(gameActions.setGame(response.data.body));
         dispatch(gameActions.setLoading(false));
       } catch (error: any) {
@@ -136,6 +137,12 @@ const submitCode = (submission: SubmissionProps) => {
   };
 };
 
+const changeSubmitState = (state: string) => {
+  return (dispatch: any) => {
+    dispatch(submissionActions.setSubmitState(state));
+  };
+};
+
 const leaveGame = (gameId: number) => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
@@ -210,6 +217,7 @@ const gameThunks = {
   checkQueue,
   leaveQueue,
   dismissToast,
+  changeSubmitState,
 };
 
 export default gameThunks;
