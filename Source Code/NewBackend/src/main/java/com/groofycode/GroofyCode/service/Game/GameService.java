@@ -31,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -66,6 +67,7 @@ public class GameService {
 
     private final RatingSystemCalculator ratingSystemCalculator;
 
+    private final MatchInvitationService matchInvitationService;
 
 //    private final MatchScheduler matchScheduler;
 
@@ -74,7 +76,7 @@ public class GameService {
                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
-                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator) {
+                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, MatchInvitationService matchInvitationService) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -90,6 +92,7 @@ public class GameService {
         this.problemPicker = problemPicker;
         this.ratingSystemCalculator = ratingSystemCalculator;
 //        this.matchScheduler = matchScheduler;
+        this.matchInvitationService = matchInvitationService;
     }
 
     public ResponseEntity<Object> findAllGames(Integer page) throws Exception {
@@ -107,8 +110,11 @@ public class GameService {
     public ResponseEntity<Object> findRankedMatch() throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());
+
         PlayerDTO playerDTO = modelMapper.map(player, PlayerDTO.class);
+
         int expectedRating = problemPicker.expectedRatingPlayer(playerDTO);
+
         MatchPlayerDTO matchPlayerDTO = new MatchPlayerDTO(player.getId(), expectedRating, expectedRating);
         playerSelection.addPlayerToQueue(matchPlayerDTO);
 
@@ -315,6 +321,52 @@ public class GameService {
         return ResponseEntity.ok(ResponseUtils.successfulRes("Left the match successfully", leavingPlayerGameResult));
     }
 
+    public ResponseEntity<Object> getUserHistory() {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel user = userRepository.findByUsername(userInfo.getUsername());
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("User not found", null));
+            }
+
+            List<Game> games = gameRepository.findGamesByUser(user);
+
+            List<GameResultDTO> gameResultDTOs = games.stream().map(game -> {
+                try {
+                    ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(game.getProblemUrl());
+                    ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
+                    Object parsedProblem = problemParsed.getBody();
+
+                    GameDTO gameDTO;
+                    if (game instanceof SoloMatch) {
+                        gameDTO = new SoloMatchDTO((SoloMatch) game, parsedProblem);
+                    } else if (game instanceof RankedMatch) {
+                        gameDTO = new RankedMatchDTO((RankedMatch) game, parsedProblem);
+                    } else {
+                        gameDTO = new GameDTO(game); // Default DTO if no specific type matches
+                    }
+
+                    List<Submission> submissions = submissionRepository.findByUserId(user.getId());
+                    List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
+                        SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
+                        subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+                        return subDTO;
+                    }).toList();
+
+                    return new GameResultDTO("Completed", user.getUser_rating(), submissionDTOS);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null; // Or handle the exception appropriately
+                }
+            }).filter(dto -> dto != null).toList();
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("User history retrieved successfully", gameResultDTOs));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("An error occurred while retrieving user history", null));
+        }
+    }
 
     public ResponseEntity<Object> submitCode(Long gameId, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         Game game = gameRepository.findById(gameId).orElse(null);
@@ -496,6 +548,32 @@ public class GameService {
 
     public ResponseEntity<Object> createTeamMatch(TeamModel team1, TeamModel team2) {
         try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel user = userRepository.findByUsername(userInfo.getUsername());
+
+            UserModel admin1 = team1.getCreator();
+            UserModel admin2 = team2.getCreator();
+
+
+
+            // Ensure the user is the owner of at least one of the teams
+            if (!user.getId().equals(admin1.getId()) && !user.getId().equals(admin2.getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtils.unsuccessfulRes("You are not an admin for either team", null));
+            }
+
+            // Ensure the user is the owner of team1
+            if (!user.getId().equals(admin1.getId()) && user.getId().equals(admin2.getId())) {
+                // Swap team1 and team2
+                TeamModel temp = team1;
+                team1 = team2;
+                team2 = temp;
+
+                // Reassign admins after swap
+                admin1 = team1.getCreator();
+                admin2 = team2.getCreator();
+            }
+
             List<UserModel> team1Users = team1.getMembers().stream()
                     .map(TeamMember::getUser)
                     .collect(Collectors.toList());
@@ -503,25 +581,33 @@ public class GameService {
                     .map(TeamMember::getUser)
                     .collect(Collectors.toList());
 
-            if (team1Users.isEmpty() || team2Users.isEmpty()) {
+            List<UserModel> commonUsers = new ArrayList<>(team1Users);
+            commonUsers.retainAll(team2Users);
+
+            boolean hasIntersection = !commonUsers.isEmpty();
+            if (hasIntersection) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ResponseUtils.unsuccessfulRes("Teams cannot be empty", null));
+                        .body(ResponseUtils.unsuccessfulRes("Teams cannot have common members", null));
             }
 
-            // Calculate average PlayerDTO attributes for both teams
-            PlayerDTO averagePlayerDTO = calculateAveragePlayerDTO(team1Users, team2Users);
+//            matchInvitationService.;
 
-            // Combine all solved problems from both teams
-            List<ProgProblem> combinedProblems = new ArrayList<>();
-            team1Users.forEach(user -> combinedProblems.addAll(user.getSolvedProblems()));
-            team2Users.forEach(user -> combinedProblems.addAll(user.getSolvedProblems()));
 
-            List<ProblemDTO> problemDTOs = mapProblemsToDTOs(combinedProblems);
-            String problemURL = (String) problemPicker.pickProblem(averagePlayerDTO, problemDTOs).getBody();
+            ////TODO: retrive 3 problem based on team average rating
 
+            String problemURL = "https://codeforces.com/problemset/problem/1989/F"; // Default problem URL
+            String problemURL2 = "https://codeforces.com/problemset/problem/1989/F"; // Default problem URL
+            String problemURL3 = "https://codeforces.com/problemset/problem/1989/F"; // Default problem URL
             // Create the TeamMatch
             LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
-            final TeamMatch teamMatch = new TeamMatch(team1, team2, problemURL, LocalDateTime.now(), endTime, 60.0);
+            final TeamMatch teamMatch = new TeamMatch(team1, team2,
+                    problemURL,
+                    problemURL2,
+                    problemURL3, LocalDateTime.now(), endTime, 60.0);
+
+            teamMatch.setPlayers1(team1Users);
+            teamMatch.setPlayers2(team2Users);
+
             gameRepository.save(teamMatch); // Save the team match immediately
 
             // Update each player's existing game ID
@@ -532,8 +618,11 @@ public class GameService {
 
             // Convert the TeamMatch entity to its corresponding DTO
             ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
+            ProblemDTO problemDTO2 = problemParser.parseCodeforcesUrl(problemURL2);
+            ProblemDTO problemDTO3 = problemParser.parseCodeforcesUrl(problemURL3);
+
             ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
-            TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody());
+            TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody(), problemDTO2, problemDTO3);
 
             // Notify all players about the match start
             team1Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",

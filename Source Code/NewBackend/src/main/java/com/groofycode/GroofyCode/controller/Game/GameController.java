@@ -23,7 +23,7 @@ public class GameController {
     private GameService gameService;
 
     @GetMapping
-    public ResponseEntity<Object> getAllGames(@RequestParam(value = "p", required = false) Integer page) throws Exception{
+    public ResponseEntity<Object> getAllGames(@RequestParam(value = "p", required = false) Integer page) throws Exception {
         return gameService.findAllGames(page);
     }
 
@@ -92,14 +92,17 @@ public class GameController {
             TeamModel team2 = teamRepository.findById(team2Id).get();
 
             // Pass the TeamModel objects to the service method
-           return gameService.createTeamMatch(team1, team2);
+            return gameService.createTeamMatch(team1, team2);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));
         }
     }
 
-
+    @GetMapping("/history")
+    public ResponseEntity<Object> getMatchHistory() {
+        return gameService.getUserHistory();
+    }
 
 //    @PostMapping("/join")
 //    public ResponseEntity<Void> joinGame(@RequestBody UserModel user) {
@@ -108,6 +111,3 @@ public class GameController {
 //    }
 
 }
-
-////ToDo: Implement the joinGame method in the GameService class
-////Todo: Edit the GameController class to use UserModel instead of String for player1 and player2

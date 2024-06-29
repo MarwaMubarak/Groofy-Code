@@ -192,6 +192,7 @@ public class TeamService {
             UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
 
             List<TeamInvitation> invitations = teamInvitationRepository.findByReceiver(currentUser);
+
             List<TeamInvitationDTO> invitationDTOs = invitations.stream()
                     .map(invitation -> {
                         TeamInvitationDTO invitationDTO = new TeamInvitationDTO();

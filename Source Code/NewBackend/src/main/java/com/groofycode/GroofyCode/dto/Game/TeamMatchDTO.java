@@ -16,8 +16,10 @@ public class TeamMatchDTO extends GameDTO {
 
     private Long team1Id;
     private Long team2Id;
+    private Object problemStatement2;
+    private Object problemStatement3;
 
-    public TeamMatchDTO(TeamMatch teamMatch, Object problemStatement) {
+    public TeamMatchDTO(TeamMatch teamMatch, Object problemStatement,Object problemStatement2,Object problemStatement3) {
         super(
                 teamMatch.getId(),
                 teamMatch.getTeam1().getMembers().stream()
@@ -37,5 +39,7 @@ public class TeamMatchDTO extends GameDTO {
         this.team1Id = teamMatch.getTeam1().getId();
         this.team2Id = teamMatch.getTeam2().getId();
         setProblemStatement(problemStatement);
+        this.problemStatement2 = problemStatement2;
+        this.problemStatement3 = problemStatement3;
     }
 }

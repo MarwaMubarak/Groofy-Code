@@ -24,11 +24,15 @@ public class TeamMatch extends Game {
     @JoinColumn(name = "team2_id")
     private TeamModel team2;
 
+    private String problemUrl2;
+
+    private String problemUrl3;
+
     public TeamMatch() {
         setGameType(GameType.TEAM);
     }
 
-    public TeamMatch(TeamModel team1, TeamModel team2, String problemUrl, LocalDateTime startTime, LocalDateTime endTime, double duration) {
+    public TeamMatch(TeamModel team1, TeamModel team2, String problemUrl, String problemUrl2, String problemUrl3, LocalDateTime startTime, LocalDateTime endTime, double duration) {
         this.team1 = team1;
         this.team2 = team2;
         setProblemUrl(problemUrl);
@@ -37,6 +41,8 @@ public class TeamMatch extends Game {
         setDuration(duration);
         setGameStatus(GameStatus.ONGOING);
         setGameType(GameType.TEAM);
+        this.problemUrl2 = problemUrl2;
+        this.problemUrl3 = problemUrl3;
     }
 
 }
