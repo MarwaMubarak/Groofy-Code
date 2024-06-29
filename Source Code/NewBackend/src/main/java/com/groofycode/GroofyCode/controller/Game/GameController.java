@@ -49,6 +49,11 @@ public class GameController {
         return gameService.getUserQueue();
     }
 
+    @GetMapping("/{gameId}/submissions")
+    public ResponseEntity<Object> getSubmissions(@PathVariable Long gameId) {
+        return gameService.getSubmissions(gameId);
+    }
+
 
     @PostMapping("/ranked")
     public ResponseEntity<Object> findRankedMatch() throws Exception {

@@ -142,4 +142,24 @@
   width: 100%;
   gap: 0 20px;
   margin-top: 20px;
+}
+.esec .box_match_stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+.esec .box_match_stats .match_stats {
+  color: white;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+.esec .box_match_stats .match_stats thead {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.paginator {
+  background-color: #303031;
 }/*# sourceMappingURL=codingsection.module.css.map */

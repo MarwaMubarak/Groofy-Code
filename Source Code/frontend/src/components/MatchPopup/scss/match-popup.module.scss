@@ -15,10 +15,52 @@
     background-color: #fff;
     border-radius: 12px;
     width: 500px;
-    height: 300px;
+    height: 430px;
     animation: show-animation 0.5s ease-in-out forwards;
+    position: relative;
+    .trophy_icn {
+      @include center;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      img {
+        width: 100px;
+        height: 100px;
+      }
+    }
     .match_status {
       text-align: center;
+    }
+    .info_game {
+      @include around;
+      width: 100%;
+      margin-top: 35px;
+      .info_game_attemps {
+        @include center;
+        flex-direction: column;
+        span {
+          font-size: 32px;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+        h3 {
+          font-size: 22px;
+          font-weight: 300;
+        }
+      }
+      .info_game_elapsedtime {
+        @include center;
+        flex-direction: column;
+        span {
+          font-size: 32px;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+        h3 {
+          font-size: 22px;
+          font-weight: 300;
+        }
+      }
     }
     .match_result {
       margin: 12px 0 0;
@@ -26,21 +68,30 @@
     }
     .result_box {
       @include center;
-      img {
-        width: 32px;
-        height: 32px;
-        margin-right: 8px;
+      h3 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-right: 10px;
       }
       .result {
         @include center;
+        span {
+          font-size: 20px;
+        }
         i {
           margin-left: 5px;
           margin-right: 5px;
         }
         h5 {
-          font-size: 16px;
+          font-size: 20px;
           &.win {
             color: $greenColor;
+          }
+          &.lose {
+            color: $redColor;
+          }
+          &.draw {
+            color: black;
           }
         }
       }
@@ -55,13 +106,24 @@
     }
     .btn_box {
       width: 100%;
+      position: absolute;
+      bottom: 20px;
+      left: -28%;
       text-align: center;
-      margin-top: 40px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
       .match_btn {
         padding: 10px 15px;
         background-color: $blueColor;
         color: #fff;
         border-radius: 12px;
+        width: 200px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        &:hover {
+          background-color: $blueHoverLightColor;
+        }
       }
     }
   }

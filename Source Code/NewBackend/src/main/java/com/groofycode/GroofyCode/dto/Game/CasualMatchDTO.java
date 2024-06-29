@@ -26,7 +26,7 @@ public class CasualMatchDTO extends GameDTO {
                 casualMatch.getStartTime(),
                 casualMatch.getEndTime(),
                 casualMatch.getDuration(),
-                casualMatch.getGameType().toString(),
+                "Casual",
                 casualMatch.getGameStatus().toString(),
                 null // assgin it later
         );

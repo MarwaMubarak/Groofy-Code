@@ -26,7 +26,7 @@ public class SoloMatchDTO extends GameDTO {
                 soloMatch.getStartTime(),
                 soloMatch.getEndTime(),
                 soloMatch.getDuration(),
-                soloMatch.getGameType().toString(),
+                "Solo",
                 soloMatch.getGameStatus().toString(),
                 null // assgin it later
         );

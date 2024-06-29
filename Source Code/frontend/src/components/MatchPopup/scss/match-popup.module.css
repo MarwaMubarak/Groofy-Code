@@ -15,11 +15,61 @@
   background-color: #fff;
   border-radius: 12px;
   width: 500px;
-  height: 300px;
+  height: 430px;
   animation: show-animation 0.5s ease-in-out forwards;
+  position: relative;
+}
+.match_overlay .match_popup .trophy_icn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.match_overlay .match_popup .trophy_icn img {
+  width: 100px;
+  height: 100px;
 }
 .match_overlay .match_popup .match_status {
   text-align: center;
+}
+.match_overlay .match_popup .info_game {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 35px;
+}
+.match_overlay .match_popup .info_game .info_game_attemps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.match_overlay .match_popup .info_game .info_game_attemps span {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.match_overlay .match_popup .info_game .info_game_attemps h3 {
+  font-size: 22px;
+  font-weight: 300;
+}
+.match_overlay .match_popup .info_game .info_game_elapsedtime {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.match_overlay .match_popup .info_game .info_game_elapsedtime span {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.match_overlay .match_popup .info_game .info_game_elapsedtime h3 {
+  font-size: 22px;
+  font-weight: 300;
 }
 .match_overlay .match_popup .match_result {
   margin: 12px 0 0;
@@ -30,25 +80,34 @@
   justify-content: center;
   align-items: center;
 }
-.match_overlay .match_popup .result_box img {
-  width: 32px;
-  height: 32px;
-  margin-right: 8px;
+.match_overlay .match_popup .result_box h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 .match_overlay .match_popup .result_box .result {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+.match_overlay .match_popup .result_box .result span {
+  font-size: 20px;
+}
 .match_overlay .match_popup .result_box .result i {
   margin-left: 5px;
   margin-right: 5px;
 }
 .match_overlay .match_popup .result_box .result h5 {
-  font-size: 16px;
+  font-size: 20px;
 }
 .match_overlay .match_popup .result_box .result h5.win {
   color: #18cf08;
+}
+.match_overlay .match_popup .result_box .result h5.lose {
+  color: #f55353;
+}
+.match_overlay .match_popup .result_box .result h5.draw {
+  color: black;
 }
 .match_overlay .match_popup .match_stats {
   width: 100%;
@@ -60,14 +119,25 @@
 }
 .match_overlay .match_popup .btn_box {
   width: 100%;
+  position: absolute;
+  bottom: 20px;
+  left: -28%;
   text-align: center;
-  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 .match_overlay .match_popup .btn_box .match_btn {
   padding: 10px 15px;
   background-color: #00aaff;
   color: #fff;
   border-radius: 12px;
+  width: 200px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.match_overlay .match_popup .btn_box .match_btn:hover {
+  background-color: #29b8ff;
 }
 
 @keyframes show-animation {

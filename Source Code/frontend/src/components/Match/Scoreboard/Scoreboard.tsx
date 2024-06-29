@@ -4,15 +4,19 @@ import ProfileImage from "../../ProfileImage/ProfileImage";
 
 const Scoreboard = () => {
   const loggedUser = useSelector((state: any) => state.auth.user);
+  const gameType = useSelector((state: any) => state.game.gameType);
+  const gameDuration = useSelector((state: any) => state.game.duration);
   return (
     <div className={classes.scoreboard}>
       <div className={classes.m_infobox}>
         <div className={classes.dot}></div>
-        <div className={classes.match_info}>Casual Match | 30 Min</div>
+        <div
+          className={classes.match_info}
+        >{`${gameType} Game | ${gameDuration} Min`}</div>
       </div>
       <div className={classes.players}>
         <div className={classes.player}>
-          <div className={classes.first_status}></div>
+          {/* <div className={classes.first_status}></div> */}
           <div className={classes.info}>
             <div className={classes.usn}>{loggedUser.username}</div>
             <div className={classes.img}>
@@ -49,11 +53,11 @@ const Scoreboard = () => {
               <img src="/Assets/Images/tourist.jpg" alt="ProfilePhoto" />
             </div>
           </div>
-          <div className={classes.second_status}>
+          {/* <div className={classes.second_status}>
             <div className={classes.finished}>
               <img src="/Assets/Images/success.png" alt="Success" />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

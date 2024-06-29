@@ -4,6 +4,7 @@ import { gameActions } from "../slices/game-slice";
 import { submissionActions } from "../slices/submission-slice";
 import { authActions } from "../slices/auth-slice";
 import { toastActions } from "../slices/toast-slice";
+import { get } from "http";
 
 const getAllUserGames = (page: number) => {
   return async (dispatch: any) => {
@@ -125,13 +126,33 @@ const submitCode = (submission: SubmissionProps) => {
             },
           }
         );
+        console.log("PUSSSHHH RESPO", response.data);
         dispatch(submissionActions.setIsLoading(false));
         dispatch(submissionActions.setSubmission(response.data));
+        await dispatch(getGameSubmissions(submission.gameID) as any);
         return response.data;
       } catch (error: any) {
         dispatch(submissionActions.setSubmission(error.response.data));
         dispatch(submissionActions.setIsLoading(false));
         throw error.response.data;
+      }
+    }
+  };
+};
+
+const getGameSubmissions = (gameId: any) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(`/game/${gameId}/submissions`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(submissionActions.setSubmissions(response.data.body));
+      } catch (error: any) {
+        console.log("error", error.response.data);
       }
     }
   };
@@ -218,6 +239,7 @@ const gameThunks = {
   leaveQueue,
   dismissToast,
   changeSubmitState,
+  getGameSubmissions,
 };
 
 export default gameThunks;
