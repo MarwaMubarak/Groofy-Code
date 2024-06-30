@@ -8,15 +8,6 @@
   justify-content: center;
   align-items: center;
 }
-.single_request .user_info img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-.single_request .user_info span {
-  font-size: 15px;
-  margin-left: 10px;
-}
 .single_request .request_actions {
   display: flex;
   justify-content: center;

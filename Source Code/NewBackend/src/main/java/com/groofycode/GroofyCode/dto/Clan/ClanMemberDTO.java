@@ -12,6 +12,7 @@ import lombok.Setter;
 public class ClanMemberDTO {
     private String username;
     private String photoUrl;
+    private String accountColor;
     private Integer status;
     private String role;
 }

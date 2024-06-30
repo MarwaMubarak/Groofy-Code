@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/notifications")
@@ -19,29 +20,21 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-//    @PostMapping
-////    public ResponseEntity<NotificationDTO> createNotification(@RequestBody NotificationDTO notificationDTO) {
-////        System.out.println("dohaa");
-//////        NotificationDTO createdNotification = notificationService.createNotification(notificationDTO);
-//////        return ResponseEntity.ok(createdNotification);
-////    }
-
     @GetMapping
-    public ResponseEntity<Object> getAllNotifications(@RequestParam(value = "p", required = false) Integer page) throws Exception {
+    public ResponseEntity<Object> getAllNotifications(@RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
         return notificationService.getAllNotifications(page);
     }
 
-    @GetMapping("/like")
-    public ResponseEntity<List<NotificationDTO>> getUserLikeNotifications() {
-        System.out.println("dohhaaa");
-        List<NotificationDTO> userNotifications = notificationService.getUserLikes();
-        return ResponseEntity.ok(userNotifications);
+    @GetMapping("/normal")
+    public ResponseEntity<Object> GetNormalNotifications(@RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
+        return notificationService.getNormalNotifications(page);
     }
+
     @GetMapping("/friend")
-    public ResponseEntity<List<NotificationDTO>> getUserFriendNotifications() {
-        List<NotificationDTO> friendNotifications = notificationService.getUserFriendNotifications();
-        return ResponseEntity.ok(friendNotifications);
+    public ResponseEntity<Object> getUserFriendNotifications(@RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
+        return notificationService.getUserFriendNotifications(page);
     }
+
     @PutMapping("/markRead/{notificationId}")
     public ResponseEntity<Void> markRead(@PathVariable Long notificationId) {
         notificationService.markRead(notificationId);

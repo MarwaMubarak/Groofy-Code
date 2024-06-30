@@ -10,23 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
-
     @Autowired
     MessageService messageService;
 
-    @PutMapping("/send")
-    ResponseEntity<Object> sendMessage(@RequestParam Long chatId, @RequestParam String content) throws Exception {
-        return messageService.sendMessage(chatId,content);
-    }
-
     @GetMapping("/{chatId}")
-    ResponseEntity<Object> getMessagesChat(@PathVariable Long chatId) throws Exception {
-        return messageService.getMessagesChat(chatId);
+    ResponseEntity<Object> getMessagesChat(@PathVariable Long chatId, @RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
+        return messageService.getMessagesChat(chatId, page);
     }
-
-    @GetMapping("/{chatId}/pagination")
-    ResponseEntity<Object> getMessagesChatPage(@PathVariable Long chatId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
-        return messageService.getMessagesChatPage(chatId, page,size);
-    }
-
 }

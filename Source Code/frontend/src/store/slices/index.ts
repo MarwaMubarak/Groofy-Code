@@ -10,6 +10,7 @@ import notifyReducer from "./notify-slice";
 import gameReducer from "./game-slice";
 import toastReducer from "./toast-slice";
 import popupReducer from "./popup-slice";
+import chatReducer from "./chat-slice";
 
 export {
   authReducer,
@@ -24,4 +25,5 @@ export {
   gameReducer,
   toastReducer,
   popupReducer,
+  chatReducer,
 };

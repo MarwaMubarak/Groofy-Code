@@ -91,8 +91,10 @@ public class UserService implements UserDetailsService {
             if (userModel.getClanMember() != null) {
                 userDTO.setClanName(userModel.getClanMember().getClan().getName());
             }
-            Integer notifyCnt = notificationRepository.countUnRetrievedByReceiver(userModel);
+            Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(userModel);
+            Integer friendNotifyCnt = notificationRepository.countFriendUnRetrievedByReceiver(userModel);
             userDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+            userDTO.setFriendNotifyCnt(friendNotifyCnt > 99 ? "99+" : friendNotifyCnt.toString());
             return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
         } catch (Exception e) {
             throw new Exception(e);
@@ -262,7 +264,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<Object> searchUsersByPrefixPage(String prefix, int page, int size ) throws Exception {
+    public ResponseEntity<Object> searchUsersByPrefixPage(String prefix, int page, int size) throws Exception {
         try {
             // Validate if prefix is provided
             if (prefix.isEmpty()) {
@@ -272,7 +274,7 @@ public class UserService implements UserDetailsService {
 
             Pageable pageable = PageRequest.of(page, size);
             // Perform case-insensitive search for usernames starting with the given prefix
-            Page<UserModel> users = userRepository.findByUsernameStartingWithIgnoreCase(prefix,pageable);
+            Page<UserModel> users = userRepository.findByUsernameStartingWithIgnoreCase(prefix, pageable);
 
             if (users.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)

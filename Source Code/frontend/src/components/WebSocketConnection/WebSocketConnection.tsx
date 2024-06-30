@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { gameThunks, popupThunks } from "../../store/actions";
+import { chatThunks, gameThunks, popupThunks } from "../../store/actions";
 import { notifyThunks, socketThunks } from "../../store/actions";
 
 const WebSocketConnection = () => {
@@ -25,6 +25,11 @@ const WebSocketConnection = () => {
             { Authorization: `Bearer ${localStorage.getItem("token")}` }
           );
           client.subscribe(
+            `/userTCP/${loggedUser.username}/messages`,
+            onChatMessage,
+            { Authorization: `Bearer ${localStorage.getItem("token")}` }
+          );
+          client.subscribe(
             `/userTCP/${loggedUser.username}/games`,
             onGameMessage,
             { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -39,7 +44,7 @@ const WebSocketConnection = () => {
           if (loggedUser.clanName !== null) {
             client.subscribe(
               `/clanTCP/${loggedUser.clanName}/chat`,
-              onMessage,
+              onChatMessage,
               {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               }
@@ -52,6 +57,12 @@ const WebSocketConnection = () => {
         const msg = JSON.parse(message.body);
         console.log("Recieved message: ", msg);
         dispatch(notifyThunks.socketNotification(msg) as any);
+      };
+
+      const onChatMessage = (message: any) => {
+        const chatMsg = JSON.parse(message.body);
+        console.log("Recieved chat message: ", chatMsg);
+        dispatch(chatThunks.addMessage(chatMsg) as any);
       };
 
       const onGameMessage = (message: any) => {

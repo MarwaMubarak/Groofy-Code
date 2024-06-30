@@ -15,6 +15,9 @@ import java.util.List;
 public interface ClanRepository extends JpaRepository<ClanModel, Long> {
     ClanModel findByNameIgnoreCase(String clanName);
 
+    @Query("SELECT c FROM ClanModel c LEFT JOIN FETCH c.chat WHERE lower(c.name) = lower(:clanName)")
+    ClanModel fetchByNameIgnoreCase(@Param("clanName") String clanName);
+
     @Query("SELECT COUNT(m) FROM ClanModel c JOIN c.members m WHERE c.id=:id")
     Integer countMembersById(Long id);
 

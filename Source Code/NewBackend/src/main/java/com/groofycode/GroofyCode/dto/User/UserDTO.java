@@ -34,6 +34,10 @@ public class UserDTO {
 
     private String notifyCnt;
 
+    private String messageNotifyCnt;
+
+    private String friendNotifyCnt;
+
     private Integer wins;
 
     private Integer draws;

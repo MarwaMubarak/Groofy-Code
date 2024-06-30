@@ -15,23 +15,21 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserModel userModel;
 
-    @Column(nullable = false)
-    private Long userId;
-
-    @Column(nullable = false)
-    private Long chatId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @CreationTimestamp
     private Date createdAt;
-
-
 }

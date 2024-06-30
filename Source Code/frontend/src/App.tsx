@@ -58,6 +58,8 @@ function App() {
 
   console.log("QUEUE", inQueue);
 
+  console.log("Logged User", loggedUser);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setMessage(getRandomMessage());

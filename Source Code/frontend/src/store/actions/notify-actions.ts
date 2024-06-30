@@ -1,8 +1,7 @@
 import { reqInstance } from "..";
 import { notifyActions } from "../slices/notify-slice";
 
-const getAllNotifications = (page?: Number) => {
-  if (page === undefined) page = 0;
+const getAllNotifications = (page: Number = 0) => {
   return async (dispatch: any) => {
     try {
       const token = localStorage.getItem("token");
@@ -21,12 +20,61 @@ const getAllNotifications = (page?: Number) => {
   };
 };
 
+const getNormalNotifications = (page: Number = 0) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(
+          `/notifications/normal?p=${page}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(notifyActions.setNotifications(response.data.body));
+        dispatch(notifyActions.setNotifyCnt(0));
+      } catch (error: any) {
+        dispatch(notifyActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const getFriendNotifications = (page: Number = 0) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(
+          `/notifications/friend?p=${page}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(notifyActions.setNotifications(response.data.body));
+        dispatch(notifyActions.setNotifyCnt(0));
+      } catch (error: any) {
+        dispatch(notifyActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
 const socketNotification = (notification: any) => {
   return (dispatch: any) => {
     dispatch(notifyActions.setNotifyCnt(notification.notifyCnt));
   };
 };
 
-const notifyThunks = { getAllNotifications, socketNotification };
+const notifyThunks = {
+  getAllNotifications,
+  socketNotification,
+  getNormalNotifications,
+  getFriendNotifications,
+};
 
 export default notifyThunks;

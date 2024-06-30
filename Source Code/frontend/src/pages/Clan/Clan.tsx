@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Chat, ClanRequests, GroofyWrapper } from "../../components";
+import {
+  Chat,
+  ClanRequests,
+  GroofyWrapper,
+  ProfileImage,
+} from "../../components";
 import classes from "./scss/clan.module.css";
 import { useEffect, useRef, useState } from "react";
 import clanThunks from "../../store/actions/clan-actions";
@@ -24,6 +29,8 @@ const Clan = () => {
 
     getClan();
   }, [dispatch, fetchClan]);
+
+  console.log(clan);
 
   const leaveClan = async () => {
     return await dispatch(clanThunks.leaveClan() as any);
@@ -141,7 +148,18 @@ const Clan = () => {
                 {clan.members.map((member: any, idx: number) => (
                   <div className={classes.member} key={idx}>
                     <div className={classes.m_info}>
-                      <img src={member.photoUrl} alt="profilePhoto" />
+                      <ProfileImage
+                        photoUrl={member.photoUrl}
+                        username={member.username}
+                        style={{
+                          backgroundColor: member.accountColor,
+                          width: "42px",
+                          height: "42px",
+                          fontSize: "18px",
+                          marginRight: "10px",
+                        }}
+                        canClick={false}
+                      />
                       <span className={classes.m_usn}>{member.username}</span>
                     </div>
                     <div

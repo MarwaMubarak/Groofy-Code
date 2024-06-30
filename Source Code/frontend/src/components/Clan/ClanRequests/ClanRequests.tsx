@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import clanThunks from "../../../store/actions/clan-actions";
 import classes from "./scss/clan-requests.module.css";
 import { Toast } from "primereact/toast";
+import ProfileImage from "../../ProfileImage/ProfileImage";
 
 const ClanRequests = (props: ClanRequestsProps) => {
   const dispatch = useDispatch();
@@ -41,7 +42,18 @@ const ClanRequests = (props: ClanRequestsProps) => {
         clanRequests.map((request: any, idx: number) => (
           <div key={idx} className={classes.single_request}>
             <div className={classes.user_info}>
-              <img src={request.photoUrl} alt="UserPhoto" />
+              <ProfileImage
+                photoUrl={request.photoUrl}
+                username={request.username}
+                style={{
+                  backgroundColor: request.accountColor,
+                  width: "42px",
+                  height: "42px",
+                  fontSize: "18px",
+                  marginRight: "10px",
+                }}
+                canClick={false}
+              />
               <span>{request.username}</span>
             </div>
             <div className={classes.request_actions}>

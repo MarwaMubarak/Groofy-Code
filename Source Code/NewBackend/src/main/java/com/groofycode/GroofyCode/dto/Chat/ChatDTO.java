@@ -11,7 +11,6 @@ import java.util.List;
 @Setter
 @Data
 public class ChatDTO {
-
     private Long id;
 
     private String name;
@@ -21,6 +20,4 @@ public class ChatDTO {
     private List<Long> userIds;
 
     private List<MessageDTO> messages;
-
-
 }

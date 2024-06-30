@@ -1,17 +1,16 @@
 package com.groofycode.GroofyCode.dto.Notification;
 
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
+
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
 @Setter
 @Getter
 @Data
+@NoArgsConstructor
 public class NotificationDTO {
     private long id;
     private String body;

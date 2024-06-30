@@ -5,15 +5,6 @@
   @include between;
   .user_info {
     @include center;
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-    span {
-      font-size: 15px;
-      margin-left: 10px;
-    }
   }
   .request_actions {
     @include center;

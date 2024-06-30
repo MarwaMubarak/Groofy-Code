@@ -171,7 +171,7 @@ public class PostService {
                     likeNotificationDTO.setContent(post.getContent());
                     likeNotificationDTO.setImg(post.getUser().getPhotoUrl());
                     likeNotificationDTO.setPostId(post.getId());
-                    Integer notifyCnt = notificationRepository.countUnRetrievedByReceiver(post.getUser());
+                    Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(post.getUser());
                     likeNotificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
                     messagingTemplate.convertAndSendToUser(post.getUser().getUsername(), "/notification", likeNotificationDTO);
 

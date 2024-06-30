@@ -1,5 +1,7 @@
 package com.groofycode.GroofyCode.service.Game;
 
+import com.groofycode.GroofyCode.dto.Notification.MatchInvitationNotificationDTO;
+import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Game.FriendMatchInvitation;
 import com.groofycode.GroofyCode.model.Game.MatchInvitation;
@@ -100,7 +102,7 @@ public class MatchInvitationService {
 
             // Create and save the match invitation notification
             MatchInvitationNotificationModel notification = new MatchInvitationNotificationModel();
-            notification.setBody(team1.getName() + " has invited you to join a team match");
+            notification.setBody("has invited you to join a team match");
             notification.setSender(currUser);
             notification.setCreatedAt(new Date());
             notification.setReceiver(receiver);
@@ -111,8 +113,20 @@ public class MatchInvitationService {
 
             matchInvitationNotificationRepository.save(notification);
 
+            MatchInvitationNotificationDTO matchInvitationNotificationDTO = new MatchInvitationNotificationDTO();
+            matchInvitationNotificationDTO.setBody(notification.getBody());
+            matchInvitationNotificationDTO.setSender(currUser.getUsername());
+            matchInvitationNotificationDTO.setImg(currUser.getPhotoUrl());
+            matchInvitationNotificationDTO.setColor(currUser.getAccountColor());
+            matchInvitationNotificationDTO.setTeam1ID(team1.getId());
+            matchInvitationNotificationDTO.setTeam2ID(team2.getId());
+            matchInvitationNotificationDTO.setInvitationID(matchInvitation.getId());
+            matchInvitationNotificationDTO.setCreatedAt(notification.getCreatedAt());
+            Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(receiver);
+            matchInvitationNotificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+
             // Send the notification via WebSocket
-            messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", notificationService.mapEntityToDTO(notification));
+            messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", matchInvitationNotificationDTO);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Match invitation sent successfully!", null));
         } catch (Exception e) {
@@ -283,17 +297,26 @@ public class MatchInvitationService {
 
             // Create and save the match invitation notification
             FriendMatchInvitationNotificationModel notification = new FriendMatchInvitationNotificationModel();
-            notification.setBody("You have received a friend match invitation from " + currUser.getUsername());
+            notification.setBody("invites you to a friendly match");
             notification.setSender(currUser);
             notification.setCreatedAt(new Date());
             notification.setReceiver(receiver);
             notification.setNotificationType(NotificationType.FRIEND_MATCH_INVITATION);
             notification.setFriendMatchInvitation(friendMatchInvitation);
-
             friendMatchInvitationNotificationRepository.save(notification);
 
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setBody(notification.getBody());
+            notificationDTO.setSender(currUser.getUsername());
+            notificationDTO.setImg(currUser.getPhotoUrl());
+            notificationDTO.setColor(currUser.getAccountColor());
+            notificationDTO.setNotificationType(NotificationType.FRIEND_MATCH_INVITATION);
+            notificationDTO.setCreatedAt(notification.getCreatedAt());
+            Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(receiver);
+            notificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+
             // Send the notification via WebSocket
-            messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", notificationService.mapEntityToDTO(notification));
+            messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", notificationDTO);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Friend match invitation sent successfully!", null));
         } catch (Exception e) {

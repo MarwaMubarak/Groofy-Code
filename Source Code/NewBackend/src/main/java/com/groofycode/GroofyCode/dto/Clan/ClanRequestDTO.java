@@ -15,4 +15,6 @@ public class ClanRequestDTO {
     private String username;
 
     private String photoUrl;
+
+    private String accountColor;
 }
