@@ -13,10 +13,9 @@ import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Team.TeamMember;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
-import com.groofycode.GroofyCode.repository.Game.GameRepository;
-import com.groofycode.GroofyCode.repository.Game.ProgProblemRepository;
-import com.groofycode.GroofyCode.repository.Game.SubmissionRepository;
+import com.groofycode.GroofyCode.repository.Game.*;
 import com.groofycode.GroofyCode.repository.NotificationRepository;
+import com.groofycode.GroofyCode.repository.TeamMatchInvitationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.CodeforcesSubmissionService;
 import com.groofycode.GroofyCode.service.NotificationService;
@@ -73,6 +72,10 @@ public class GameService {
 
     private final ProgProblemRepository progProblemRepository;
 
+    private final TeamMatchInvitationRepository teamMatchInvitationRepository;
+
+    private final BeatAFriendRepository beatAFriendMatchRepository;
+
 
 //    private final MatchScheduler matchScheduler;
 
@@ -82,7 +85,7 @@ public class GameService {
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
 
-                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, MatchInvitationService matchInvitationService, ProgProblemRepository progProblemRepository) {
+                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, MatchInvitationService matchInvitationService, ProgProblemRepository progProblemRepository, TeamMatchInvitationRepository teamMatchInvitationRepository, BeatAFriendRepository beatAFriendMatchRepository) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -100,6 +103,8 @@ public class GameService {
         this.progProblemRepository = progProblemRepository;
 //        this.matchScheduler = matchScheduler;
         this.matchInvitationService = matchInvitationService;
+        this.teamMatchInvitationRepository = teamMatchInvitationRepository;
+        this.beatAFriendMatchRepository = beatAFriendMatchRepository;
     }
 
     public ResponseEntity<Object> findAllGames(Integer page) throws Exception {
@@ -591,6 +596,7 @@ public class GameService {
 
     public ResponseEntity<Object> createTeamMatch(TeamModel team1, TeamModel team2) {
         try {
+
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel user = userRepository.findByUsername(userInfo.getUsername());
 
@@ -616,12 +622,19 @@ public class GameService {
                 admin2 = team2.getCreator();
             }
 
+
             List<UserModel> team1Users = team1.getMembers().stream()
                     .map(TeamMember::getUser)
                     .collect(Collectors.toList());
             List<UserModel> team2Users = team2.getMembers().stream()
                     .map(TeamMember::getUser)
                     .collect(Collectors.toList());
+
+            if (!(team1Users.size() == 3 && team2Users.size() == 3)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Teams must have 3 members", null));
+            }
+
 
             List<UserModel> commonUsers = new ArrayList<>(team1Users);
             commonUsers.retainAll(team2Users);
@@ -632,50 +645,121 @@ public class GameService {
                         .body(ResponseUtils.unsuccessfulRes("Teams cannot have common members", null));
             }
 
-//            matchInvitationService.;
+            List<TeamMatchInvitation> existingInvitation = teamMatchInvitationRepository.findByTeams(team1, team2);
 
+            if (existingInvitation.isEmpty()) {
+                matchInvitationService.sendTeamMatchInvitation(team1.getId(), team2.getId(), admin2.getUsername());
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", null));
+            } else if (existingInvitation.get(0).isAccepted()) {
+                ////TODO: retrive 3 problem based on team average rating
 
-            ////TODO: retrive 3 problem based on team average rating
+                String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
+                String problemURL2 = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
+                String problemURL3 = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
+                // Create the TeamMatch
+                LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
+                final TeamMatch teamMatch = new TeamMatch(team1, team2,
+                        problemURL,
+                        problemURL2,
+                        problemURL3, LocalDateTime.now(), endTime, 60.0);
 
-            String problemURL = "https://codeforces.com/problemset/problem/1989/F"; // Default problem URL
-            String problemURL2 = "https://codeforces.com/problemset/problem/1989/F"; // Default problem URL
-            String problemURL3 = "https://codeforces.com/problemset/problem/1989/F"; // Default problem URL
-            // Create the TeamMatch
-            LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
-            final TeamMatch teamMatch = new TeamMatch(team1, team2,
-                    problemURL,
-                    problemURL2,
-                    problemURL3, LocalDateTime.now(), endTime, 60.0);
+                teamMatch.setPlayers1(team1Users);
+                teamMatch.setPlayers2(team2Users);
 
-            teamMatch.setPlayers1(team1Users);
-            teamMatch.setPlayers2(team2Users);
+                gameRepository.save(teamMatch); // Save the team match immediately
 
-            gameRepository.save(teamMatch); // Save the team match immediately
+                // Update each player's existing game ID
+                team1Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
+                team2Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
+                userRepository.saveAll(team1Users);
+                userRepository.saveAll(team2Users);
 
-            // Update each player's existing game ID
-            team1Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
-            team2Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
-            userRepository.saveAll(team1Users);
-            userRepository.saveAll(team2Users);
+                // Convert the TeamMatch entity to its corresponding DTO
+                ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
+                ProblemDTO problemDTO2 = problemParser.parseCodeforcesUrl(problemURL2);
+                ProblemDTO problemDTO3 = problemParser.parseCodeforcesUrl(problemURL3);
 
-            // Convert the TeamMatch entity to its corresponding DTO
-            ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
-            ProblemDTO problemDTO2 = problemParser.parseCodeforcesUrl(problemURL2);
-            ProblemDTO problemDTO3 = problemParser.parseCodeforcesUrl(problemURL3);
+                ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
+                ResponseEntity<Object> problemParsed2 = problemParser.parseFullProblem(problemDTO2.getContestId(), problemDTO2.getIndex());
+                ResponseEntity<Object> problemParsed3 = problemParser.parseFullProblem(problemDTO3.getContestId(), problemDTO3.getIndex());
 
-            ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
-            TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody(), problemDTO2, problemDTO3);
+                TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody(), problemParsed2.getBody(), problemParsed3.getBody());
 
-            // Notify all players about the match start
-            team1Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
-                    ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
-            team2Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
-                    ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
+                // Notify all players about the match start
+                team1Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                        ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
+                team2Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                        ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
 
-            return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
+                matchInvitationService.deleteInvitation(team1, team2);
+
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Teams already have a pending invitation", null));
+            }
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<Object> createBeatAFriendMatch(Long receiverUserId) {
+        try {
+            // Retrieve sender and receiver information
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel sender = userRepository.findByUsername(userInfo.getUsername());
+            UserModel receiver = userRepository.findById(receiverUserId).orElse(null);
+
+            if (receiver == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("Receiver not found", null));
+            }
+
+            // Check if there is an existing invitation between sender and receiver
+            ResponseEntity<Object> invitationResponse = matchInvitationService.sendFriendMatchInvitation(receiver.getUsername());
+            if (invitationResponse.getStatusCode() != HttpStatus.OK) {
+                return invitationResponse;
+            }
+
+            // Retrieve the invitation status from the response
+            String invitationStatus = (String) invitationResponse.getBody();
+
+            // Handle invitation status
+            switch (invitationStatus) {
+                case "PENDING":
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes("Beat a Friend invitation is already pending", null));
+
+                case "ACCEPTED":
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes("You already have an ongoing Beat a Friend match with this user", null));
+
+                default: // No invitation exists, proceed to create one
+
+                    String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
+                    LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
+                    BeatAFriend beatAFriendMatch = new BeatAFriend(List.of(sender), List.of(receiver), problemURL, LocalDateTime.now(), endTime, 60.0);
+                    beatAFriendMatchRepository.save(beatAFriendMatch);
+
+                    // Prepare DTO for response
+                    ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
+                    ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
+                    BeatAFriendDTO beatAFriendDTO = new BeatAFriendDTO(beatAFriendMatch, problemParsed.getBody());
+
+                    // Notify sender and receiver about the match start
+                    messagingTemplate.convertAndSendToUser(sender.getUsername(), "/notification",
+                            ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+                    messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification",
+                            ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+
+                    return ResponseEntity.ok(ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Error creating Beat a Friend match", e.getMessage()));
         }
     }
 

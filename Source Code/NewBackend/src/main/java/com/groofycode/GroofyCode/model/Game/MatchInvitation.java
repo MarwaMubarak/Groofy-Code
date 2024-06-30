@@ -19,10 +19,6 @@ public class MatchInvitation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "game_id")
-    private Game game;
-
-    @ManyToOne
     @JoinColumn(name = "sender_id")
     private UserModel sender;
 
@@ -30,9 +26,11 @@ public class MatchInvitation {
     @JoinColumn(name = "receiver_id")
     private UserModel receiver;
 
+    private boolean isAccepted;
+
     private Date sentAt;
-    public MatchInvitation(Game game, UserModel sender, UserModel receiver, Date sentAt) {
-        this.game = game;
+
+    public MatchInvitation( UserModel sender, UserModel receiver, Date sentAt) {
         this.sender = sender;
         this.receiver = receiver;
         this.sentAt = sentAt;

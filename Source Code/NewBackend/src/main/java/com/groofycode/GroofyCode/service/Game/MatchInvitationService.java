@@ -1,15 +1,22 @@
 package com.groofycode.GroofyCode.service.Game;
+
 import com.groofycode.GroofyCode.dto.User.UserInfo;
-import com.groofycode.GroofyCode.model.Game.Game;
+import com.groofycode.GroofyCode.model.Game.FriendMatchInvitation;
 import com.groofycode.GroofyCode.model.Game.MatchInvitation;
+import com.groofycode.GroofyCode.model.Game.TeamMatchInvitation;
+import com.groofycode.GroofyCode.model.Notification.FriendMatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.MatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
+import com.groofycode.GroofyCode.model.Team.TeamInvitation;
+import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.*;
 import com.groofycode.GroofyCode.repository.Game.GameRepository;
 import com.groofycode.GroofyCode.repository.Game.MatchInvitationRepository;
+import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +24,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,38 +38,55 @@ public class MatchInvitationService {
     private GameRepository gameRepository;
 
     @Autowired
-    private MatchInvitationRepository matchInvitationRepository;
+    private TeamRepository teamRepository;
+
+//    @Autowired
+//    private MatchInvitationRepository matchInvitationRepository;
 
     @Autowired
     private NotificationRepository notificationRepository;
+
     @Autowired
-    private  MatchInvitationNotificationRepository matchInvitationNotificationRepository;
+    private MatchInvitationNotificationRepository matchInvitationNotificationRepository;
 
     @Autowired
     private NotificationService notificationService;
 
 
-
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    public ResponseEntity<Object> sendMatchInvitation(Long gameId, String receiverUsername) {
+    @Autowired
+    private TeamMatchInvitationRepository teamMatchInvitationRepository;
+
+    @Autowired
+    private FriendMatchInvitationRepository friendMatchInvitationRepository;
+
+    @Autowired
+    private FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository;
+
+    public ResponseEntity<Object> sendTeamMatchInvitation(Long teamId1, Long teamId2, String receiverUsername) {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
 
-            Optional<Game> gameOpt = gameRepository.findById(gameId);
-            if (gameOpt.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Game not found!", null));
+
+            Optional<TeamModel> teamOpt1 = teamRepository.findById(teamId1);
+            Optional<TeamModel> teamOpt2 = teamRepository.findById(teamId2);
+            if (teamOpt1.isEmpty() || teamOpt2.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("One or both teams not found!", null));
             }
-            Game game = gameOpt.get();
+            TeamModel team1 = teamOpt1.get();
+            TeamModel team2 = teamOpt2.get();
+
 
             UserModel receiver = userRepository.findByUsername(receiverUsername);
             if (receiver == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("User not found!", null));
             }
 
-            Optional<MatchInvitation> existingInvitation = matchInvitationRepository.findByGameAndReceiver(game, receiver);
+            Optional<TeamMatchInvitation> existingInvitation = teamMatchInvitationRepository.findByTeam1AndTeam2(team1, team2);
+
             if (existingInvitation.isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Invitation already sent to this user!", null));
             }
@@ -71,17 +95,20 @@ public class MatchInvitationService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("You cannot send an invitation to yourself!", null));
             }
 
-            MatchInvitation matchInvitation = new MatchInvitation(game, currUser, receiver,new Date());
-            matchInvitationRepository.save(matchInvitation);
+            TeamMatchInvitation matchInvitation = new TeamMatchInvitation(team1, team2, currUser, receiver, new Date());
+            teamMatchInvitationRepository.save(matchInvitation);
 
             // Create and save the match invitation notification
             MatchInvitationNotificationModel notification = new MatchInvitationNotificationModel();
-            notification.setBody(currUser.getUsername() + " has invited you to join the match " + game.getId());
+            notification.setBody(team1.getName() + " has invited you to join a team match");
             notification.setSender(currUser);
             notification.setCreatedAt(new Date());
             notification.setReceiver(receiver);
             notification.setNotificationType(NotificationType.MATCH_INVITATION);
-            notification.setGame(game);
+            notification.setTeam1(team1);
+            notification.setTeam2(team2);
+            notification.setMatchInvitation(matchInvitation);
+
             matchInvitationNotificationRepository.save(notification);
 
             // Send the notification via WebSocket
@@ -98,27 +125,40 @@ public class MatchInvitationService {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
 
-            Optional<MatchInvitation> invitationOpt = matchInvitationRepository.findById(invitationId);
+            Optional<TeamMatchInvitation> invitationOpt = teamMatchInvitationRepository.findById(invitationId);
             if (invitationOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
             }
 
-            MatchInvitation matchInvitation = invitationOpt.get();
+            TeamMatchInvitation matchInvitation = invitationOpt.get();
+
+            matchInvitation.setAccepted(true);
+
+            teamMatchInvitationRepository.save(matchInvitation);
+
+
+            TeamModel teamModel;
+
+            teamModel = ((TeamMatchInvitation) matchInvitation).getTeam2();
+            if (!teamModel.getCreator().equals(currUser)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot accept this invitation, as you are not the admin!", null));
+            }
+
             if (!matchInvitation.getReceiver().getId().equals(currUser.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot accept this invitation!", null));
             }
+            TeamModel teamModel1 = matchInvitation.getTeam1();
+            TeamModel teamModel2 = matchInvitation.getTeam2();
 
-            Game game = matchInvitation.getGame();
-            game.getPlayers2().add(currUser); // Add to players2 or players1 based on the logic
-            gameRepository.save(game);
-
-            matchInvitationRepository.delete(matchInvitation);
 
             // Delete the corresponding notification
-            MatchInvitationNotificationModel notification = matchInvitationNotificationRepository.findByReceiverAndGame(currUser, game);
-            if (notification != null) {
+            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(teamModel1, teamModel2);
+            MatchInvitationNotificationModel notification;
+            if (!notificationOPT.isEmpty()) {
+                notification = notificationOPT.get(0);
                 matchInvitationNotificationRepository.delete(notification);
             }
+
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invitation accepted successfully", null));
         } catch (Exception e) {
@@ -131,27 +171,57 @@ public class MatchInvitationService {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
 
-            Optional<MatchInvitation> invitationOpt = matchInvitationRepository.findById(invitationId);
+            Optional<TeamMatchInvitation> invitationOpt = teamMatchInvitationRepository.findById(invitationId);
             if (invitationOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
             }
 
-            MatchInvitation matchInvitation = invitationOpt.get();
+            TeamMatchInvitation matchInvitation = invitationOpt.get();
             if (!matchInvitation.getReceiver().getId().equals(currUser.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot reject this invitation!", null));
             }
 
-            matchInvitationRepository.delete(matchInvitation);
+            teamMatchInvitationRepository.delete(matchInvitation);
 
+
+            TeamModel teamModel1 = ((TeamMatchInvitation) matchInvitation).getTeam1();
+            TeamModel teamModel2 = ((TeamMatchInvitation) matchInvitation).getTeam2();
             // Delete the corresponding notification
-            MatchInvitationNotificationModel notification = matchInvitationNotificationRepository.findByReceiverAndGame(currUser, matchInvitation.getGame());
-            if (notification != null) {
+            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(teamModel1, teamModel2);
+            MatchInvitationNotificationModel notification;
+            if (!notificationOPT.isEmpty()) {
+                notification = notificationOPT.get(0);
                 matchInvitationNotificationRepository.delete(notification);
             }
+
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invitation rejected successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to reject invitation", null));
+        }
+    }
+
+    public ResponseEntity<Object> deleteInvitation(TeamModel team1, TeamModel team2) {
+        try {
+            Optional<TeamMatchInvitation> invitationOpt = teamMatchInvitationRepository.findByTeam1AndTeam2(team1, team2);
+            if (invitationOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
+            }
+
+            TeamMatchInvitation matchInvitation = invitationOpt.get();
+            teamMatchInvitationRepository.delete(matchInvitation);
+
+            // Delete the corresponding notification
+            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(team1, team2);
+            MatchInvitationNotificationModel notification;
+            if (!notificationOPT.isEmpty()) {
+                notification = notificationOPT.get(0);
+                matchInvitationNotificationRepository.delete(notification);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invitation deleted successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to delete invitation", null));
         }
     }
 
@@ -160,27 +230,162 @@ public class MatchInvitationService {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
 
-            Optional<MatchInvitation> invitationOpt = matchInvitationRepository.findById(invitationId);
+            Optional<TeamMatchInvitation> invitationOpt = teamMatchInvitationRepository.findById(invitationId);
             if (invitationOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
             }
 
-            MatchInvitation matchInvitation = invitationOpt.get();
+            TeamMatchInvitation matchInvitation = invitationOpt.get();
             if (!matchInvitation.getSender().getId().equals(currUser.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot cancel this invitation!", null));
             }
 
-            matchInvitationRepository.delete(matchInvitation);
+            teamMatchInvitationRepository.delete(matchInvitation);
+
 
             // Delete the corresponding notification
-            MatchInvitationNotificationModel notification = matchInvitationNotificationRepository.findByReceiverAndGame(matchInvitation.getReceiver(), matchInvitation.getGame());
-            if (notification != null) {
+            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(matchInvitation.getTeam1(), matchInvitation.getTeam1());
+            MatchInvitationNotificationModel notification;
+            if (!notificationOPT.isEmpty()) {
+                notification = notificationOPT.get(0);
                 matchInvitationNotificationRepository.delete(notification);
             }
+
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invitation canceled successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to cancel invitation", null));
         }
     }
+
+    public ResponseEntity<Object> sendFriendMatchInvitation(String receiverUsername) {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
+
+            UserModel receiver = userRepository.findByUsername(receiverUsername);
+            if (receiver == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("User not found!", null));
+            }
+
+            List<FriendMatchInvitation> existingInvitation = friendMatchInvitationRepository.findBySenderAndReceiverOrReceiverAndSender(currUser, receiver);
+
+            if (!existingInvitation.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Invitation already sent to this user!", null));
+            }
+
+            if (currUser.getId().equals(receiver.getId())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("You cannot send an invitation to yourself!", null));
+            }
+
+            FriendMatchInvitation friendMatchInvitation = new FriendMatchInvitation(currUser, receiver, new Date());
+            friendMatchInvitationRepository.save(friendMatchInvitation);
+
+            // Create and save the match invitation notification
+            FriendMatchInvitationNotificationModel notification = new FriendMatchInvitationNotificationModel();
+            notification.setBody("You have received a friend match invitation from " + currUser.getUsername());
+            notification.setSender(currUser);
+            notification.setCreatedAt(new Date());
+            notification.setReceiver(receiver);
+            notification.setNotificationType(NotificationType.FRIEND_MATCH_INVITATION);
+            notification.setFriendMatchInvitation(friendMatchInvitation);
+
+            friendMatchInvitationNotificationRepository.save(notification);
+
+            // Send the notification via WebSocket
+            messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", notificationService.mapEntityToDTO(notification));
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Friend match invitation sent successfully!", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to send invitation", null));
+        }
+    }
+
+    public ResponseEntity<Object> acceptFriendMatchInvitation(Long invitationId) {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
+
+            Optional<FriendMatchInvitation> invitationOpt = friendMatchInvitationRepository.findById(invitationId);
+            if (invitationOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
+            }
+
+            FriendMatchInvitation friendMatchInvitation = invitationOpt.get();
+
+            friendMatchInvitation.setAccepted(true);
+
+            friendMatchInvitationRepository.save(friendMatchInvitation);
+
+            // Delete the corresponding notification
+            List<FriendMatchInvitationNotificationModel> notifications = friendMatchInvitationNotificationRepository.findByFriendMatchInvitation(friendMatchInvitation);
+            if (!notifications.isEmpty()) {
+                friendMatchInvitationNotificationRepository.deleteAll(notifications);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation accepted successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to accept invitation", null));
+        }
+    }
+
+    public ResponseEntity<Object> rejectFriendMatchInvitation(Long invitationId) {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
+
+            Optional<FriendMatchInvitation> invitationOpt = friendMatchInvitationRepository.findById(invitationId);
+            if (invitationOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
+            }
+
+            FriendMatchInvitation friendMatchInvitation = invitationOpt.get();
+            if (!friendMatchInvitation.getReceiver().getId().equals(currUser.getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot reject this invitation!", null));
+            }
+
+            friendMatchInvitationRepository.delete(friendMatchInvitation);
+
+            // Delete the corresponding notification
+            List<FriendMatchInvitationNotificationModel> notifications = friendMatchInvitationNotificationRepository.findByFriendMatchInvitation(friendMatchInvitation);
+            if (!notifications.isEmpty()) {
+                friendMatchInvitationNotificationRepository.deleteAll(notifications);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation rejected successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to reject invitation", null));
+        }
+    }
+
+
+    public ResponseEntity<Object> cancelFriendMatchInvitation(Long invitationId) {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
+
+            Optional<FriendMatchInvitation> invitationOpt = friendMatchInvitationRepository.findById(invitationId);
+            if (invitationOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
+            }
+
+            FriendMatchInvitation friendMatchInvitation = invitationOpt.get();
+            if (!friendMatchInvitation.getSender().getId().equals(currUser.getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot cancel this invitation!", null));
+            }
+
+            friendMatchInvitationRepository.delete(friendMatchInvitation);
+
+            // Delete the corresponding notification
+            List<FriendMatchInvitationNotificationModel> notifications = friendMatchInvitationNotificationRepository.findByFriendMatchInvitation(friendMatchInvitation);
+            if (!notifications.isEmpty()) {
+                friendMatchInvitationNotificationRepository.deleteAll(notifications);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation canceled successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to cancel invitation", null));
+        }
+    }
+
 }

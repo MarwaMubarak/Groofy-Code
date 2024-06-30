@@ -12,6 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "notifications")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "dtype", length = 50)  // Adjust the length as needed
 @Getter
 @Setter
 public class NotificationModel {
@@ -40,5 +41,4 @@ public class NotificationModel {
     @Enumerated(EnumType.STRING)
     @Column(length = 255)  // Ensure this matches the altered column length
     private NotificationType notificationType;
-
 }

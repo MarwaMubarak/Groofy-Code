@@ -6,29 +6,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/match")
-public class matchInvitationController {
+@RequestMapping("/api/match/beat-friend")
+public class BeatAFriendController {
 
     @Autowired
-    private MatchInvitationService matchInvitationService;
+    private MatchInvitationService beatAFriendService;
 
-//    @PostMapping("/invite")
-//    public ResponseEntity<Object> sendInvitation(@RequestParam Long gameId, @RequestParam String receiverUsername) {
-//        return matchInvitationService.sendTeamMatchInvitation(gameId, receiverUsername);
-//    }
+    @PostMapping("/invite")
+    public ResponseEntity<Object> sendInvitation(@RequestParam String receiverUsername) {
+        return beatAFriendService.sendFriendMatchInvitation(receiverUsername);
+    }
 
     @PostMapping("/acceptInvitation")
     public ResponseEntity<Object> acceptInvitation(@RequestParam Long invitationId) {
-        return matchInvitationService.acceptMatchInvitation(invitationId);
+        return beatAFriendService.acceptFriendMatchInvitation(invitationId);
     }
 
     @PostMapping("/rejectInvitation")
     public ResponseEntity<Object> rejectInvitation(@RequestParam Long invitationId) {
-        return matchInvitationService.rejectMatchInvitation(invitationId);
+        return beatAFriendService.rejectFriendMatchInvitation(invitationId);
     }
 
     @PostMapping("/cancelInvitation")
     public ResponseEntity<Object> cancelInvitation(@RequestParam Long invitationId) {
-        return matchInvitationService.cancelMatchInvitation(invitationId);
+        return beatAFriendService.cancelFriendMatchInvitation(invitationId);
     }
 }

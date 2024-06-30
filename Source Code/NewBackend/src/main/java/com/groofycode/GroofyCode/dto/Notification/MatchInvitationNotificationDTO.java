@@ -11,5 +11,7 @@ import java.util.Date;
 @Setter
 @Data
 public class MatchInvitationNotificationDTO extends NotificationDTO {
-    private Long gameId;
+    private Long team1ID;
+    private Long team2ID;
+    private Long invitationID;
 }

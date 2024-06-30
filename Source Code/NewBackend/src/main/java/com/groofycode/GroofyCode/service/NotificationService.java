@@ -135,7 +135,20 @@ public class NotificationService {
         dto.setSender(notification.getSender().getUsername());
         dto.setNotificationType(notification.getNotificationType());
         dto.setCreatedAt(notification.getCreatedAt());
-        dto.setGameId(notification.getGame().getId());
+        dto.setTeam1ID(notification.getTeam1().getId());
+        dto.setTeam2ID(notification.getTeam2().getId());
+        dto.setInvitationID(notification.getMatchInvitation().getId());
+        return dto;
+    }
+
+    public FriendMatchInvitationNotificationDTO mapEntityToDTO(FriendMatchInvitationNotificationModel notification) {
+        FriendMatchInvitationNotificationDTO dto = new FriendMatchInvitationNotificationDTO();
+        dto.setId(notification.getId());
+        dto.setBody(notification.getBody());
+        dto.setSender(notification.getSender().getUsername());
+        dto.setNotificationType(notification.getNotificationType());
+        dto.setCreatedAt(notification.getCreatedAt());
+        dto.setFriendMatchInvitationID(notification.getFriendMatchInvitation().getId());
         return dto;
     }
 }

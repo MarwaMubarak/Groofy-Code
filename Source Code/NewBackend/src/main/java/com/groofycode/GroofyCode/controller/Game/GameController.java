@@ -3,6 +3,7 @@ package com.groofycode.GroofyCode.controller.Game;
 
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
+import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.service.Game.GameService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
@@ -93,6 +94,18 @@ public class GameController {
 
             // Pass the TeamModel objects to the service method
             return gameService.createTeamMatch(team1, team2);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/friend-match")
+    public ResponseEntity<Object> createBeatAFriendMatch(
+            @RequestParam("opponentId") Long opponentId
+    ) {
+        try {
+            return gameService.createBeatAFriendMatch(opponentId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));
