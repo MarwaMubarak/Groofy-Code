@@ -150,6 +150,8 @@ public class MatchInvitationService {
             TeamModel teamModel1 = matchInvitation.getTeam1();
             TeamModel teamModel2 = matchInvitation.getTeam2();
 
+            currUser.setExistingInvitationId(invitationId);
+
 
             // Delete the corresponding notification
             List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(teamModel1, teamModel2);
@@ -310,6 +312,9 @@ public class MatchInvitationService {
             if (invitationOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
             }
+            if (!currUser.getId().equals(invitationOpt.get().getReceiver().getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot accept this invitation!", null));
+            }
 
             FriendMatchInvitation friendMatchInvitation = invitationOpt.get();
 
@@ -322,6 +327,7 @@ public class MatchInvitationService {
             if (!notifications.isEmpty()) {
                 friendMatchInvitationNotificationRepository.deleteAll(notifications);
             }
+            currUser.setExistingInvitationId(invitationId);
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation accepted successfully", null));
         } catch (Exception e) {

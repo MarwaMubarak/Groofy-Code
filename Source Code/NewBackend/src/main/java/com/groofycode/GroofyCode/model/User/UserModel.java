@@ -66,6 +66,8 @@ public class UserModel implements UserDetails {
 
     private Long existingGameId;
 
+    private Long existingInvitationId;
+
 
     private Integer rate_800_cnt;
     private Integer rate_900_cnt;

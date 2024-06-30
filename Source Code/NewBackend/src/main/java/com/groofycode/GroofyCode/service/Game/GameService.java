@@ -1,22 +1,23 @@
 package com.groofycode.GroofyCode.service.Game;
 
 
+import com.groofycode.GroofyCode.dto.FriendMatchInvitationDTO;
 import com.groofycode.GroofyCode.dto.Game.*;
 import com.groofycode.GroofyCode.dto.MatchPlayerDTO;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
 import com.groofycode.GroofyCode.dto.Game.PlayerDTO;
 import com.groofycode.GroofyCode.dto.Game.ProblemDTO;
+import com.groofycode.GroofyCode.dto.TeamMatchInvitationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Game.*;
+import com.groofycode.GroofyCode.model.Notification.FriendMatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.MatchNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Team.TeamMember;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.*;
 import com.groofycode.GroofyCode.repository.Game.*;
-import com.groofycode.GroofyCode.repository.NotificationRepository;
-import com.groofycode.GroofyCode.repository.TeamMatchInvitationRepository;
-import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.CodeforcesSubmissionService;
 import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.service.ProblemPicker;
@@ -76,6 +77,11 @@ public class GameService {
 
     private final BeatAFriendRepository beatAFriendMatchRepository;
 
+    private final FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository;
+
+    private final FriendMatchInvitationRepository friendMatchInvitationRepository;
+
+    private final MatchInvitationRepository matchInvitationRepository;
 
 //    private final MatchScheduler matchScheduler;
 
@@ -85,7 +91,7 @@ public class GameService {
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
 
-                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, MatchInvitationService matchInvitationService, ProgProblemRepository progProblemRepository, TeamMatchInvitationRepository teamMatchInvitationRepository, BeatAFriendRepository beatAFriendMatchRepository) {
+                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, MatchInvitationService matchInvitationService, ProgProblemRepository progProblemRepository, TeamMatchInvitationRepository teamMatchInvitationRepository, BeatAFriendRepository beatAFriendMatchRepository, FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository, FriendMatchInvitationRepository friendMatchInvitationRepository, MatchInvitationRepository matchInvitationRepository) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -105,9 +111,12 @@ public class GameService {
         this.matchInvitationService = matchInvitationService;
         this.teamMatchInvitationRepository = teamMatchInvitationRepository;
         this.beatAFriendMatchRepository = beatAFriendMatchRepository;
+        this.friendMatchInvitationNotificationRepository = friendMatchInvitationNotificationRepository;
+        this.friendMatchInvitationRepository = friendMatchInvitationRepository;
+        this.matchInvitationRepository = matchInvitationRepository;
     }
 
-    public ResponseEntity<Object> getSubmissions(Long gameId){
+    public ResponseEntity<Object> getSubmissions(Long gameId) {
         List<Submission> submissions = submissionRepository.findByGameId(gameId);
         List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
             SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
@@ -240,6 +249,36 @@ public class GameService {
                 Exception e) {
             // Handle any exceptions that may occur during the match creation or saving process
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error getting match", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<Object> getMatchInvitation(Long id) {
+        if (id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("ID must not be null", null));
+        }
+
+        Optional<MatchInvitation> optionalInvitation = matchInvitationRepository.findById(id);
+        if (optionalInvitation.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Match invitation not found", null));
+        }
+
+        try {
+            MatchInvitation invitation = optionalInvitation.get();
+
+            if (invitation instanceof FriendMatchInvitation) {
+                FriendMatchInvitation friendMatchInvitation = (FriendMatchInvitation) invitation;
+                FriendMatchInvitationDTO dto = new FriendMatchInvitationDTO(friendMatchInvitation);
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Friend match invitation retrieved successfully", dto));
+            } else if (invitation instanceof TeamMatchInvitation) {
+                TeamMatchInvitation teamMatchInvitation = (TeamMatchInvitation) invitation;
+                TeamMatchInvitationDTO dto = new TeamMatchInvitationDTO(teamMatchInvitation);
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Team match invitation retrieved successfully", dto));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Unknown invitation type", null));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error getting match invitation", e.getMessage()));
         }
     }
 
@@ -663,8 +702,11 @@ public class GameService {
             List<TeamMatchInvitation> existingInvitation = teamMatchInvitationRepository.findByTeams(team1, team2);
 
             if (existingInvitation.isEmpty()) {
-                matchInvitationService.sendTeamMatchInvitation(team1.getId(), team2.getId(), admin2.getUsername());
-                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", null));
+                ResponseEntity<Object> responseEntity = matchInvitationService.sendTeamMatchInvitation(team1.getId(), team2.getId(), admin2.getUsername());
+                if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                    user.setExistingInvitationId(((TeamMatchInvitation) responseEntity.getBody()).getId());
+                }
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", responseEntity));
             } else if (existingInvitation.get(0).isAccepted()) {
                 ////TODO: retrive 3 problem based on team average rating
 
@@ -732,44 +774,35 @@ public class GameService {
                         .body(ResponseUtils.unsuccessfulRes("Receiver not found", null));
             }
 
-            // Check if there is an existing invitation between sender and receiver
-            ResponseEntity<Object> invitationResponse = matchInvitationService.sendFriendMatchInvitation(receiver.getUsername());
-            if (invitationResponse.getStatusCode() != HttpStatus.OK) {
-                return invitationResponse;
-            }
 
-            // Retrieve the invitation status from the response
-            String invitationStatus = (String) invitationResponse.getBody();
+            List<FriendMatchInvitation> existingInvitation = friendMatchInvitationRepository.findBySenderAndReceiverOrReceiverAndSender(sender, receiver);
+            if (existingInvitation.isEmpty()) {
+                ResponseEntity<Object> invitationResponse = matchInvitationService.sendFriendMatchInvitation(receiver.getUsername());
+                if (invitationResponse.getStatusCode() == HttpStatus.OK) {
+                    sender.setExistingInvitationId(((FriendMatchInvitation) invitationResponse.getBody()).getId());
+                }
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", invitationResponse));
+            } else if (existingInvitation.get(0).isAccepted()) {
+                String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
+                LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
+                BeatAFriend beatAFriendMatch = new BeatAFriend(List.of(sender), List.of(receiver), problemURL, LocalDateTime.now(), endTime, 60.0);
+                beatAFriendMatchRepository.save(beatAFriendMatch);
 
-            // Handle invitation status
-            switch (invitationStatus) {
-                case "PENDING":
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(ResponseUtils.unsuccessfulRes("Beat a Friend invitation is already pending", null));
+                // Prepare DTO for response
+                ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
+                ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
+                BeatAFriendDTO beatAFriendDTO = new BeatAFriendDTO(beatAFriendMatch, problemParsed.getBody());
 
-                case "ACCEPTED":
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(ResponseUtils.unsuccessfulRes("You already have an ongoing Beat a Friend match with this user", null));
+                // Notify sender and receiver about the match start
+                messagingTemplate.convertAndSendToUser(sender.getUsername(), "/notification",
+                        ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+                messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification",
+                        ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
 
-                default: // No invitation exists, proceed to create one
-
-                    String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
-                    LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
-                    BeatAFriend beatAFriendMatch = new BeatAFriend(List.of(sender), List.of(receiver), problemURL, LocalDateTime.now(), endTime, 60.0);
-                    beatAFriendMatchRepository.save(beatAFriendMatch);
-
-                    // Prepare DTO for response
-                    ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
-                    ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
-                    BeatAFriendDTO beatAFriendDTO = new BeatAFriendDTO(beatAFriendMatch, problemParsed.getBody());
-
-                    // Notify sender and receiver about the match start
-                    messagingTemplate.convertAndSendToUser(sender.getUsername(), "/notification",
-                            ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
-                    messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification",
-                            ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
-
-                    return ResponseEntity.ok(ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Friend already has a pending invitation", null));
             }
 
         } catch (Exception e) {

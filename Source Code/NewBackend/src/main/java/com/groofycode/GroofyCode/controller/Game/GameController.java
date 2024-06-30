@@ -117,6 +117,11 @@ public class GameController {
         }
     }
 
+    @GetMapping("/invitation")
+    public ResponseEntity<Object> getInvitation(@RequestParam Long invitationId) {
+        return gameService.getMatchInvitation(invitationId);
+    }
+
     @GetMapping("/history")
     public ResponseEntity<Object> getMatchHistory() {
         return gameService.getUserHistory();
