@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const submissionInitialState = {
   status: "",
   message: "",
-  submission: "",
+  submission: {},
+  submissions: [] as any[],
   isLoading: false,
   submitState: "",
 };
@@ -16,6 +17,12 @@ const submissionSlice = createSlice({
       state.status = action.payload.status;
       state.message = action.payload.message;
       state.submission = action.payload.body;
+    },
+    pushSubmission(state, action) {
+      state.submissions = [action.payload, ...state.submissions];
+    },
+    setSubmissions(state, action) {
+      state.submissions = action.payload;
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;

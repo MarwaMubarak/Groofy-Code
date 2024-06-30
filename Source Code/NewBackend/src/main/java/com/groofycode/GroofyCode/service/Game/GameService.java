@@ -107,6 +107,18 @@ public class GameService {
         this.beatAFriendMatchRepository = beatAFriendMatchRepository;
     }
 
+    public ResponseEntity<Object> getSubmissions(Long gameId){
+        List<Submission> submissions = submissionRepository.findByGameId(gameId);
+        List<SubmissionDTO> submissionDTOS = submissions.stream().map(sub -> {
+            SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
+            Duration duration = Duration.between(sub.getSubmissionTime(), LocalDateTime.now());
+            subDTO.setSubmissionTime(duration.getSeconds() / 60 + " min");
+            subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+            return subDTO;
+        }).toList();
+        return ResponseEntity.ok(ResponseUtils.successfulRes("Submissions retrieved successfully", submissionDTOS));
+    }
+
     public ResponseEntity<Object> findAllGames(Integer page) throws Exception {
         try {
             if (page == null || page < 0) page = 0;
@@ -152,7 +164,10 @@ public class GameService {
             LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
             SoloMatch soloMatch = new SoloMatch(players1, problemURL, LocalDateTime.now(), endTime, 60.0);
 
+
             soloMatch = gameRepository.save(soloMatch);
+
+            playerSelection.activeSoloDuration(soloMatch.getId());
 
             ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
 

@@ -25,7 +25,7 @@ public class RankedMatchDTO extends GameDTO {
                 rankedMatch.getStartTime(),
                 rankedMatch.getEndTime(),
                 rankedMatch.getDuration(),
-                rankedMatch.getGameType().toString(),
+                "Ranked",
                 rankedMatch.getGameStatus().toString(),
                 null // assgin it later
         );

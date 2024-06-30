@@ -164,7 +164,7 @@ public class PlayerSelection {
             return;
         }
 
-        Duration duration = Duration.between(LocalDateTime.now(), schedulerRankedMatch.getEndTime());
+        Duration duration = Duration.between(LocalDateTime.now(), soloMatch.getEndTime());
         if (duration.isNegative() || duration.isZero()) {
             terminateSoloGame();
         }

@@ -6,10 +6,12 @@ import { cpp } from "@codemirror/lang-cpp";
 import { python } from "@codemirror/lang-python";
 import { javascript } from "@codemirror/lang-javascript";
 import { java } from "@codemirror/lang-java";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { gameThunks } from "../../../store/actions";
 import { Toast } from "primereact/toast";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
 
 const languages: any = {
   "c++": {
@@ -33,6 +35,14 @@ const CodingSection = () => {
   const toast = useRef<Toast>(null);
   const problemURL = useSelector((state: any) => state.game.problemUrl);
   const gameID = useSelector((state: any) => state.game.gameID);
+  const submissions = useSelector((state: any) => state.submission.submissions);
+  console.log("submissions", submissions);
+
+  useEffect(() => {
+    if (gameID) {
+      dispatch(gameThunks.getGameSubmissions(gameID) as any);
+    }
+  }, [dispatch, gameID]);
 
   const submitCode = async () => {
     console.log("my code", currentCode);
@@ -109,6 +119,53 @@ const CodingSection = () => {
           />
         </div>
       </div>
+      <DataTable
+        value={submissions}
+        tableStyle={{
+          minWidth: "50rem",
+          marginTop: "30px",
+        }}
+        paginator
+        rows={5}
+        paginatorTemplate={
+          "FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+        }
+        emptyMessage="No submissions found"
+        paginatorClassName={classes.paginator}
+      >
+        <Column
+          style={{ backgroundColor: "#303031", background: "#303031" }}
+          field="submissionTime"
+          header="Submission Time"
+        ></Column>
+        <Column
+          style={{ backgroundColor: "#303031", background: "#303031" }}
+          field="verdict"
+          header="Verdict"
+          body={(rowData: any) => {
+            return (
+              <span
+                style={{
+                  color:
+                    rowData.verdict === "Accepted"
+                      ? "green"
+                      : rowData.verdict === "Wrong Answer"
+                      ? "#f55353"
+                      : "yellow",
+                }}
+              >
+                {rowData.verdict}
+              </span>
+            );
+          }}
+        ></Column>
+        <Column
+          style={{ backgroundColor: "#303031", background: "#303031" }}
+          field="language"
+          header="Language"
+        ></Column>
+      </DataTable>
+
       {/* <div className={classes.op_sec}>
         <span className={classes.op_title}>Output:</span>
         <div className={classes.op_info}>

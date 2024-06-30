@@ -32,7 +32,7 @@ public class TeamMatchDTO extends GameDTO {
                 teamMatch.getStartTime(),
                 teamMatch.getEndTime(),
                 teamMatch.getDuration(),
-                teamMatch.getGameType().toString(),
+                "Team",
                 teamMatch.getGameStatus().toString(),
                 null // problemStatement will be assigned later
         );

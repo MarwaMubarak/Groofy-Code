@@ -12,4 +12,21 @@
   @include scrollbar;
   @include editorSection;
   @include outputSection;
+  .box_match_stats {
+    @include center;
+    margin-top: 40px;
+    .match_stats {
+      color: white;
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+      thead {
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+  }
+}
+.paginator {
+  background-color: #303031;
 }

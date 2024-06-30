@@ -23,6 +23,7 @@ const Match = () => {
   const popupBody = useSelector((state: any) => state.popup.body);
 
   console.log("POPUP SHOW", popupShow);
+  console.log("LOGGGGGGDEEEDDD", loggedUser);
 
   useEffect(() => {
     const getCurrentMatch = async () => {

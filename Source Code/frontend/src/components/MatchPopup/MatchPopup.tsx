@@ -3,50 +3,69 @@ import classes from "./scss/match-popup.module.css";
 import { MatchPopupProps } from "../../shared/types";
 import { useDispatch } from "react-redux";
 import { popupThunks } from "../../store/actions";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
 
 const MatchPopup = (props: MatchPopupProps) => {
   const dispatch = useDispatch();
   const closePopUp = () => {
     dispatch(popupThunks.setPopUpState(false, {}) as any);
   };
+  console.log("PLAYERSS", props);
 
   return (
     <div className={classes.match_overlay}>
       <div className={classes.match_popup}>
-        <h2 className={classes.match_status}>Match Ended</h2>
-        <h4 className={classes.match_result}>{props.matchResult}</h4>
+        <div className={classes.trophy_icn}>
+          {props.submissions.length > 0 &&
+          props.submissions.at(0).verdict === "Accepted" ? (
+            <img src="/Assets/SVG/trophyIconYellow.svg" alt="Trophy" />
+          ) : (
+            <img src="/Assets/SVG/sad.svg" alt="Trophy" />
+          )}
+        </div>
+        <h2 className={classes.match_status}>
+          {props.submissions.length > 0 &&
+          props.submissions.at(0).verdict === "Accepted"
+            ? "Congratulations"
+            : "Better Luck Next Time"}
+        </h2>
+        <div className={classes.info_game}>
+          <div className={classes.info_game_attemps}>
+            <span>{props.submissions.length}</span>
+            <h3>Attemps</h3>
+          </div>
+          <div className={classes.info_game_elapsedtime}>
+            {props.submissions.length > 0 &&
+            props.submissions.at(0).verdict === "Accepted" ? (
+              <span>{props.submissions.at(0).submissionTime}</span>
+            ) : (
+              <span>60:00</span>
+            )}
+            <h3>Elapsed Time</h3>
+          </div>
+        </div>
         {props.matchType === "Ranked" && (
           <div className={classes.result_box}>
-            <img
-              src="/Assets/SVG/trophyIconYellow.svg"
-              alt="Trophy"
-              className={classes.trophy_icn}
-            />
+            <h3>Rating Changes: </h3>
+            {/* <img src="/Assets/SVG/trophyIconYellow.svg" alt="Trophy" /> */}
             <div className={classes.result}>
               <span>{props.oldRank}</span>
               <i className="bi bi-arrow-right"></i>
-              <h5 className={classes.win}>{props.newRank}</h5>
+              <h5
+                className={`${
+                  props.oldRank < props.newRank
+                    ? classes.win
+                    : props.oldRank > props.newRank
+                    ? classes.lose
+                    : classes.draw
+                }`}
+              >
+                {props.newRank}
+              </h5>
             </div>
           </div>
         )}
-        <table className={classes.match_stats}>
-          <thead>
-            <tr>
-              <td>Time</td>
-              <td>Verdict</td>
-              <td>Language</td>
-            </tr>
-          </thead>
-          <tbody>
-            {props.submissions.map((submission, idx) => (
-              <tr key={idx}>
-                <td>{submission.submissionTime}</td>
-                <td>{submission.verdict}</td>
-                <td>{submission.language}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
         <div className={classes.btn_box}>
           <Link to="/" className={classes.match_btn} onClick={closePopUp}>
             Back to Home
