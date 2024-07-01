@@ -103,8 +103,6 @@ public class TeamService {
                 teamDTO.setCreatorUsername(team.getCreator().getUsername());
 
 
-
-
                 // Set members in the TeamDTO
                 List<MemberDTO> memberDTOs = team.getMembers().stream()
                         .map(tm -> {
@@ -186,6 +184,102 @@ public class TeamService {
         }
     }
 
+    public ResponseEntity<Object> getTeamsByPrefixWithPagination(String prefix, int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<TeamModel> teamsPage = teamRepository.findByNameStartingWith(prefix, pageable);
+            List<TeamDTO> teamDTOs = teamsPage.stream().map(team -> {
+                int membersCount = teamMembersRepository.countByTeam(team);
+
+                List<MemberDTO> memberDTOs = teamMembersRepository.findByTeam(team).stream()
+                        .map(tm -> {
+                            MemberDTO memberDTO = new MemberDTO();
+                            memberDTO.setUsername(tm.getUser().getUsername());
+                            memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            return memberDTO;
+                        })
+                        .collect(Collectors.toList());
+
+                TeamDTO teamDTO = modelMapper.map(team, TeamDTO.class);
+                teamDTO.setMembersCount(membersCount);
+                teamDTO.setCreatorUsername(team.getCreator().getUsername());
+                teamDTO.setMembers(memberDTOs);
+
+                return teamDTO;
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Teams retrieved successfully", teamDTOs));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve teams", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<Object> getTeamsByPrefix(String prefix) {
+        try {
+            List<TeamModel> teams = teamRepository.findByNameStartingWith(prefix);
+            List<TeamDTO> teamDTOs = teams.stream().map(team -> {
+                int membersCount = teamMembersRepository.countByTeam(team);
+
+                List<MemberDTO> memberDTOs = teamMembersRepository.findByTeam(team).stream()
+                        .map(tm -> {
+                            MemberDTO memberDTO = new MemberDTO();
+                            memberDTO.setUsername(tm.getUser().getUsername());
+                            memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            return memberDTO;
+                        })
+                        .collect(Collectors.toList());
+
+                TeamDTO teamDTO = modelMapper.map(team, TeamDTO.class);
+                teamDTO.setMembersCount(membersCount);
+                teamDTO.setCreatorUsername(team.getCreator().getUsername());
+                teamDTO.setMembers(memberDTOs);
+
+                return teamDTO;
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Teams retrieved successfully", teamDTOs));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve teams", e.getMessage()));
+        }
+    }
+
+
+
+    public ResponseEntity<Object> getTeamsByCreator(int page, int size) {
+        try {
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel creator = userRepository.findByUsername(userInfo.getUsername());
+
+            Pageable pageable = PageRequest.of(page, size);
+            Page<TeamModel> teamPage = teamRepository.findByCreator(creator, pageable);
+
+            List<TeamDTO> teamDTOs = teamPage.stream().map(team -> {
+                int membersCount = teamMembersRepository.countByTeam(team);
+
+                List<MemberDTO> memberDTOs = teamMembersRepository.findByTeam(team).stream()
+                        .map(tm -> {
+                            MemberDTO memberDTO = new MemberDTO();
+                            memberDTO.setUsername(tm.getUser().getUsername());
+                            memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            return memberDTO;
+                        })
+                        .collect(Collectors.toList());
+
+                TeamDTO teamDTO = modelMapper.map(team, TeamDTO.class);
+                teamDTO.setMembersCount(membersCount);
+                teamDTO.setCreatorUsername(team.getCreator().getUsername());
+                teamDTO.setMembers(memberDTOs);
+
+                return teamDTO;
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Teams retrieved successfully", teamDTOs));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve teams", e.getMessage()));
+        }
+    }
+
     public ResponseEntity<Object> getUserInvitations() {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -211,7 +305,6 @@ public class TeamService {
                     .body(ResponseUtils.unsuccessfulRes("Failed to retrieve user's invitations", null));
         }
     }
-
 
     public ResponseEntity<Object> create(TeamDTO teamDTO) {
         try {

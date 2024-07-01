@@ -32,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -648,6 +649,36 @@ public class GameService {
         return notification;
     }
 
+    private List<UserModel> getPlayersInInvitation(List<UserModel> team1, List<UserModel> team2) {
+        List<UserModel> playersInPending = new ArrayList<>();
+        for (UserModel player : team1) {
+            if (player.getExistingInvitationId() != null) {
+                playersInPending.add(player);
+            }
+        }
+        for (UserModel player : team2) {
+            if (player.getExistingInvitationId() != null) {
+                playersInPending.add(player);
+            }
+        }
+        return playersInPending;
+    }
+
+    private List<UserModel> getPlayersInAGame (List<UserModel> team1, List<UserModel> team2) {
+        List<UserModel> playersInGame = new ArrayList<>();
+        for (UserModel player : team1) {
+            if (player.getExistingGameId() != null) {
+                playersInGame.add(player);
+            }
+        }
+        for (UserModel player : team2) {
+            if (player.getExistingGameId() != null) {
+                playersInGame.add(player);
+            }
+        }
+        return playersInGame;
+    }
+
     public ResponseEntity<Object> createTeamMatch(TeamModel team1, TeamModel team2) {
         try {
 
@@ -702,14 +733,36 @@ public class GameService {
             List<TeamMatchInvitation> existingInvitation = teamMatchInvitationRepository.findByTeams(team1, team2);
 
             if (existingInvitation.isEmpty()) {
+
+                List<UserModel> playersInPending = getPlayersInInvitation(team1Users, team2Users);
+                if (!playersInPending.isEmpty()) {
+                    String message = "The following players are already in a pending match invitation: ";
+                    for (UserModel player : playersInPending) {
+                        message += player.getUsername() + ", ";
+                    }
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes(message, null));
+                }
+
+                List<UserModel> playersInGame = getPlayersInAGame(team1Users, team2Users);
+                if (!playersInGame.isEmpty()) {
+                    String message = "The following players are already in a game: ";
+                    for (UserModel player : playersInGame) {
+                        message += player.getUsername() + ", ";
+                    }
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes(message, null));
+                }
+
                 ResponseEntity<Object> responseEntity = matchInvitationService.sendTeamMatchInvitation(team1.getId(), team2.getId(), admin2.getUsername());
                 if (responseEntity.getStatusCode() == HttpStatus.OK) {
                     user.setExistingInvitationId(((TeamMatchInvitation) responseEntity.getBody()).getId());
                 }
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", responseEntity));
-            } else if (existingInvitation.get(0).isAccepted()) {
-                ////TODO: retrive 3 problem based on team average rating
 
+            } else if (existingInvitation.get(0).isAccepted()) {
+
+                ////TODO: retrive 3 problem based on team average rating
                 String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
                 String problemURL2 = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
                 String problemURL3 = "https://codeforces.com/contest/4/problem/A"; // Default problem URL

@@ -65,6 +65,13 @@ public class MatchInvitationService {
     @Autowired
     private FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository;
 
+    private void setPlayersInvitation(List<UserModel> players, Long invitationId) {
+        for (UserModel player : players) {
+            player.setExistingInvitationId(invitationId);
+            userRepository.save(player);
+        }
+    }
+
     public ResponseEntity<Object> sendTeamMatchInvitation(Long teamId1, Long teamId2, String receiverUsername) {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

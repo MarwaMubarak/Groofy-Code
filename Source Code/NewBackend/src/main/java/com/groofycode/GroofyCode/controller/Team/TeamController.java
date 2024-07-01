@@ -26,18 +26,18 @@ public class TeamController {
 
     @GetMapping("/pagination")
     public ResponseEntity<Object> getTeamsPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return teamService.getTeamsPage(page,size);
+        return teamService.getTeamsPage(page, size);
     }
 
     @GetMapping("/{teamId}")
     public ResponseEntity<Object> getTeamInfo(@PathVariable Long teamId) {
         return teamService.getTeamInfo(teamId);
     }
+
     @GetMapping("/invitations")
     public ResponseEntity<Object> getUserInvitations() {
         return teamService.getUserInvitations();
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<Object> createTeam(@RequestBody TeamDTO teamDTO) {
@@ -52,6 +52,25 @@ public class TeamController {
     @PostMapping("/invite")
     public ResponseEntity<Object> sendInvitation(@RequestParam Long teamId, @RequestParam String receiverUsername) {
         return teamService.teamInvitation(teamId, receiverUsername);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Object> getTeamsByPrefix(@RequestParam String prefix) {
+        return teamService.getTeamsByPrefix(prefix);
+    }
+
+    @GetMapping("/my-teams")
+    public ResponseEntity<Object> getTeamsByCreator(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return teamService.getTeamsByCreator(page, size);
+    }
+
+    @GetMapping("/search/pagination")
+    public ResponseEntity<Object> getTeamsByPrefixWithPagination(@RequestParam String prefix,
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
+        return teamService.getTeamsByPrefixWithPagination(prefix, page, size);
     }
 
     @PostMapping("/acceptInvitation")
