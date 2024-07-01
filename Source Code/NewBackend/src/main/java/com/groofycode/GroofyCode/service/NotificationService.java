@@ -66,18 +66,45 @@ public class NotificationService {
         }
     }
 
-    public List<NotificationDTO> getUserLikes() {
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
-        List<LikeNotificationModel> notifications = likeNotificationRepository.findByReceiver(userModel);
-        return notifications.stream().map(this::mapEntityToLikeDTO).collect(Collectors.toList());
+    public ResponseEntity<Object> getNormalNotifications(Integer page) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            PageRequest pageRequest = PageRequest.of(page, 7);
+            List<NotificationModel> notifications = notificationRepository.findNormalNotificationsByUserId(userInfo.getUserId(), pageRequest).getContent();
+
+            List<NotificationDTO> notificationDTOS = notifications.stream().map(notify -> {
+                if (!notify.isRetrieved()) {
+                    notify.setRetrieved(true);
+                    notificationRepository.save(notify);
+                }
+                NotificationDTO notificationDTO = modelMapper.map(notify, NotificationDTO.class);
+                notificationDTO.setBody(notify.getBody());
+                notificationDTO.setSender(notify.getSender().getUsername());
+                notificationDTO.setImg(notify.getSender().getPhotoUrl());
+                notificationDTO.setColor(notify.getSender().getAccountColor());
+                notificationDTO.setNotificationType(notify.getNotificationType());
+                notificationDTO.setCreatedAt(notify.getCreatedAt());
+                notificationDTO.setRead(notify.isRead());
+                return notificationDTO;
+            }).toList();
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Notifications retrieved successfully", notificationDTOS));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
-    public List<NotificationDTO> getUserFriendNotifications() {
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
-        List<FriendNotificationModel> notifications = friendNotificationRepository.findByReceiver(userModel);
-        return notifications.stream().map(this::mapEntityToFriendDTO).collect(Collectors.toList());
+    public ResponseEntity<Object> getUserFriendNotifications(Integer page) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel = userRepository.findByUsername(userInfo.getUsername());
+            PageRequest pageRequest = PageRequest.of(page, 7);
+            List<FriendNotificationModel> notifications = friendNotificationRepository.findByReceiver(userModel, pageRequest).getContent();
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Notifications retrieved successfully",
+                    notifications.stream().map(this::mapEntityToFriendDTO).collect(Collectors.toList())));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     public void markRead(Long notificationId) {
@@ -108,6 +135,8 @@ public class NotificationService {
         FriendNotificationDTO dto = new FriendNotificationDTO();
         dto.setBody(notification.getBody());
         dto.setSender(notification.getSender().getUsername());
+        dto.setImg(notification.getSender().getPhotoUrl());
+        dto.setColor(notification.getSender().getAccountColor());
         dto.setNotificationType(notification.getNotificationType());
         dto.setCreatedAt(notification.getCreatedAt());
         dto.setRead(notification.isRead());

@@ -1,6 +1,7 @@
 package com.groofycode.GroofyCode.model.User;
 
 import com.groofycode.GroofyCode.model.Badge.BadgeModel;
+import com.groofycode.GroofyCode.model.Chat.ChatUsers;
 import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
 import com.groofycode.GroofyCode.model.Game.ProgProblem;
@@ -108,9 +109,6 @@ public class UserModel implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TeamMember> teamMembers;
 
-
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<Message> messages;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PostModel> posts;

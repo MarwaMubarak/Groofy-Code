@@ -8,7 +8,7 @@ import com.groofycode.GroofyCode.model.Clan.ClanModel;
 import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
 import com.groofycode.GroofyCode.model.User.UserModel;
-import com.groofycode.GroofyCode.repository.ChatRepository;
+import com.groofycode.GroofyCode.repository.Chat.ChatRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanMembersRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRequestRepository;
@@ -107,7 +107,7 @@ public class ClanService {
             List<ClanMember> clanMembers = clanMembersRepository.findByClanId(clanModel.getId(), pageRequest).getContent();
             List<ClanMemberDTO> clanMemberDTOS = clanMembers.stream().map(member -> {
                 UserModel userModel = member.getUser();
-                return new ClanMemberDTO(userModel.getUsername(), userModel.getPhotoUrl(), userModel.getStatus(), member.getRole());
+                return new ClanMemberDTO(userModel.getUsername(), userModel.getPhotoUrl(), userModel.getAccountColor(), userModel.getStatus(), member.getRole());
             }).toList();
 
             ClanDTO clanDTO = modelMapper.map(clanModel, ClanDTO.class);
@@ -172,9 +172,7 @@ public class ClanService {
 
             // Create Chat for the Clan
             Chat chat = new Chat();
-            chat.setName("Clan Chat - " + clanDTO.getName()); // Example chat name
             chatRepository.save(chat); // Save chat to generate chat id
-            chatService.addUser(chat.getId(), currentUser.getId()); // Add user to chat
             clan.setChat(chat); // Associate chat with clan
 
             // Create Clan Member
@@ -194,7 +192,7 @@ public class ClanService {
             // Map Clan Members to DTOs
             List<ClanMemberDTO> clanMemberDTOS = savedClan.getMembers().stream().map(member -> {
                 UserModel userModel = member.getUser();
-                return new ClanMemberDTO(userModel.getUsername(), userModel.getPhotoUrl(), userModel.getStatus(), member.getRole());
+                return new ClanMemberDTO(userModel.getUsername(), userModel.getPhotoUrl(), userModel.getAccountColor(), userModel.getStatus(), member.getRole());
             }).toList();
 
             // Set DTO properties
@@ -279,7 +277,7 @@ public class ClanService {
                 List<ClanRequest> clanRequests = clanRequestRepository.fetchByClanId(currentUser.getClanMember().getClan().getId(), pageRequest).getContent();
                 List<ClanRequestDTO> clanRequestDTOS = clanRequests.stream().map(clanRequest -> {
                     UserModel userModel = clanRequest.getUser();
-                    return new ClanRequestDTO(clanRequest.getId(), userModel.getUsername(), userModel.getPhotoUrl());
+                    return new ClanRequestDTO(clanRequest.getId(), userModel.getUsername(), userModel.getPhotoUrl(), userModel.getAccountColor());
                 }).toList();
                 allClanRequestsDTO.setRequests(clanRequestDTOS);
             } else {
@@ -371,9 +369,6 @@ public class ClanService {
                 clanRequest.setUser(null);
                 clanMembersRepository.save(clanMember);
                 clanRequestRepository.delete(clanRequest);
-
-                chatService.addUser(clanModel.get().getChat().getId(), currentUser.getId()); // Add user to chat
-
 
                 return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Request accepted successfully", null));
             } else {

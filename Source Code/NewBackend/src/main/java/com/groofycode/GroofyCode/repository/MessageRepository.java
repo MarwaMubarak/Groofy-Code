@@ -11,9 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-
-
-    List<Message> findByChatId(Long chatId);
+    Page<Message> findByChatIdOrderByCreatedAtAsc(Long chatId, Pageable pageable);
     Page<Message> findByChatId(Long chatId, Pageable pageable);
 
 }

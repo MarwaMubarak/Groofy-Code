@@ -261,3 +261,13 @@ export interface MatchPopupProps {
   newRank: number;
   submissions: any[];
 }
+
+export interface NotificationsContainerProps {
+  title: string;
+  desc: string;
+  notifications: any[];
+  isActive: boolean;
+  setNotifyCnt: (val: number) => void;
+  setNotifyActive: (val: boolean) => void;
+  rightPosition: string;
+}

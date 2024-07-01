@@ -54,6 +54,17 @@ const TestingSocket = () => {
     );
   };
 
+  const sendMessageToUser = (msg: any) => {
+    const data = {
+      content: msg,
+    };
+    stompClient.send(
+      `/app/user/tester/sendMessage`,
+      { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      JSON.stringify(data)
+    );
+  };
+
   const getToast = () =>
     toast.custom(
       (t) => (
@@ -93,9 +104,7 @@ const TestingSocket = () => {
 
   return (
     <div>
-      <button onClick={() => sendMessage(loggedUser.clanName, "Hello")}>
-        Send
-      </button>
+      <button onClick={() => sendMessageToUser("Testing message")}>Send</button>
       <br />
       <br />
       <button

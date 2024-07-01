@@ -18,6 +18,7 @@ import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import useClickOutside from "../../shared/functions/handleClickOutside";
 import ProfileImage from "../ProfileImage/ProfileImage";
 import FormatDate from "../../shared/functions/format-date";
+import NotificationsContainer from "../NotificationsContainer/NotificationsContainer";
 
 interface Country {
   name: string;
@@ -31,7 +32,15 @@ const GroofyHeader = () => {
   const notifications: any[] = useSelector(
     (state: any) => state.notify.notifications
   );
-  const notificationsCnt = useSelector((state: any) => state.notify.notifyCnt);
+
+  const normalNotifyCnt = useSelector((state: any) => state.notify.notifyCnt);
+  const messageNotifyCnt = useSelector(
+    (state: any) => state.notify.messageNotifyCnt
+  );
+  const friendNotifyCnt = useSelector(
+    (state: any) => state.notify.friendNotifyCnt
+  );
+
   const op = useRef<OverlayPanel>(null);
   const [searchText, setSearchText] = useState<string>("");
   const [counterToFetch, setCounterToFetch] = useState<number>(2);
@@ -39,6 +48,9 @@ const GroofyHeader = () => {
   const componentRefProfileArea = useRef(null);
   const componentRefNotifyArea = useRef(null);
   const [searchActive, setSearchActive] = useState(false);
+  const [rightPosition, setRightPosition] = useState("30px");
+  const [notifyConTitle, setNotifyConTitle] = useState("");
+  const [notifyConDesc, setNotifyConDesc] = useState("");
 
   useClickOutside(componentRefProfileArea, () => {
     setProfileActive(false);
@@ -103,17 +115,21 @@ const GroofyHeader = () => {
     navigate("/login");
   };
 
-  const getAllNotifications = async () => {
-    await dispatch(notifyThunks.getAllNotifications() as any);
+  const getNormalNotifications = async () => {
+    await dispatch(notifyThunks.getNormalNotifications() as any);
+  };
+
+  const getFriendNotifications = async () => {
+    await dispatch(notifyThunks.getFriendNotifications() as any);
   };
 
   console.log(notifications);
 
-  console.log("Notification Cnt: ", notificationsCnt);
+  console.log("Notification Cnt: ", notifyCnt);
 
   return (
     <div className={classes.header_container}>
-      <div
+      {/* <div
         className={`${classes.notify_area} ${
           notifyActive ? classes.true : classes.false
         }`}
@@ -154,7 +170,16 @@ const GroofyHeader = () => {
           )}
         </div>
         <div className={classes.see_all}>See more notifications</div>
-      </div>
+      </div> */}
+      <NotificationsContainer
+        isActive={notifyActive}
+        setNotifyActive={setNotifyActive}
+        setNotifyCnt={setNotifyCnt}
+        notifications={notifications}
+        rightPosition={rightPosition}
+        title={notifyConTitle}
+        desc={notifyConDesc}
+      />
       <div
         className={`${classes.profile_area} ${
           profileActive ? classes.true : classes.false
@@ -330,30 +355,39 @@ const GroofyHeader = () => {
         )}
         <div className={classes.header_h_imgbox}>
           <ActionButton
-            count={friendsNewCnt}
+            count={friendNotifyCnt}
             img="/Assets/SVG/people.svg"
             clickEvent={() => {
-              setFriendsActive((prev) => !prev);
+              setNotifyActive((prev) => !prev);
               setProfileActive(false);
-              setFriendsNewCnt(0);
+              getFriendNotifications();
+              setRightPosition("80px");
+              setNotifyConTitle("Friend Requests");
+              setNotifyConDesc("There are no friend requests");
             }}
           />
           <ActionButton
-            count={messageNewCnt}
+            count={messageNotifyCnt}
             img="/Assets/SVG/message.svg"
             clickEvent={() => {
-              setMessageActive((prev) => !prev);
+              setNotifyActive((prev) => !prev);
               setProfileActive(false);
               setMessageNewCnt(0);
+              setRightPosition("60px");
+              setNotifyConTitle("Messages");
+              setNotifyConDesc("There are no messages");
             }}
           />
           <ActionButton
-            count={notificationsCnt}
+            count={normalNotifyCnt}
             img="/Assets/SVG/notificationsIcon.svg"
             clickEvent={() => {
               setNotifyActive((prev) => !prev);
               setProfileActive(false);
-              getAllNotifications();
+              getNormalNotifications();
+              setRightPosition("30px");
+              setNotifyConTitle("Notifications");
+              setNotifyConDesc("There are no notifications");
             }}
           />
           <ProfileImage

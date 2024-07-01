@@ -126,12 +126,6 @@
   justify-content: center;
   align-items: center;
 }
-.clan_div .c_info .c_box .m_box .member .m_info img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
 .clan_div .c_info .c_box .m_box .member .m_info .m_usn {
   font-size: 15px;
 }

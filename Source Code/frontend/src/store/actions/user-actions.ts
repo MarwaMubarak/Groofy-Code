@@ -47,7 +47,13 @@ const getProfile = () => {
           },
         });
         dispatch(authActions.setUser(response.data.body));
-        dispatch(notifyActions.setNotifyCnt(response.data.body.notifyCnt));
+        dispatch(
+          notifyActions.setNotificationsCnt({
+            notifyCnt: response.data.body.notifyCnt,
+            messageNotifyCnt: response.data.body.messageNotifyCnt,
+            friendNotifyCnt: response.data.body.friendNotifyCnt,
+          })
+        );
       } catch (error: any) {
         throw error;
       }

@@ -18,38 +18,13 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String name;
+    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<Message> messages;
 
     @CreationTimestamp
     private Date createdAt;
 
-    @Column
-    private List<Long> userIds;
-
-
-    @OneToOne(mappedBy = "chat")
-    private ClanModel clan;
-
-    @ManyToMany
-    @JoinTable(
-            name = "chat_participants",
-            joinColumns = @JoinColumn(name = "chat_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<UserModel> participants = new HashSet<>();
-
     public Chat() {
-        userIds = new ArrayList<>();
-    }
-
-    public void adduser(Long userId) {
-        if (userIds.isEmpty())
-            userIds = new ArrayList<>();
-        userIds.add(userId);
-    }
-
-    public boolean checkUserExist(Long userId) {
-        return userIds.contains(userId);
+        this.messages = new ArrayList<>();
     }
 }

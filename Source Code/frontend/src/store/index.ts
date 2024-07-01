@@ -12,6 +12,7 @@ import {
   gameReducer,
   toastReducer,
   popupReducer,
+  chatReducer,
 } from "./slices";
 import axios from "axios";
 
@@ -29,6 +30,7 @@ const store = configureStore({
     game: gameReducer,
     toast: toastReducer,
     popup: popupReducer,
+    chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
