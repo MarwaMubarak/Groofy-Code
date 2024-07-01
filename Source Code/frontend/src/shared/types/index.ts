@@ -59,6 +59,8 @@ export interface GroofyInputProps {
 // Notify Box Props
 
 export interface NotifyBoxProps {
+  nid: number;
+  nuid: number;
   nuImg: string;
   nusn: string;
   ncolor: string;
@@ -195,7 +197,7 @@ export interface PInfoProps {
 
 // Chat Props
 export interface ChatProps {
-  type?: string;
+  type: string;
 }
 
 // Submission Props

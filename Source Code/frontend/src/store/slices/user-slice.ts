@@ -16,7 +16,9 @@ const userSlice = createSlice({
       state.res = action.payload;
     },
     setFriendshipStatus(state, action) {
-      (state.user! as any).friendshipStatus = action.payload;
+      if (state.user !== null) {
+        (state.user as any).friendshipStatus = action.payload;
+      }
     },
   },
 });

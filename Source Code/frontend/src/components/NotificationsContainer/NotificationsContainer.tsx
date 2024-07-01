@@ -36,6 +36,8 @@ const NotificationsContainer = (props: NotificationsContainerProps) => {
           props.notifications.map((notify, idx) => (
             <NotifyBox
               key={idx}
+              nid={notify.id}
+              nuid={notify.senderId}
               nuImg={notify.img}
               ncolor={notify.color}
               nusn={notify.sender}

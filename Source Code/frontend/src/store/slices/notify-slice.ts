@@ -5,9 +5,9 @@ const initialState = {
   status: "",
   message: "",
   notifications: [],
-  notifyCnt: "0",
-  messageNotifyCnt: "0",
-  friendNotifyCnt: "0",
+  notifyCnt: 0,
+  messageNotifyCnt: 0,
+  friendNotifyCnt: 0,
 };
 
 const notifySlice = createSlice({
@@ -37,6 +37,11 @@ const notifySlice = createSlice({
     setResponse(state, action) {
       state.status = action.payload.status;
       state.message = action.payload.message;
+    },
+    removeNotification(state, action) {
+      state.notifications = state.notifications.filter(
+        (notify: any) => notify.id !== action.payload
+      );
     },
   },
 });

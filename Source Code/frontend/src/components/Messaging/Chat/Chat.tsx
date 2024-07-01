@@ -54,19 +54,25 @@ const Chat = (props: ChatProps) => {
   const dispatch = useDispatch();
   const loggedUser = useSelector((state: any) => state.auth.user);
   const stompClient = useSelector((state: any) => state.socket.stompClient);
+  const chatUser = useSelector((state: any) => state.chat.chatUser);
   const clan = useSelector((state: any) => state.clan.clan);
-  const messages: any[] = useSelector((state: any) => state.chat.messages);
+  const clanMessages: any[] = useSelector(
+    (state: any) => state.chat.clanMessages
+  );
+  const userMessages: any[] = useSelector(
+    (state: any) => state.chat.userMessages
+  );
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     const getClanChat = async () => {
-      await dispatch(chatThunks.getClanChat(clan.id) as any);
+      if (props.type === "clan") {
+        await dispatch(chatThunks.getClanChat(clan.id) as any);
+      }
     };
 
     getClanChat();
-  }, [clan, dispatch]);
-
-  console.log("Messages", messages);
+  }, [clan, dispatch, props.type]);
 
   const sendMessage = () => {
     if (message.trim() === "") return;
@@ -77,7 +83,9 @@ const Chat = (props: ChatProps) => {
     };
 
     stompClient.send(
-      `/app/clan/${clan.name}/sendMessage`,
+      `/app/${props.type}/${
+        props.type === "clan" ? clan.name : chatUser.username
+      }/sendMessage`,
       { Authorization: `Bearer ${localStorage.getItem("token")}` },
       JSON.stringify(data)
     );
@@ -88,12 +96,12 @@ const Chat = (props: ChatProps) => {
   function convertTo12HourFormat(isoString: any) {
     const date = new Date(isoString);
 
-    // Extract components
-    const year = date.getUTCFullYear();
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-    const day = date.getUTCDate().toString().padStart(2, "0");
-    let hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes();
+    // Extract components using local time
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
 
     // Determine AM or PM suffix
     const ampm = hours >= 12 ? "PM" : "AM";
@@ -113,124 +121,219 @@ const Chat = (props: ChatProps) => {
 
   return (
     <div className={classes.chat_container}>
-      <TieredMenu
-        model={items}
-        popup
-        ref={menu}
-        breakpoint="767px"
-        className={classes.dots_menu}
-      />
-      {props.type === "clan" ? (
-        <div className={classes.clan_chat_header}>
-          <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
-          <span>Chat</span>
-        </div>
-      ) : (
-        <div className={classes.chat_header}>
-          <div className={classes.friend_box}>
-            <div className={classes.friend_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="FriendProfilePic" />
-            </div>
-            <div className={classes.friend_info}>
-              <h3>Hazem Adel</h3>
-              <p>Online</p>
-            </div>
-          </div>
-          <div
-            className={classes.header_dots}
-            onClick={(e) => menu.current.toggle(e)}
-          >
-            <i className="bi bi-three-dots" />
-          </div>
-        </div>
-      )}
-      <div className={classes.chat_body}>
-        {messages.map((msg: any) =>
-          loggedUser.id !== msg.userId ? (
-            <div className={classes.msg_box + " " + classes.reciever}>
-              <div className={classes.u_img}>
-                {msg.photoUrl !== null ? (
-                  <img src={msg.photoUrl} alt="profile_photo" />
-                ) : (
-                  <ProfileImage
-                    photoUrl={msg.photoUrl}
-                    username={msg.username}
-                    style={{
-                      backgroundColor: msg.accountColor,
-                      width: "48px",
-                      height: "48px",
-                      fontSize: "24px",
-                      marginBottom: "25px",
-                    }}
-                    canClick={false}
-                  />
-                )}
-              </div>
-              <div className={classes.msg_info}>
-                <h4 className={classes.msg_usn}>{msg.username}</h4>
-                <p className={classes.msg}>
-                  {msg.content}
-                  <span className={classes.message_date}>
-                    {convertTo12HourFormat(msg.createdAt)}
-                  </span>
-                </p>
-                {/* <span className={classes.message_status}>sent</span> */}
-              </div>
+      {props.type === "clan" || chatUser !== null ? (
+        <>
+          <TieredMenu
+            model={items}
+            popup
+            ref={menu}
+            breakpoint="767px"
+            className={classes.dots_menu}
+          />
+          {props.type === "clan" ? (
+            <div className={classes.clan_chat_header}>
+              <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
+              <span>Chat</span>
             </div>
           ) : (
-            <div className={classes.msg_box + " " + classes.sender}>
-              <div className={classes.u_img}>
-                {msg.photoUrl !== null ? (
-                  <img src={msg.photoUrl} alt="profile_photo" />
-                ) : (
+            <div className={classes.chat_header}>
+              <div className={classes.friend_box}>
+                <div className={classes.friend_img}>
                   <ProfileImage
-                    photoUrl={msg.photoUrl}
-                    username={msg.username}
+                    photoUrl={chatUser.photo}
+                    username={chatUser.username}
                     style={{
-                      backgroundColor: msg.accountColor,
-                      width: "48px",
-                      height: "48px",
-                      fontSize: "24px",
-                      marginBottom: "25px",
+                      backgroundColor: chatUser.color,
+                      width: "50px",
+                      height: "50px",
+                      fontSize: "18px",
+                      marginRight: "10px",
                     }}
                     canClick={false}
                   />
-                )}
+                </div>
+                <div className={classes.friend_info}>
+                  <h3>{chatUser.username}</h3>
+                  {/* <p>Online</p> */}
+                </div>
               </div>
-              <div className={classes.msg_info}>
-                <h4 className={classes.msg_usn}>{msg.username}</h4>
-                <p className={classes.msg}>
-                  {msg.content}
-                  <span className={classes.message_date}>
-                    {convertTo12HourFormat(msg.createdAt)}
-                  </span>
-                </p>
-                {/* <span className={classes.message_status}>sent</span> */}
+              <div
+                className={classes.header_dots}
+                onClick={(e) => menu.current.toggle(e)}
+              >
+                <i className="bi bi-three-dots" />
               </div>
             </div>
-          )
-        )}
-      </div>
-      <div className={classes.chat_footer}>
-        <div className={classes.text_box}>
-          <InputText
-            className={classes.text_send}
-            placeholder="Type a message..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <div className={classes.chat_footer_actions}>
-            <i className="bi bi-emoji-smile" />
-            <i className="bi bi-paperclip" />
-            <i className="bi bi-mic" />
+          )}
+          <div className={classes.chat_body}>
+            {props.type === "clan"
+              ? clanMessages?.map((msg: any, idx: number) =>
+                  loggedUser.id !== msg.userId ? (
+                    <div
+                      className={classes.msg_box + " " + classes.reciever}
+                      key={idx}
+                    >
+                      <div className={classes.u_img}>
+                        {msg.photoUrl !== null ? (
+                          <img src={msg.photoUrl} alt="profile_photo" />
+                        ) : (
+                          <ProfileImage
+                            photoUrl={msg.photoUrl}
+                            username={msg.username}
+                            style={{
+                              backgroundColor: msg.accountColor,
+                              width: "48px",
+                              height: "48px",
+                              fontSize: "24px",
+                              marginBottom: "25px",
+                            }}
+                            canClick={false}
+                          />
+                        )}
+                      </div>
+                      <div className={classes.msg_info}>
+                        <h4 className={classes.msg_usn}>{msg.username}</h4>
+                        <p className={classes.msg}>
+                          {msg.content}
+                          <span className={classes.message_date}>
+                            {convertTo12HourFormat(msg.createdAt)}
+                          </span>
+                        </p>
+                        {/* <span className={classes.message_status}>sent</span> */}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={classes.msg_box + " " + classes.sender}
+                      key={idx}
+                    >
+                      <div className={classes.u_img}>
+                        {msg.photoUrl !== null ? (
+                          <img src={msg.photoUrl} alt="profile_photo" />
+                        ) : (
+                          <ProfileImage
+                            photoUrl={msg.photoUrl}
+                            username={msg.username}
+                            style={{
+                              backgroundColor: msg.accountColor,
+                              width: "48px",
+                              height: "48px",
+                              fontSize: "24px",
+                              marginBottom: "25px",
+                            }}
+                            canClick={false}
+                          />
+                        )}
+                      </div>
+                      <div className={classes.msg_info}>
+                        <h4 className={classes.msg_usn}>{msg.username}</h4>
+                        <p className={classes.msg}>
+                          {msg.content}
+                          <span className={classes.message_date}>
+                            {convertTo12HourFormat(msg.createdAt)}
+                          </span>
+                        </p>
+                        {/* <span className={classes.message_status}>sent</span> */}
+                      </div>
+                    </div>
+                  )
+                )
+              : userMessages?.map((msg: any, idx: number) =>
+                  loggedUser.id !== msg.userId ? (
+                    <div
+                      className={classes.msg_box + " " + classes.reciever}
+                      key={idx}
+                    >
+                      <div className={classes.u_img}>
+                        {msg.photoUrl !== null ? (
+                          <img src={msg.photoUrl} alt="profile_photo" />
+                        ) : (
+                          <ProfileImage
+                            photoUrl={msg.photoUrl}
+                            username={msg.username}
+                            style={{
+                              backgroundColor: msg.accountColor,
+                              width: "48px",
+                              height: "48px",
+                              fontSize: "24px",
+                              marginBottom: "25px",
+                            }}
+                            canClick={false}
+                          />
+                        )}
+                      </div>
+                      <div className={classes.msg_info}>
+                        <h4 className={classes.msg_usn}>{msg.username}</h4>
+                        <p className={classes.msg}>
+                          {msg.content}
+                          <span className={classes.message_date}>
+                            {convertTo12HourFormat(msg.createdAt)}
+                          </span>
+                        </p>
+                        {/* <span className={classes.message_status}>sent</span> */}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={classes.msg_box + " " + classes.sender}
+                      key={idx}
+                    >
+                      <div className={classes.u_img}>
+                        {msg.photoUrl !== null ? (
+                          <img src={msg.photoUrl} alt="profile_photo" />
+                        ) : (
+                          <ProfileImage
+                            photoUrl={msg.photoUrl}
+                            username={msg.username}
+                            style={{
+                              backgroundColor: msg.accountColor,
+                              width: "48px",
+                              height: "48px",
+                              fontSize: "24px",
+                              marginBottom: "25px",
+                            }}
+                            canClick={false}
+                          />
+                        )}
+                      </div>
+                      <div className={classes.msg_info}>
+                        <h4 className={classes.msg_usn}>{msg.username}</h4>
+                        <p className={classes.msg}>
+                          {msg.content}
+                          <span className={classes.message_date}>
+                            {convertTo12HourFormat(msg.createdAt)}
+                          </span>
+                        </p>
+                        {/* <span className={classes.message_status}>sent</span> */}
+                      </div>
+                    </div>
+                  )
+                )}
           </div>
-        </div>
+          <div className={classes.chat_footer}>
+            <div className={classes.text_box}>
+              <InputText
+                className={classes.text_send}
+                placeholder="Type a message..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <div className={classes.chat_footer_actions}>
+                <i className="bi bi-emoji-smile" />
+                <i className="bi bi-paperclip" />
+                <i className="bi bi-mic" />
+              </div>
+            </div>
 
-        <Button
-          className={`bi bi-send ${classes.send_text}`}
-          onClick={sendMessage}
-        />
-      </div>
+            <Button
+              className={`bi bi-send ${classes.send_text}`}
+              onClick={sendMessage}
+            />
+          </div>
+        </>
+      ) : (
+        <span>Start a new conversation to see it here</span>
+      )}
     </div>
   );
 };

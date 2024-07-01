@@ -58,6 +58,7 @@ public class NotificationService {
                 notificationDTO.setSender(notification.getSender().getUsername());
                 notificationDTO.setImg(notification.getSender().getPhotoUrl());
                 notificationDTO.setColor(notification.getSender().getAccountColor());
+                notificationDTO.setSenderId(notification.getSender().getId());
                 return notificationDTO;
             }).toList();
             return ResponseEntity.ok(ResponseUtils.successfulRes("Notifications retrieved successfully", notificationsDTOS));
@@ -85,6 +86,7 @@ public class NotificationService {
                 notificationDTO.setNotificationType(notify.getNotificationType());
                 notificationDTO.setCreatedAt(notify.getCreatedAt());
                 notificationDTO.setRead(notify.isRead());
+                notificationDTO.setSenderId(notify.getSender().getId());
                 return notificationDTO;
             }).toList();
 
@@ -101,7 +103,13 @@ public class NotificationService {
             PageRequest pageRequest = PageRequest.of(page, 7);
             List<FriendNotificationModel> notifications = friendNotificationRepository.findByReceiver(userModel, pageRequest).getContent();
             return ResponseEntity.ok(ResponseUtils.successfulRes("Notifications retrieved successfully",
-                    notifications.stream().map(this::mapEntityToFriendDTO).collect(Collectors.toList())));
+                    notifications.stream().map(notify -> {
+                        if (!notify.isRetrieved()) {
+                            notify.setRetrieved(true);
+                            notificationRepository.save(notify);
+                        }
+                        return mapEntityToFriendDTO(notify);
+                    }).toList()));
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -141,6 +149,7 @@ public class NotificationService {
         dto.setCreatedAt(notification.getCreatedAt());
         dto.setRead(notification.isRead());
         dto.setId(notification.getId());
+        dto.setSenderId(notification.getSender().getId());
         return dto;
     }
 

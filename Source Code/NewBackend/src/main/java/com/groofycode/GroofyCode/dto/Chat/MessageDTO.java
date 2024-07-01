@@ -17,4 +17,5 @@ public class MessageDTO {
     private String content;
     private Date createdAt;
     private Long chatId;
+    private String messageType;
 }

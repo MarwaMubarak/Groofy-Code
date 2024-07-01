@@ -14,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ChatService {
@@ -42,7 +41,10 @@ public class ChatService {
 
             PageRequest pageRequest = PageRequest.of(page, 10);
 
-            List<Message> chatMessages = messageRepository.findByChatId(id, pageRequest).getContent();
+            List<Message> chatMessages = new ArrayList<>(messageRepository.findByChatIdOrderByCreatedAtDesc(id, pageRequest).getContent());
+
+            Collections.reverse(chatMessages);
+
             List<MessageDTO> messagesDTO = chatMessages.stream().map(message -> {
                 MessageDTO messageDTO = modelMapper.map(message, MessageDTO.class);
                 messageDTO.setUsername(message.getUserModel().getUsername());

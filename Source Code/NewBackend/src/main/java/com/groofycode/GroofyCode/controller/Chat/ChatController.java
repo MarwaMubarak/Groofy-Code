@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/chats")
 public class ChatController {
     private final ChatService chatService;
-
     private final MessageService messageService;
 
     @Autowired
@@ -25,8 +24,18 @@ public class ChatController {
         this.messageService = messageService;
     }
 
-    @GetMapping("/{clanId}")
-    ResponseEntity<Object> getClanChatById(@PathVariable Long clanId, @RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
+    @GetMapping("/chat")
+    public ResponseEntity<Object> GetUserChats(@RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
+        return messageService.getUserChats(page);
+    }
+
+    @GetMapping("/chat/{userId}")
+    public ResponseEntity<Object> getMessagesChat(@PathVariable Long userId, @RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
+        return messageService.getMessagesChat(userId, page);
+    }
+
+    @GetMapping("/clan/{clanId}")
+    public ResponseEntity<Object> getClanChatById(@PathVariable Long clanId, @RequestParam(value = "p", required = false, defaultValue = "0") Integer page) throws Exception {
         return chatService.getClanChatById(clanId, page);
     }
 

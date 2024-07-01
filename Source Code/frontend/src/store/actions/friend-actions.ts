@@ -187,6 +187,7 @@ const RemoveFriend = (friendId: number) => {
           }
         );
         dispatch(friendActions.removeFriend(friendId));
+        dispatch(userActions.setFriendshipStatus(null));
         return response.data;
       } catch (error: any) {
         throw error.response.data;

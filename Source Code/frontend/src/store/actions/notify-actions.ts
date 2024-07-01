@@ -56,7 +56,7 @@ const getFriendNotifications = (page: Number = 0) => {
           }
         );
         dispatch(notifyActions.setNotifications(response.data.body));
-        dispatch(notifyActions.setNotifyCnt(0));
+        dispatch(notifyActions.setFriendNotifyCnt(0));
       } catch (error: any) {
         dispatch(notifyActions.setResponse(error.response.data));
       }
@@ -66,7 +66,20 @@ const getFriendNotifications = (page: Number = 0) => {
 
 const socketNotification = (notification: any) => {
   return (dispatch: any) => {
-    dispatch(notifyActions.setNotifyCnt(notification.notifyCnt));
+    if (
+      notification.notificationType === "FRIEND_REQUEST" ||
+      notification.notificationType === "FRIEND_ACCEPT"
+    ) {
+      dispatch(notifyActions.setFriendNotifyCnt(notification.friendNotifyCnt));
+    } else {
+      dispatch(notifyActions.setNotifyCnt(notification.notifyCnt));
+    }
+  };
+};
+
+const removeNotification = (notificationId: Number) => {
+  return (dispatch: any) => {
+    dispatch(notifyActions.removeNotification(notificationId));
   };
 };
 
@@ -75,6 +88,7 @@ const notifyThunks = {
   socketNotification,
   getNormalNotifications,
   getFriendNotifications,
+  removeNotification,
 };
 
 export default notifyThunks;
