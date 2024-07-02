@@ -8,15 +8,13 @@ import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Chat.Chat;
 import com.groofycode.GroofyCode.model.Chat.ChatUsers;
 import com.groofycode.GroofyCode.model.Friendship.FriendshipModel;
+import com.groofycode.GroofyCode.model.Notification.FriendMatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.FriendNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.*;
 import com.groofycode.GroofyCode.repository.Chat.ChatRepository;
 import com.groofycode.GroofyCode.repository.Chat.ChatUsersRepository;
-import com.groofycode.GroofyCode.repository.FriendNotificationRepository;
-import com.groofycode.GroofyCode.repository.FriendshipRepository;
-import com.groofycode.GroofyCode.repository.NotificationRepository;
-import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +43,7 @@ public class FriendshipService {
     private final NotificationService notificationService;
 
     private final FriendNotificationRepository friendNotificationRepository;
+    private final FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository;
     private final ChatUsersRepository chatUsersRepository;
     private final ChatRepository chatRepository;
 
@@ -53,7 +52,8 @@ public class FriendshipService {
     public FriendshipService(FriendshipRepository friendshipRepository, ModelMapper modelMapper, UserRepository userRepository,
                              NotificationRepository notificationRepository, SimpMessagingTemplate messagingTemplate,
                              NotificationService notificationService, FriendNotificationRepository friendNotificationRepository,
-                             ChatUsersRepository chatUsersRepository, ChatRepository chatRepository) {
+                             ChatUsersRepository chatUsersRepository, ChatRepository chatRepository,
+                             FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository) {
         this.friendshipRepository = friendshipRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
@@ -63,6 +63,7 @@ public class FriendshipService {
         this.friendNotificationRepository = friendNotificationRepository;
         this.chatUsersRepository = chatUsersRepository;
         this.chatRepository = chatRepository;
+        this.friendMatchInvitationNotificationRepository = friendMatchInvitationNotificationRepository;
     }
 
 
@@ -137,6 +138,8 @@ public class FriendshipService {
                             friendDTO.setUsername(friendUser.getUsername());
                             friendDTO.setPhotoUrl(friendUser.getPhotoUrl());
                             friendDTO.setAccountColor(friendUser.getAccountColor());
+                            List<FriendMatchInvitationNotificationModel> invitationList = friendMatchInvitationNotificationRepository.findBySenderAndReceiverOrReceiverAndSender(currUser, friendUser);
+                            friendDTO.setIsInvited(!invitationList.isEmpty());
                         }
 
                         return friendDTO;
