@@ -4,7 +4,7 @@ import { gameActions } from "../slices/game-slice";
 import { submissionActions } from "../slices/submission-slice";
 import { authActions } from "../slices/auth-slice";
 import { toastActions } from "../slices/toast-slice";
-import { get } from "http";
+import { friendActions } from "../slices/friend-slice";
 
 const getAllUserGames = (page: number) => {
   return async (dispatch: any) => {
@@ -71,6 +71,88 @@ const createSoloGame = () => {
       dispatch(gameActions.setResponse(error.response.data));
       dispatch(gameActions.setLoading(false));
       throw error.response.data;
+    }
+  };
+};
+
+const inviteToFriendlyGame = (friendId: any) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post(
+          `/game/beat-friend/invite/${friendId}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(
+          friendActions.changeInviteState({ friendId, isInvited: true })
+        );
+        return response.data;
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+        return error.response.data;
+      }
+    }
+  };
+};
+
+const cancelInvitationToFriendlyGame = (friendId: any) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post(
+          `/game/beat-friend/cancelInvitation`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(
+          friendActions.changeInviteState({ friendId, isInvited: false })
+        );
+        return response.data;
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+        return error.response.data;
+      }
+    }
+  };
+};
+
+const createFriendlyGame = (userId: any) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post(
+          `/game/friend-match/${userId}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.body !== null) {
+          dispatch(gameActions.setGame(response.data.body));
+          dispatch(authActions.setUserGameId(response.data.body.id));
+          return {
+            status: response.data.status,
+            message: response.data.message,
+            gameId: response.data.body.id,
+          };
+        }
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
     }
   };
 };
@@ -240,6 +322,9 @@ const gameThunks = {
   dismissToast,
   changeSubmitState,
   getGameSubmissions,
+  inviteToFriendlyGame,
+  createFriendlyGame,
+  cancelInvitationToFriendlyGame,
 };
 
 export default gameThunks;

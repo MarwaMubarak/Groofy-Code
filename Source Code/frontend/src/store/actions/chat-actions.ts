@@ -69,6 +69,7 @@ const getUserChat = (userId: number, chatId: number, page: number = 0) => {
         dispatch(chatActions.setChatUser(chatUser));
         dispatch(chatActions.setUserMessages(response.data.body.messages));
         dispatch(chatActions.readUserMessages(chatId));
+        dispatch(chatActions.setChatId(chatId));
       } catch (err) {
         console.error("User Chat Error", err);
       }
@@ -94,6 +95,12 @@ const addUserMessage = (message: any) => {
   };
 };
 
+const readChatMessages = (chatId: number) => {
+  return (dispatch: any) => {
+    dispatch(chatActions.readUserMessages(chatId));
+  };
+};
+
 const chatThunks = {
   addClanMessage,
   addUserMessage,
@@ -101,6 +108,7 @@ const chatThunks = {
   getAllUserChats,
   getUserChat,
   clearChat,
+  readChatMessages,
 };
 
 export default chatThunks;

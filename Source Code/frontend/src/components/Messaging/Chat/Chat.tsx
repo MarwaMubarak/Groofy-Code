@@ -60,6 +60,7 @@ const Chat = (props: ChatProps) => {
   const stompClient = useSelector((state: any) => state.socket.stompClient);
   const chatUser = useSelector((state: any) => state.chat.chatUser);
   const clan = useSelector((state: any) => state.clan.clan);
+  const chatId = useSelector((state: any) => state.chat.chatId);
   const clanMessages: any[] = useSelector(
     (state: any) => state.chat.clanMessages
   );
@@ -77,6 +78,10 @@ const Chat = (props: ChatProps) => {
 
     getClanChat();
   }, [clan, dispatch, props.type]);
+
+  const readChatMessages = () => {
+    dispatch(chatThunks.readChatMessages(chatId) as any);
+  };
 
   const sendMessage = () => {
     if (message.trim() === "") return;
@@ -359,6 +364,7 @@ const Chat = (props: ChatProps) => {
                 placeholder="Type a message..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onFocus={readChatMessages}
               />
               <div className={classes.chat_footer_actions}>
                 <i

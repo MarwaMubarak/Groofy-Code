@@ -236,4 +236,14 @@
       }
     }
   }
+  .beat_friend_dialog {
+    @include center;
+    flex-direction: column;
+    .beat_friend_header {
+      @include center;
+    }
+    .beat_friend_content {
+      margin-top: 20px;
+    }
+  }
 }

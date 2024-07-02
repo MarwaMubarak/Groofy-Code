@@ -83,6 +83,27 @@ const GetFriendRequestsCount = () => {
   };
 };
 
+const SearchFriends = (search: string, page: number = 0, size: number = 10) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(
+          `/friends/search?prefix=${search}&page=${page}&size=${size}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(friendActions.setFriends(response.data.body));
+      } catch (error: any) {
+        throw error.response.data;
+      }
+    }
+  };
+};
+
 const AddFriend = (friendId: number) => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
@@ -206,6 +227,7 @@ const friendThunks = {
   RejectFriendRequest,
   CancelFriendRequest,
   RemoveFriend,
+  SearchFriends,
 };
 
 export default friendThunks;

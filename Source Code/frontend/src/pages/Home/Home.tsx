@@ -1,26 +1,40 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import {
   GroofyHeader,
   SideBar,
   Gamemode,
   PostsContainer,
+  Friend,
+  SearchedFriend,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
-import { gameThunks, toastThunks } from "../../store/actions";
+import { friendThunks, gameThunks, toastThunks } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import classes from "./scss/home.module.css";
 import { Toaster, toast as hotToast } from "react-hot-toast";
+import { ConfirmDialog } from "primereact/confirmdialog";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
   const matchLoading = useSelector((state: any) => state.match.isLoading);
+  const searchedFriends: any[] = useSelector(
+    (state: any) => state.friend.friends
+  );
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  console.log("Searched Friends: ", searchedFriends);
 
   const createSoloGame = async () => {
     return await dispatch(gameThunks.createSoloGame() as any);
@@ -30,11 +44,57 @@ const Home = () => {
     return await dispatch(gameThunks.createRankedGame() as any);
   };
 
+  const searchFriends = async () => {
+    if (searchText === "") return;
+    return await dispatch(friendThunks.SearchFriends(searchText) as any);
+  };
+
   return (
     <div className={classes.home_container}>
       <Toast ref={toast} style={{ padding: "0.75rem" }} />
       <Toaster />
       <SideBar idx={0} />
+      <Dialog
+        header="Send your message"
+        visible={dialogVisible}
+        style={{ width: "600px" }}
+        onHide={() => {
+          if (!dialogVisible) return;
+          setDialogVisible(false);
+        }}
+        className={classes.beat_friend_dialog}
+      >
+        <div className={classes.beat_friend_header}>
+          <InputText
+            value={searchText}
+            onChange={(e: any) => setSearchText(e.target.value)}
+            placeholder="Search for your friends..."
+          />
+          <Button
+            label="Search"
+            style={{ color: "#fff" }}
+            onClick={searchFriends}
+          />
+        </div>
+        <div className={classes.beat_friend_content}>
+          <div className={classes.friends}>
+            {(searchedFriends === null || searchedFriends.length === 0) && (
+              <h3>You have no friends</h3>
+            )}
+            {searchedFriends !== null &&
+              searchedFriends.map((friend: any, idx: number) => (
+                <SearchedFriend
+                  key={idx}
+                  userId={friend.friendId}
+                  username={friend.username}
+                  photoUrl={friend.photoUrl}
+                  accountColor={friend.accountColor}
+                  isInvited={friend.isInvited}
+                />
+              ))}
+          </div>
+        </div>
+      </Dialog>
       <div className={classes.activity_section}>
         <GroofyHeader />
         <div className={classes.main_section}>
@@ -179,7 +239,7 @@ const Home = () => {
                   id="beat_friend_card"
                   title="Beat a Friend"
                   img="/Assets/Images/friends.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => setDialogVisible(true)}
                 />
               </div>
             </div>

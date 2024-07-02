@@ -66,6 +66,7 @@ const WebSocketConnection = () => {
           dispatch(chatThunks.addClanMessage(chatMsg) as any);
         } else {
           dispatch(chatThunks.addUserMessage(chatMsg.body) as any);
+          dispatch(chatThunks.getAllUserChats() as any);
         }
       };
 

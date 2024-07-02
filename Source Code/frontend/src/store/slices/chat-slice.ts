@@ -4,6 +4,7 @@ const chatInitialState = {
   chats: [] as any[],
   clanMessages: [] as any[],
   userMessages: [] as any[],
+  chatId: null,
   chatUser: null,
 };
 
@@ -41,10 +42,13 @@ const chatSlice = createSlice({
     clearUserMessages(state) {
       state.userMessages = [];
     },
+    setChatId(state, action) {
+      state.chatId = action.payload;
+    },
     readUserMessages(state, action) {
       state.chats
-        .filter((msg: any) => msg.id === action.payload)
-        .map((msg: any) => (msg.unreadCount = 0));
+        .filter((msg: any) => msg.chat.id === action.payload)
+        .map((msg: any) => (msg.chat.unreadCount = 0));
     },
   },
 });

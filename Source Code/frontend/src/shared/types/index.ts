@@ -241,6 +241,7 @@ export interface FriendProps {
   username: string;
   photoUrl: string;
   accountColor: string;
+  isInvited?: boolean;
 }
 
 // Profile Image Props

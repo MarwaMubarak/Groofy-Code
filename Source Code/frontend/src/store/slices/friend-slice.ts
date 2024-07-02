@@ -28,6 +28,11 @@ const friendSlice = createSlice({
         (friend: any) => friend.friendId !== action.payload
       );
     },
+    changeInviteState(state, action) {
+      state.friends
+        .filter((request: any) => request.friendId === action.payload.friendId)
+        .map((friend: any) => (friend.isInvited = action.payload.isInvited));
+    },
   },
 });
 

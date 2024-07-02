@@ -27,8 +27,8 @@ public class BeatAFriendController {
         return beatAFriendService.rejectFriendMatchInvitation(invitationId);
     }
 
-    @PostMapping("/cancelInvitation/{invitationId}")
-    public ResponseEntity<Object> cancelInvitation(@PathVariable Long invitationId) {
-        return beatAFriendService.cancelFriendMatchInvitation(invitationId);
+    @PostMapping("/cancelInvitation")
+    public ResponseEntity<Object> cancelInvitation() {
+        return beatAFriendService.cancelFriendMatchInvitation();
     }
 }

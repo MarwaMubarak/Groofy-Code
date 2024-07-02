@@ -507,11 +507,11 @@ public class MatchInvitationService {
         }
     }
 
-    public ResponseEntity<Object> cancelFriendMatchInvitation(Long invitationId) {
+    public ResponseEntity<Object> cancelFriendMatchInvitation() {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
-
+            Long invitationId = currUser.getExistingInvitationId();
             Optional<FriendMatchInvitation> invitationOpt = friendMatchInvitationRepository.findById(invitationId);
             if (invitationOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
@@ -522,13 +522,14 @@ public class MatchInvitationService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot cancel this invitation!", null));
             }
 
-            friendMatchInvitationRepository.delete(friendMatchInvitation);
-
             // Delete the corresponding notification
             List<FriendMatchInvitationNotificationModel> notifications = friendMatchInvitationNotificationRepository.findByFriendMatchInvitation(friendMatchInvitation);
             if (!notifications.isEmpty()) {
                 friendMatchInvitationNotificationRepository.deleteAll(notifications);
             }
+
+            friendMatchInvitationRepository.delete(friendMatchInvitation);
+
             setPlayersInvitationNull(List.of(currUser));
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation canceled successfully", null));
