@@ -565,7 +565,9 @@ public class GameService {
                 int player2Rating = remainingPlayers.get(0).getUser_rating();
                 int newPlayer1Rating = ratingSystemCalculator.calculateDeltaRating(player2Rating - player1Rating, player1Rating, 'W');
                 int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'L');
+                submittingPlayers.get(0).setUser_max_rating(Math.max(submittingPlayers.get(0).getUser_max_rating(), newPlayer1Rating));
                 submittingPlayers.get(0).setUser_rating(newPlayer1Rating);
+                remainingPlayers.get(0).setUser_max_rating(Math.max(remainingPlayers.get(0).getUser_max_rating(), newPlayer2Rating));
                 remainingPlayers.get(0).setUser_rating(newPlayer2Rating);
                 submittingPlayers.get(0).setExistingGameId(null);
                 remainingPlayers.get(0).setExistingGameId(null);
@@ -696,7 +698,7 @@ public class GameService {
             }
 
             // Ensure the user is the owner of team1
-            if (!user.getId().equals(admin1.getId()) && user.getId().equals(admin2.getId())) {
+            if (!user.getId().equals(admin1.getId())) {
                 // Swap team1 and team2
                 TeamModel temp = team1;
                 team1 = team2;
