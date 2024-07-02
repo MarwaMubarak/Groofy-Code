@@ -27,5 +27,7 @@ public class MatchInvitationNotificationModel extends NotificationModel {
     @JoinColumn(name = "team2_id")
     private TeamModel team2;
 
+    private boolean isAdmin;
+
 }
 

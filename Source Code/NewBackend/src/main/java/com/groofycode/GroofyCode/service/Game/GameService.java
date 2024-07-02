@@ -1,6 +1,7 @@
 package com.groofycode.GroofyCode.service.Game;
 
 
+import com.google.firebase.database.utilities.Pair;
 import com.groofycode.GroofyCode.dto.FriendMatchInvitationDTO;
 import com.groofycode.GroofyCode.dto.Game.*;
 import com.groofycode.GroofyCode.dto.MatchPlayerDTO;
@@ -664,7 +665,7 @@ public class GameService {
         return playersInPending;
     }
 
-    private List<UserModel> getPlayersInAGame (List<UserModel> team1, List<UserModel> team2) {
+    private List<UserModel> getPlayersInAGame(List<UserModel> team1, List<UserModel> team2) {
         List<UserModel> playersInGame = new ArrayList<>();
         for (UserModel player : team1) {
             if (player.getExistingGameId() != null) {
@@ -677,6 +678,48 @@ public class GameService {
             }
         }
         return playersInGame;
+    }
+
+    private List<String> get3problems(TeamModel team1, TeamModel team2) throws Exception {
+
+        List<UserModel> users = new ArrayList<>();
+        users.addAll(team1.getMembers().stream().map(TeamMember::getUser).toList());
+        users.addAll(team2.getMembers().stream().map(TeamMember::getUser).toList());
+
+        List<Pair<Integer, PlayerDTO>> players = new ArrayList<>();
+
+        for (UserModel user : users) {
+            PlayerDTO playerDTO = modelMapper.map(user, PlayerDTO.class);
+            players.add(new Pair<>(user.getUser_rating(), playerDTO));
+        }
+
+        //sorting players array
+        players.sort((a, b) -> {
+            return a.getFirst().compareTo(b.getFirst());
+        });
+
+        List<ProblemDTO> problemDTOs = new ArrayList<>();
+
+        for (UserModel user : users) {
+            problemDTOs.addAll(user.getSolvedProblems().stream().map(progProblem -> {
+                return modelMapper.map(progProblem, ProblemDTO.class);
+            }).toList());
+        }
+
+        PlayerDTO medium = players.get(2).getSecond();
+        String problemURL2 = (String) problemPicker.pickProblem(medium, problemDTOs).getBody();
+        problemDTOs.add(problemPicker.getProblemByUrl(problemURL2));
+
+        String problemURL1 = (String) problemPicker.pickProblem(medium.getUser_rating() - 300, problemDTOs).getBody();
+        problemDTOs.add(problemPicker.getProblemByUrl(problemURL1));
+
+        String problemURL3 = (String) problemPicker.pickProblem(medium.getUser_rating() + 300, problemDTOs).getBody();
+
+        List<String> problems = new ArrayList<>();
+        problems.add(problemURL1);
+        problems.add(problemURL2);
+        problems.add(problemURL3);
+        return problems;
     }
 
     public ResponseEntity<Object> createTeamMatch(TeamModel team1, TeamModel team2) {
@@ -696,7 +739,7 @@ public class GameService {
             }
 
             // Ensure the user is the owner of team1
-            if (!user.getId().equals(admin1.getId()) ) {
+            if (!user.getId().equals(admin1.getId())) {
                 // Swap team1 and team2
                 TeamModel temp = team1;
                 team1 = team2;
@@ -754,7 +797,7 @@ public class GameService {
                             .body(ResponseUtils.unsuccessfulRes(message, null));
                 }
 
-                ResponseEntity<Object> responseEntity = matchInvitationService.sendTeamMatchInvitation(team1.getId(), team2.getId(), admin2.getUsername());
+                ResponseEntity<Object> responseEntity = matchInvitationService.sendTeamMatchInvitation(team1.getId(), team2.getId());
                 if (responseEntity.getStatusCode() == HttpStatus.OK) {
                     user.setExistingInvitationId(((TeamMatchInvitation) responseEntity.getBody()).getId());
                 }
@@ -762,10 +805,11 @@ public class GameService {
 
             } else if (existingInvitation.get(0).isAccepted()) {
 
+                List<String> problems = get3problems(team1, team2);
                 ////TODO: retrive 3 problem based on team average rating
-                String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
-                String problemURL2 = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
-                String problemURL3 = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
+                String problemURL = problems.get(0); // Default problem URL
+                String problemURL2 = problems.get(1); // Default problem URL
+                String problemURL3 = problems.get(2); // Default problem URL
                 // Create the TeamMatch
                 LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
                 final TeamMatch teamMatch = new TeamMatch(team1, team2,
@@ -796,11 +840,18 @@ public class GameService {
                 TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody(), problemParsed2.getBody(), problemParsed3.getBody());
 
                 // Notify all players about the match start
-                team1Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
-                        ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
-                team2Users.forEach(player -> messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
-                        ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO)));
-
+                for (UserModel player : team1Users) {
+                    if (!player.getUsername().equals(userInfo.getUsername())) {
+                        messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                                ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
+                    }
+                }
+                for (UserModel player : team2Users) {
+                    if (!player.getUsername().equals(userInfo.getUsername())) {
+                        messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                                ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
+                    }
+                }
                 matchInvitationService.deleteInvitation(team1, team2);
 
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
