@@ -268,6 +268,7 @@ public class FriendshipService {
             friendNotificationDTO.setColor(friendNotification.getSender().getAccountColor());
             friendNotificationDTO.setId(friendNotification.getId());
             friendNotificationDTO.setRead(friendNotification.isRead());
+            friendNotificationDTO.setSenderId(friendNotification.getSender().getId());
             Integer notifyCnt = notificationRepository.countFriendUnRetrievedByReceiver(friend.get());
             friendNotificationDTO.setFriendNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
 
@@ -320,8 +321,9 @@ public class FriendshipService {
                 friendNotificationDTO.setColor(friendNotification.getSender().getAccountColor());
                 friendNotificationDTO.setId(friendNotification.getId());
                 friendNotificationDTO.setRead(friendNotification.isRead());
-                Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(friend.get());
-                friendNotificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+                friendNotificationDTO.setSenderId(friendNotification.getSender().getId());
+                Integer notifyCnt = notificationRepository.countFriendUnRetrievedByReceiver(friend.get());
+                friendNotificationDTO.setFriendNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
 
                 messagingTemplate.convertAndSendToUser(friend.get().getUsername(), "/notification", friendNotificationDTO);
                 return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Accepted successfully", friendshipDTO));

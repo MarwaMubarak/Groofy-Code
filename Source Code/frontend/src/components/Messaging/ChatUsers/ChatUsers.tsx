@@ -1,8 +1,20 @@
 import classes from "./scss/chatusers.module.css";
 import { InputText } from "primereact/inputtext";
 import { Badge } from "primereact/badge";
+import { useDispatch, useSelector } from "react-redux";
+import ProfileImage from "../../ProfileImage/ProfileImage";
+import { chatThunks } from "../../../store/actions";
 
 const ChatUsers = () => {
+  const dispatch = useDispatch();
+  const chats: any[] = useSelector((state: any) => state.chat.chats);
+
+  console.log("CHATS: ", chats);
+
+  const getUserChat = (userId: number, chatId: number) => {
+    dispatch(chatThunks.getUserChat(userId, chatId) as any);
+  };
+
   return (
     <div className={classes.chats_container}>
       <div className={classes.chats_header}>
@@ -14,317 +26,47 @@ const ChatUsers = () => {
         <i className="bi bi-search"></i>
       </div>
       <div className={classes.chats_users}>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.online}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Username</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>09:26 PM</span>
-            <Badge className={classes.messages_cnt} value="2" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.online}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Username</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>09:26 PM</span>
-            <Badge className={classes.messages_cnt} value="1" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.online}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Username</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>09:26 PM</span>
-            <Badge className={classes.messages_cnt} value="1" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.online}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Username</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>09:26 PM</span>
-            <Badge className={classes.messages_cnt} value="3" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.online}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Username</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>09:26 PM</span>
-            <Badge className={classes.messages_cnt} value="6" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.online}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Username</h3>
-              <p>
-                WelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcomeWelcome
-              </p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>09:26 PM</span>
-            <Badge className={classes.messages_cnt} value="5" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.online}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Username</h3>
-              <p>Hi there</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>05:26 AM</span>
-            <Badge className={classes.messages_cnt} value="7" />
-          </div>
-        </div>
-        <div className={classes.offline_users}>
-          <i className="bi bi-wifi-off" />
-          <span>offline</span>
-        </div>
+        {chats.map((chat: any, idx: number) => (
+          <div
+            className={classes.chat_user}
+            key={idx}
+            onClick={() => {
+              getUserChat(chat.receiverId, chat.id);
+            }}
+          >
+            <div className={classes.chat_user_info}>
+              <div className={classes.chat_user_img}>
+                <ProfileImage
+                  photoUrl={chat.receiverPhoto}
+                  username={chat.receiverName}
+                  style={{
+                    backgroundColor: chat.receiverColor,
+                    width: "50px",
+                    height: "50px",
+                    fontSize: "18px",
+                    marginRight: "10px",
+                  }}
+                  canClick={false}
+                />
 
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
+                {/* <div className={classes.online}></div> */}
+              </div>
+              <div className={classes.chat_user_data}>
+                <h3>{chat.receiverName}</h3>
+                {/* <p>Are you here?</p> */}
+              </div>
             </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
+            <div className={classes.chat_user_status}>
+              <span>09:26 PM</span>
+              {chat.unreadCount > 0 && (
+                <Badge
+                  className={classes.messages_cnt}
+                  value={chat.unreadCount}
+                />
+              )}
             </div>
           </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
-        <div className={classes.chat_user}>
-          <div className={classes.chat_user_info}>
-            <div className={classes.chat_user_img}>
-              <img src="/Assets/Images/Hazem Adel.jpg" alt="SearchProfilePic" />
-              <div className={classes.offline}></div>
-            </div>
-            <div className={classes.chat_user_data}>
-              <h3>Hazem Adel</h3>
-              <p>Are you here?</p>
-            </div>
-          </div>
-          <div className={classes.chat_user_status}>
-            <span>10:26 PM</span>
-            <Badge className={classes.messages_cnt} value="11" />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

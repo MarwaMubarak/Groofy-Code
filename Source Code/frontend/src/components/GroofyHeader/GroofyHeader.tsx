@@ -129,48 +129,6 @@ const GroofyHeader = () => {
 
   return (
     <div className={classes.header_container}>
-      {/* <div
-        className={`${classes.notify_area} ${
-          notifyActive ? classes.true : classes.false
-        }`}
-        ref={componentRefNotifyArea}
-      >
-        <div className={classes.notify_header}>
-          <h3 className={classes.notify_title}>Notifications</h3>
-          <abbr title="Clear notifications">
-            <div
-              className={classes.clear_notify}
-              onClick={() => setNotifyCnt(0)}
-            >
-              <img src="/Assets/SVG/clear.svg" alt="Clear" />
-            </div>
-          </abbr>
-        </div>
-        <div className={classes.na_content}>
-          {notifications.length > 0 ? (
-            notifications.map((notify, idx) => (
-              <NotifyBox
-                key={idx}
-                nuImg={notify.img}
-                ncolor={notify.color}
-                nusn={notify.sender}
-                nbody={notify.body}
-                ntime={FormatDate(notify.createdAt) ?? "Some time ago"}
-                nType={notify.notificationType}
-              />
-            ))
-          ) : (
-            <div className={classes.empty_box}>
-              <img
-                src="/Assets/Images/empty_notify.png"
-                alt="EmptyNotification"
-              />
-              <span>There are no notifications</span>
-            </div>
-          )}
-        </div>
-        <div className={classes.see_all}>See more notifications</div>
-      </div> */}
       <NotificationsContainer
         isActive={notifyActive}
         setNotifyActive={setNotifyActive}
@@ -370,12 +328,13 @@ const GroofyHeader = () => {
             count={messageNotifyCnt}
             img="/Assets/SVG/message.svg"
             clickEvent={() => {
-              setNotifyActive((prev) => !prev);
-              setProfileActive(false);
-              setMessageNewCnt(0);
-              setRightPosition("60px");
-              setNotifyConTitle("Messages");
-              setNotifyConDesc("There are no messages");
+              // setNotifyActive((prev) => !prev);
+              // setProfileActive(false);
+              // setMessageNewCnt(0);
+              // setRightPosition("60px");
+              // setNotifyConTitle("Messages");
+              // setNotifyConDesc("There are no messages");
+              navigate("/user/message");
             }}
           />
           <ActionButton

@@ -62,7 +62,11 @@ const WebSocketConnection = () => {
       const onChatMessage = (message: any) => {
         const chatMsg = JSON.parse(message.body);
         console.log("Recieved chat message: ", chatMsg);
-        dispatch(chatThunks.addMessage(chatMsg) as any);
+        if (chatMsg.messageType === "CLAN") {
+          dispatch(chatThunks.addClanMessage(chatMsg) as any);
+        } else {
+          dispatch(chatThunks.addUserMessage(chatMsg.body) as any);
+        }
       };
 
       const onGameMessage = (message: any) => {

@@ -15,6 +15,7 @@ public class NotificationDTO {
     private long id;
     private String body;
     private String sender;
+    private Long senderId;
     private String img;
     private String color;
     private NotificationType notificationType;

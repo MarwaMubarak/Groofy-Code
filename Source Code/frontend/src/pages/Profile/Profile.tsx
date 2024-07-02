@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   SideBar,
   GroofyHeader,
@@ -16,6 +16,9 @@ import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import classes from "./scss/profile.module.css";
 import FormatDate from "../../shared/functions/format-date";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
 
 interface Country {
   name: string;
@@ -25,9 +28,12 @@ interface Country {
 const Profile = () => {
   const dispatch = useDispatch();
   const toast = useRef<Toast>(null);
+  const stompClient = useSelector((state: any) => state.socket.stompClient);
   const loggedUser = useSelector((state: any) => state.auth.user);
   const profileUser = useSelector((state: any) => state.user.user);
   const profileRes = useSelector((state: any) => state.user.res);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [messageText, setMessageText] = useState("");
 
   console.log(loggedUser);
 
@@ -54,6 +60,24 @@ const Profile = () => {
     getUser();
   }, [dispatch, userProfile]);
 
+  const sendMessage = () => {
+    if (messageText.trim() === "") return;
+
+    const data = {
+      userId: loggedUser.id,
+      content: messageText,
+    };
+
+    stompClient.send(
+      `/app/user/${profileUser.username}/sendMessage`,
+      { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      JSON.stringify(data)
+    );
+
+    setMessageText("");
+    setDialogVisible(false);
+  };
+
   console.log(profileUser);
 
   const friendRequestAction = async () => {
@@ -78,6 +102,34 @@ const Profile = () => {
     <div className={classes.newprofile_container}>
       <Toast ref={toast} />
       <SideBar idx={1} />
+      <Dialog
+        header="Send your message"
+        visible={dialogVisible}
+        style={{ width: "600px" }}
+        onHide={() => {
+          if (!dialogVisible) return;
+          setDialogVisible(false);
+        }}
+      >
+        <InputTextarea
+          autoResize
+          value={messageText}
+          onChange={(e: any) => setMessageText(e.target.value)}
+          style={{ width: "100%", minHeight: "200px" }}
+          maxLength={700}
+          placeholder="Type your message here..."
+        />
+        <div
+          className="send_message_btn"
+          style={{ width: "100%", marginTop: "20px", textAlign: "right" }}
+        >
+          <Button
+            label="Send message"
+            style={{ color: "#fff" }}
+            onClick={sendMessage}
+          />
+        </div>
+      </Dialog>
       <div className={classes.userprofile}>
         <GroofyHeader />
         {profileRes.status === "success" ? (
@@ -142,6 +194,7 @@ const Profile = () => {
                           className={
                             "bi bi-chat-dots-fill " + classes.user_action_btn
                           }
+                          onClick={() => setDialogVisible(true)}
                         />
                         <button
                           className={` ${

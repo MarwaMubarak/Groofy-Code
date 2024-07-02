@@ -4,6 +4,7 @@ import com.groofycode.GroofyCode.model.Clan.ClanModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -29,6 +30,8 @@ public class Message {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    private Boolean isRead = false;
 
     @CreationTimestamp
     private Date createdAt;

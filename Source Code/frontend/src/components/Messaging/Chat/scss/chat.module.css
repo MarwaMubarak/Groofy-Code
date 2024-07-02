@@ -122,6 +122,7 @@
 .chat_container .chat_body .msg_box.sender .msg_info .msg {
   border-radius: 12px 0px 12px 12px;
   background-color: #0a7cff;
+  min-width: 70px;
   color: white;
 }
 .chat_container .chat_body .msg_box .u_img img {
