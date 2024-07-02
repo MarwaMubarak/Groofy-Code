@@ -10,6 +10,7 @@ import com.groofycode.GroofyCode.model.Notification.FriendMatchInvitationNotific
 import com.groofycode.GroofyCode.model.Notification.MatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Team.TeamInvitation;
+import com.groofycode.GroofyCode.model.Team.TeamMember;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.*;
@@ -107,9 +108,51 @@ public class MatchInvitationService {
             TeamMatchInvitation matchInvitation = new TeamMatchInvitation(team1, team2, currUser, receiver, new Date());
             teamMatchInvitationRepository.save(matchInvitation);
 
+            List<TeamMember> team1members = team1.getMembers();
+
+            List<UserModel> team1Players = List.of();
+            for (TeamMember teamMember : team1members) {
+                team1Players.add(teamMember.getUser());
+            }
+
+            setPlayersInvitation(team1Players, matchInvitation.getId());
+
+            for (UserModel player : team1Players) {
+                if (!player.getId().equals(team1.getCreator().getId())) {
+
+                    MatchInvitationNotificationModel notification = new MatchInvitationNotificationModel();
+                    notification.setBody("You admin " + currUser.getUsername() + " invites your team "+ team1.getName() + " to a match with " + team2.getName() + " team");
+                    notification.setSender(currUser);
+                    notification.setCreatedAt(new Date());
+                    notification.setReceiver(player);
+                    notification.setNotificationType(NotificationType.MATCH_INVITATION);
+                    notification.setTeam1(team1);
+                    notification.setTeam2(team2);
+                    notification.setMatchInvitation(matchInvitation);
+
+                    matchInvitationNotificationRepository.save(notification);
+
+                    MatchInvitationNotificationDTO matchInvitationNotificationDTO = new MatchInvitationNotificationDTO();
+                    matchInvitationNotificationDTO.setBody(notification.getBody());
+                    matchInvitationNotificationDTO.setSender(currUser.getUsername());
+                    matchInvitationNotificationDTO.setImg(currUser.getPhotoUrl());
+                    matchInvitationNotificationDTO.setColor(currUser.getAccountColor());
+                    matchInvitationNotificationDTO.setTeam1ID(team1.getId());
+                    matchInvitationNotificationDTO.setTeam2ID(team2.getId());
+                    matchInvitationNotificationDTO.setInvitationID(matchInvitation.getId());
+                    matchInvitationNotificationDTO.setCreatedAt(notification.getCreatedAt());
+                    Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(receiver);
+                    matchInvitationNotificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+
+                    // Send the notification via WebSocket
+                    messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification", matchInvitationNotificationDTO);
+
+                }
+            }
+
             // Create and save the match invitation notification
             MatchInvitationNotificationModel notification = new MatchInvitationNotificationModel();
-            notification.setBody("has invited you to join a team match");
+            notification.setBody("You admin " + currUser.getUsername() + " invites your team "+ team1.getName() + " to a match with " + team2.getName() + " team");
             notification.setSender(currUser);
             notification.setCreatedAt(new Date());
             notification.setReceiver(receiver);
