@@ -1,7 +1,9 @@
 package com.groofycode.GroofyCode.service.Chat;
 
 import com.groofycode.GroofyCode.dto.Chat.MessageDTO;
+import com.groofycode.GroofyCode.dto.Chat.UserChatWithDateDTO;
 import com.groofycode.GroofyCode.dto.Chat.UsersChatDTO;
+import com.groofycode.GroofyCode.dto.Chat.UsersChatWrapperDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
 import com.groofycode.GroofyCode.model.Chat.Chat;
 import com.groofycode.GroofyCode.model.Chat.ChatUsers;
@@ -166,7 +168,6 @@ public class MessageService {
 
             Integer unreadCount = messageRepository.countByChatIdAndUnread(userInfo.getUserId(), chat.getId());
 
-
             List<MessageDTO> chatMessagesDTO = chatMessages.stream().map(message -> {
                 MessageDTO messageDTO = modelMapper.map(message, MessageDTO.class);
                 if (!message.getIsRead()) {
@@ -191,33 +192,65 @@ public class MessageService {
         }
     }
 
+    public Integer getCountUnreadChats() throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            List<ChatUsers> chatUsers = chatUsersRepository.findAllChatsByUserId(userInfo.getUserId());
+            Set<Integer> countUnreadChats = new HashSet<>();
+
+            for(ChatUsers chatUser: chatUsers){
+                if (chatUser.getFirstUser().getId().equals(userInfo.getUserId())) {
+                    Integer unreadCount = messageRepository.countByChatIdAndUnread(chatUser.getFirstUser().getId(), chatUser.getChat().getId());
+                    if(unreadCount > 0){
+                        countUnreadChats.add(chatUser.getChat().getId().intValue());
+                    }
+                } else {
+                    Integer unreadCount = messageRepository.countByChatIdAndUnread(chatUser.getSecondUser().getId(), chatUser.getChat().getId());
+                    if(unreadCount > 0){
+                        countUnreadChats.add(chatUser.getChat().getId().intValue());
+                    }
+                }
+            }
+            return countUnreadChats.size();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public ResponseEntity<Object> getUserChats(Integer page) throws Exception {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             PageRequest pageRequest = PageRequest.of(page, 12);
             List<ChatUsers> chatUsers = chatUsersRepository.findChatsByUserId(userInfo.getUserId(), pageRequest).getContent();
-            List<UsersChatDTO> usersChatDTOS = chatUsers.stream().map(chatUser -> {
-                UsersChatDTO usersChatDTO = new UsersChatDTO();
+            Integer countUnreadChats = getCountUnreadChats();
+
+            List<UserChatWithDateDTO> usersChatDTOS = new ArrayList<>();
+            for(ChatUsers chatUser: chatUsers){
+                UserChatWithDateDTO usersChatDTO = new UserChatWithDateDTO();
                 if (chatUser.getFirstUser().getId().equals(userInfo.getUserId())) {
-                    usersChatDTO.setId(chatUser.getChat().getId());
-                    usersChatDTO.setReceiverName(chatUser.getSecondUser().getUsername());
-                    usersChatDTO.setReceiverPhoto(chatUser.getSecondUser().getPhotoUrl());
-                    usersChatDTO.setReceiverColor(chatUser.getSecondUser().getAccountColor());
-                    usersChatDTO.setReceiverId(chatUser.getSecondUser().getId());
-                    usersChatDTO.setUnreadCount(messageRepository.countByChatIdAndUnread(chatUser.getFirstUser().getId(), chatUser.getChat().getId()));
+                    usersChatDTO.getChat().setId(chatUser.getChat().getId());
+                    usersChatDTO.getChat().setReceiverName(chatUser.getSecondUser().getUsername());
+                    usersChatDTO.getChat().setReceiverPhoto(chatUser.getSecondUser().getPhotoUrl());
+                    usersChatDTO.getChat().setReceiverColor(chatUser.getSecondUser().getAccountColor());
+                    usersChatDTO.getChat().setReceiverId(chatUser.getSecondUser().getId());
+                    usersChatDTO.getChat().setUnreadCount(messageRepository.countByChatIdAndUnread(chatUser.getFirstUser().getId(), chatUser.getChat().getId()));
                 } else {
-                    usersChatDTO.setId(chatUser.getChat().getId());
-                    usersChatDTO.setReceiverName(chatUser.getFirstUser().getUsername());
-                    usersChatDTO.setReceiverPhoto(chatUser.getFirstUser().getPhotoUrl());
-                    usersChatDTO.setReceiverColor(chatUser.getFirstUser().getAccountColor());
-                    usersChatDTO.setReceiverId(chatUser.getFirstUser().getId());
-                    usersChatDTO.setUnreadCount(messageRepository.countByChatIdAndUnread(chatUser.getSecondUser().getId(), chatUser.getChat().getId()));
+                    usersChatDTO.getChat().setId(chatUser.getChat().getId());
+                    usersChatDTO.getChat().setReceiverName(chatUser.getFirstUser().getUsername());
+                    usersChatDTO.getChat().setReceiverPhoto(chatUser.getFirstUser().getPhotoUrl());
+                    usersChatDTO.getChat().setReceiverColor(chatUser.getFirstUser().getAccountColor());
+                    usersChatDTO.getChat().setReceiverId(chatUser.getFirstUser().getId());
+                    usersChatDTO.getChat().setUnreadCount(messageRepository.countByChatIdAndUnread(chatUser.getSecondUser().getId(), chatUser.getChat().getId()));
                 }
+                usersChatDTO.setLastMessageDate(chatUser.getChat().getMessages().get(chatUser.getChat().getMessages().size() - 1).getCreatedAt());
+                usersChatDTOS.add(usersChatDTO);
+            }
 
-                return usersChatDTO;
-            }).toList();
+            usersChatDTOS.sort(Comparator.comparing(UserChatWithDateDTO::getLastMessageDate).reversed());
 
-            return ResponseEntity.ok(ResponseUtils.successfulRes("Chats retrieved successfully", usersChatDTOS));
+            UsersChatWrapperDTO usersChatWrapperDTO = new UsersChatWrapperDTO(usersChatDTOS, countUnreadChats);
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Chats retrieved successfully", usersChatWrapperDTO));
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

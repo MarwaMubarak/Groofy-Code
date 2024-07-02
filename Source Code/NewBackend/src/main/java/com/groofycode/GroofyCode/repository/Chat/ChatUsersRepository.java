@@ -15,4 +15,7 @@ public interface ChatUsersRepository extends JpaRepository<ChatUsers, Long> {
 
     @Query("SELECT cu FROM ChatUsers cu WHERE cu.firstUser.id = :userId OR cu.secondUser.id = :userId")
     Page<ChatUsers> findChatsByUserId(Long userId, Pageable pageable);
+
+    @Query("SELECT cu FROM ChatUsers cu WHERE cu.firstUser.id = :userId OR cu.secondUser.id = :userId")
+    List<ChatUsers> findAllChatsByUserId(Long userId);
 }

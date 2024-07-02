@@ -11,6 +11,12 @@ const chatSlice = createSlice({
   name: "chat",
   initialState: chatInitialState,
   reducers: {
+    clearChat(state) {
+      state.chats = [];
+      state.clanMessages = [];
+      state.userMessages = [];
+      state.chatUser = null;
+    },
     setChatUser(state, action) {
       state.chatUser = action.payload;
     },

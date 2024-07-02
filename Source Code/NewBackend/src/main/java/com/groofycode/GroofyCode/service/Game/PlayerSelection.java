@@ -191,7 +191,9 @@ public class PlayerSelection {
         int player2Rating = opponent.getUser_rating();
         int newPlayer1Rating = ratingSystemCalculator.calculateDeltaRating(player2Rating - player1Rating, player1Rating, 'D');
         int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'D');
+        player1.setUser_max_rating(Math.max(player1.getUser_max_rating(), newPlayer1Rating));
         player1.setUser_rating(newPlayer1Rating);
+        opponent.setUser_max_rating(Math.max(opponent.getUser_max_rating(), newPlayer2Rating));
         opponent.setUser_rating(newPlayer2Rating);
         userRepository.save(player1);
         userRepository.save(opponent);

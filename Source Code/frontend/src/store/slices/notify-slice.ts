@@ -38,6 +38,9 @@ const notifySlice = createSlice({
       state.status = action.payload.status;
       state.message = action.payload.message;
     },
+    openUserChat(state) {
+      state.messageNotifyCnt = Math.max(state.messageNotifyCnt - 1, 0);
+    },
     removeNotification(state, action) {
       state.notifications = state.notifications.filter(
         (notify: any) => notify.id !== action.payload
