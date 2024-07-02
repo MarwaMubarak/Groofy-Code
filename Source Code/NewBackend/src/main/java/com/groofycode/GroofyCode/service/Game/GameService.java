@@ -696,7 +696,7 @@ public class GameService {
             }
 
             // Ensure the user is the owner of team1
-            if (!user.getId().equals(admin1.getId()) && user.getId().equals(admin2.getId())) {
+            if (!user.getId().equals(admin1.getId()) ) {
                 // Swap team1 and team2
                 TeamModel temp = team1;
                 team1 = team2;

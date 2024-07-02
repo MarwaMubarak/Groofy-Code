@@ -26,6 +26,8 @@ public class Submission {
 
     private String language;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String code;
 
     private LocalDateTime submissionTime;
