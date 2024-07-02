@@ -102,6 +102,26 @@ public class ProblemPicker {
         return ResponseEntity.ok("https://codeforces.com/contest/" + unSolvedProblems.get(index).getContestId() + "/problem/" + unSolvedProblems.get(index).getIndex());
     }
 
+
+    public ResponseEntity<Object> pickProblem(double expectedRating, List<ProblemDTO> solvedProblems) {
+        int count = (int)expectedRating / 100;
+        if((int)expectedRating % 100 != 0)count++;
+        int rating = 100 * count;
+        while (solvedProblems.size() == problems.get(rating).size())rating += 100;
+
+        List<ProblemDTO> problemsByRating = problems.get(rating);
+        List<ProblemDTO> unSolvedProblems = new ArrayList<>();
+        for(ProblemDTO problemDTO : problemsByRating) {
+            if(solvedProblems.contains(problemDTO)) continue;
+            unSolvedProblems.add(problemDTO);
+        }
+        double percentile = (double) solvedProblems.size() / problemsByRating.size();
+        int index = (int) Math.round(percentile * unSolvedProblems.size());
+        index = Math.min(Math.max(index, 0), unSolvedProblems.size() - 1);
+
+        return ResponseEntity.ok("https://codeforces.com/contest/" + unSolvedProblems.get(index).getContestId() + "/problem/" + unSolvedProblems.get(index).getIndex());
+    }
+
     public int expectedRatingPlayer(PlayerDTO playerDTO) throws Exception {
         String apiUrl = "http://localhost:5000/predict";
         String response = restTemplate.postForObject(apiUrl, playerDTO, String.class);
