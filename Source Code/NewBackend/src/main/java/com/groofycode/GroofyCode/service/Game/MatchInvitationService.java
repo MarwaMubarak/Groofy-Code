@@ -26,10 +26,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchInvitationService {
@@ -79,6 +82,132 @@ public class MatchInvitationService {
         for (UserModel player : players) {
             player.setExistingInvitationId(null);
             userRepository.save(player);
+        }
+    }
+    private List<UserModel> getPlayersInAGame(List<UserModel> team1, List<UserModel> team2) {
+        List<UserModel> playersInGame = new ArrayList<>();
+        for (UserModel player : team1) {
+            if (player.getExistingGameId() != null) {
+                playersInGame.add(player);
+            }
+        }
+        for (UserModel player : team2) {
+            if (player.getExistingGameId() != null) {
+                playersInGame.add(player);
+            }
+        }
+        return playersInGame;
+    }
+
+
+    private List<UserModel> getPlayersInInvitation(List<UserModel> team1, List<UserModel> team2) {
+        List<UserModel> playersInPending = new ArrayList<>();
+        for (UserModel player : team1) {
+            if (player.getExistingInvitationId() != null) {
+                playersInPending.add(player);
+            }
+        }
+        for (UserModel player : team2) {
+            if (player.getExistingInvitationId() != null) {
+                playersInPending.add(player);
+            }
+        }
+        return playersInPending;
+    }
+
+
+    public ResponseEntity<Object> sendTeamMatchInvitationMain(Long team1Id, Long team2Id) throws Exception {
+        try {
+
+
+            TeamModel team1 = teamRepository.findById(team1Id).get();
+            TeamModel team2 = teamRepository.findById(team2Id).get();
+
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel user = userRepository.findByUsername(userInfo.getUsername());
+
+            UserModel admin1 = team1.getCreator();
+            UserModel admin2 = team2.getCreator();
+
+
+            // Ensure the user is the owner of at least one of the teams
+            if (!user.getId().equals(admin1.getId()) && !user.getId().equals(admin2.getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtils.unsuccessfulRes("You are not an admin for either team", null));
+            }
+
+            // Ensure the user is the owner of team1
+            if (!user.getId().equals(admin1.getId())) {
+                // Swap team1 and team2
+                TeamModel temp = team1;
+                team1 = team2;
+                team2 = temp;
+
+                // Reassign admins after swap
+                admin1 = team1.getCreator();
+                admin2 = team2.getCreator();
+            }
+
+
+            List<UserModel> team1Users = team1.getMembers().stream()
+                    .map(TeamMember::getUser)
+                    .collect(Collectors.toList());
+            List<UserModel> team2Users = team2.getMembers().stream()
+                    .map(TeamMember::getUser)
+                    .collect(Collectors.toList());
+
+            if (!(team1Users.size() == 3 && team2Users.size() == 3)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Teams must have 3 members", null));
+            }
+
+
+            List<UserModel> commonUsers = new ArrayList<>(team1Users);
+            commonUsers.retainAll(team2Users);
+
+            boolean hasIntersection = !commonUsers.isEmpty();
+            if (hasIntersection) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Teams cannot have common members", null));
+            }
+
+            List<TeamMatchInvitation> existingInvitation = teamMatchInvitationRepository.findByTeams(team1, team2);
+
+            if (existingInvitation.isEmpty()) {
+
+                List<UserModel> playersInPending = getPlayersInInvitation(team1Users, team2Users);
+                if (!playersInPending.isEmpty()) {
+                    String message = "The following players are already in a pending match invitation: ";
+                    for (UserModel player : playersInPending) {
+                        message += player.getUsername() + ", ";
+                    }
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes(message, null));
+                }
+
+                List<UserModel> playersInGame = getPlayersInAGame(team1Users, team2Users);
+                if (!playersInGame.isEmpty()) {
+                    String message = "The following players are already in a game: ";
+                    for (UserModel player : playersInGame) {
+                        message += player.getUsername() + ", ";
+                    }
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(ResponseUtils.unsuccessfulRes(message, null));
+                }
+
+                ResponseEntity<Object> responseEntity = sendTeamMatchInvitation(team1.getId(), team2.getId());
+                if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                    user.setExistingInvitationId(((TeamMatchInvitation) responseEntity.getBody()).getId());
+                }
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", responseEntity));
+
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ResponseUtils.unsuccessfulRes("Invitation already sent to this user!", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Failed to send invitation", null));
         }
     }
 
@@ -385,15 +514,15 @@ public class MatchInvitationService {
             if (!matchInvitation.getSender().getId().equals(currUser.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot cancel this invitation!", null));
             }
-
-            teamMatchInvitationRepository.delete(matchInvitation);
-
-
             // Delete the corresponding notification
             List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(matchInvitation.getTeam1(), matchInvitation.getTeam1());
             if (!notificationOPT.isEmpty()) {
                 matchInvitationNotificationRepository.deleteAll(notificationOPT);
             }
+
+            teamMatchInvitationRepository.delete(matchInvitation);
+
+
 
             List<TeamMember> team1Members = matchInvitation.getTeam1().getMembers();
             List<UserModel> team1Players = List.of();

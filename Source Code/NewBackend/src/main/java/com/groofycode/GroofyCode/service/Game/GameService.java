@@ -652,35 +652,6 @@ public class GameService {
         return notification;
     }
 
-    private List<UserModel> getPlayersInInvitation(List<UserModel> team1, List<UserModel> team2) {
-        List<UserModel> playersInPending = new ArrayList<>();
-        for (UserModel player : team1) {
-            if (player.getExistingInvitationId() != null) {
-                playersInPending.add(player);
-            }
-        }
-        for (UserModel player : team2) {
-            if (player.getExistingInvitationId() != null) {
-                playersInPending.add(player);
-            }
-        }
-        return playersInPending;
-    }
-
-    private List<UserModel> getPlayersInAGame(List<UserModel> team1, List<UserModel> team2) {
-        List<UserModel> playersInGame = new ArrayList<>();
-        for (UserModel player : team1) {
-            if (player.getExistingGameId() != null) {
-                playersInGame.add(player);
-            }
-        }
-        for (UserModel player : team2) {
-            if (player.getExistingGameId() != null) {
-                playersInGame.add(player);
-            }
-        }
-        return playersInGame;
-    }
 
     private List<String> get3problems(TeamModel team1, TeamModel team2) throws Exception {
 
@@ -724,11 +695,21 @@ public class GameService {
         return problems;
     }
 
-    public ResponseEntity<Object> createTeamMatch(TeamModel team1, TeamModel team2) {
+    public ResponseEntity<Object> createTeamMatch(Long invitationId) {
         try {
 
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel user = userRepository.findByUsername(userInfo.getUsername());
+
+            TeamMatchInvitation teamMatchInvitation = teamMatchInvitationRepository.findById(invitationId).orElse(null);
+
+            if (teamMatchInvitation == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ResponseUtils.unsuccessfulRes("Invitation not found", null));
+            }
+
+            TeamModel team1 = teamMatchInvitation.getTeam1();
+            TeamModel team2 = teamMatchInvitation.getTeam2();
 
             UserModel admin1 = team1.getCreator();
             UserModel admin2 = team2.getCreator();
@@ -760,11 +741,6 @@ public class GameService {
                     .map(TeamMember::getUser)
                     .collect(Collectors.toList());
 
-            if (!(team1Users.size() == 3 && team2Users.size() == 3)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ResponseUtils.unsuccessfulRes("Teams must have 3 members", null));
-            }
-
 
             List<UserModel> commonUsers = new ArrayList<>(team1Users);
             commonUsers.retainAll(team2Users);
@@ -777,38 +753,9 @@ public class GameService {
 
             List<TeamMatchInvitation> existingInvitation = teamMatchInvitationRepository.findByTeams(team1, team2);
 
-            if (existingInvitation.isEmpty()) {
-
-                List<UserModel> playersInPending = getPlayersInInvitation(team1Users, team2Users);
-                if (!playersInPending.isEmpty()) {
-                    String message = "The following players are already in a pending match invitation: ";
-                    for (UserModel player : playersInPending) {
-                        message += player.getUsername() + ", ";
-                    }
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(ResponseUtils.unsuccessfulRes(message, null));
-                }
-
-                List<UserModel> playersInGame = getPlayersInAGame(team1Users, team2Users);
-                if (!playersInGame.isEmpty()) {
-                    String message = "The following players are already in a game: ";
-                    for (UserModel player : playersInGame) {
-                        message += player.getUsername() + ", ";
-                    }
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(ResponseUtils.unsuccessfulRes(message, null));
-                }
-
-                ResponseEntity<Object> responseEntity = matchInvitationService.sendTeamMatchInvitation(team1.getId(), team2.getId());
-                if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                    user.setExistingInvitationId(((TeamMatchInvitation) responseEntity.getBody()).getId());
-                }
-                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", responseEntity));
-
-            } else if (existingInvitation.get(0).isAccepted()) {
+            if (existingInvitation.get(0).isAccepted()) {
 
                 List<String> problems = get3problems(team1, team2);
-                ////TODO: retrive 3 problem based on team average rating
                 String problemURL = problems.get(0); // Default problem URL
                 String problemURL2 = problems.get(1); // Default problem URL
                 String problemURL3 = problems.get(2); // Default problem URL
@@ -859,7 +806,7 @@ public class GameService {
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ResponseUtils.unsuccessfulRes("Teams already have a pending invitation", null));
+                        .body(ResponseUtils.unsuccessfulRes("Team has not accepted the invitation", null));
             }
 
         } catch (Exception e) {

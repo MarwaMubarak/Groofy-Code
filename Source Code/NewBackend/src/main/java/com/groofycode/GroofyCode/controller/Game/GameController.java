@@ -87,18 +87,11 @@ public class GameController {
         return gameService.submitCode(gameId, problemSubmitDTO);
     }
 
-    @PostMapping("/team-match")
-    public ResponseEntity<Object> createTeamMatch(
-            @RequestParam("team1Id") Long team1Id,
-            @RequestParam("team2Id") Long team2Id
-    ) {
+    @PostMapping("/team-match/{invitationId}")
+    public ResponseEntity<Object> createTeamMatch(@PathVariable Long invitationId) {
         try {
-            // Retrieve TeamModel objects from the provided IDs
-            TeamModel team1 = teamRepository.findById(team1Id).get();
-            TeamModel team2 = teamRepository.findById(team2Id).get();
 
-            // Pass the TeamModel objects to the service method
-            return gameService.createTeamMatch(team1, team2);
+            return gameService.createTeamMatch(invitationId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));

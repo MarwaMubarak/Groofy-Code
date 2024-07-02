@@ -12,10 +12,14 @@ public class matchInvitationController {
     @Autowired
     private MatchInvitationService matchInvitationService;
 
-//    @PostMapping("/invite")
-//    public ResponseEntity<Object> sendInvitation(@RequestParam Long gameId, @RequestParam String receiverUsername) {
-//        return matchInvitationService.sendTeamMatchInvitation(gameId, receiverUsername);
-//    }
+    @PostMapping("/invite")
+    public ResponseEntity<Object> sendInvitation(@PathVariable Long teamId1, @PathVariable Long teamId2) {
+        try {
+            return matchInvitationService.sendTeamMatchInvitationMain(teamId1, teamId2);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @PostMapping("/acceptInvitation")
     public ResponseEntity<Object> acceptInvitation(@RequestParam Long invitationId) {
