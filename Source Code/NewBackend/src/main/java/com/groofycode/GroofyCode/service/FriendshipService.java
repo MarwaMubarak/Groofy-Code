@@ -105,6 +105,52 @@ public class FriendshipService {
         }
     }
 
+    public ResponseEntity<Object> searchAcceptedFriendsByPrefix(int page, int size, String prefix) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = userInfo.getUsername();
+            UserModel currUser = userRepository.findByUsername(username);
+            if (currUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes(username + " is Not Found!", null));
+            }
+
+            Long userId = currUser.getId();
+            Pageable pageable = PageRequest.of(page, size);
+            Page<FriendshipModel> friendshipModelList = friendshipRepository.getAcceptedPage(userId, pageable);
+            if (friendshipModelList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("There are no Friends!", null));
+            }
+
+            List<FriendDTO> friendDTOS = friendshipModelList.stream()
+                    .map(bm -> {
+                        FriendDTO friendDTO = new FriendDTO();
+                        UserModel friendUser;
+                        if (!bm.getSenderId().equals(userInfo.getUserId())) {
+                            friendDTO.setFriendId(bm.getSenderId());
+                            friendUser = userRepository.findById(bm.getSenderId()).orElse(null);
+                        } else {
+                            friendDTO.setFriendId(bm.getReceiverId());
+                            friendUser = userRepository.findById(bm.getReceiverId()).orElse(null);
+                        }
+
+                        if (friendUser != null) {
+                            friendDTO.setUsername(friendUser.getUsername());
+                            friendDTO.setPhotoUrl(friendUser.getPhotoUrl());
+                            friendDTO.setAccountColor(friendUser.getAccountColor());
+                        }
+
+                        return friendDTO;
+                    })
+                    .filter(friendDTO -> friendDTO.getUsername().startsWith(prefix))
+                    .toList();
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friends retrieved successfully", friendDTOS));
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
+
     public ResponseEntity<Object> getPendingPage(int page, int size) throws Exception {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

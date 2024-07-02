@@ -1,4 +1,5 @@
 package com.groofycode.GroofyCode.controller;
+
 import com.groofycode.GroofyCode.service.FriendshipService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 @SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/friends")
@@ -16,7 +18,7 @@ public class FriendshipController {
 
     @PostMapping("/send")
     public ResponseEntity<Object> sendRequest(@RequestParam Long friendId) throws Exception {
-       return  friendshipService.sendRequest(friendId);
+        return friendshipService.sendRequest(friendId);
 
     }
 
@@ -28,7 +30,7 @@ public class FriendshipController {
 
     @DeleteMapping("/reject")
     public ResponseEntity<Object> rejectRequest(@RequestParam Long friendId) throws Exception {
-       return friendshipService.rejectRequest(friendId);
+        return friendshipService.rejectRequest(friendId);
     }
 
     @DeleteMapping("/delete")
@@ -43,17 +45,17 @@ public class FriendshipController {
 
     @GetMapping("/accepted")
     public ResponseEntity<Object> getAcceptedPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
-        return friendshipService.getAcceptedPage(page,size);
+        return friendshipService.getAcceptedPage(page, size);
     }
 
     @GetMapping("/pending")
     public ResponseEntity<Object> getPendingPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
-        return friendshipService.getPendingPage(page,size);
+        return friendshipService.getPendingPage(page, size);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Object> getAllPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
-        return friendshipService.getAllPage(  page,size);
+        return friendshipService.getAllPage(page, size);
     }
 
     @GetMapping("/accepted_cnt/{friendId}")
@@ -71,6 +73,13 @@ public class FriendshipController {
         return friendshipService.getAllCount();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Object> searchAcceptedFriendsByPrefix(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam String prefix) throws Exception {
 
+        return friendshipService.searchAcceptedFriendsByPrefix(page, size, prefix);
+    }
 
 }
