@@ -22,4 +22,5 @@ public class NotificationDTO {
     private Date createdAt;
     private boolean isRead;
     private String notifyCnt;
+    private Long invitationId;
 }

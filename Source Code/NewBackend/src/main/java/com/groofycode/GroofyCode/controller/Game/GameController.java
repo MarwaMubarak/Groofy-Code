@@ -105,16 +105,9 @@ public class GameController {
         }
     }
 
-    @PostMapping("/friend-match")
-    public ResponseEntity<Object> createBeatAFriendMatch(
-            @RequestParam("opponentId") Long opponentId
-    ) {
-        try {
-            return gameService.createBeatAFriendMatch(opponentId);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ResponseUtils.unsuccessfulRes("Error creating Team Match", e.getMessage()));
-        }
+    @PostMapping("/friend-match/{invitationId}")
+    public ResponseEntity<Object> createBeatAFriendMatch(@PathVariable Long invitationId) throws Exception {
+        return gameService.createBeatAFriendMatch(invitationId);
     }
 
     @GetMapping("/invitation")

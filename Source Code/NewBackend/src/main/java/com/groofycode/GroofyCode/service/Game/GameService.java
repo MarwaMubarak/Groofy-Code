@@ -868,27 +868,22 @@ public class GameService {
         }
     }
 
-    public ResponseEntity<Object> createBeatAFriendMatch(Long receiverUserId) {
+    public ResponseEntity<Object> createBeatAFriendMatch(Long invitationId) throws Exception {
         try {
-            // Retrieve sender and receiver information
-            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            UserModel sender = userRepository.findByUsername(userInfo.getUsername());
-            UserModel receiver = userRepository.findById(receiverUserId).orElse(null);
+            FriendMatchInvitation friendMatchInvitation = friendMatchInvitationRepository.findById(invitationId).orElse(null);
 
-            if (receiver == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseUtils.unsuccessfulRes("Receiver not found", null));
+            if (friendMatchInvitation == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found", null));
             }
 
+            UserModel sender = friendMatchInvitation.getSender();
+            UserModel receiver = friendMatchInvitation.getReceiver();
 
-            List<FriendMatchInvitation> existingInvitation = friendMatchInvitationRepository.findBySenderAndReceiverOrReceiverAndSender(sender, receiver);
-            if (existingInvitation.isEmpty()) {
-                ResponseEntity<Object> invitationResponse = matchInvitationService.sendFriendMatchInvitation(receiver.getUsername());
-                if (invitationResponse.getStatusCode() == HttpStatus.OK) {
-                    sender.setExistingInvitationId(((FriendMatchInvitation) invitationResponse.getBody()).getId());
-                }
-                return ResponseEntity.ok(ResponseUtils.successfulRes("Team Match invitation sent successfully", invitationResponse));
-            } else if (existingInvitation.get(0).isAccepted()) {
+            if (friendMatchInvitation.getReceiver() == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Receiver not found", null));
+            }
+
+            if (friendMatchInvitation.isAccepted()) {
                 String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
                 LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
                 BeatAFriend beatAFriendMatch = new BeatAFriend(List.of(sender), List.of(receiver), problemURL, LocalDateTime.now(), endTime, 60.0);
@@ -901,19 +896,17 @@ public class GameService {
 
                 // Notify sender and receiver about the match start
                 messagingTemplate.convertAndSendToUser(sender.getUsername(), "/notification",
-                        ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+                        ResponseUtils.successfulRes("Friendly match started successfully", beatAFriendDTO));
                 messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification",
-                        ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
+                        ResponseUtils.successfulRes("Friendly match started successfully", beatAFriendDTO));
 
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ResponseUtils.unsuccessfulRes("Friend already has a pending invitation", null));
+                        .body(ResponseUtils.unsuccessfulRes("Friend has not accepted the invitation", null));
             }
-
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ResponseUtils.unsuccessfulRes("Error creating Beat a Friend match", e.getMessage()));
+            throw new Exception(e.getMessage());
         }
     }
 

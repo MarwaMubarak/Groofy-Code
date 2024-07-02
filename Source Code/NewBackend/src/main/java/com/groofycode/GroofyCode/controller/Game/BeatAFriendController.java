@@ -12,9 +12,9 @@ public class BeatAFriendController {
     @Autowired
     private MatchInvitationService beatAFriendService;
 
-    @PostMapping("/invite")
-    public ResponseEntity<Object> sendInvitation(@RequestParam String receiverUsername) {
-        return beatAFriendService.sendFriendMatchInvitation(receiverUsername);
+    @PostMapping("/invite/{receiverUserId}")
+    public ResponseEntity<Object> sendInvitation(@PathVariable Long receiverUserId) throws Exception {
+        return beatAFriendService.sendFriendlyMatchInvitation(receiverUserId);
     }
 
     @PostMapping("/acceptInvitation")
@@ -27,8 +27,8 @@ public class BeatAFriendController {
         return beatAFriendService.rejectFriendMatchInvitation(invitationId);
     }
 
-    @PostMapping("/cancelInvitation")
-    public ResponseEntity<Object> cancelInvitation(@RequestParam Long invitationId) {
+    @PostMapping("/cancelInvitation/{invitationId}")
+    public ResponseEntity<Object> cancelInvitation(@PathVariable Long invitationId) {
         return beatAFriendService.cancelFriendMatchInvitation(invitationId);
     }
 }

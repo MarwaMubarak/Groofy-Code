@@ -87,6 +87,9 @@ public class NotificationService {
                 notificationDTO.setCreatedAt(notify.getCreatedAt());
                 notificationDTO.setRead(notify.isRead());
                 notificationDTO.setSenderId(notify.getSender().getId());
+                if (notify instanceof FriendMatchInvitationNotificationModel) {
+                    notificationDTO.setInvitationId(((FriendMatchInvitationNotificationModel) notify).getFriendMatchInvitation().getId());
+                }
                 return notificationDTO;
             }).toList();
 

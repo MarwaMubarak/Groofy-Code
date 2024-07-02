@@ -537,4 +537,29 @@ public class MatchInvitationService {
         }
     }
 
+    public ResponseEntity<Object> sendFriendlyMatchInvitation(Long receiverUserId) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel sender = userRepository.findByUsername(userInfo.getUsername());
+            UserModel receiver = userRepository.findById(receiverUserId).orElse(null);
+
+            if (receiver == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Receiver not found", null));
+            }
+
+            if (sender.getExistingInvitationId() != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("You already have a pending invitation", null));
+            }
+
+            List<FriendMatchInvitation> existingInvitation = friendMatchInvitationRepository.findBySenderAndReceiverOrReceiverAndSender(sender, receiver);
+            if (existingInvitation.isEmpty()) {
+                ResponseEntity<Object> invitationResponse = sendFriendMatchInvitation(receiver.getUsername());
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Friendly match invitation sent successfully", invitationResponse));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Friend already has a pending invitation", null));
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }
