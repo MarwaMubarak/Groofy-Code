@@ -18,6 +18,9 @@ public interface ClanRepository extends JpaRepository<ClanModel, Long> {
     @Query("SELECT c FROM ClanModel c LEFT JOIN FETCH c.chat WHERE lower(c.name) = lower(:clanName)")
     ClanModel fetchByNameIgnoreCase(@Param("clanName") String clanName);
 
+    @Query("SELECT c FROM ClanModel c LEFT JOIN FETCH c.chat WHERE c.id = :clanId")
+    ClanModel fetchByClanId(@Param("clanId") Long clanId);
+
     @Query("SELECT COUNT(m) FROM ClanModel c JOIN c.members m WHERE c.id=:id")
     Integer countMembersById(Long id);
 

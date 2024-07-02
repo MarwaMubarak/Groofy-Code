@@ -240,6 +240,7 @@ export interface FriendProps {
   userId: number;
   username: string;
   photoUrl: string;
+  accountColor: string;
 }
 
 // Profile Image Props

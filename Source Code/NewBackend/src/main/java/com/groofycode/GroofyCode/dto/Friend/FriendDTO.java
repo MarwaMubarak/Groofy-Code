@@ -11,4 +11,5 @@ public class FriendDTO {
     private Long friendId;
     private String photoUrl;
     private String username;
+    private String accountColor;
 }

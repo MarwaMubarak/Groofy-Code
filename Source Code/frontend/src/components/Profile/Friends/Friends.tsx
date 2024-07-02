@@ -30,6 +30,7 @@ const Friends = () => {
             userId={friend.friendId}
             username={friend.username}
             photoUrl={friend.photoUrl}
+            accountColor={friend.accountColor}
           />
         ))}
     </div>

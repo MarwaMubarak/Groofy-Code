@@ -8,8 +8,12 @@ import classes from "./scss/chat.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { chatThunks } from "../../../store/actions";
 import ProfileImage from "../../ProfileImage/ProfileImage";
+import Picker from "emoji-picker-react";
+import EmojiPicker from "emoji-picker-react";
 
 const Chat = (props: ChatProps) => {
+  const [showPicker, setShowPicker] = useState(false);
+
   const menu = useRef<any>(null);
   const items: MenuItem[] = [
     {
@@ -93,8 +97,9 @@ const Chat = (props: ChatProps) => {
     setMessage("");
   };
 
-  function convertTo12HourFormat(isoString: any) {
+  function convertTo12HourFormat(isoString: string): string {
     const date = new Date(isoString);
+    const now = new Date();
 
     // Extract components using local time
     const year = date.getFullYear();
@@ -110,14 +115,51 @@ const Chat = (props: ChatProps) => {
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
 
-    // Format minutes and seconds
+    // Format minutes
     const minutesStr = minutes < 10 ? "0" + minutes : minutes;
 
+    // Calculate difference in days
+    const oneDayInMs = 24 * 60 * 60 * 1000;
+    const diffInMs = now.setHours(0, 0, 0, 0) - date.setHours(0, 0, 0, 0);
+    const diffInDays = diffInMs / oneDayInMs;
+
+    // Determine if the date is today, yesterday, or another day
+    let dateStr: string;
+    if (diffInDays === 0) {
+      dateStr = "Today";
+    } else if (diffInDays === 1) {
+      dateStr = "Yesterday";
+    } else {
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const monthsOfYear = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const dayOfWeek = daysOfWeek[date.getDay()];
+      const monthStr = monthsOfYear[date.getMonth()];
+      dateStr = `${dayOfWeek}, ${monthStr} ${day}`;
+    }
+
     // Format the date and time
-    const formattedDate = `${hours}:${minutesStr} ${ampm}`;
+    const formattedDate = `${dateStr} ${hours}:${minutesStr} ${ampm}`;
 
     return formattedDate;
   }
+
+  const onEmojiClick = (event: any) => {
+    console.log("EVeeent", event);
+    setMessage((msg) => msg + event.emoji);
+  };
 
   return (
     <div className={classes.chat_container}>
@@ -319,9 +361,22 @@ const Chat = (props: ChatProps) => {
                 onChange={(e) => setMessage(e.target.value)}
               />
               <div className={classes.chat_footer_actions}>
-                <i className="bi bi-emoji-smile" />
-                <i className="bi bi-paperclip" />
-                <i className="bi bi-mic" />
+                <i
+                  className="bi bi-emoji-smile"
+                  onClick={() => setShowPicker((val) => !val)}
+                  style={{ position: "relative" }}
+                ></i>
+                {showPicker && (
+                  <Picker
+                    style={{
+                      width: "400px",
+                      position: "absolute",
+                      bottom: "50px",
+                      right: "-30px",
+                    }}
+                    onEmojiClick={onEmojiClick}
+                  />
+                )}
               </div>
             </div>
 

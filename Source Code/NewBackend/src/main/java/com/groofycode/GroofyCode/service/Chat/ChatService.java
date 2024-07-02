@@ -4,7 +4,9 @@ import com.groofycode.GroofyCode.dto.Chat.*;
 import com.groofycode.GroofyCode.dto.Chat.MessageDTO;
 import com.groofycode.GroofyCode.model.Chat.Chat;
 import com.groofycode.GroofyCode.model.Chat.Message;
+import com.groofycode.GroofyCode.model.Clan.ClanModel;
 import com.groofycode.GroofyCode.repository.Chat.ChatRepository;
+import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.MessageRepository;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
@@ -21,27 +23,31 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final MessageRepository messageRepository;
     private final ModelMapper modelMapper;
+    private final ClanRepository clanRepository;
 
     @Autowired
-    public ChatService(ChatRepository chatRepository, MessageRepository messageRepository, ModelMapper modelMapper) {
+    public ChatService(ChatRepository chatRepository, MessageRepository messageRepository, ClanRepository clanRepository, ModelMapper modelMapper) {
         this.chatRepository = chatRepository;
         this.messageRepository = messageRepository;
         this.modelMapper = modelMapper;
+        this.clanRepository = clanRepository;
     }
 
     public ResponseEntity<Object> getClanChatById(Long id, Integer page) throws Exception {
         try {
-            Optional<Chat> chatOptional = chatRepository.findById(id);
+            ClanModel clanModel = clanRepository.fetchByClanId(id);
 
-            if (chatOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Chat not found", null));
+            if(clanModel == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Clan not found", null));
             }
 
-            ChatDTO chatDTO = modelMapper.map(chatOptional.get(), ClanChatDTO.class);
+            Chat chat = clanModel.getChat();
+
+            ChatDTO chatDTO = modelMapper.map(chat, ClanChatDTO.class);
 
             PageRequest pageRequest = PageRequest.of(page, 10);
 
-            List<Message> chatMessages = new ArrayList<>(messageRepository.findByChatIdOrderByCreatedAtDesc(id, pageRequest).getContent());
+            List<Message> chatMessages = new ArrayList<>(messageRepository.findByChatIdOrderByCreatedAtDesc(chat.getId(), pageRequest).getContent());
 
             Collections.reverse(chatMessages);
 

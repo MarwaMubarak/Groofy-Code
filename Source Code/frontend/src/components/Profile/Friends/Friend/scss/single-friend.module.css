@@ -5,22 +5,20 @@
   align-items: center;
 }
 .single_friend:not(:last-of-type) {
+  padding-bottom: 10px;
   border-bottom: 1px solid #242526;
+  margin-bottom: 10px;
 }
 .single_friend .friend_info {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.single_friend .friend_info img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  margin-right: 20px;
-}
-.single_friend .friend_info span {
+.single_friend .friend_info .friend_name {
   font-size: 18px;
   color: #fff;
+  margin-left: 10px;
+  font-weight: bold;
 }
 .single_friend .friend_actions .friend_btn {
   color: #fff;

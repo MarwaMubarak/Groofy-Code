@@ -33,6 +33,10 @@ public class LoggedUserDTO {
 
     private String notifyCnt;
 
+    private String messageNotifyCnt;
+
+    private String friendNotifyCnt;
+
     private Integer wins;
 
     private Integer draws;
@@ -50,8 +54,6 @@ public class LoggedUserDTO {
     private Date createdAt;
 
     private Long existingGameId;
-
-    private Long existingInvitationId;
 
     private Integer rate_800_cnt;
     private Integer rate_900_cnt;

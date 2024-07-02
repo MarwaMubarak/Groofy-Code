@@ -5,6 +5,7 @@ import { friendThunks } from "../../../../store/actions";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import ProfileImage from "../../../ProfileImage/ProfileImage";
 
 const Friend = (props: FriendProps) => {
   const dispatch = useDispatch();
@@ -48,10 +49,17 @@ const Friend = (props: FriendProps) => {
       <Toast ref={toast} />
       <ConfirmDialog />
       <div className={classes.friend_info}>
-        <img
-          src={props.photoUrl}
-          alt="Profile"
-          className={classes.friend_profile}
+        <ProfileImage
+          photoUrl={props.photoUrl}
+          username={props.username}
+          style={{
+            cursor: "pointer",
+            backgroundColor: props.accountColor,
+            width: "45px",
+            height: "45px",
+            fontSize: "20px",
+          }}
+          canClick={false}
         />
         <span className={classes.friend_name}>{props.username}</span>
       </div>

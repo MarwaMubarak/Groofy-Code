@@ -3,8 +3,9 @@ import classes from "./scss/match-popup.module.css";
 import { MatchPopupProps } from "../../shared/types";
 import { useDispatch } from "react-redux";
 import { popupThunks } from "../../store/actions";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
+
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 const MatchPopup = (props: MatchPopupProps) => {
   const dispatch = useDispatch();
@@ -12,9 +13,14 @@ const MatchPopup = (props: MatchPopupProps) => {
     dispatch(popupThunks.setPopUpState(false, {}) as any);
   };
   console.log("PLAYERSS", props);
+  const { width, height } = useWindowSize();
 
   return (
     <div className={classes.match_overlay}>
+      {props.submissions.length > 0 &&
+        props.submissions.at(0).verdict === "Accepted" && (
+          <Confetti width={width} height={height} />
+        )}
       <div className={classes.match_popup}>
         <div className={classes.trophy_icn}>
           {props.submissions.length > 0 &&
@@ -38,7 +44,9 @@ const MatchPopup = (props: MatchPopupProps) => {
           <div className={classes.info_game_elapsedtime}>
             {props.submissions.length > 0 &&
             props.submissions.at(0).verdict === "Accepted" ? (
-              <span>{props.submissions.at(0).submissionTime}</span>
+              <>
+                <span>{props.submissions.at(0).submissionTime}</span>
+              </>
             ) : (
               <span>60:00</span>
             )}

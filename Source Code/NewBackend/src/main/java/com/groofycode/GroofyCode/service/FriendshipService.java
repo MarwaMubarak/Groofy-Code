@@ -95,6 +95,7 @@ public class FriendshipService {
                 assert userModel != null;
                 friendDTO.setUsername(userModel.getUsername());
                 friendDTO.setPhotoUrl(userModel.getPhotoUrl());
+                friendDTO.setAccountColor(userModel.getAccountColor());
                 return friendDTO;
             }).toList();
 

@@ -2,7 +2,7 @@ import { reqInstance } from "..";
 import { UserProps } from "../../shared/types";
 import { authActions } from "../slices/auth-slice";
 import { postActions } from "../slices/post-slice";
-
+import userThunks from "../actions/user-actions";
 interface LoginProps {
   usernameOrEmail: string;
   password: string;
@@ -19,6 +19,8 @@ const login = (loginInfo: LoginProps) => {
       localStorage.setItem("token", response.data.body.token);
       const { token, ...body } = response.data.body;
       dispatch(authActions.login(body));
+
+      dispatch(userThunks.getProfile() as any);
     } catch (error: any) {
       throw error;
     }

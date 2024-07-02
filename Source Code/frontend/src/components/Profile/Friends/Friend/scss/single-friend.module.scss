@@ -3,21 +3,20 @@
 
 .single_friend {
   width: 100%;
+
   @include between;
   &:not(:last-of-type) {
+    padding-bottom: 10px;
     border-bottom: 1px solid $mainColor2;
+    margin-bottom: 10px;
   }
   .friend_info {
     @include center;
-    img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      margin-right: 20px;
-    }
-    span {
+    .friend_name {
       font-size: 18px;
       color: #fff;
+      margin-left: 10px;
+      font-weight: bold;
     }
   }
   .friend_actions {

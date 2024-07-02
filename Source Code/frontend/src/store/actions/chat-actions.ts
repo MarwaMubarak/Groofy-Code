@@ -1,5 +1,6 @@
 import { reqInstance } from "..";
 import { chatActions } from "../slices/chat-slice";
+import { notifyActions } from "../slices/notify-slice";
 
 const getClanChat = (clanId: number) => {
   return async (dispatch: any) => {
@@ -29,7 +30,11 @@ const getAllUserChats = (page: number = 0) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        dispatch(chatActions.setChats(response.data.body));
+        console.log("hahaha", response.data.body);
+        dispatch(chatActions.setChats(response.data.body.chats));
+        dispatch(
+          notifyActions.setMessageNotifyCnt(response.data.body.unreadChatsCount)
+        );
       } catch (err) {
         console.error("User Chat Error", err);
       }
@@ -51,6 +56,9 @@ const getUserChat = (userId: number, chatId: number, page: number = 0) => {
           }
         );
         console.log("USER CHAT", response.data.body);
+        if (response.data.body.unreadCount > 0) {
+          dispatch(notifyActions.openUserChat());
+        }
         const chatUser = {
           userId: response.data.body.receiverId,
           username: response.data.body.receiverName,
@@ -65,6 +73,12 @@ const getUserChat = (userId: number, chatId: number, page: number = 0) => {
         console.error("User Chat Error", err);
       }
     }
+  };
+};
+
+const clearChat = () => {
+  return (dispatch: any) => {
+    dispatch(chatActions.clearChat());
   };
 };
 
@@ -86,6 +100,7 @@ const chatThunks = {
   getClanChat,
   getAllUserChats,
   getUserChat,
+  clearChat,
 };
 
 export default chatThunks;

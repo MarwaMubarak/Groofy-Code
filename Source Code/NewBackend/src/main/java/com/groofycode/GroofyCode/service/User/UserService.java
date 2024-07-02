@@ -6,6 +6,7 @@ import com.groofycode.GroofyCode.model.User.UserModel;
 import com.groofycode.GroofyCode.repository.FriendshipRepository;
 import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.service.Chat.MessageService;
 import com.groofycode.GroofyCode.utilities.FirebaseManager;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
@@ -33,16 +34,18 @@ public class UserService implements UserDetailsService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final FirebaseManager firebaseManager;
+    private final MessageService messageService;
 
     @Autowired
     public UserService(UserRepository userRepository, FriendshipRepository friendshipRepository, ModelMapper modelMapper,
-                       PasswordEncoder passwordEncoder, FirebaseManager firebaseManager, NotificationRepository notificationRepository) {
+                       PasswordEncoder passwordEncoder, FirebaseManager firebaseManager, NotificationRepository notificationRepository, MessageService messageService) {
         this.userRepository = userRepository;
         this.friendshipRepository = friendshipRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.firebaseManager = firebaseManager;
         this.notificationRepository = notificationRepository;
+        this.messageService = messageService;
     }
 
     private static String getRandomColor() {
@@ -93,8 +96,10 @@ public class UserService implements UserDetailsService {
             }
             Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(userModel);
             Integer friendNotifyCnt = notificationRepository.countFriendUnRetrievedByReceiver(userModel);
+            Integer messageNotifyCnt = messageService.getCountUnreadChats();
             userDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
             userDTO.setFriendNotifyCnt(friendNotifyCnt > 99 ? "99+" : friendNotifyCnt.toString());
+            userDTO.setMessageNotifyCnt(messageNotifyCnt > 99 ? "99+" : messageNotifyCnt.toString());
             return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
         } catch (Exception e) {
             throw new Exception(e);
