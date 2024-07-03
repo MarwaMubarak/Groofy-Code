@@ -1,0 +1,15 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.simple_user {
+  @include center;
+  &.rev {
+    flex-direction: row-reverse;
+    .username {
+      margin-right: 10px;
+    }
+  }
+  .username {
+    color: #fff;
+  }
+}

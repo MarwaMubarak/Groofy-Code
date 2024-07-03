@@ -47,6 +47,7 @@ import WebSocketConnection from "./WebSocketConnection/WebSocketConnection";
 import MatchPopup from "./MatchPopup/MatchPopup";
 import NotificationsContainer from "./NotificationsContainer/NotificationsContainer";
 import SearchedFriend from "./SearchedFriend/SearchedFriend";
+import SimpleUser from "./SimpleUser/SimpleUser";
 
 export {
   MatchHeader,
@@ -98,4 +99,5 @@ export {
   MatchPopup,
   NotificationsContainer,
   SearchedFriend,
+  SimpleUser,
 };

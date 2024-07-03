@@ -1,0 +1,14 @@
+.simple_user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.simple_user.rev {
+  flex-direction: row-reverse;
+}
+.simple_user.rev .username {
+  margin-right: 10px;
+}
+.simple_user .username {
+  color: #fff;
+}/*# sourceMappingURL=simple-user.module.css.map */

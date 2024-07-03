@@ -127,6 +127,56 @@ const cancelInvitationToFriendlyGame = (friendId: any) => {
   };
 };
 
+const acceptFriendlyGameInvitation = (invitationId: any) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post(
+          `/game/beat-friend/acceptInvitation?invitationId=${invitationId}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(gameActions.setWaitingPopup(true));
+        return response.data;
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+        dispatch(gameActions.setWaitingPopup(false));
+        throw error.response.data;
+      }
+    }
+  };
+};
+
+const rejectFriendlyGameInvitation = (invitationId: any) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post(
+          `/game/beat-friend/rejectInvitation?invitationId=${invitationId}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(gameActions.setWaitingPopup(false));
+        return response.data;
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+        dispatch(gameActions.setWaitingPopup(false));
+        throw error.response.data;
+      }
+    }
+  };
+};
+
 const createFriendlyGame = (userId: any) => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
@@ -309,6 +359,12 @@ const dismissToast = () => {
   };
 };
 
+const changeWaitingPopup = (state: boolean) => {
+  return (dispatch: any) => {
+    dispatch(gameActions.setWaitingPopup(state));
+  };
+};
+
 const gameThunks = {
   getAllUserGames,
   getCurrentGame,
@@ -325,6 +381,9 @@ const gameThunks = {
   inviteToFriendlyGame,
   createFriendlyGame,
   cancelInvitationToFriendlyGame,
+  acceptFriendlyGameInvitation,
+  rejectFriendlyGameInvitation,
+  changeWaitingPopup,
 };
 
 export default gameThunks;

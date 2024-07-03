@@ -275,3 +275,10 @@ export interface NotificationsContainerProps {
   setNotifyActive: (val: boolean) => void;
   rightPosition: string;
 }
+
+export interface SimpleUserProps {
+  username: string;
+  photoUrl: string;
+  accountColor: string;
+  reverse?: boolean;
+}
