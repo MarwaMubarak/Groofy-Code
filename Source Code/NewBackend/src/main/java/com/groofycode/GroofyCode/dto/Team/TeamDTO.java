@@ -10,4 +10,6 @@ public class TeamDTO {
     private int membersCount;
     private String creatorUsername;
     private List<MemberDTO> members;
+    private Boolean isInvited;
+
 }
