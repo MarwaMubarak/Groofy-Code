@@ -18,6 +18,13 @@ public class FriendMatchInvitationDTO {
     private Long receiverId;
     private boolean isAccepted;
     private Date sentAt;
+    private String username1;
+    private String username2;
+    private String accountColor1;
+    private String accountColor2;
+    private Long userId1;
+    private Long userId2;
+
 
     public FriendMatchInvitationDTO(FriendMatchInvitation friendMatchInvitation) {
         this.id = friendMatchInvitation.getId();

@@ -264,14 +264,38 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Match invitation not found", null));
         }
 
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
+
+
         try {
             MatchInvitation invitation = optionalInvitation.get();
 
             if (invitation instanceof FriendMatchInvitation) {
+                UserModel User1;
+                UserModel User2;
+                if (currUser.getId().equals(invitation.getSender().getId())) {
+                    User1 = invitation.getSender();
+                    User2 = invitation.getReceiver();
+                } else {
+                    User1 = invitation.getReceiver();
+                    User2 = invitation.getSender();
+                }
+
                 FriendMatchInvitation friendMatchInvitation = (FriendMatchInvitation) invitation;
                 FriendMatchInvitationDTO dto = new FriendMatchInvitationDTO(friendMatchInvitation);
+                dto.setUsername1(User1.getUsername());
+                dto.setUserId1(User1.getId());
+                dto.setAccountColor1(User1.getAccountColor());
+
+                dto.setUsername2(User2.getUsername());
+                dto.setUserId2(User2.getId());
+                dto.setAccountColor2(User2.getAccountColor());
+
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Friend match invitation retrieved successfully", dto));
             } else if (invitation instanceof TeamMatchInvitation) {
+
+
                 TeamMatchInvitation teamMatchInvitation = (TeamMatchInvitation) invitation;
                 TeamMatchInvitationDTO dto = new TeamMatchInvitationDTO(teamMatchInvitation);
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team match invitation retrieved successfully", dto));
