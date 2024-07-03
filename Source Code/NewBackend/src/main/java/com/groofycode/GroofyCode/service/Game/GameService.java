@@ -314,7 +314,7 @@ public class GameService {
 
                 TeamMatchInvitation teamMatchInvitation = (TeamMatchInvitation) invitation;
                 TeamMatchInvitationDTO dto = new TeamMatchInvitationDTO(teamMatchInvitation);
-                
+
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team match invitation retrieved successfully", dto));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Unknown invitation type", null));
