@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @AllArgsConstructor
-public class playerDisplayDTO {
+public class PlayerDisplayDTO {
 
     private String username;
     private String accountColor;
