@@ -56,6 +56,8 @@ public class UserDTO {
 
     private Long existingGameId;
 
+    private Long existingInvitationId;
+
     private Integer rate_800_cnt;
     private Integer rate_900_cnt;
     private Integer rate_1000_cnt;

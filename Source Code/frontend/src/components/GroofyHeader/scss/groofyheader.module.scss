@@ -235,6 +235,32 @@
         }
       }
     }
+    .pending_match {
+      @include center;
+      margin-right: 20px;
+      span {
+        color: #fff;
+        margin-right: 10px;
+      }
+      .view_pending_btn {
+        background-color: #e69a1f;
+        padding: 10px 15px;
+        border-radius: 12px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: none;
+        border: none;
+        transition: 0.3s;
+        cursor: pointer;
+        &:hover,
+        &:focus,
+        &:active {
+          background-color: $btnColor;
+          outline: none;
+        }
+      }
+    }
     .header_h_usn {
       color: #fff;
       font-weight: 400;

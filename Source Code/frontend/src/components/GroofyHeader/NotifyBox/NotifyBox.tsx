@@ -1,24 +1,39 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ProfileImage } from "../..";
 import { NotifyBoxProps } from "../../../shared/types";
 import classes from "./scss/notifybox.module.css";
-import { friendThunks, notifyThunks } from "../../../store/actions";
+import { friendThunks, gameThunks, notifyThunks } from "../../../store/actions";
 
 const NotifyBox = (props: NotifyBoxProps) => {
   const dispatch = useDispatch();
+  const loggedUser = useSelector((state: any) => state.auth.user);
 
   const handleAccept = () => {
     if (props.nType === "FRIEND_REQUEST") {
       dispatch(friendThunks.AcceptFriendRequest(props.nuid) as any);
-      dispatch(notifyThunks.removeNotification(props.nid) as any);
+    } else if (props.nType === "FRIEND_MATCH_INVITATION") {
+      dispatch(
+        gameThunks.acceptFriendlyGameInvitation(
+          props.nInvId,
+          loggedUser.id
+        ) as any
+      );
     }
+    dispatch(notifyThunks.removeNotification(props.nid) as any);
   };
 
   const handleReject = () => {
     if (props.nType === "FRIEND_REQUEST") {
       dispatch(friendThunks.RejectFriendRequest(props.nuid) as any);
-      dispatch(notifyThunks.removeNotification(props.nid) as any);
+    } else if (props.nType === "FRIEND_MATCH_INVITATION") {
+      dispatch(
+        gameThunks.rejectFriendlyGameInvitation(
+          props.nInvId,
+          loggedUser.id
+        ) as any
+      );
     }
+    dispatch(notifyThunks.removeNotification(props.nid) as any);
   };
 
   return (

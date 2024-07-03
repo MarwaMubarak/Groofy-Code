@@ -16,7 +16,8 @@ const initialState = {
   players2Ids: [],
   responseStatus: null,
   responseMessage: null,
-  waitingPopup: false,
+  waitingPopup: null,
+  searchFriendDialog: null,
   gamePlayers: {},
 };
 
@@ -63,6 +64,9 @@ const gameSlice = createSlice({
     },
     setGamePlayers(state, action) {
       state.gamePlayers = action.payload;
+    },
+    setFriendlyDialog(state, action) {
+      state.searchFriendDialog = action.payload;
     },
   },
 });

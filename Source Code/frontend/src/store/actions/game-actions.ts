@@ -46,6 +46,27 @@ const getCurrentGame = (gameId: number) => {
   };
 };
 
+const getInvitationPlayers = (invitationId: number) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(
+          `/game/invitation/${invitationId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(gameActions.setGamePlayers(response.data.body));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
 const createSoloGame = () => {
   return async (dispatch: any) => {
     try {
@@ -89,6 +110,7 @@ const inviteToFriendlyGame = (friendId: any) => {
             },
           }
         );
+        console.log("FRIENDLY INVITATION", response.data.body);
         dispatch(
           friendActions.changeInviteState({ friendId, isInvited: true })
         );
@@ -127,7 +149,7 @@ const cancelInvitationToFriendlyGame = (friendId: any) => {
   };
 };
 
-const acceptFriendlyGameInvitation = (invitationId: any) => {
+const acceptFriendlyGameInvitation = (invitationId: any, friendId: any) => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -142,17 +164,23 @@ const acceptFriendlyGameInvitation = (invitationId: any) => {
           }
         );
         dispatch(gameActions.setWaitingPopup(true));
+        dispatch(authActions.setExistingInvitation(invitationId));
+        dispatch(gameActions.setFriendlyDialog(false));
+        dispatch(
+          friendActions.changeInviteState({ friendId, isInvited: false })
+        );
         return response.data;
       } catch (error: any) {
         dispatch(gameActions.setResponse(error.response.data));
         dispatch(gameActions.setWaitingPopup(false));
+        dispatch(authActions.setExistingInvitation(null));
         throw error.response.data;
       }
     }
   };
 };
 
-const rejectFriendlyGameInvitation = (invitationId: any) => {
+const rejectFriendlyGameInvitation = (invitationId: any, friendId: any) => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -166,7 +194,12 @@ const rejectFriendlyGameInvitation = (invitationId: any) => {
             },
           }
         );
+
+        console.log("REJECT INVITATION REPSONSE:", response);
         dispatch(gameActions.setWaitingPopup(false));
+        dispatch(
+          friendActions.changeInviteState({ friendId, isInvited: false })
+        );
         return response.data;
       } catch (error: any) {
         dispatch(gameActions.setResponse(error.response.data));
@@ -177,13 +210,13 @@ const rejectFriendlyGameInvitation = (invitationId: any) => {
   };
 };
 
-const createFriendlyGame = (userId: any) => {
+const createFriendlyGame = (invitationId: any) => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const response = await reqInstance.post(
-          `/game/friend-match/${userId}`,
+          `/game/friend-match/${invitationId}`,
           null,
           {
             headers: {
@@ -194,6 +227,8 @@ const createFriendlyGame = (userId: any) => {
         if (response.data.body !== null) {
           dispatch(gameActions.setGame(response.data.body));
           dispatch(authActions.setUserGameId(response.data.body.id));
+          dispatch(gameActions.setWaitingPopup(false));
+          dispatch(authActions.setExistingInvitation(null));
           return {
             status: response.data.status,
             message: response.data.message,
@@ -315,12 +350,12 @@ const leaveGame = (gameId: number) => {
   };
 };
 
-const checkQueue = () => {
+const checkRankedQueue = () => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const response = await reqInstance.get("/game/user-queue", {
+        const response = await reqInstance.get("/game/user-queue/ranked", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -365,6 +400,25 @@ const changeWaitingPopup = (state: boolean) => {
   };
 };
 
+const changeSearchFriendDialog = (state: boolean) => {
+  return (dispatch: any) => {
+    dispatch(gameActions.setFriendlyDialog(state));
+  };
+};
+
+const gameNotify = (
+  waitingPopUpState: boolean,
+  searchFriendDialogState: boolean,
+  invitationId: any
+) => {
+  return (dispatch: any) => {
+    dispatch(gameActions.setWaitingPopup(waitingPopUpState));
+    dispatch(gameActions.setFriendlyDialog(searchFriendDialogState));
+    dispatch(authActions.setExistingInvitation(invitationId));
+    console.log("Frie - INVITATION ID", invitationId);
+  };
+};
+
 const gameThunks = {
   getAllUserGames,
   getCurrentGame,
@@ -373,7 +427,7 @@ const gameThunks = {
   updateGroofyGame,
   submitCode,
   leaveGame,
-  checkQueue,
+  checkRankedQueue,
   leaveQueue,
   dismissToast,
   changeSubmitState,
@@ -384,6 +438,9 @@ const gameThunks = {
   acceptFriendlyGameInvitation,
   rejectFriendlyGameInvitation,
   changeWaitingPopup,
+  getInvitationPlayers,
+  gameNotify,
+  changeSearchFriendDialog,
 };
 
 export default gameThunks;

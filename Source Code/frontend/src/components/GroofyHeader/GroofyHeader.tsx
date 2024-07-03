@@ -4,7 +4,12 @@ import NotifyBox from "./NotifyBox/NotifyBox";
 import ActionButton from "./ActionButton/ActionButton";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { authThunks, notifyThunks, userThunks } from "../../store/actions";
+import {
+  authThunks,
+  gameThunks,
+  notifyThunks,
+  userThunks,
+} from "../../store/actions";
 import { postActions } from "../../store/slices/post-slice";
 import classes from "./scss/groofyheader.module.css";
 import { OverlayPanel } from "primereact/overlaypanel";
@@ -51,6 +56,7 @@ const GroofyHeader = () => {
   const [rightPosition, setRightPosition] = useState("30px");
   const [notifyConTitle, setNotifyConTitle] = useState("");
   const [notifyConDesc, setNotifyConDesc] = useState("");
+  const waitingPopUp = useSelector((state: any) => state.game.waitingPopup);
 
   useClickOutside(componentRefProfileArea, () => {
     setProfileActive(false);
@@ -115,12 +121,23 @@ const GroofyHeader = () => {
     navigate("/login");
   };
 
+  useEffect(() => {
+    if (waitingPopUp) {
+      setNotifyActive(false);
+      setProfileActive(false);
+    }
+  }, [waitingPopUp]);
+
   const getNormalNotifications = async () => {
     await dispatch(notifyThunks.getNormalNotifications() as any);
   };
 
   const getFriendNotifications = async () => {
     await dispatch(notifyThunks.getFriendNotifications() as any);
+  };
+
+  const openWaitingPopUp = () => {
+    dispatch(gameThunks.changeWaitingPopup(true) as any);
   };
 
   console.log(notifications);
@@ -311,6 +328,19 @@ const GroofyHeader = () => {
             <Link to={`/game/${loggedUser.existingGameId}`}>View game</Link>
           </div>
         )}
+        {loggedUser.existingInvitationId &&
+          waitingPopUp !== null &&
+          waitingPopUp !== true && (
+            <div className={classes.pending_match}>
+              <span>Pending game...</span>
+              <button
+                className={classes.view_pending_btn}
+                onClick={openWaitingPopUp}
+              >
+                View
+              </button>
+            </div>
+          )}
         <div className={classes.header_h_imgbox}>
           <ActionButton
             count={friendNotifyCnt}

@@ -276,6 +276,32 @@
 .header_container .header_user_area .ongoing_match a:hover {
   background-color: #feb139;
 }
+.header_container .header_user_area .pending_match {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+.header_container .header_user_area .pending_match span {
+  color: #fff;
+  margin-right: 10px;
+}
+.header_container .header_user_area .pending_match .view_pending_btn {
+  background-color: #e69a1f;
+  padding: 10px 15px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.header_container .header_user_area .pending_match .view_pending_btn:hover, .header_container .header_user_area .pending_match .view_pending_btn:focus, .header_container .header_user_area .pending_match .view_pending_btn:active {
+  background-color: #feb139;
+  outline: none;
+}
 .header_container .header_user_area .header_h_usn {
   color: #fff;
   font-weight: 400;

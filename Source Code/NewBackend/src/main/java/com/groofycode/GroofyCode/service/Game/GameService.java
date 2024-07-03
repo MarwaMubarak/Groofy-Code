@@ -34,6 +34,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -303,8 +305,6 @@ public class GameService {
     }
 
 
-
-
     public ResponseEntity<Object> getMatch(Long id) {
         if (id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("ID must not be null", null));
@@ -331,11 +331,21 @@ public class GameService {
                 gameDTO = new SoloMatchDTO((SoloMatch) game, problemParsed.getBody());
             } else if (game instanceof CasualMatch) {
                 gameDTO = new CasualMatchDTO((CasualMatch) game, problemParsed.getBody());
+            } else if (game instanceof BeatAFriend) {
+                gameDTO = new BeatAFriendDTO((BeatAFriend) game, problemParsed.getBody());
+            } else if (game instanceof VelocityMatch) {
+                gameDTO = new VelocityMatchDTO((VelocityMatch) game, problemParsed.getBody());
+            } else if (game instanceof TeamMatch) {
+                ProblemDTO problemDTO2 = problemParser.parseCodeforcesUrl(((TeamMatch) game).getProblemUrl2());
+                ProblemDTO problemDTO3 = problemParser.parseCodeforcesUrl(((TeamMatch) game).getProblemUrl3());
 
+                ResponseEntity<Object> problem2Parsed = problemParser.parseFullProblem(problemDTO2.getContestId(), problemDTO2.getIndex());
+                ResponseEntity<Object> problem3Parsed = problemParser.parseFullProblem(problemDTO3.getContestId(), problemDTO3.getIndex());
+
+                gameDTO = new TeamMatchDTO((TeamMatch) game, problemParsed.getBody(), problem2Parsed.getBody(), problem3Parsed.getBody());
             } else {
                 gameDTO = new GameDTO(game);
             }
-
 
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
         } catch (
@@ -376,11 +386,12 @@ public class GameService {
                 FriendMatchInvitation friendMatchInvitation = (FriendMatchInvitation) invitation;
                 FriendMatchInvitationDTO dto = new FriendMatchInvitationDTO(friendMatchInvitation);
 
-                PlayerDisplayDTO player1 = new PlayerDisplayDTO( User1.getUsername(), User1.getAccountColor(),User1.getPhotoUrl());
-                PlayerDisplayDTO player2 = new PlayerDisplayDTO( User2.getUsername(), User2.getAccountColor(),User2.getPhotoUrl());
+                PlayerDisplayDTO player1 = new PlayerDisplayDTO(User1.getUsername(), User1.getAccountColor(), User1.getPhotoUrl());
+                PlayerDisplayDTO player2 = new PlayerDisplayDTO(User2.getUsername(), User2.getAccountColor(), User2.getPhotoUrl());
 
                 dto.setTeam1Players(List.of(player1));
                 dto.setTeam2Players(List.of(player2));
+                dto.setSender(invitation.getSender().getId().equals(currUser.getId()));
 
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Friend match invitation retrieved successfully", dto));
             } else if (invitation instanceof TeamMatchInvitation) {
@@ -388,7 +399,7 @@ public class GameService {
                 TeamModel team2;
 
                 if (//check if the current user is a member of team1
-                        ((TeamMatchInvitation) invitation).getTeam1().getMembers().stream().anyMatch(user -> user.getId().equals(currUser.getId()))){
+                        ((TeamMatchInvitation) invitation).getTeam1().getMembers().stream().anyMatch(user -> user.getId().equals(currUser.getId()))) {
                     team1 = ((TeamMatchInvitation) invitation).getTeam1();
                     team2 = ((TeamMatchInvitation) invitation).getTeam2();
                 } else {
@@ -407,12 +418,12 @@ public class GameService {
                 }).toList();
 
 
-
                 TeamMatchInvitation teamMatchInvitation = (TeamMatchInvitation) invitation;
                 TeamMatchInvitationDTO dto = new TeamMatchInvitationDTO(teamMatchInvitation);
 
                 dto.setTeam1Players(team1Players);
                 dto.setTeam2Players(team2Players);
+                dto.setSender(invitation.getSender().getId().equals(currUser.getId()));
 
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team match invitation retrieved successfully", dto));
             } else {
@@ -496,13 +507,15 @@ public class GameService {
         } else if (game instanceof SoloMatch) {
             gameType = "Solo";
 
-        } else if(game instanceof CasualMatch){
+        } else if (game instanceof CasualMatch) {
             gameType = "Casual";
-        }
-        else if(game instanceof VelocityMatch){
+        } else if (game instanceof VelocityMatch) {
             gameType = "Velocity";
-        }
-        else {
+        } else if (game instanceof BeatAFriend) {
+            gameType = "Friendly";
+        } else if (game instanceof TeamMatch) {
+            gameType = "Team";
+        } else {
             gameType = "Unknown";
         }
 
@@ -525,7 +538,7 @@ public class GameService {
 
         for (UserModel lp : leavingPlayers) {
             lp.setExistingGameId(null);
-            if(gameType.equals("Ranked")){
+            if (gameType.equals("Ranked")) {
                 lp.setUser_rating(lp.getUser_rating() - 30);
             }
             userRepository.save(lp);
@@ -570,14 +583,11 @@ public class GameService {
                         gameDTO = new SoloMatchDTO((SoloMatch) game, parsedProblem);
                     } else if (game instanceof RankedMatch) {
                         gameDTO = new RankedMatchDTO((RankedMatch) game, parsedProblem);
-                    }
-                    else if (game instanceof CasualMatch) {
+                    } else if (game instanceof CasualMatch) {
                         gameDTO = new CasualMatchDTO((CasualMatch) game, parsedProblem);
-                    }
-                    else if (game instanceof VelocityMatch) {
+                    } else if (game instanceof VelocityMatch) {
                         gameDTO = new VelocityMatchDTO((VelocityMatch) game, parsedProblem);
-                    }
-                    else {
+                    } else {
                         gameDTO = new GameDTO(game); // Default DTO if no specific type matches
                     }
 
@@ -955,6 +965,7 @@ public class GameService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ResponseEntity<Object> createBeatAFriendMatch(Long invitationId) throws Exception {
         try {
             FriendMatchInvitation friendMatchInvitation = friendMatchInvitationRepository.findById(invitationId).orElse(null);
@@ -974,7 +985,6 @@ public class GameService {
             UserModel opponent = userRepository.findByUsername(receiver.getUsername());
 
             if (friendMatchInvitation.isAccepted()) {
-
                 PlayerDTO playerDTO = modelMapper.map(player1, PlayerDTO.class);
                 PlayerDTO opponentDTO = modelMapper.map(opponent, PlayerDTO.class);
 
@@ -989,7 +999,17 @@ public class GameService {
                 BeatAFriend beatAFriendMatch = new BeatAFriend(List.of(sender), List.of(receiver), problemURL, LocalDateTime.now(), endTime, 60.0);
                 beatAFriendMatchRepository.save(beatAFriendMatch);
 
+                player1.setExistingGameId(beatAFriendMatch.getId());
+                opponent.setExistingGameId(beatAFriendMatch.getId());
+
+                player1.setExistingInvitationId(null);
+                opponent.setExistingInvitationId(null);
+
+                userRepository.save(player1);
+                userRepository.save(opponent);
+
                 // Prepare DTO for response
+                assert problemURL != null;
                 ProblemDTO problemDTO = problemParser.parseCodeforcesUrl(problemURL);
                 ResponseEntity<Object> problemParsed = problemParser.parseFullProblem(problemDTO.getContestId(), problemDTO.getIndex());
                 BeatAFriendDTO beatAFriendDTO = new BeatAFriendDTO(beatAFriendMatch, problemParsed.getBody());
@@ -1000,16 +1020,20 @@ public class GameService {
                 messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/games",
                         ResponseUtils.successfulRes("Friendly match started successfully", beatAFriendDTO));
 
+                Boolean notifyIsDeleted = matchInvitationService.deleteInvitation(player1, opponent);
+
+                if (!notifyIsDeleted) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to create a game", null));
+                }
+
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ResponseUtils.unsuccessfulRes("Friend has not accepted the invitation", null));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Friend has not accepted the invitation", null));
             }
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
-
 
 
     public List<ProblemDTO> mapProblemsToDTOs(List<ProgProblem> problems) {

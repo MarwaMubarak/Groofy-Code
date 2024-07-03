@@ -49,7 +49,7 @@ function App() {
   useEffect(() => {
     const getProfile = async () => {
       await dispatch(userThunks.getProfile() as any);
-      await dispatch(gameThunks.checkQueue() as any);
+      await dispatch(gameThunks.checkRankedQueue() as any);
     };
     if (!loggedUser) {
       getProfile();

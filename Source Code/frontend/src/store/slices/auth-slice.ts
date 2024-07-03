@@ -40,6 +40,11 @@ const authSlice = createSlice({
       (state.user! as any).existingGameId = action.payload;
       state.existingGameId = action.payload;
     },
+    setExistingInvitation(state, action) {
+      if (state.user !== null) {
+        (state.user as any).existingInvitationId = action.payload;
+      }
+    },
   },
 });
 

@@ -23,7 +23,7 @@ public class BeatAFriendController {
     }
 
     @PostMapping("/rejectInvitation")
-    public ResponseEntity<Object> rejectInvitation(@RequestParam Long invitationId) {
+    public ResponseEntity<Object> rejectInvitation(@RequestParam Long invitationId) throws Exception {
         return beatAFriendService.rejectFriendMatchInvitation(invitationId);
     }
 

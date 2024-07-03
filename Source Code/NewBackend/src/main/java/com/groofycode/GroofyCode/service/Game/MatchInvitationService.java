@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.service.Game;
 
+import com.groofycode.GroofyCode.dto.FriendMatchInvitationDTO;
 import com.groofycode.GroofyCode.dto.Notification.MatchInvitationNotificationDTO;
 import com.groofycode.GroofyCode.dto.Notification.NotificationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
@@ -7,6 +8,7 @@ import com.groofycode.GroofyCode.model.Game.FriendMatchInvitation;
 import com.groofycode.GroofyCode.model.Game.MatchInvitation;
 import com.groofycode.GroofyCode.model.Game.TeamMatchInvitation;
 import com.groofycode.GroofyCode.model.Notification.FriendMatchInvitationNotificationModel;
+import com.groofycode.GroofyCode.model.Notification.FriendNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.MatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Team.TeamInvitation;
@@ -20,6 +22,7 @@ import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.checkerframework.checker.units.qual.A;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +73,9 @@ public class MatchInvitationService {
 
     @Autowired
     private FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     private void setPlayersInvitation(List<UserModel> players, Long invitationId) {
         for (UserModel player : players) {
@@ -246,7 +252,8 @@ public class MatchInvitationService {
     }
 
     private void sendFriendNotification(UserModel player, UserModel currUser, FriendMatchInvitation friendMatchInvitation,
-                                        String messageBody, NotificationType notificationType) {
+                                        String messageBody, NotificationType notificationType, Boolean isRejected) {
+
         FriendMatchInvitationNotificationModel notification = new FriendMatchInvitationNotificationModel();
         notification.setBody(messageBody);
         notification.setSender(currUser);
@@ -255,7 +262,9 @@ public class MatchInvitationService {
         notification.setNotificationType(notificationType);
         notification.setFriendMatchInvitation(friendMatchInvitation);
 
-        friendMatchInvitationNotificationRepository.save(notification);
+        if (!isRejected) {
+            friendMatchInvitationNotificationRepository.save(notification);
+        }
 
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setBody(notification.getBody());
@@ -266,6 +275,7 @@ public class MatchInvitationService {
         notificationDTO.setCreatedAt(notification.getCreatedAt());
         Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(player);
         notificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+        notificationDTO.setInvitationId(friendMatchInvitation.getId());
 
         // Send the notification via WebSocket
         messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification", notificationDTO);
@@ -316,7 +326,7 @@ public class MatchInvitationService {
                 if (!player.getId().equals(team1.getCreator().getId())) {
 
                     sendNotifcation(player, currUser, team1, team2, matchInvitation
-                            , "Your admin " + currUser.getUsername() + " invites your team " + team1.getName() + " to a match with " + team2.getName() + " team", false, NotificationType.MATCH_INVITATION);
+                            , currUser.getUsername() + " invites your team " + team1.getName() + " to a match with " + team2.getName() + " team", false, NotificationType.MATCH_INVITATION);
 
                 }
             }
@@ -487,9 +497,6 @@ public class MatchInvitationService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Invitation not found!", null));
             }
 
-            TeamMatchInvitation matchInvitation = invitationOpt.get();
-            teamMatchInvitationRepository.delete(matchInvitation);
-
             // Delete the corresponding notification
             List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(team1, team2);
             MatchInvitationNotificationModel notification;
@@ -498,9 +505,38 @@ public class MatchInvitationService {
                 matchInvitationNotificationRepository.delete(notification);
             }
 
+            TeamMatchInvitation matchInvitation = invitationOpt.get();
+            teamMatchInvitationRepository.delete(matchInvitation);
+
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invitation deleted successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to delete invitation", null));
+        }
+    }
+
+    public Boolean deleteInvitation(UserModel player1, UserModel player2) {
+        try {
+            List<FriendMatchInvitation> invitationOpt = friendMatchInvitationRepository.findBySenderAndReceiverOrReceiverAndSender(player1, player2);
+
+            if (invitationOpt.isEmpty()) {
+                return false;
+            }
+
+            // Delete the corresponding notification
+            List<FriendMatchInvitationNotificationModel> notificationOPT = friendMatchInvitationNotificationRepository.findBySenderAndReceiverOrReceiverAndSender(player1, player2);
+
+            MatchInvitationNotificationModel notification;
+
+            if (!notificationOPT.isEmpty()) {
+                friendMatchInvitationNotificationRepository.deleteAll(notificationOPT);
+            }
+
+            FriendMatchInvitation matchInvitation = invitationOpt.get(0);
+            friendMatchInvitationRepository.delete(matchInvitation);
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -565,10 +601,9 @@ public class MatchInvitationService {
             friendMatchInvitationRepository.save(friendMatchInvitation);
 
             setPlayersInvitation(List.of(currUser), friendMatchInvitation.getId());
-            sendFriendNotification(receiver, currUser, friendMatchInvitation, currUser.getUsername() + " invites you to a friendly match", NotificationType.FRIEND_MATCH_INVITATION);
+            sendFriendNotification(receiver, currUser, friendMatchInvitation, " invites you to a friendly match", NotificationType.FRIEND_MATCH_INVITATION, false);
 
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Friend match invitation sent successfully!", null));
+            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Friend match invitation sent successfully!", friendMatchInvitation.getId()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to send invitation", null));
         }
@@ -600,7 +635,7 @@ public class MatchInvitationService {
             }
 
             setPlayersInvitation(List.of(currUser), friendMatchInvitation.getId());
-            sendFriendNotification(friendMatchInvitation.getSender(), currUser, friendMatchInvitation, currUser.getUsername() + " accepted your invitation", NotificationType.MATCH_INVITATION_ACCEPT);
+            sendFriendNotification(friendMatchInvitation.getSender(), currUser, friendMatchInvitation, " accepted your invitation", NotificationType.MATCH_INVITATION_ACCEPT, false);
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation accepted successfully", null));
         } catch (Exception e) {
@@ -608,7 +643,7 @@ public class MatchInvitationService {
         }
     }
 
-    public ResponseEntity<Object> rejectFriendMatchInvitation(Long invitationId) {
+    public ResponseEntity<Object> rejectFriendMatchInvitation(Long invitationId) throws Exception {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel currUser = userRepository.findByUsername(userInfo.getUsername());
@@ -623,20 +658,22 @@ public class MatchInvitationService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot reject this invitation!", null));
             }
 
-            friendMatchInvitationRepository.delete(friendMatchInvitation);
-
             // Delete the corresponding notification
             List<FriendMatchInvitationNotificationModel> notifications = friendMatchInvitationNotificationRepository.findByFriendMatchInvitation(friendMatchInvitation);
             if (!notifications.isEmpty()) {
                 friendMatchInvitationNotificationRepository.deleteAll(notifications);
             }
 
+//            FriendMatchInvitation copiedFriendInvitation = modelMapper.map(friendMatchInvitation, FriendMatchInvitation.class);
+
+            friendMatchInvitationRepository.delete(friendMatchInvitation);
+
             setPlayersInvitationNull(List.of(invitationOpt.get().getSender()));
-            sendFriendNotification(friendMatchInvitation.getSender(), currUser, friendMatchInvitation, currUser.getUsername() + " rejected your invitation", NotificationType.MATCH_INVITATION_REJECT);
+            sendFriendNotification(friendMatchInvitation.getSender(), currUser, null, " rejected your invitation", NotificationType.MATCH_INVITATION_REJECT, true);
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation rejected successfully", null));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to reject invitation", null));
+            throw new Exception(e.getMessage());
         }
     }
 

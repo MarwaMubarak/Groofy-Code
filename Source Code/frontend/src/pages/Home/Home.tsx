@@ -25,16 +25,24 @@ const Home = () => {
   const searchedFriends: any[] = useSelector(
     (state: any) => state.friend.friends
   );
-  const waitingPopUp = useSelector((state: any) => state.game.waitingPopUp);
+  const waitingPopUp = useSelector((state: any) => state.game.waitingPopup);
+  const searchFriendDialog = useSelector(
+    (state: any) => state.game.searchFriendDialog
+  );
+  const gamePlayers = useSelector((state: any) => state.game.gamePlayers);
+
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
-  const [friendlyDialogVisible, setFriendlyDialogVisible] = useState(false);
-  const [waitingDialogVisible, setWaitingDialogVisible] =
-    useState(waitingPopUp);
   const [searchText, setSearchText] = useState("");
 
-  console.log("Searched Friends: ", searchedFriends);
+  // console.log("Searched Friends: ", searchedFriends);
+
+  // console.log("Game Players: ", gamePlayers);
+
+  console.log("LOGGED USER: ", user);
+
+  console.log("WAITING POPUP: ", waitingPopUp);
 
   const createSoloGame = async () => {
     return await dispatch(gameThunks.createSoloGame() as any);
@@ -44,9 +52,35 @@ const Home = () => {
     return await dispatch(gameThunks.createRankedGame() as any);
   };
 
+  const createBeatAFriendGame = async () => {
+    console.log("Frie - ", user);
+    if (user.existingInvitationId === null) return;
+    return await dispatch(
+      gameThunks.createFriendlyGame(user.existingInvitationId) as any
+    );
+  };
+
   const searchFriends = async () => {
     if (searchText === "") return;
     return await dispatch(friendThunks.SearchFriends(searchText) as any);
+  };
+
+  const getInvitationPlayers = async () => {
+    return await dispatch(
+      gameThunks.getInvitationPlayers(user.existingInvitationId) as any
+    );
+  };
+
+  const closeWaitingPopUp = () => {
+    dispatch(gameThunks.changeWaitingPopup(false) as any);
+  };
+
+  const openSearchFriendDialog = () => {
+    dispatch(gameThunks.changeSearchFriendDialog(true) as any);
+  };
+
+  const closeSearchFriendDialog = () => {
+    dispatch(gameThunks.changeSearchFriendDialog(false) as any);
   };
 
   return (
@@ -56,11 +90,11 @@ const Home = () => {
       <SideBar idx={0} />
       <Dialog
         header="Send your message"
-        visible={friendlyDialogVisible}
+        visible={searchFriendDialog}
         style={{ width: "600px" }}
         onHide={() => {
-          if (!friendlyDialogVisible) return;
-          setFriendlyDialogVisible(false);
+          if (!searchFriendDialog) return;
+          closeSearchFriendDialog();
         }}
         className={classes.beat_friend_dialog}
       >
@@ -97,36 +131,58 @@ const Home = () => {
       </Dialog>
       <Dialog
         header="Beat a friend Game"
-        visible={waitingDialogVisible}
+        visible={waitingPopUp}
         style={{ width: "600px" }}
+        onShow={getInvitationPlayers}
         onHide={() => {
-          if (!waitingDialogVisible) return;
-          setWaitingDialogVisible(false);
+          if (!waitingPopUp) return;
+          closeWaitingPopUp();
         }}
         className={classes.beat_friend_waiting_dialog}
       >
         <div className={classes.beat_friend_waiting_wrapper}>
           <div className={classes.beat_friend_waiting_content}>
-            <SimpleUser
-              username={user.username}
-              accountColor={user.accountColor}
-              photoUrl={user.photoUrl}
-            />
+            <div className={`${classes.team_players} ${classes.first}`}>
+              {gamePlayers.team1Players?.map((player: any, idx: number) => (
+                <SimpleUser
+                  key={idx}
+                  username={`${player.username} (You)`}
+                  accountColor={player.accountColor}
+                  photoUrl={player.photoUrl}
+                />
+              ))}
+            </div>
             <span className={classes.vs}>VS</span>
-            <SimpleUser
-              username={user.username}
-              accountColor={user.accountColor}
-              photoUrl={user.photoUrl}
-              reverse={true}
-            />
+            <div className={`${classes.team_players} ${classes.second}`}>
+              {gamePlayers.team2Players?.map((player: any, idx: number) => (
+                <SimpleUser
+                  key={idx}
+                  username={player.username}
+                  accountColor={player.accountColor}
+                  photoUrl={player.photoUrl}
+                  reverse={true}
+                />
+              ))}
+            </div>
           </div>
-          <div className={classes.start_game_btn}>
-            <Button
-              label="Start Game"
-              style={{ color: "#fff" }}
-              onClick={() => {}}
-            />
-          </div>
+          {gamePlayers.sender === true && (
+            <div className={classes.start_game_btn}>
+              <Button
+                label="Start Game"
+                style={{ color: "#fff" }}
+                onClick={() => {
+                  createBeatAFriendGame()
+                    .then((res: any) => {
+                      if (res.status === "success") {
+                        console.log("Game Response: ", res);
+                        navigate(`/game/${res.gameId}`);
+                      }
+                    })
+                    .catch((error: any) => {});
+                }}
+              />
+            </div>
+          )}
         </div>
       </Dialog>
       <div className={classes.activity_section}>
@@ -273,7 +329,7 @@ const Home = () => {
                   id="beat_friend_card"
                   title="Beat a Friend"
                   img="/Assets/Images/friends.png"
-                  clickEvent={() => setWaitingDialogVisible(true)}
+                  clickEvent={openSearchFriendDialog}
                 />
               </div>
             </div>

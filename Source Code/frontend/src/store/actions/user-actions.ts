@@ -1,5 +1,6 @@
 import { reqInstance } from "..";
 import { authActions } from "../slices/auth-slice";
+import { gameActions } from "../slices/game-slice";
 import { notifyActions } from "../slices/notify-slice";
 import { userActions } from "../slices/user-slice";
 
@@ -46,7 +47,15 @@ const getProfile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         dispatch(authActions.setUser(response.data.body));
+
+        dispatch(
+          gameActions.setWaitingPopup(
+            response.data.body.existingInvitationId !== null
+          )
+        );
+
         dispatch(
           notifyActions.setNotificationsCnt({
             notifyCnt: response.data.body.notifyCnt,

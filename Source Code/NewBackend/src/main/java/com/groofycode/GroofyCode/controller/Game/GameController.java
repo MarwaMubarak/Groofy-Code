@@ -45,7 +45,7 @@ public class GameController {
 //        return gameService.saveGame(casualMatch);
 //    }
 
-    @GetMapping("/user-queue")
+    @GetMapping("/user-queue/ranked")
     public ResponseEntity<Object> getUserRankedQueue() {
         return gameService.getUserRankedQueue();
     }
@@ -87,7 +87,7 @@ public class GameController {
         }
     }
 
-    @PostMapping("/casual")
+    @PostMapping("/velocity")
     public ResponseEntity<Object> findVelocityMatch() throws Exception {
         ResponseEntity<Object> match = gameService.findVelocityMatch();
         if (match != null) {
@@ -145,7 +145,7 @@ public class GameController {
     }
 
     @GetMapping("/invitation/{invitationId}")
-    public ResponseEntity<Object> getInvitation(@RequestParam Long invitationId) {
+    public ResponseEntity<Object> getInvitation(@PathVariable Long invitationId) {
         return gameService.getMatchInvitation(invitationId);
     }
 

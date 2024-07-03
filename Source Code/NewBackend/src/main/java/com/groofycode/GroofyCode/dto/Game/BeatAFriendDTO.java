@@ -25,7 +25,7 @@ public class BeatAFriendDTO extends GameDTO {
                 beatAFriend.getStartTime(),
                 beatAFriend.getEndTime(),
                 beatAFriend.getDuration(),
-                beatAFriend.getGameType().toString(),
+                "Friendly",
                 beatAFriend.getGameStatus().toString(),
                 null // assign it later
         );

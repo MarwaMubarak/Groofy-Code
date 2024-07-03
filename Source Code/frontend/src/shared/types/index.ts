@@ -67,6 +67,7 @@ export interface NotifyBoxProps {
   nbody: string;
   ntime: string;
   nType: string;
+  nInvId: number;
 }
 
 // Single Friend Props

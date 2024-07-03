@@ -12,6 +12,8 @@ const NotificationsContainer = (props: NotificationsContainerProps) => {
     props.setNotifyActive(false);
   });
 
+  console.log("NOTIFICATIONS: ", props.notifications);
+
   return (
     <div
       className={`${classes.notify_area} ${
@@ -44,6 +46,7 @@ const NotificationsContainer = (props: NotificationsContainerProps) => {
               nbody={notify.body}
               ntime={FormatDate(notify.createdAt) ?? "Some time ago"}
               nType={notify.notificationType}
+              nInvId={notify.invitationId}
             />
           ))
         ) : (

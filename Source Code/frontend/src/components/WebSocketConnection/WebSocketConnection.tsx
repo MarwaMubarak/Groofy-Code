@@ -58,9 +58,10 @@ const WebSocketConnection = () => {
         console.log("Recieved message: ", msg);
 
         if (msg.notificationType === "MATCH_INVITATION_ACCEPT") {
-          dispatch(gameThunks.changeWaitingPopup(true) as any);
+          console.log("Frie - Invitation accepted", msg);
+          dispatch(gameThunks.gameNotify(true, false, msg.invitationId) as any);
         } else if (msg.notificationType === "MATCH_INVITATION_REJECT") {
-          dispatch(gameThunks.changeWaitingPopup(false) as any);
+          dispatch(gameThunks.gameNotify(false, true, null) as any);
         }
 
         dispatch(notifyThunks.socketNotification(msg) as any);
@@ -85,7 +86,7 @@ const WebSocketConnection = () => {
           dispatch(gameThunks.dismissToast() as any);
           navigate(`/game/${msg.body.id}`);
         } else {
-          console.log("Game id is null");
+          console.log("Frie - Match Finished", msg);
           dispatch(popupThunks.setPopUpState(true, msg) as any);
         }
       };

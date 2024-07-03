@@ -292,6 +292,13 @@
   align-items: center;
   width: 100%;
 }
+.beat_friend_waiting_dialog .beat_friend_waiting_content .team_players {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px 0;
+}
 .beat_friend_waiting_dialog .beat_friend_waiting_content .vs {
   font-size: 35px;
   font-weight: bold;
