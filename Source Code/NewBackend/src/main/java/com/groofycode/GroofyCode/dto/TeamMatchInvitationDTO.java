@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +20,9 @@ public class TeamMatchInvitationDTO {
     private Date sentAt;
     private Long team1Id;
     private Long team2Id;
+    List<playerDisplayDTO> team1Players;
+    List<playerDisplayDTO> team2Players;
+    private boolean isSender;
 
     public TeamMatchInvitationDTO(TeamMatchInvitation teamMatchInvitation) {
         this.id = teamMatchInvitation.getId();
