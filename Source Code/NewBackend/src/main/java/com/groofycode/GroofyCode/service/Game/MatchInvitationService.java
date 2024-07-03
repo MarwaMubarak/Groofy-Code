@@ -84,6 +84,7 @@ public class MatchInvitationService {
             userRepository.save(player);
         }
     }
+
     private List<UserModel> getPlayersInAGame(List<UserModel> team1, List<UserModel> team2) {
         List<UserModel> playersInGame = new ArrayList<>();
         for (UserModel player : team1) {
@@ -211,14 +212,15 @@ public class MatchInvitationService {
         }
     }
 
-    private void sendNotifcation(UserModel player, UserModel currUser, TeamModel team1, TeamModel team2, TeamMatchInvitation matchInvitation, String messageBody, boolean isAdmin) {
+    private void sendNotifcation(UserModel player, UserModel currUser, TeamModel team1, TeamModel team2,
+                                 TeamMatchInvitation matchInvitation, String messageBody, boolean isAdmin, NotificationType notificationType) {
 
         MatchInvitationNotificationModel notification = new MatchInvitationNotificationModel();
         notification.setBody(messageBody);
         notification.setSender(currUser);
         notification.setCreatedAt(new Date());
         notification.setReceiver(player);
-        notification.setNotificationType(NotificationType.MATCH_INVITATION);
+        notification.setNotificationType(notificationType);
         notification.setTeam1(team1);
         notification.setTeam2(team2);
         notification.setMatchInvitation(matchInvitation);
@@ -234,6 +236,7 @@ public class MatchInvitationService {
         matchInvitationNotificationDTO.setTeam2ID(team2.getId());
         matchInvitationNotificationDTO.setInvitationID(matchInvitation.getId());
         matchInvitationNotificationDTO.setCreatedAt(notification.getCreatedAt());
+        matchInvitationNotificationDTO.setNotificationType(notificationType);
         Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(player);
         matchInvitationNotificationDTO.setAdmin(isAdmin);
         matchInvitationNotificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
@@ -313,7 +316,7 @@ public class MatchInvitationService {
                 if (!player.getId().equals(team1.getCreator().getId())) {
 
                     sendNotifcation(player, currUser, team1, team2, matchInvitation
-                            , "Your admin " + currUser.getUsername() + " invites your team " + team1.getName() + " to a match with " + team2.getName() + " team", false);
+                            , "Your admin " + currUser.getUsername() + " invites your team " + team1.getName() + " to a match with " + team2.getName() + " team", false, NotificationType.MATCH_INVITATION);
 
                 }
             }
@@ -321,10 +324,10 @@ public class MatchInvitationService {
             for (UserModel player : team2Players) {
                 if (player.getId().equals(team2.getCreator().getId())) {
                     sendNotifcation(player, currUser, team1, team2, matchInvitation
-                            , "You are admin and you are invited to a match with " + team1.getName() + " team by " + currUser.getUsername(), true);
+                            , "You are admin and you are invited to a match with " + team1.getName() + " team by " + currUser.getUsername(), true, NotificationType.MATCH_INVITATION);
                 } else {
                     sendNotifcation(player, currUser, team1, team2, matchInvitation
-                            , "You are invited to a match with " + team1.getName() + " team by " + currUser.getUsername(), false);
+                            , "You are invited to a match with " + team1.getName() + " team by " + currUser.getUsername(), false, NotificationType.MATCH_INVITATION);
                 }
             }
 
@@ -384,17 +387,17 @@ public class MatchInvitationService {
             for (UserModel player : team1Players) {
                 if (player.getId().equals(teamModel1.getCreator().getId())) {
                     sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
-                            , invitationOpt.get().getTeam2().getName() + " team accepted your invitation", true);
+                            , invitationOpt.get().getTeam2().getName() + " team accepted your invitation", true, NotificationType.MATCH_INVITATION_ACCEPT);
                 } else {
                     sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
-                            , invitationOpt.get().getTeam2().getName() + " team accepted your invitation", false);
+                            , invitationOpt.get().getTeam2().getName() + " team accepted your invitation", false, NotificationType.MATCH_INVITATION_ACCEPT);
                 }
             }
 
             for (UserModel player : team2Players) {
                 if (!player.getId().equals(teamModel2.getCreator().getId()))
                     sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
-                            , "Your admin " + currUser.getUsername() + " accepted the invitation from " + teamModel1.getName() + " team", false);
+                            , "Your admin " + currUser.getUsername() + " accepted the invitation from " + teamModel1.getName() + " team", false, NotificationType.MATCH_INVITATION_ACCEPT);
             }
             // Delete the corresponding notification
             List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(teamModel1, teamModel2);
@@ -458,17 +461,17 @@ public class MatchInvitationService {
 
                 if (player.getId().equals(teamModel1.getCreator().getId())) {
                     sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
-                            , invitationOpt.get().getTeam2().getName() + " team reject your invitation", true);
+                            , invitationOpt.get().getTeam2().getName() + " team reject your invitation", true, NotificationType.MATCH_INVITATION_REJECT);
                 } else {
                     sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
-                            , invitationOpt.get().getTeam2().getName() + " team reject your invitation", false);
+                            , invitationOpt.get().getTeam2().getName() + " team reject your invitation", false, NotificationType.MATCH_INVITATION_REJECT);
                 }
             }
 
             for (UserModel player : team2Players) {
                 if (!player.getId().equals(teamModel2.getCreator().getId()))
                     sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
-                            , "Your admin " + currUser.getUsername() + " reject the invitation from " + teamModel1.getName() + " team", false);
+                            , "Your admin " + currUser.getUsername() + " reject the invitation from " + teamModel1.getName() + " team", false, NotificationType.MATCH_INVITATION_REJECT);
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invitation rejected", null));
@@ -522,7 +525,6 @@ public class MatchInvitationService {
             }
 
             teamMatchInvitationRepository.delete(matchInvitation);
-
 
 
             List<TeamMember> team1Members = matchInvitation.getTeam1().getMembers();
