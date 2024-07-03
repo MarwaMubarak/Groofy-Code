@@ -103,7 +103,7 @@ public class GameController {
         return gameService.createBeatAFriendMatch(invitationId);
     }
 
-    @GetMapping("/invitation{invitationId}")
+    @GetMapping("/invitation/{invitationId}")
     public ResponseEntity<Object> getInvitation(@RequestParam Long invitationId) {
         return gameService.getMatchInvitation(invitationId);
     }
