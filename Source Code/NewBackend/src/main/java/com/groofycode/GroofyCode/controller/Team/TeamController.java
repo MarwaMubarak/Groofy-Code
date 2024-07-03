@@ -69,8 +69,8 @@ public class TeamController {
     @GetMapping("/search/pagination")
     public ResponseEntity<Object> getTeamsByPrefixWithPagination(@RequestParam String prefix,
                                                                  @RequestParam(defaultValue = "0") int page,
-                                                                 @RequestParam(defaultValue = "10") int size) {
-        return teamService.getTeamsByPrefixWithPagination(prefix, page, size);
+                                                                 @RequestParam(defaultValue = "10") int size, Long team1ID) {
+        return teamService.getTeamsByPrefixWithPagination(prefix, page, size, team1ID);
     }
 
     @PostMapping("/acceptInvitation")

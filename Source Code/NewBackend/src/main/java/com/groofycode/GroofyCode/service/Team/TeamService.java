@@ -4,6 +4,7 @@ import com.groofycode.GroofyCode.dto.Team.MemberDTO;
 import com.groofycode.GroofyCode.dto.Team.TeamDTO;
 import com.groofycode.GroofyCode.dto.Team.TeamInvitationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.Game.TeamMatchInvitation;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Notification.TeamNotificationModel;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
@@ -14,6 +15,7 @@ import com.groofycode.GroofyCode.repository.NotificationRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamMembersRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamInvitationRepository;
+import com.groofycode.GroofyCode.repository.TeamMatchInvitationRepository;
 import com.groofycode.GroofyCode.repository.TeamNotificationRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.NotificationService;
@@ -49,9 +51,11 @@ public class TeamService {
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationService notificationService;
 
+    private final TeamMatchInvitationRepository teamMatchInvitationRepository;
+
     @Autowired
     public TeamService(TeamRepository teamRepository, TeamMembersRepository teamMembersRepository, TeamInvitationRepository teamInvitationRepository,
-                       UserRepository userRepository, ModelMapper modelMapper, NotificationRepository notificationRepository, TeamNotificationRepository teamNotificationRepository, SimpMessagingTemplate messagingTemplate, NotificationService notificationService) {
+                       UserRepository userRepository, ModelMapper modelMapper, NotificationRepository notificationRepository, TeamNotificationRepository teamNotificationRepository, SimpMessagingTemplate messagingTemplate, NotificationService notificationService, TeamMatchInvitationRepository teamMatchInvitationRepository) {
         this.teamRepository = teamRepository;
         this.teamMembersRepository = teamMembersRepository;
         this.teamInvitationRepository = teamInvitationRepository;
@@ -61,6 +65,7 @@ public class TeamService {
         this.teamNotificationRepository = teamNotificationRepository;
         this.messagingTemplate = messagingTemplate;
         this.notificationService = notificationService;
+        this.teamMatchInvitationRepository = teamMatchInvitationRepository;
     }
 
     public ResponseEntity<Object> getAll() {
@@ -184,10 +189,14 @@ public class TeamService {
         }
     }
 
-    public ResponseEntity<Object> getTeamsByPrefixWithPagination(String prefix, int page, int size) {
+    public ResponseEntity<Object> getTeamsByPrefixWithPagination(String prefix, int page, int size, Long team1ID) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<TeamModel> teamsPage = teamRepository.findByNameStartingWith(prefix, pageable);
+            TeamModel team1 = teamRepository.findById(team1ID).get();
+            if (teamsPage.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("No teams found!", null));
+            }
             List<TeamDTO> teamDTOs = teamsPage.stream().map(team -> {
                 int membersCount = teamMembersRepository.countByTeam(team);
 
@@ -204,6 +213,12 @@ public class TeamService {
                 teamDTO.setMembersCount(membersCount);
                 teamDTO.setCreatorUsername(team.getCreator().getUsername());
                 teamDTO.setMembers(memberDTOs);
+                List<TeamMatchInvitation> existingInvitation = teamMatchInvitationRepository.findByTeams(team1, team);
+                if (!existingInvitation.isEmpty()) {
+                    teamDTO.setIsInvited(true);
+                } else {
+                    teamDTO.setIsInvited(false);
+                }
 
                 return teamDTO;
             }).collect(Collectors.toList());
@@ -242,7 +257,6 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve teams", e.getMessage()));
         }
     }
-
 
 
     public ResponseEntity<Object> getTeamsByCreator(int page, int size) {
