@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,12 +19,9 @@ public class FriendMatchInvitationDTO {
     private Long receiverId;
     private boolean isAccepted;
     private Date sentAt;
-    private String username1;
-    private String username2;
-    private String accountColor1;
-    private String accountColor2;
-    private Long userId1;
-    private Long userId2;
+    List<playerDisplayDTO> team1Players;
+    List<playerDisplayDTO> team2Players;
+    private boolean isSender;
 
 
     public FriendMatchInvitationDTO(FriendMatchInvitation friendMatchInvitation) {

@@ -10,6 +10,7 @@ import com.groofycode.GroofyCode.dto.Game.PlayerDTO;
 import com.groofycode.GroofyCode.dto.Game.ProblemDTO;
 import com.groofycode.GroofyCode.dto.TeamMatchInvitationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.dto.playerDisplayDTO;
 import com.groofycode.GroofyCode.model.Game.*;
 import com.groofycode.GroofyCode.model.Notification.FriendMatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.MatchNotificationModel;
@@ -284,20 +285,36 @@ public class GameService {
 
                 FriendMatchInvitation friendMatchInvitation = (FriendMatchInvitation) invitation;
                 FriendMatchInvitationDTO dto = new FriendMatchInvitationDTO(friendMatchInvitation);
-                dto.setUsername1(User1.getUsername());
-                dto.setUserId1(User1.getId());
-                dto.setAccountColor1(User1.getAccountColor());
 
-                dto.setUsername2(User2.getUsername());
-                dto.setUserId2(User2.getId());
-                dto.setAccountColor2(User2.getAccountColor());
+                playerDisplayDTO player1 = new playerDisplayDTO( User1.getUsername(), User1.getAccountColor(),User1.getPhotoUrl());
+                playerDisplayDTO player2 = new playerDisplayDTO( User2.getUsername(), User2.getAccountColor(),User2.getPhotoUrl());
+
+                dto.setTeam1Players(List.of(player1));
+                dto.setTeam2Players(List.of(player2));
 
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Friend match invitation retrieved successfully", dto));
             } else if (invitation instanceof TeamMatchInvitation) {
+                TeamModel team1;
+                TeamModel team2;
+
+                if (//check if the current user is a member of team1
+                        ((TeamMatchInvitation) invitation).getTeam1().getMembers().stream().anyMatch(user -> user.getId().equals(currUser.getId()))){
+                    team1 = ((TeamMatchInvitation) invitation).getTeam1();
+                    team2 = ((TeamMatchInvitation) invitation).getTeam2();
+                } else {
+                    team1 = ((TeamMatchInvitation) invitation).getTeam2();
+                    team2 = ((TeamMatchInvitation) invitation).getTeam1();
+                }
+
+                List<String> usernames1 =
+                        team1.getMembers().stream().map(TeamMember::getUser).map(UserModel::getUsername).collect(Collectors.toList());
+                List<String> accountColors1 =
+                        team1.getMembers().stream().map(TeamMember::getUser).map(UserModel::getAccountColor).collect(Collectors.toList());
 
 
                 TeamMatchInvitation teamMatchInvitation = (TeamMatchInvitation) invitation;
                 TeamMatchInvitationDTO dto = new TeamMatchInvitationDTO(teamMatchInvitation);
+
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team match invitation retrieved successfully", dto));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Unknown invitation type", null));
