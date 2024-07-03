@@ -149,7 +149,35 @@ public class GameService {
         int expectedRating = problemPicker.expectedRatingPlayer(playerDTO);
 
         MatchPlayerDTO matchPlayerDTO = new MatchPlayerDTO(player.getId(), expectedRating, expectedRating);
-        playerSelection.addPlayerToQueue(matchPlayerDTO);
+        playerSelection.addPlayerToRankedQueue(matchPlayerDTO);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
+    }
+
+    public ResponseEntity<Object> findCasualMatch() throws Exception {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+
+        PlayerDTO playerDTO = modelMapper.map(player, PlayerDTO.class);
+
+        int expectedRating = problemPicker.expectedRatingPlayer(playerDTO);
+
+        MatchPlayerDTO matchPlayerDTO = new MatchPlayerDTO(player.getId(), expectedRating, expectedRating);
+        playerSelection.addPlayerToCausalQueue(matchPlayerDTO);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
+    }
+
+    public ResponseEntity<Object> findVelocityMatch() throws Exception {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+
+        PlayerDTO playerDTO = modelMapper.map(player, PlayerDTO.class);
+
+        int expectedRating = problemPicker.expectedRatingPlayer(playerDTO);
+
+        MatchPlayerDTO matchPlayerDTO = new MatchPlayerDTO(player.getId(), expectedRating, expectedRating);
+        playerSelection.addPlayerToVelocityQueue(matchPlayerDTO);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
     }
@@ -201,8 +229,8 @@ public class GameService {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             UserModel player = userRepository.findByUsername(userInfo.getUsername());
 
-            if (playerSelection.isInQueue(player.getId())) {
-                playerSelection.leaveQueue(player.getId());
+            if (playerSelection.isInRankedQueue(player.getId())) {
+                playerSelection.leaveRankedQueue(player.getId());
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Player removed from queue successfully", null));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player not in queue", null));
@@ -211,6 +239,71 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error removing player from queue", e.getMessage()));
         }
     }
+
+    public ResponseEntity<Object> leaveCasualQueue() {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel player = userRepository.findByUsername(userInfo.getUsername());
+
+            if (playerSelection.isInCasualQueue(player.getId())) {
+                playerSelection.leaveCasualQueue(player.getId());
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Player removed from queue successfully", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player not in queue", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error removing player from queue", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<Object> leaveVelocityQueue() {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel player = userRepository.findByUsername(userInfo.getUsername());
+
+            if (playerSelection.isInVelocityQueue(player.getId())) {
+                playerSelection.leaveVelocityQueue(player.getId());
+                return ResponseEntity.ok(ResponseUtils.successfulRes("Player removed from queue successfully", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player not in queue", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error removing player from queue", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<Object> getUserRankedQueue() {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+        if (playerSelection.isInRankedQueue(player.getId())) {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("YES", null));
+        } else {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("NO", null));
+        }
+    }
+
+    public ResponseEntity<Object> getUserCasualQueue() {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+        if (playerSelection.isInCasualQueue(player.getId())) {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("YES", null));
+        } else {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("NO", null));
+        }
+    }
+
+    public ResponseEntity<Object> getUserVelocityQueue() {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+        if (playerSelection.isInVelocityQueue(player.getId())) {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("YES", null));
+        } else {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("NO", null));
+        }
+    }
+
+
+
 
     public ResponseEntity<Object> getMatch(Long id) {
         if (id == null) {
@@ -402,8 +495,15 @@ public class GameService {
             gameType = "Ranked";
         } else if (game instanceof SoloMatch) {
             gameType = "Solo";
-        } else {
+
+        } else if(game instanceof CasualMatch){
             gameType = "Casual";
+        }
+        else if(game instanceof VelocityMatch){
+            gameType = "Velocity";
+        }
+        else {
+            gameType = "Unknown";
         }
 
         // Send notification to remaining players
@@ -425,7 +525,9 @@ public class GameService {
 
         for (UserModel lp : leavingPlayers) {
             lp.setExistingGameId(null);
-            lp.setUser_rating(lp.getUser_rating() - 30);
+            if(gameType.equals("Ranked")){
+                lp.setUser_rating(lp.getUser_rating() - 30);
+            }
             userRepository.save(lp);
 
             List<Submission> submissions = submissionRepository.findByUserId(lp.getId(), gameId);
@@ -468,7 +570,14 @@ public class GameService {
                         gameDTO = new SoloMatchDTO((SoloMatch) game, parsedProblem);
                     } else if (game instanceof RankedMatch) {
                         gameDTO = new RankedMatchDTO((RankedMatch) game, parsedProblem);
-                    } else {
+                    }
+                    else if (game instanceof CasualMatch) {
+                        gameDTO = new CasualMatchDTO((CasualMatch) game, parsedProblem);
+                    }
+                    else if (game instanceof VelocityMatch) {
+                        gameDTO = new VelocityMatchDTO((VelocityMatch) game, parsedProblem);
+                    }
+                    else {
                         gameDTO = new GameDTO(game); // Default DTO if no specific type matches
                     }
 
@@ -556,22 +665,6 @@ public class GameService {
         }
 
         return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
-    }
-
-    public void calculateRank(RankedMatch rankedMatch) {
-        // Implement the logic to calculate rank for each user
-        List<UserModel> players1 = rankedMatch.getPlayers1();
-        List<UserModel> players2 = rankedMatch.getPlayers2();
-
-        // Example rank calculation logic
-        for (UserModel player : players1) {
-//            player.setRank(player.getRank() + 10);  // Increase rank by 10 points
-            userRepository.save(player);
-        }
-        for (UserModel player : players2) {
-//            player.setRank(player.getRank() + 5);  // Increase rank by 5 points
-            userRepository.save(player);
-        }
     }
 
     private ResponseEntity<Object> submitCodeteam2team(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
@@ -917,132 +1010,7 @@ public class GameService {
         }
     }
 
-    private PlayerDTO calculateAveragePlayerDTO(List<UserModel> team1Users, List<UserModel> team2Users) {
-        List<UserModel> allUsers = new ArrayList<>();
-        allUsers.addAll(team1Users);
-        allUsers.addAll(team2Users);
 
-        int userRatingSum = allUsers.stream().mapToInt(UserModel::getUser_rating).sum();
-        int userMaxRatingSum = allUsers.stream().mapToInt(UserModel::getUser_max_rating).sum();
-        int winsSum = allUsers.stream().mapToInt(UserModel::getWins).sum();
-        int drawsSum = allUsers.stream().mapToInt(UserModel::getDraws).sum();
-        int lossesSum = allUsers.stream().mapToInt(UserModel::getLosses).sum();
-
-        int[] rateCountsSum = new int[31];
-        for (UserModel user : allUsers) {
-            PlayerDTO playerDTO = modelMapper.map(user, PlayerDTO.class);
-            rateCountsSum[0] += playerDTO.getRate_800_cnt();
-            rateCountsSum[1] += playerDTO.getRate_900_cnt();
-            rateCountsSum[2] += playerDTO.getRate_1000_cnt();
-            rateCountsSum[3] += playerDTO.getRate_1100_cnt();
-            rateCountsSum[4] += playerDTO.getRate_1200_cnt();
-            rateCountsSum[5] += playerDTO.getRate_1300_cnt();
-            rateCountsSum[6] += playerDTO.getRate_1400_cnt();
-            rateCountsSum[7] += playerDTO.getRate_1500_cnt();
-            rateCountsSum[8] += playerDTO.getRate_1600_cnt();
-            rateCountsSum[9] += playerDTO.getRate_1700_cnt();
-            rateCountsSum[10] += playerDTO.getRate_1800_cnt();
-            rateCountsSum[11] += playerDTO.getRate_1900_cnt();
-            rateCountsSum[12] += playerDTO.getRate_2000_cnt();
-            rateCountsSum[13] += playerDTO.getRate_2100_cnt();
-            rateCountsSum[14] += playerDTO.getRate_2200_cnt();
-            rateCountsSum[15] += playerDTO.getRate_2300_cnt();
-            rateCountsSum[16] += playerDTO.getRate_2400_cnt();
-            rateCountsSum[17] += playerDTO.getRate_2500_cnt();
-            rateCountsSum[18] += playerDTO.getRate_2600_cnt();
-            rateCountsSum[19] += playerDTO.getRate_2700_cnt();
-            rateCountsSum[20] += playerDTO.getRate_2800_cnt();
-            rateCountsSum[21] += playerDTO.getRate_2900_cnt();
-            rateCountsSum[22] += playerDTO.getRate_3000_cnt();
-            rateCountsSum[23] += playerDTO.getRate_3100_cnt();
-            rateCountsSum[24] += playerDTO.getRate_3200_cnt();
-            rateCountsSum[25] += playerDTO.getRate_3300_cnt();
-            rateCountsSum[26] += playerDTO.getRate_3400_cnt();
-            rateCountsSum[27] += playerDTO.getRate_3500_cnt();
-        }
-
-        int userCount = allUsers.size();
-        return new PlayerDTO(
-                userRatingSum / userCount,
-                userMaxRatingSum / userCount,
-                winsSum / userCount,
-                drawsSum / userCount,
-                lossesSum / userCount,
-                rateCountsSum[0] / userCount,
-                rateCountsSum[1] / userCount,
-                rateCountsSum[2] / userCount,
-                rateCountsSum[3] / userCount,
-                rateCountsSum[4] / userCount,
-                rateCountsSum[5] / userCount,
-                rateCountsSum[6] / userCount,
-                rateCountsSum[7] / userCount,
-                rateCountsSum[8] / userCount,
-                rateCountsSum[9] / userCount,
-                rateCountsSum[10] / userCount,
-                rateCountsSum[11] / userCount,
-                rateCountsSum[12] / userCount,
-                rateCountsSum[13] / userCount,
-                rateCountsSum[14] / userCount,
-                rateCountsSum[15] / userCount,
-                rateCountsSum[16] / userCount,
-                rateCountsSum[17] / userCount,
-                rateCountsSum[18] / userCount,
-                rateCountsSum[19] / userCount,
-                rateCountsSum[20] / userCount,
-                rateCountsSum[21] / userCount,
-                rateCountsSum[22] / userCount,
-                rateCountsSum[23] / userCount,
-                rateCountsSum[24] / userCount,
-                rateCountsSum[25] / userCount,
-                rateCountsSum[26] / userCount,
-                rateCountsSum[27] / userCount
-        );
-    }
-
-
-    private NotificationDTO convertToDTO(MatchNotificationModel notification) {
-        NotificationDTO dto = new NotificationDTO();
-        dto.setBody(notification.getBody());
-        dto.setSender(notification.getSender().getUsername());
-        dto.setNotificationType(notification.getNotificationType());
-        dto.setCreatedAt(notification.getCreatedAt());
-        dto.setRead(notification.isRead());
-        dto.setId(notification.getId());
-        return dto;
-    }
-
-//    public RankedMatchDTO convertToDTO(RankedMatch match) {
-//        if (match == null) return null;
-//        return new RankedMatchDTO(
-//                match.getId(),
-//                match.getPlayers1().getId(),
-//                match.getPlayers2().getId(),
-//                match.getStartTime(),
-//                match.getGameType().toString()
-//        );
-//    }
-//
-//    public SoloMatchDTO convertToDTO(SoloMatch match, Object problem) {
-//        if (match == null) return null;
-//        return new SoloMatchDTO(
-//                match.getId(),
-//                match.getPlayer1().getId(),
-//                match.getStartTime(),
-//                match.getGameType().toString(),
-//                problem,
-//                match.getProblemUrl()
-//        );
-//    }
-
-    public ResponseEntity<Object> getUserQueue() {
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel player = userRepository.findByUsername(userInfo.getUsername());
-        if (playerSelection.isInQueue(player.getId())) {
-            return ResponseEntity.ok(ResponseUtils.successfulRes("YES", null));
-        } else {
-            return ResponseEntity.ok(ResponseUtils.successfulRes("NO", null));
-        }
-    }
 
     public List<ProblemDTO> mapProblemsToDTOs(List<ProgProblem> problems) {
         return problems.stream()

@@ -46,9 +46,20 @@ public class GameController {
 //    }
 
     @GetMapping("/user-queue")
-    public ResponseEntity<Object> getUserQueue() {
-        return gameService.getUserQueue();
+    public ResponseEntity<Object> getUserRankedQueue() {
+        return gameService.getUserRankedQueue();
     }
+
+    @GetMapping("/user-queue/casual")
+    public ResponseEntity<Object> getUserCasualQueue() {
+        return gameService.getUserCasualQueue();
+    }
+
+    @GetMapping("/user-queue/velocity")
+    public ResponseEntity<Object> getUserVelocityQueue() {
+        return gameService.getUserVelocityQueue();
+    }
+
 
     @GetMapping("/{gameId}/submissions")
     public ResponseEntity<Object> getSubmissions(@PathVariable Long gameId) {
@@ -66,9 +77,39 @@ public class GameController {
         }
     }
 
+    @PostMapping("/casual")
+    public ResponseEntity<Object> findCasualMatch() throws Exception {
+        ResponseEntity<Object> match = gameService.findCasualMatch();
+        if (match != null) {
+            return match;
+        } else {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Still looking for a match", null)); // Still looking for a match
+        }
+    }
+
+    @PostMapping("/casual")
+    public ResponseEntity<Object> findVelocityMatch() throws Exception {
+        ResponseEntity<Object> match = gameService.findVelocityMatch();
+        if (match != null) {
+            return match;
+        } else {
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Still looking for a match", null)); // Still looking for a match
+        }
+    }
+
     @PostMapping("/leaveRankedQueue")
-    public ResponseEntity<Object> leaveQueue() {
+    public ResponseEntity<Object> leaveRankedQueue() {
         return gameService.leaveRankedQueue();
+    }
+
+    @PostMapping("/leaveCasualQueue")
+    public ResponseEntity<Object> leaveCasualQueue() {
+        return gameService.leaveCasualQueue();
+    }
+
+    @PostMapping("/leaveVelocityQueue")
+    public ResponseEntity<Object> leaveVelocityQueue() {
+        return gameService.leaveVelocityQueue();
     }
 
     @GetMapping("/{matchId}")

@@ -5,5 +5,6 @@ public enum GameType {
     RANKED,
     CASUAL,
     TEAM,
-    BEAT_A_FRIEND  // New game type
+    BEAT_A_FRIEND,  // New game type
+    VELOCITY
 }
