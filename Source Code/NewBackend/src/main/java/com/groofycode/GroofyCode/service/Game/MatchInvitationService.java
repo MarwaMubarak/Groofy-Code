@@ -242,13 +242,14 @@ public class MatchInvitationService {
         messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification", matchInvitationNotificationDTO);
     }
 
-    private void sendFriendNotification(UserModel player, UserModel currUser, FriendMatchInvitation friendMatchInvitation, String messageBody) {
+    private void sendFriendNotification(UserModel player, UserModel currUser, FriendMatchInvitation friendMatchInvitation,
+                                        String messageBody, NotificationType notificationType) {
         FriendMatchInvitationNotificationModel notification = new FriendMatchInvitationNotificationModel();
         notification.setBody(messageBody);
         notification.setSender(currUser);
         notification.setCreatedAt(new Date());
         notification.setReceiver(player);
-        notification.setNotificationType(NotificationType.FRIEND_MATCH_INVITATION);
+        notification.setNotificationType(notificationType);
         notification.setFriendMatchInvitation(friendMatchInvitation);
 
         friendMatchInvitationNotificationRepository.save(notification);
@@ -258,7 +259,7 @@ public class MatchInvitationService {
         notificationDTO.setSender(currUser.getUsername());
         notificationDTO.setImg(currUser.getPhotoUrl());
         notificationDTO.setColor(currUser.getAccountColor());
-        notificationDTO.setNotificationType(NotificationType.FRIEND_MATCH_INVITATION);
+        notificationDTO.setNotificationType(notificationType);
         notificationDTO.setCreatedAt(notification.getCreatedAt());
         Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(player);
         notificationDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
@@ -562,7 +563,7 @@ public class MatchInvitationService {
             friendMatchInvitationRepository.save(friendMatchInvitation);
 
             setPlayersInvitation(List.of(currUser), friendMatchInvitation.getId());
-            sendFriendNotification(receiver, currUser, friendMatchInvitation, currUser.getUsername() + " invites you to a friendly match");
+            sendFriendNotification(receiver, currUser, friendMatchInvitation, currUser.getUsername() + " invites you to a friendly match", NotificationType.FRIEND_MATCH_INVITATION);
 
 
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Friend match invitation sent successfully!", null));
@@ -597,7 +598,7 @@ public class MatchInvitationService {
             }
 
             setPlayersInvitation(List.of(currUser), friendMatchInvitation.getId());
-            sendFriendNotification(friendMatchInvitation.getSender(), currUser, friendMatchInvitation, currUser.getUsername() + " accepted your invitation");
+            sendFriendNotification(friendMatchInvitation.getSender(), currUser, friendMatchInvitation, currUser.getUsername() + " accepted your invitation", NotificationType.MATCH_INVITATION_ACCEPT);
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation accepted successfully", null));
         } catch (Exception e) {
@@ -629,6 +630,7 @@ public class MatchInvitationService {
             }
 
             setPlayersInvitationNull(List.of(invitationOpt.get().getSender()));
+            sendFriendNotification(friendMatchInvitation.getSender(), currUser, friendMatchInvitation, currUser.getUsername() + " rejected your invitation", NotificationType.MATCH_INVITATION_REJECT);
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friend match invitation rejected successfully", null));
         } catch (Exception e) {

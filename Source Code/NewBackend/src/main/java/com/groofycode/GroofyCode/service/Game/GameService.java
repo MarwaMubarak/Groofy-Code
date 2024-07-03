@@ -855,9 +855,9 @@ public class GameService {
                 BeatAFriendDTO beatAFriendDTO = new BeatAFriendDTO(beatAFriendMatch, problemParsed.getBody());
 
                 // Notify sender and receiver about the match start
-                messagingTemplate.convertAndSendToUser(sender.getUsername(), "/notification",
+                messagingTemplate.convertAndSendToUser(sender.getUsername(), "/games",
                         ResponseUtils.successfulRes("Friendly match started successfully", beatAFriendDTO));
-                messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/notification",
+                messagingTemplate.convertAndSendToUser(receiver.getUsername(), "/games",
                         ResponseUtils.successfulRes("Friendly match started successfully", beatAFriendDTO));
 
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Beat a Friend match started successfully", beatAFriendDTO));
