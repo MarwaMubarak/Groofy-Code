@@ -830,8 +830,21 @@ public class GameService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Receiver not found", null));
             }
 
+            UserModel player1 = userRepository.findByUsername(sender.getUsername());
+            UserModel opponent = userRepository.findByUsername(receiver.getUsername());
+
             if (friendMatchInvitation.isAccepted()) {
-                String problemURL = "https://codeforces.com/contest/4/problem/A"; // Default problem URL
+
+                PlayerDTO playerDTO = modelMapper.map(player1, PlayerDTO.class);
+                PlayerDTO opponentDTO = modelMapper.map(opponent, PlayerDTO.class);
+
+                List<ProblemDTO> solvedProblemsPlayer = player1.getSolvedProblems().stream().map(
+                        progProblem -> modelMapper.map(progProblem, ProblemDTO.class)).toList();
+                List<ProblemDTO> solvedProblemsOpponent = opponent.getSolvedProblems().stream().map(
+                        progProblem -> modelMapper.map(progProblem, ProblemDTO.class)).toList();
+
+                String problemURL = (String) problemPicker.pickProblem(playerDTO, solvedProblemsPlayer, opponentDTO, solvedProblemsOpponent).getBody();
+
                 LocalDateTime endTime = LocalDateTime.now().plusMinutes(60);
                 BeatAFriend beatAFriendMatch = new BeatAFriend(List.of(sender), List.of(receiver), problemURL, LocalDateTime.now(), endTime, 60.0);
                 beatAFriendMatchRepository.save(beatAFriendMatch);
