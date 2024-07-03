@@ -10,9 +10,8 @@ import com.groofycode.GroofyCode.dto.Game.PlayerDTO;
 import com.groofycode.GroofyCode.dto.Game.ProblemDTO;
 import com.groofycode.GroofyCode.dto.TeamMatchInvitationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
-import com.groofycode.GroofyCode.dto.playerDisplayDTO;
+import com.groofycode.GroofyCode.dto.PlayerDisplayDTO;
 import com.groofycode.GroofyCode.model.Game.*;
-import com.groofycode.GroofyCode.model.Notification.FriendMatchInvitationNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.MatchNotificationModel;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Team.TeamMember;
@@ -34,8 +33,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -286,8 +283,8 @@ public class GameService {
                 FriendMatchInvitation friendMatchInvitation = (FriendMatchInvitation) invitation;
                 FriendMatchInvitationDTO dto = new FriendMatchInvitationDTO(friendMatchInvitation);
 
-                playerDisplayDTO player1 = new playerDisplayDTO( User1.getUsername(), User1.getAccountColor(),User1.getPhotoUrl());
-                playerDisplayDTO player2 = new playerDisplayDTO( User2.getUsername(), User2.getAccountColor(),User2.getPhotoUrl());
+                PlayerDisplayDTO player1 = new PlayerDisplayDTO( User1.getUsername(), User1.getAccountColor(),User1.getPhotoUrl());
+                PlayerDisplayDTO player2 = new PlayerDisplayDTO( User2.getUsername(), User2.getAccountColor(),User2.getPhotoUrl());
 
                 dto.setTeam1Players(List.of(player1));
                 dto.setTeam2Players(List.of(player2));
@@ -306,14 +303,23 @@ public class GameService {
                     team2 = ((TeamMatchInvitation) invitation).getTeam1();
                 }
 
-                List<String> usernames1 =
-                        team1.getMembers().stream().map(TeamMember::getUser).map(UserModel::getUsername).collect(Collectors.toList());
-                List<String> accountColors1 =
-                        team1.getMembers().stream().map(TeamMember::getUser).map(UserModel::getAccountColor).collect(Collectors.toList());
+                List<PlayerDisplayDTO> team1Players = team1.getMembers().stream().map(teamMember -> {
+                    UserModel user = teamMember.getUser();
+                    return new PlayerDisplayDTO(user.getUsername(), user.getAccountColor(), user.getPhotoUrl());
+                }).toList();
+
+                List<PlayerDisplayDTO> team2Players = team2.getMembers().stream().map(teamMember -> {
+                    UserModel user = teamMember.getUser();
+                    return new PlayerDisplayDTO(user.getUsername(), user.getAccountColor(), user.getPhotoUrl());
+                }).toList();
+
 
 
                 TeamMatchInvitation teamMatchInvitation = (TeamMatchInvitation) invitation;
                 TeamMatchInvitationDTO dto = new TeamMatchInvitationDTO(teamMatchInvitation);
+
+                dto.setTeam1Players(team1Players);
+                dto.setTeam2Players(team2Players);
 
                 return ResponseEntity.ok(ResponseUtils.successfulRes("Team match invitation retrieved successfully", dto));
             } else {

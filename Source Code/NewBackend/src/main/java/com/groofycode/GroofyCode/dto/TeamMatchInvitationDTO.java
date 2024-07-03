@@ -20,8 +20,8 @@ public class TeamMatchInvitationDTO {
     private Date sentAt;
     private Long team1Id;
     private Long team2Id;
-    List<playerDisplayDTO> team1Players;
-    List<playerDisplayDTO> team2Players;
+    List<PlayerDisplayDTO> team1Players;
+    List<PlayerDisplayDTO> team2Players;
     private boolean isSender;
 
     public TeamMatchInvitationDTO(TeamMatchInvitation teamMatchInvitation) {

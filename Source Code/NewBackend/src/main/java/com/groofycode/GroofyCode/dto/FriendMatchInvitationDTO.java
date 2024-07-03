@@ -1,7 +1,6 @@
 package com.groofycode.GroofyCode.dto;
 
 import com.groofycode.GroofyCode.model.Game.FriendMatchInvitation;
-import com.groofycode.GroofyCode.model.User.UserModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,8 +18,8 @@ public class FriendMatchInvitationDTO {
     private Long receiverId;
     private boolean isAccepted;
     private Date sentAt;
-    List<playerDisplayDTO> team1Players;
-    List<playerDisplayDTO> team2Players;
+    List<PlayerDisplayDTO> team1Players;
+    List<PlayerDisplayDTO> team2Players;
     private boolean isSender;
 
 
