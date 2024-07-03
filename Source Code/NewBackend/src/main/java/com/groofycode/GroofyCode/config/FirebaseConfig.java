@@ -6,19 +6,21 @@ import com.google.firebase.FirebaseOptions;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 @Configuration
 public class FirebaseConfig {
     @Value("${groofycode.credentials}")
-    private String credentialsPath;
+    private Resource credentialsPath;
 
     @PostConstruct
     public void InitializeFirebase() throws IOException {
         FileInputStream serviceAccount =
-                new FileInputStream(credentialsPath);
+                new FileInputStream(Paths.get(credentialsPath.getURI()).toFile());
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
