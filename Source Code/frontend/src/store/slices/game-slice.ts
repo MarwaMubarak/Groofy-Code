@@ -16,6 +16,8 @@ const initialState = {
   players2Ids: [],
   responseStatus: null,
   responseMessage: null,
+  waitingPopup: false,
+  gamePlayers: {},
 };
 
 const gameSlice = createSlice({
@@ -55,6 +57,12 @@ const gameSlice = createSlice({
     },
     setInQueue(state, action) {
       state.inQueue = action.payload;
+    },
+    setWaitingPopup(state, action) {
+      state.waitingPopup = action.payload;
+    },
+    setGamePlayers(state, action) {
+      state.gamePlayers = action.payload;
     },
   },
 });

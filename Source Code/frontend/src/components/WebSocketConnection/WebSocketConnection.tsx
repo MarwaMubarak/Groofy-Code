@@ -56,6 +56,13 @@ const WebSocketConnection = () => {
       const onMessage = (message: any) => {
         const msg = JSON.parse(message.body);
         console.log("Recieved message: ", msg);
+
+        if (msg.notificationType === "MATCH_INVITATION_ACCEPT") {
+          dispatch(gameThunks.changeWaitingPopup(true) as any);
+        } else if (msg.notificationType === "MATCH_INVITATION_REJECT") {
+          dispatch(gameThunks.changeWaitingPopup(false) as any);
+        }
+
         dispatch(notifyThunks.socketNotification(msg) as any);
       };
 

@@ -1,22 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import {
   GroofyHeader,
   SideBar,
   Gamemode,
   PostsContainer,
-  Friend,
   SearchedFriend,
+  SimpleUser,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
 import { friendThunks, gameThunks, toastThunks } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import classes from "./scss/home.module.css";
-import { Toaster, toast as hotToast } from "react-hot-toast";
-import { ConfirmDialog } from "primereact/confirmdialog";
+import { Toaster } from "react-hot-toast";
 import { Dialog } from "primereact/dialog";
-import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 
@@ -24,14 +22,16 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
-  const matchLoading = useSelector((state: any) => state.match.isLoading);
   const searchedFriends: any[] = useSelector(
     (state: any) => state.friend.friends
   );
+  const waitingPopUp = useSelector((state: any) => state.game.waitingPopUp);
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
-  const [dialogVisible, setDialogVisible] = useState(false);
+  const [friendlyDialogVisible, setFriendlyDialogVisible] = useState(false);
+  const [waitingDialogVisible, setWaitingDialogVisible] =
+    useState(waitingPopUp);
   const [searchText, setSearchText] = useState("");
 
   console.log("Searched Friends: ", searchedFriends);
@@ -56,11 +56,11 @@ const Home = () => {
       <SideBar idx={0} />
       <Dialog
         header="Send your message"
-        visible={dialogVisible}
+        visible={friendlyDialogVisible}
         style={{ width: "600px" }}
         onHide={() => {
-          if (!dialogVisible) return;
-          setDialogVisible(false);
+          if (!friendlyDialogVisible) return;
+          setFriendlyDialogVisible(false);
         }}
         className={classes.beat_friend_dialog}
       >
@@ -92,6 +92,40 @@ const Home = () => {
                   isInvited={friend.isInvited}
                 />
               ))}
+          </div>
+        </div>
+      </Dialog>
+      <Dialog
+        header="Beat a friend Game"
+        visible={waitingDialogVisible}
+        style={{ width: "600px" }}
+        onHide={() => {
+          if (!waitingDialogVisible) return;
+          setWaitingDialogVisible(false);
+        }}
+        className={classes.beat_friend_waiting_dialog}
+      >
+        <div className={classes.beat_friend_waiting_wrapper}>
+          <div className={classes.beat_friend_waiting_content}>
+            <SimpleUser
+              username={user.username}
+              accountColor={user.accountColor}
+              photoUrl={user.photoUrl}
+            />
+            <span className={classes.vs}>VS</span>
+            <SimpleUser
+              username={user.username}
+              accountColor={user.accountColor}
+              photoUrl={user.photoUrl}
+              reverse={true}
+            />
+          </div>
+          <div className={classes.start_game_btn}>
+            <Button
+              label="Start Game"
+              style={{ color: "#fff" }}
+              onClick={() => {}}
+            />
           </div>
         </div>
       </Dialog>
@@ -239,7 +273,7 @@ const Home = () => {
                   id="beat_friend_card"
                   title="Beat a Friend"
                   img="/Assets/Images/friends.png"
-                  clickEvent={() => setDialogVisible(true)}
+                  clickEvent={() => setWaitingDialogVisible(true)}
                 />
               </div>
             </div>
