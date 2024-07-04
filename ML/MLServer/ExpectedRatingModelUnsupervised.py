@@ -2,7 +2,10 @@ import numpy as np
 import pandas as pd
 from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
 import joblib
+import matplotlib.pyplot as plt
 
 # Load multiple datasets
 all_dfs = []
@@ -45,7 +48,7 @@ scaler = StandardScaler()
 scaled_data = scaler.fit_transform(combined_df.select_dtypes(include=[np.number]))
 
 # Train Gaussian Mixture Model
-num_clusters = 10
+num_clusters = 28
 gmm = GaussianMixture(n_components=num_clusters, random_state=42)
 gmm.fit(scaled_data)
 
@@ -59,3 +62,23 @@ cluster_ratings = combined_df.groupby('cluster')['user_rating'].mean().to_dict()
 
 # Output the cluster ratings
 print("Cluster Ratings:", cluster_ratings)
+
+# Perform PCA to reduce dimensions for visualization
+pca = PCA(n_components=2)
+pca_data = pca.fit_transform(scaled_data)
+
+# Scatter plot of the clusters
+plt.figure(figsize=(10, 7))
+for cluster in np.unique(combined_df['cluster']):
+    plt.scatter(pca_data[combined_df['cluster'] == cluster, 0],
+                pca_data[combined_df['cluster'] == cluster, 1],
+                label=f'Cluster {cluster}')
+plt.title('Clusters Visualization using PCA')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.legend()
+plt.show()
+
+# Calculate the silhouette score to evaluate clustering quality
+sil_score = silhouette_score(scaled_data, combined_df['cluster'])
+print(f'Silhouette Score: {sil_score:.2f}')

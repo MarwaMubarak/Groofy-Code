@@ -97,6 +97,8 @@ public class ProblemPicker {
         }
         double percentile = (double) solvedProblems.size() / problemsByRating.size();
         int index = (int) Math.round(percentile * unSolvedProblems.size());
+        int random = (int) (Math.random() * 11) - 5;
+        index += random;
         index = Math.min(Math.max(index, 0), unSolvedProblems.size() - 1);
 
         return ResponseEntity.ok("https://codeforces.com/contest/" + unSolvedProblems.get(index).getContestId() + "/problem/" + unSolvedProblems.get(index).getIndex());
@@ -117,6 +119,8 @@ public class ProblemPicker {
         }
         double percentile = (double) solvedProblems.size() / problemsByRating.size();
         int index = (int) Math.round(percentile * unSolvedProblems.size());
+        int random = (int) (Math.random() * 11) - 5;
+        index += random;
         index = Math.min(Math.max(index, 0), unSolvedProblems.size() - 1);
 
         return ResponseEntity.ok("https://codeforces.com/contest/" + unSolvedProblems.get(index).getContestId() + "/problem/" + unSolvedProblems.get(index).getIndex());
@@ -152,6 +156,8 @@ public class ProblemPicker {
             }
             double percentile = (double) (solvedProblems.size() + opponentSolvedProblems.size()) / problemsByRating.size();
             int index = (int) Math.round(percentile * unSolvedProblems.size());
+            int random = (int) (Math.random() * 11) - 5;
+            index += random;
             index = Math.min(Math.max(index, 0), unSolvedProblems.size() - 1);
             return ResponseEntity.ok("https://codeforces.com/contest/" + unSolvedProblems.get(index).getContestId() + "/problem/" + unSolvedProblems.get(index).getIndex());
         }
