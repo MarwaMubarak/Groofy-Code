@@ -8,6 +8,7 @@ import com.groofycode.GroofyCode.model.Clan.ClanModel;
 import com.groofycode.GroofyCode.repository.Chat.ChatRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.MessageRepository;
+import com.groofycode.GroofyCode.utilities.BlobConverter;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class ChatService {
     private final MessageRepository messageRepository;
     private final ModelMapper modelMapper;
     private final ClanRepository clanRepository;
+    private final BlobConverter blobConverter;
 
     @Autowired
     public ChatService(ChatRepository chatRepository, MessageRepository messageRepository, ClanRepository clanRepository, ModelMapper modelMapper) {
@@ -31,6 +33,7 @@ public class ChatService {
         this.messageRepository = messageRepository;
         this.modelMapper = modelMapper;
         this.clanRepository = clanRepository;
+        this.blobConverter = new BlobConverter();
     }
 
     public ResponseEntity<Object> getClanChatById(Long id, Integer page) throws Exception {
@@ -59,6 +62,12 @@ public class ChatService {
                 messageDTO.setChatId(message.getChat().getId());
                 messageDTO.setUserId(message.getUserModel().getId());
                 messageDTO.setCreatedAt(message.getCreatedAt());
+                try {
+                    String content = blobConverter.convertBlobToObject(message.getContent()).toString();
+                    messageDTO.setContent(content);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 return messageDTO;
             }).toList();
 

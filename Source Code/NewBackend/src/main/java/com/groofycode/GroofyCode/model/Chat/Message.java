@@ -28,8 +28,9 @@ public class Message {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGBLOB")
+    private byte[] content;
 
     private Boolean isRead = false;
 

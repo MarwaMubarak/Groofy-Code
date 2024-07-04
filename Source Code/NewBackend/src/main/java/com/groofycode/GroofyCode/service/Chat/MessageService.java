@@ -15,6 +15,7 @@ import com.groofycode.GroofyCode.repository.Chat.ChatUsersRepository;
 import com.groofycode.GroofyCode.repository.Clan.ClanRepository;
 import com.groofycode.GroofyCode.repository.MessageRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
+import com.groofycode.GroofyCode.utilities.BlobConverter;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -54,8 +55,14 @@ public class MessageService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    private BlobConverter blobConverter;
+
     @PersistenceContext
     private EntityManager entityManager;
+
+    public MessageService() {
+        this.blobConverter = new BlobConverter();
+    }
 
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -84,7 +91,7 @@ public class MessageService {
 
             Message message = new Message();
             message.setUserModel(firstUser);
-            message.setContent(content);
+            message.setContent(blobConverter.convertObjectToBlob(content));
             message.setChat(chat);
 
             messageRepository.save(message);
@@ -97,6 +104,7 @@ public class MessageService {
             messageDTO.setCreatedAt(message.getCreatedAt());
             messageDTO.setChatId(chat.getId());
             messageDTO.setMessageType("USER");
+            messageDTO.setContent(content);
 
             messagingTemplate.convertAndSendToUser(firstUser.getUsername(), "/messages", ResponseUtils.successfulRes("New Message", messageDTO));
             messagingTemplate.convertAndSendToUser(secondUser.getUsername(), "/messages", ResponseUtils.successfulRes("New Message", messageDTO));
@@ -125,11 +133,12 @@ public class MessageService {
                 throw new Exception("User not found");
             }
 
+            String content = messageDTO.getContent();
+
             Message message = new Message();
             message.setUserModel(userModel);
-            message.setContent(messageDTO.getContent());
             message.setChat(clanChat);
-
+            message.setContent(blobConverter.convertObjectToBlob(content));
             messageRepository.save(message);
             messageDTO = modelMapper.map(message, MessageDTO.class);
             messageDTO.setUserId(message.getUserModel().getId());
@@ -139,6 +148,7 @@ public class MessageService {
             messageDTO.setCreatedAt(message.getCreatedAt());
             messageDTO.setChatId(clanChat.getId());
             messageDTO.setMessageType("CLAN");
+            messageDTO.setContent(content);
             return messageDTO;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -180,6 +190,12 @@ public class MessageService {
                 messageDTO.setAccountColor(message.getUserModel().getAccountColor());
                 messageDTO.setCreatedAt(message.getCreatedAt());
                 messageDTO.setChatId(chat.getId());
+                try {
+                    String content = (String) blobConverter.convertBlobToObject(message.getContent());
+                    messageDTO.setContent(content);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 return messageDTO;
             }).toList();
 

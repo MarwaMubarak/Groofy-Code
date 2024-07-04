@@ -27,8 +27,8 @@ public class Submission {
     private String language;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
-    private String code;
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] code;
 
     private LocalDateTime submissionTime;
 
@@ -38,7 +38,7 @@ public class Submission {
     public Submission() {
     }
 
-    public Submission(Game game, UserModel user, String code, String language ,LocalDateTime submissionTime, Integer result) {
+    public Submission(Game game, UserModel user, byte[] code, String language ,LocalDateTime submissionTime, Integer result) {
         this.game = game;
         this.user = user;
         this.code = code;

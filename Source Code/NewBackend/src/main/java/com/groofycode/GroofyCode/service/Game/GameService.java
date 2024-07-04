@@ -22,10 +22,7 @@ import com.groofycode.GroofyCode.repository.Game.*;
 import com.groofycode.GroofyCode.service.CodeforcesSubmissionService;
 import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.service.ProblemPicker;
-import com.groofycode.GroofyCode.utilities.MatchStatusMapper;
-import com.groofycode.GroofyCode.utilities.ProblemParser;
-import com.groofycode.GroofyCode.utilities.RatingSystemCalculator;
-import com.groofycode.GroofyCode.utilities.ResponseUtils;
+import com.groofycode.GroofyCode.utilities.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -85,6 +82,8 @@ public class GameService {
 
     private final MatchInvitationRepository matchInvitationRepository;
 
+    private final BlobConverter blobConverter;
+
 //    private final MatchScheduler matchScheduler;
 
     @Autowired
@@ -116,6 +115,7 @@ public class GameService {
         this.friendMatchInvitationNotificationRepository = friendMatchInvitationNotificationRepository;
         this.friendMatchInvitationRepository = friendMatchInvitationRepository;
         this.matchInvitationRepository = matchInvitationRepository;
+        blobConverter = new BlobConverter();
     }
 
     public ResponseEntity<Object> getSubmissions(Long gameId) {
@@ -641,7 +641,7 @@ public class GameService {
         Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
 
-        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
+        Submission submission = new Submission(game, submittingPlayer, blobConverter.convertObjectToBlob(problemSubmitDTO.getCode()), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
 
 
@@ -702,7 +702,7 @@ public class GameService {
 
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // Default response, simulate the actual submission process
 
-        Submission submission = new Submission(game, submittingPlayer, problemSubmitDTO.getCode(), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
+        Submission submission = new Submission(game, submittingPlayer, blobConverter.convertObjectToBlob(problemSubmitDTO.getCode()), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
         submissionRepository.save(submission);
         if (codeForceResponse.equals("Accepted")) {
             // End the game and notify the remaining player that they lost
