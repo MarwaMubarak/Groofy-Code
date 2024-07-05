@@ -119,9 +119,6 @@ public class FriendshipService {
             Long userId = currUser.getId();
             Pageable pageable = PageRequest.of(page, size);
             Page<FriendshipModel> friendshipModelList = friendshipRepository.getAcceptedPage(userId, pageable);
-            if (friendshipModelList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("There are no Friends!", null));
-            }
 
             List<FriendDTO> friendDTOS = friendshipModelList.stream()
                     .map(bm -> {
@@ -166,8 +163,6 @@ public class FriendshipService {
             Long userId = currUser.getId();
             Pageable pageable = PageRequest.of(page, size);
             Page<FriendshipModel> friendshipModelList = friendshipRepository.getPendingPage(userId, pageable);
-            if (friendshipModelList.isEmpty())
-                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("There are No Pending Requests!", null));
 
 
             List<FriendshipDTO> friendshipDTOList = friendshipModelList.stream()
@@ -193,8 +188,6 @@ public class FriendshipService {
             Long userId = currUser.getId();
             Pageable pageable = PageRequest.of(page, size);
             Page<FriendshipModel> friendshipModelList = friendshipRepository.getAllPage(userId, pageable);
-            if (friendshipModelList.isEmpty())
-                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("There are no Accepted or Pending Requests!", null));
 
 
             List<FriendshipDTO> friendshipDTOList = friendshipModelList.stream()

@@ -20,6 +20,7 @@ import { WebSocketConnection } from "./components";
 import { userThunks, gameThunks } from "./store/actions";
 import toast, { Toaster } from "react-hot-toast";
 import classes from "./toast.module.css";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
 const messages = [
   "Searching for the perfect match...",
   "Looking for a worthy opponent...",
@@ -174,6 +175,10 @@ function App() {
         <Route
           path="/user/message"
           element={loggedUser ? <Messaging /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/leaderboard"
+          element={loggedUser ? <Leaderboard /> : <Navigate to="/login" />}
         />
         <Route path="/testingsocket" element={<TestingSocket />} />
         <Route path="*" element={<Home />} />

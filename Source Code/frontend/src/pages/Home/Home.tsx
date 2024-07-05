@@ -97,7 +97,7 @@ const Home = () => {
       <Toaster />
       <SideBar idx={0} />
       <Dialog
-        header="Send your message"
+        header="Friendly Match"
         visible={searchFriendDialog}
         style={{ width: "600px" }}
         onHide={() => {

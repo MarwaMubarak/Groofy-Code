@@ -10,6 +10,7 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { MathJaxContext } from "better-react-mathjax";
+import "./indexGlobal.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

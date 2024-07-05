@@ -62,16 +62,10 @@ export default function BurgerMenu() {
               <span>Clan</span>
             </li>
           </Link>
-          <Link to="/news">
+          <Link to="/leaderboard">
             <li>
-              <img src="/Assets/SVG/NewsIcon.svg" alt="Home" />
-              <span>News</span>
-            </li>
-          </Link>
-          <Link to="/help">
-            <li>
-              <img src="/Assets/SVG/HelpIcon.svg" alt="Home" />
-              <span>Help</span>
+              <img src="/Assets/SVG/leaderboard.svg" alt="Home" />
+              <span>Leaderboard</span>
             </li>
           </Link>
         </ul>

@@ -71,4 +71,14 @@ public class UserController {
     public ResponseEntity<Object> searchUsersByPrefixPage(@PathVariable String prefix, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws Exception {
         return userService.searchUsersByPrefixPage(prefix,page,size);
     }
+
+    @GetMapping("/users/leaderboard")
+    public ResponseEntity<Object> getLeaderboard( @RequestParam(defaultValue = "0") Integer page) {
+        return userService.findLeaderboard(page);
+    }
+
+    @GetMapping("/users/count-all-users")
+    public ResponseEntity<Object> countAllUsers() {
+        return userService.countAllUsers();
+    }
 }

@@ -62,6 +62,17 @@ const SideBar = (probs: { idx: number }) => {
               <span>Clan</span>
             </li>
           </Link>
+          <Link to="/leaderboard">
+            <li className={`${probs.idx === 4 && classes.active}`}>
+              <img
+                src={`/Assets/SVG/${
+                  probs.idx === 4 ? "leaderboard_colored" : "leaderboard"
+                }.svg`}
+                alt=""
+              />
+              <span>Leaderboard</span>
+            </li>
+          </Link>
         </ul>
       </div>
       <div

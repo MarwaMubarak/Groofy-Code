@@ -30,4 +30,12 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
     List<UserModel> findByUsernameStartingWithIgnoreCase(String prefix);
     Page<UserModel> findByUsernameStartingWithIgnoreCase(String prefix, Pageable pageable);
 
+    @Query(value = "SELECT * FROM (SELECT id, user_rating, RANK() OVER (ORDER BY user_rating DESC) AS Rank_no FROM users) ranked WHERE id = :userId", nativeQuery = true)
+    Integer getUserRank(@Param("userId") Long userId);
+
+    @Query("SELECT u FROM UserModel u ORDER BY u.user_rating DESC")
+    Page<UserModel> findLeaderboardOrderByUserRatingDesc(Pageable pageable);
+
+    @Query("SELECT COUNT(u) FROM UserModel u")
+    Integer countAllUsers();
 }

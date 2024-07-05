@@ -9,6 +9,7 @@ import EditProfile from "./EditProfile/EditProfile";
 import Search from "./Search/Search";
 import ClanSearch from "./ClanSearch/ClanSearch";
 import Messaging from "./Messaging/Messaging";
+import Leaderboard from "./Leaderboard/Leaderboard";
 
 export {
   Home,
@@ -22,4 +23,5 @@ export {
   Search,
   ClanSearch,
   Messaging,
+  Leaderboard,
 };

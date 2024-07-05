@@ -9,6 +9,9 @@ import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.Chat.MessageService;
 import com.groofycode.GroofyCode.utilities.FirebaseManager;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -79,7 +83,15 @@ public class UserService implements UserDetailsService {
     public ResponseEntity<Object> getAllUsers() throws Exception {
         try {
             List<UserModel> users = userRepository.findAll();
-            List<UserDTO> userDTOS = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
+            List<UserDTO> userDTOS = users.stream().map(user -> {
+                UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+                if (user.getClanMember() != null) {
+                    userDTO.setClanName(user.getClanMember().getClan().getName());
+                }
+                userDTO.setWorldRank(userRepository.getUserRank(user.getId()));
+                return userDTO;
+            }).toList();
+
             return ResponseEntity.ok(ResponseUtils.successfulRes("Users retrieved successfully", userDTOS));
         } catch (Exception e) {
             throw new Exception(e);
@@ -100,9 +112,12 @@ public class UserService implements UserDetailsService {
             userDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
             userDTO.setFriendNotifyCnt(friendNotifyCnt > 99 ? "99+" : friendNotifyCnt.toString());
             userDTO.setMessageNotifyCnt(messageNotifyCnt > 99 ? "99+" : messageNotifyCnt.toString());
+            userDTO.setWorldRank(userRepository.getUserRank(userModel.getId()));
+
             return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
         } catch (Exception e) {
-            throw new Exception(e);
+            System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -142,6 +157,43 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.ok(ResponseUtils.successfulRes("User info updated successfully", null));
         } catch (Exception e) {
             throw new Exception(e);
+        }
+    }
+
+    public ResponseEntity<Object> countAllUsers(){
+        try {
+            int count = userRepository.countAllUsers();
+            return ResponseEntity.ok(ResponseUtils.successfulRes("All users counted successfully", count));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Error counting all users", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<Object> findLeaderboard(Integer page){
+        try {
+            if(page == null || page < 0){
+                page = 0;
+            }
+            PageRequest pageRequest = PageRequest.of(page, 20);
+            Page<UserModel> users = userRepository.findLeaderboardOrderByUserRatingDesc(pageRequest);
+            List<LeaderboardUserDTO> leaderboardDTOS = new ArrayList<>();
+            for(int i = 0; i < users.getContent().size(); i++){
+                LeaderboardUserDTO leaderboardUserDTO = new LeaderboardUserDTO();
+                leaderboardUserDTO.setWins(users.getContent().get(i).getWins());
+                leaderboardUserDTO.setLosses(users.getContent().get(i).getLosses());
+                leaderboardUserDTO.setDraws(users.getContent().get(i).getDraws());
+                leaderboardUserDTO.setUsername(users.getContent().get(i).getUsername());
+                leaderboardUserDTO.setRating(users.getContent().get(i).getUser_rating());
+                leaderboardUserDTO.setRank(i + 1);
+                leaderboardUserDTO.setCountry(users.getContent().get(i).getCountry());
+                leaderboardDTOS.add(leaderboardUserDTO);
+            }
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Leaderboard retrieved successfully", leaderboardDTOS));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtils.unsuccessfulRes("Error retrieving leaderboard", e.getMessage()));
         }
     }
 
@@ -238,6 +290,7 @@ public class UserService implements UserDetailsService {
             if (userModel.getClanMember() != null) {
                 userDTO.setClanName(userModel.getClanMember().getClan().getName());
             }
+            userDTO.setWorldRank(userRepository.getUserRank(userModel.getId()));
             return ResponseEntity.status(HttpStatus.OK)
                     .body(ResponseUtils.successfulRes("User retrieved successfully", userDTO));
         } catch (Exception e) {
@@ -262,7 +315,14 @@ public class UserService implements UserDetailsService {
             }
 
             // Extract desired information (username, country, photo) for each user
-            List<UserDTO> userDTOS = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
+            List<UserDTO> userDTOS = users.stream().map(user ->{
+                UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+                if (user.getClanMember() != null) {
+                    userDTO.setClanName(user.getClanMember().getClan().getName());
+                }
+                userDTO.setWorldRank(userRepository.getUserRank(user.getId()));
+                return userDTO;
+            }).toList();
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Users found", userDTOS));
         } catch (Exception e) {
             throw new Exception(e);
@@ -287,7 +347,14 @@ public class UserService implements UserDetailsService {
             }
 
             // Extract desired information (username, country, photo) for each user
-            List<UserDTO> userDTOS = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
+            List<UserDTO> userDTOS = users.stream().map(user -> {
+                UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+                if (user.getClanMember() != null) {
+                    userDTO.setClanName(user.getClanMember().getClan().getName());
+                }
+                userDTO.setWorldRank(userRepository.getUserRank(user.getId()));
+                return userDTO;
+            }).toList();
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Users found", userDTOS));
         } catch (Exception e) {
             throw new Exception(e);

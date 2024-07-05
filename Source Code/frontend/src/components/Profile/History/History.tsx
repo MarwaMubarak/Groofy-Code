@@ -128,14 +128,14 @@ const History = () => {
                 </td>
                 <td
                   className={`${classes.status} ${
-                    game.gameResult === "Win"
+                    game.ratingChange - parseInt("0") > 0
                       ? classes.w
-                      : game.gameResult === "Lose"
-                      ? classes.l
-                      : classes.d
+                      : game.ratingChange - parseInt("0") === 0
+                      ? classes.d
+                      : classes.l
                   }`}
                 >
-                  {classes.w === "w" ? "+" : null}
+                  {game.ratingChange > 0 ? "+" : null}
                   {game.ratingChange}
                 </td>
                 <td>{game.newRating}</td>
