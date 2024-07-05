@@ -445,13 +445,14 @@ public class TeamService {
 
             // Create and save the notification
             TeamNotificationModel teamNotification = new TeamNotificationModel();
-            teamNotification.setBody(currUser.getUsername() + " has invited you to join the team " + team.get().getName());
+            teamNotification.setBody("has invited you to join the team " + team.get().getName());
             teamNotification.setSender(currUser);
             teamNotification.setCreatedAt(new Date());
             teamNotification.setReceiver(receiver);
             teamNotification.setNotificationType(NotificationType.TEAM_INVITATION);
             teamNotification.setTeam(teamInvitation.getTeam());
             teamNotification.setTeamName(teamInvitation.getTeam().getName());
+            teamNotification.setInvitationId(teamInvitation.getId());
             notificationRepository.save(teamNotification);
 
             // Send the notification via WebSocket

@@ -166,6 +166,7 @@ public class NotificationService {
         dto.setId(notification.getId());
         dto.setTeamId(notification.getTeam().getId());
         dto.setTeamName(notification.getTeam().getName());
+        dto.setInvitationId(notification.getInvitationId());
         return dto;
     }
 

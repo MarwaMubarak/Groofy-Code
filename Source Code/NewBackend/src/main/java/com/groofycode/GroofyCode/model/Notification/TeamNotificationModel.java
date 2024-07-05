@@ -17,5 +17,7 @@ public class TeamNotificationModel extends NotificationModel {
     @JoinColumn(name = "team_id")
     private TeamModel team;
 
+    private Long invitationId;
+
     private String teamName;
 }
