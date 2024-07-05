@@ -152,10 +152,5 @@ public class GameController {
         return gameService.getUserHistory();
     }
 
-//    @PostMapping("/join")
-//    public ResponseEntity<Void> joinGame(@RequestBody UserModel user) {
-//        gameService.joinGame(user);
-//        return ResponseEntity.ok().build();
-//    }
 
 }

@@ -114,4 +114,14 @@ public class TeamController {
         return teamService.updateTeamName(teamId, newTeamName);
     }
 
+    @GetMapping("/search/to-invite")
+    public ResponseEntity<Object> searchForFriendsByPrefixToInvite(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam String prefix,
+            @RequestParam Long teamID) throws Exception {
+
+        return teamService.searchForFriendsByPrefix(page, size, prefix, teamID);
+    }
+
 }
