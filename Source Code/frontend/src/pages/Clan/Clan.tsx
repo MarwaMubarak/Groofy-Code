@@ -30,8 +30,6 @@ const Clan = () => {
     getClan();
   }, [dispatch, fetchClan]);
 
-  console.log(clan);
-
   const leaveClan = async () => {
     return await dispatch(clanThunks.leaveClan() as any);
   };

@@ -16,15 +16,15 @@ const Friends = () => {
     getFriends();
   }, [dispatch]);
 
-  console.log("Friends: ", friends);
+  console.log("Friends", friends);
 
   return (
     <div className={classes.friends}>
-      {(friends === null || friends.length === 0) && (
+      {(friends === null || friends?.length === 0) && (
         <h3>You have no friends</h3>
       )}
       {friends !== null &&
-        friends.map((friend: any, idx: number) => (
+        friends?.map((friend: any, idx: number) => (
           <Friend
             key={idx}
             userId={friend.friendId}

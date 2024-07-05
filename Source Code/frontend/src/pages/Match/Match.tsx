@@ -7,7 +7,7 @@ import {
   Scoreboard,
 } from "../../components";
 import classes from "./scss/match.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { gameThunks } from "../../store/actions";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
@@ -15,15 +15,21 @@ import { useNavigate } from "react-router-dom";
 const Match = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoading = useSelector((state: any) => state.match.isLoading);
   const status = useSelector((state: any) => state.match.status);
   const loggedUser = useSelector((state: any) => state.auth.user);
   const message = useSelector((state: any) => state.match.message);
   const popupShow = useSelector((state: any) => state.popup.show);
   const popupBody = useSelector((state: any) => state.popup.body);
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log("POPUP SHOW", popupShow);
-  console.log("LOGGGGGGDEEEDDD", loggedUser);
+  useEffect(() => {
+    const tim = setTimeout(() => {
+      setIsLoading(false);
+    }, 1200);
+    return () => {
+      clearTimeout(tim);
+    };
+  }, []);
 
   useEffect(() => {
     const getCurrentMatch = async () => {
@@ -41,11 +47,9 @@ const Match = () => {
     }
   }, [dispatch, loggedUser.existingGameId, navigate, popupShow]);
 
-  return isLoading ? (
-    <div>Loading...</div>
-  ) : status === "failure" ? (
-    <div>{message}</div>
-  ) : (
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
     <>
       <MatchHeader />
       <div className={classes.match_div}>

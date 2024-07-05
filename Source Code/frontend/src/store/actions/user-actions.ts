@@ -112,7 +112,6 @@ const changePhoto = (userPhoto: File | null) => {
             },
           }
         );
-        console.log("Response: ", response);
         dispatch(authActions.updateUserPhoto(response.data.body));
         if (userPhoto !== null) {
           dispatch(authActions.setIsUploading(false));

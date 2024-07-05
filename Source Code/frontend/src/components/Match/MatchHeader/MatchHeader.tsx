@@ -27,16 +27,6 @@ const MatchHeader = () => {
     }, 1000);
   }, [gameEndTime]);
 
-  // console.log(
-  //   `Time Left: ,
-  //   ${Math.floor(
-  //     (new Date(gameEndTime).getTime() - Date.now()) / (1000 * 60)
-  //   )}:${Math.floor((new Date(gameEndTime).getTime() - Date.now()) / 1000)}`
-  // );
-  // console.log("Time Now: ", Date.now());
-  // console.log("Time Left: ", )
-  // console.log("Time Left: ", timeLeft);
-
   const leaveGame = async () => {
     return await dispatch(
       gameThunks.leaveGame(loggedUser.existingGameId) as any

@@ -40,6 +40,7 @@ function App() {
   const loggedUser = useSelector((state: any) => state.auth.user);
   const toastShow = useSelector((state: any) => state.toast.toastShow);
   const inQueue = useSelector((state: any) => state.game.inQueue);
+  const gameType = useSelector((state: any) => state.game.gameType);
   const dispatch = useDispatch();
 
   const [message, setMessage] = useState(getRandomMessage());
@@ -49,16 +50,12 @@ function App() {
   useEffect(() => {
     const getProfile = async () => {
       await dispatch(userThunks.getProfile() as any);
-      await dispatch(gameThunks.checkRankedQueue() as any);
+      await dispatch(gameThunks.checkQueue() as any);
     };
     if (!loggedUser) {
       getProfile();
     }
-  }, [dispatch, loggedUser]);
-
-  console.log("QUEUE", inQueue);
-
-  console.log("Logged User", loggedUser);
+  }, [dispatch, loggedUser, gameType]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -118,7 +115,7 @@ function App() {
     }
 
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [dispatch, inQueue, message, toastShow, toastId, exit]);
+  }, [dispatch, inQueue, message, toastShow, toastId, exit, gameType]);
 
   if (!loggedUser && localStorage.getItem("token")) {
     return <div>Loading...</div>;

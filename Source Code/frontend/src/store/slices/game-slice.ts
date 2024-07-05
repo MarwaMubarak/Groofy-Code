@@ -68,6 +68,9 @@ const gameSlice = createSlice({
     setFriendlyDialog(state, action) {
       state.searchFriendDialog = action.payload;
     },
+    setGameType(state, action) {
+      state.gameType = action.payload;
+    },
   },
 });
 

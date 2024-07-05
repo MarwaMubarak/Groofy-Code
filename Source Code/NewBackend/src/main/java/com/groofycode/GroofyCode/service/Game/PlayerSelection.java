@@ -4,6 +4,7 @@ import com.groofycode.GroofyCode.dto.Game.*;
 import com.groofycode.GroofyCode.dto.MatchPlayerDTO;
 import com.groofycode.GroofyCode.model.Game.*;
 import com.groofycode.GroofyCode.model.User.UserModel;
+import com.groofycode.GroofyCode.repository.Game.GameHistoryRepository;
 import com.groofycode.GroofyCode.repository.Game.GameRepository;
 import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.ProblemPicker;
@@ -47,11 +48,12 @@ public class PlayerSelection {
     private final SimpMessagingTemplate messagingTemplate;
     private final RatingSystemCalculator ratingSystemCalculator;
     private final MatchStatusMapper matchStatusMapper;
+    private final GameHistoryRepository gameHistoryRepository;
 
 
     @Autowired
     public PlayerSelection(ProblemPicker problemPicker, ModelMapper modelMapper, UserRepository userRepository, GameRepository gameRepository,
-                           SimpMessagingTemplate messagingTemplate, RatingSystemCalculator ratingSystemCalculator, MatchStatusMapper matchStatusMapper) {
+                           SimpMessagingTemplate messagingTemplate, RatingSystemCalculator ratingSystemCalculator, GameHistoryRepository gameHistoryRepository, MatchStatusMapper matchStatusMapper) {
         this.problemPicker = problemPicker;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
@@ -59,6 +61,28 @@ public class PlayerSelection {
         this.messagingTemplate = messagingTemplate;
         this.ratingSystemCalculator = ratingSystemCalculator;
         this.matchStatusMapper = matchStatusMapper;
+        this.gameHistoryRepository = gameHistoryRepository;
+    }
+
+
+    public boolean isInQueue(Long playerId) {
+        if (isInRankedQueue(playerId) || isInCasualQueue(playerId) || isInVelocityQueue(playerId)) {
+            return true;
+        }
+        return false;
+    }
+
+    public String whichQueue(Long playerId) {
+        if (isInRankedQueue(playerId)) {
+            return "Ranked";
+        }
+        if (isInCasualQueue(playerId)) {
+            return "Casual";
+        }
+        if (isInVelocityQueue(playerId)) {
+            return "Velocity";
+        }
+        return "NO";
     }
 
     public boolean isInRankedQueue(Long playerId) {
@@ -169,7 +193,7 @@ public class PlayerSelection {
 
             String problemUrl = (String) problemPicker.pickProblem(playerDTO, solvedProblemsPlayer, opponentDTO, solvedProblemsOpponent).getBody();
 
-            RankedMatch rankedMatch = new RankedMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusHours(1), 1.0);
+            RankedMatch rankedMatch = new RankedMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusHours(1), 60.0);
 
             rankedMatch = gameRepository.save(rankedMatch);
 
@@ -220,7 +244,7 @@ public class PlayerSelection {
 
             String problemUrl = (String) problemPicker.pickProblem(playerDTO, solvedProblemsPlayer, opponentDTO, solvedProblemsOpponent).getBody();
 
-            CasualMatch casualMatch = new CasualMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusHours(1), 1.0);
+            CasualMatch casualMatch = new CasualMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusHours(1), 60.0);
 
             casualMatch = gameRepository.save(casualMatch);
 
@@ -271,7 +295,7 @@ public class PlayerSelection {
 
             String problemUrl = (String) problemPicker.pickProblem(playerDTO, solvedProblemsPlayer, opponentDTO, solvedProblemsOpponent).getBody();
 
-            VelocityMatch velocityMatch = new VelocityMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), 1.0);
+            VelocityMatch velocityMatch = new VelocityMatch(players1, players2, problemUrl, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), 15.0);
 
             velocityMatch = gameRepository.save(velocityMatch);
 
@@ -380,6 +404,41 @@ public class PlayerSelection {
         }
     }
 
+    private void storeGameHistory(List<UserModel> submittingPlayers, List<UserModel> remainingPlayers, Game game) {
+        String gameType;
+        if (game instanceof RankedMatch) {
+            gameType = "Ranked";
+        } else if (game instanceof CasualMatch) {
+            gameType = "Casual";
+        } else if (game instanceof VelocityMatch) {
+            gameType = "Velocity";
+        } else if (game instanceof BeatAFriend) {
+            gameType = "Friendly";
+        } else {
+            gameType = "Unknown";
+        }
+        for (UserModel sP : submittingPlayers) {
+            GameHistory gameHistory1 = new GameHistory();
+            gameHistory1.setGameDate(game.getStartTime());
+            gameHistory1.setGameType(gameType);
+            gameHistory1.setGameResult("Draw");
+            gameHistory1.setRatingChange(0);
+            gameHistory1.setNewRating(sP.getUser_rating());
+            gameHistory1.setUserId(sP.getId());
+            gameHistoryRepository.save(gameHistory1);
+        }
+        for (UserModel lp : remainingPlayers) {
+            GameHistory gameHistory2 = new GameHistory();
+            gameHistory2.setGameDate(game.getStartTime());
+            gameHistory2.setGameType(gameType);
+            gameHistory2.setGameResult("Draw");
+            gameHistory2.setRatingChange(0);
+            gameHistory2.setNewRating(lp.getUser_rating());
+            gameHistory2.setUserId(lp.getId());
+            gameHistoryRepository.save(gameHistory2);
+        }
+    }
+
     public void terminateRankedGame() {
         startRankedDuration.set(false);
         Game currentGame = gameRepository.fetchById(schedulerRankedMatch.getId());
@@ -407,6 +466,24 @@ public class PlayerSelection {
         opponent.setUser_rating(newPlayer2Rating);
         userRepository.save(player1);
         userRepository.save(opponent);
+
+        GameHistory gameHistory1 = new GameHistory();
+        gameHistory1.setGameDate(currentGame.getStartTime());
+        gameHistory1.setGameType("Ranked");
+        gameHistory1.setGameResult("Draw");
+        gameHistory1.setRatingChange(newPlayer1Rating - player1Rating);
+        gameHistory1.setNewRating(newPlayer1Rating);
+        gameHistory1.setUserId(player1.getId());
+        gameHistoryRepository.save(gameHistory1);
+
+        GameHistory gameHistory2 = new GameHistory();
+        gameHistory2.setGameDate(currentGame.getStartTime());
+        gameHistory2.setGameType("Ranked");
+        gameHistory2.setGameResult("Draw");
+        gameHistory2.setRatingChange(newPlayer2Rating - player2Rating);
+        gameHistory2.setNewRating(newPlayer2Rating);
+        gameHistory2.setUserId(opponent.getId());
+        gameHistoryRepository.save(gameHistory2);
 
         currentGame.setGameStatus(GameStatus.FINISHED);
         gameRepository.save(currentGame);
@@ -452,6 +529,8 @@ public class PlayerSelection {
         player1.setExistingGameId(null);
         opponent.setExistingGameId(null);
 
+        storeGameHistory(List.of(player1), List.of(opponent), currentGame);
+
         currentGame.setGameStatus(GameStatus.FINISHED);
         gameRepository.save(currentGame);
 
@@ -496,6 +575,9 @@ public class PlayerSelection {
         player1.setExistingGameId(null);
         opponent.setExistingGameId(null);
 
+        storeGameHistory(List.of(player1), List.of(opponent), currentGame);
+
+
         currentGame.setGameStatus(GameStatus.FINISHED);
         gameRepository.save(currentGame);
 
@@ -536,6 +618,8 @@ public class PlayerSelection {
         assert player1 != null;
 
         player1.setExistingGameId(null);
+
+        storeGameHistory(List.of(player1), List.of(), currentGame);
 
         userRepository.save(player1);
 

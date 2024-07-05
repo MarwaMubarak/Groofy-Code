@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import {
   GroofyHeader,
@@ -9,7 +9,12 @@ import {
   SimpleUser,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
-import { friendThunks, gameThunks, toastThunks } from "../../store/actions";
+import {
+  userThunks,
+  friendThunks,
+  gameThunks,
+  toastThunks,
+} from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import classes from "./scss/home.module.css";
@@ -36,14 +41,6 @@ const Home = () => {
   dispatch(postActions.setMessage(""));
   const [searchText, setSearchText] = useState("");
 
-  // console.log("Searched Friends: ", searchedFriends);
-
-  // console.log("Game Players: ", gamePlayers);
-
-  console.log("LOGGED USER: ", user);
-
-  console.log("WAITING POPUP: ", waitingPopUp);
-
   const createSoloGame = async () => {
     return await dispatch(gameThunks.createSoloGame() as any);
   };
@@ -52,8 +49,15 @@ const Home = () => {
     return await dispatch(gameThunks.createRankedGame() as any);
   };
 
+  const createCasualGame = async () => {
+    return await dispatch(gameThunks.createCasualGame() as any);
+  };
+
+  const createVelocityGame = async () => {
+    return await dispatch(gameThunks.createVelocityGame() as any);
+  };
+
   const createBeatAFriendGame = async () => {
-    console.log("Frie - ", user);
     if (user.existingInvitationId === null) return;
     return await dispatch(
       gameThunks.createFriendlyGame(user.existingInvitationId) as any
@@ -82,6 +86,10 @@ const Home = () => {
   const closeSearchFriendDialog = () => {
     dispatch(gameThunks.changeSearchFriendDialog(false) as any);
   };
+
+  useEffect(() => {
+    dispatch(userThunks.getProfile() as any);
+  }, [dispatch]);
 
   return (
     <div className={classes.home_container}>
@@ -174,7 +182,6 @@ const Home = () => {
                   createBeatAFriendGame()
                     .then((res: any) => {
                       if (res.status === "success") {
-                        console.log("Game Response: ", res);
                         navigate(`/game/${res.gameId}`);
                       }
                     })
@@ -197,7 +204,17 @@ const Home = () => {
                   title="Velocity Code"
                   description="Face off in a 15-minute coding duel. Strategize, code swiftly, and emerge victorious in this high-stakes test of programming prowess."
                   img="/Assets/Images/clock.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    createVelocityGame()
+                      .then((res: any) => {
+                        if (res.message === "Match started successfully") {
+                          navigate(`/game/${res.gameId}`);
+                        } else {
+                          dispatch(toastThunks.changeToastShow(true) as any);
+                        }
+                      })
+                      .catch((err: any) => {});
+                  }}
                 />
                 <Gamemode
                   id="ranked_match_play_card"
@@ -208,10 +225,8 @@ const Home = () => {
                     createRankedGame()
                       .then((res: any) => {
                         if (res.message === "Match started successfully") {
-                          console.log("Game Response: ", res);
                           navigate(`/game/${res.gameId}`);
                         } else {
-                          console.log("Waiting for opponent to join");
                           dispatch(toastThunks.changeToastShow(true) as any);
                         }
                       })
@@ -233,7 +248,6 @@ const Home = () => {
                   clickEvent={() => {
                     createSoloGame()
                       .then((res: any) => {
-                        console.log("Game Response: ", res);
                         navigate(`/game/${res.body.id}`);
                       })
                       .catch((err: any) => {
@@ -265,10 +279,8 @@ const Home = () => {
                     createRankedGame()
                       .then((res: any) => {
                         if (res.message === "Match started successfully") {
-                          console.log("Game Response: ", res);
                           navigate(`/game/${res.gameId}`);
                         } else {
-                          console.log("Waiting for opponent to join");
                           dispatch(toastThunks.changeToastShow(true) as any);
                         }
                       })
@@ -279,7 +291,17 @@ const Home = () => {
                   id="velocity_code_play_card"
                   title="Velocity Code"
                   img="/Assets/Images/clock.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    createVelocityGame()
+                      .then((res: any) => {
+                        if (res.message === "Match started successfully") {
+                          navigate(`/game/${res.gameId}`);
+                        } else {
+                          dispatch(toastThunks.changeToastShow(true) as any);
+                        }
+                      })
+                      .catch((err: any) => {});
+                  }}
                 />
                 <Gamemode
                   id="solo_practice_play_card"
@@ -288,7 +310,6 @@ const Home = () => {
                   clickEvent={() => {
                     createSoloGame()
                       .then((res: any) => {
-                        console.log("Game Response: ", res);
                         navigate(`/game/${res.body.id}`);
                       })
                       .catch((err: any) => {
@@ -305,7 +326,17 @@ const Home = () => {
                   id="casual_match_card"
                   title="Casual Match"
                   img="/Assets/Images/battle.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    createCasualGame()
+                      .then((res: any) => {
+                        if (res.message === "Match started successfully") {
+                          navigate(`/game/${res.gameId}`);
+                        } else {
+                          dispatch(toastThunks.changeToastShow(true) as any);
+                        }
+                      })
+                      .catch((err: any) => {});
+                  }}
                 />
                 <Gamemode
                   id="custom_match_card"
@@ -314,8 +345,8 @@ const Home = () => {
                   clickEvent={() => {}}
                 />
                 <Gamemode
-                  id="2v2_match_card"
-                  title="2 Vs 2"
+                  id="3v3_match_card"
+                  title="3 Vs 3"
                   img="/Assets/Images/coop.png"
                   clickEvent={() => {}}
                 />

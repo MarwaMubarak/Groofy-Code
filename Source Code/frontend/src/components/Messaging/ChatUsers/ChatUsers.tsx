@@ -10,8 +10,6 @@ const ChatUsers = () => {
   const dispatch = useDispatch();
   const chats: any[] = useSelector((state: any) => state.chat.chats);
 
-  console.log("CHATS: ", chats);
-
   useEffect(() => {
     dispatch(chatThunks.clearChat() as any);
   }, [dispatch]);

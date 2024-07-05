@@ -84,6 +84,8 @@ public class GameService {
 
     private final BlobConverter blobConverter;
 
+    private final GameHistoryRepository gameHistoryRepository;
+
 //    private final MatchScheduler matchScheduler;
 
     @Autowired
@@ -91,8 +93,10 @@ public class GameService {
                        NotificationService notificationService, SubmissionRepository submissionRepository, SimpMessagingTemplate messagingTemplate,
                        ProblemParser problemParser, CodeforcesSubmissionService codeforcesSubmissionService,
                        NotificationRepository notificationRepository, MatchStatusMapper matchStatusMapper, ModelMapper modelMapper,
+                       GameHistoryRepository gameHistoryRepository,
 
-                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, MatchInvitationService matchInvitationService, ProgProblemRepository progProblemRepository, TeamMatchInvitationRepository teamMatchInvitationRepository, BeatAFriendRepository beatAFriendMatchRepository, FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository, FriendMatchInvitationRepository friendMatchInvitationRepository, MatchInvitationRepository matchInvitationRepository) {
+                       ProblemPicker problemPicker, RatingSystemCalculator ratingSystemCalculator, MatchInvitationService matchInvitationService, ProgProblemRepository progProblemRepository, TeamMatchInvitationRepository teamMatchInvitationRepository,
+                       BeatAFriendRepository beatAFriendMatchRepository, FriendMatchInvitationNotificationRepository friendMatchInvitationNotificationRepository, FriendMatchInvitationRepository friendMatchInvitationRepository, MatchInvitationRepository matchInvitationRepository) {
 
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
@@ -115,6 +119,7 @@ public class GameService {
         this.friendMatchInvitationNotificationRepository = friendMatchInvitationNotificationRepository;
         this.friendMatchInvitationRepository = friendMatchInvitationRepository;
         this.matchInvitationRepository = matchInvitationRepository;
+        this.gameHistoryRepository = gameHistoryRepository;
         blobConverter = new BlobConverter();
     }
 
@@ -134,8 +139,10 @@ public class GameService {
         try {
             if (page == null || page < 0) page = 0;
             PageRequest pageRequest = PageRequest.of(page, 10);
-            List<Game> games = gameRepository.findAll(pageRequest).getContent();
-            List<GameDTO> gameDTOS = games.stream().map(game -> modelMapper.map(game, GameDTO.class)).toList();
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel user = userRepository.findByUsername(userInfo.getUsername());
+            List<GameHistory> gameHistories = gameHistoryRepository.findByUserIdOrderByGameDateDesc(user.getId(), pageRequest).getContent();
+            List<GameHistoryDTO> gameDTOS = gameHistories.stream().map(gameHistory -> modelMapper.map(gameHistory, GameHistoryDTO.class)).toList();
             return ResponseEntity.ok(ResponseUtils.successfulRes("Games retrieved successfully", gameDTOS));
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -145,6 +152,10 @@ public class GameService {
     public ResponseEntity<Object> findRankedMatch() throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());
+
+        if (playerSelection.isInQueue(player.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player already in queue", null));
+        }
 
         PlayerDTO playerDTO = modelMapper.map(player, PlayerDTO.class);
 
@@ -160,6 +171,10 @@ public class GameService {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());
 
+        if (playerSelection.isInQueue(player.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player already in queue", null));
+        }
+
         PlayerDTO playerDTO = modelMapper.map(player, PlayerDTO.class);
 
         int expectedRating = problemPicker.expectedRatingPlayer(playerDTO);
@@ -174,6 +189,10 @@ public class GameService {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());
 
+        if (playerSelection.isInQueue(player.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player already in queue", null));
+        }
+
         PlayerDTO playerDTO = modelMapper.map(player, PlayerDTO.class);
 
         int expectedRating = problemPicker.expectedRatingPlayer(playerDTO);
@@ -187,6 +206,10 @@ public class GameService {
     public ResponseEntity<Object> findSoloMatch() {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player1 = userRepository.findByUsername(userInfo.getUsername());
+
+        if (playerSelection.isInQueue(player1.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player already in queue", null));
+        }
         try {
 
             PlayerDTO playerDTO = modelMapper.map(player1, PlayerDTO.class);
@@ -223,6 +246,26 @@ public class GameService {
         } catch (Exception e) {
             // Handle any exceptions that may occur during the match creation or saving process
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error starting match", e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<Object> leaveQueue() {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel player = userRepository.findByUsername(userInfo.getUsername());
+            String queueType = playerSelection.whichQueue(player.getId());
+            if (queueType.equals("Ranked")) {
+                playerSelection.leaveRankedQueue(player.getId());
+            } else if (queueType.equals("Casual")) {
+                playerSelection.leaveCasualQueue(player.getId());
+            } else if (queueType.equals("Velocity")) {
+                playerSelection.leaveVelocityQueue(player.getId());
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Player not in queue", null));
+            }
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Player removed from queue successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error removing player from queue", e.getMessage()));
         }
     }
 
@@ -272,6 +315,13 @@ public class GameService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error removing player from queue", e.getMessage()));
         }
+    }
+
+    public ResponseEntity<Object> getUserQueue() {
+        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel player = userRepository.findByUsername(userInfo.getUsername());
+        String queueType = playerSelection.whichQueue(player.getId());
+        return ResponseEntity.ok(ResponseUtils.successfulRes(queueType, null));
     }
 
     public ResponseEntity<Object> getUserRankedQueue() {
@@ -624,6 +674,14 @@ public class GameService {
 
         if (game instanceof RankedMatch) {
             return submitCodeteam2team(game, problemSubmitDTO);
+        } else if (game instanceof TeamMatch) {
+            return submitCodeteam2team(game, problemSubmitDTO);
+        } else if (game instanceof CasualMatch) {
+            return submitCodeteam2team(game, problemSubmitDTO);
+        } else if (game instanceof VelocityMatch) {
+            return submitCodeteam2team(game, problemSubmitDTO);
+        } else if (game instanceof BeatAFriend) {
+            return submitCodeteam2team(game, problemSubmitDTO);
         } else if (game instanceof SoloMatch) {
             return submitCodeSolo(game, problemSubmitDTO);
         } else return null;
@@ -651,6 +709,8 @@ public class GameService {
             game.setEndTime(LocalDateTime.now());
             gameRepository.save(game);
 
+            storeGameHistory(List.of(submittingPlayer), List.of(), game);
+
             ProblemDTO problemDTO = problemPicker.getProblemByUrl(game.getProblemUrl());
 
             ProgProblem progProblem = modelMapper.map(problemDTO, ProgProblem.class);
@@ -676,6 +736,71 @@ public class GameService {
 
         return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
     }
+
+    private void storeGameHistory(List<UserModel> submittingPlayers, List<UserModel> remainingPlayers, Game game) {
+        String gameType;
+        if (game instanceof RankedMatch) {
+            gameType = "Ranked";
+        } else if (game instanceof CasualMatch) {
+            gameType = "Casual";
+        } else if (game instanceof VelocityMatch) {
+            gameType = "Velocity";
+        } else if (game instanceof BeatAFriend) {
+            gameType = "Friendly";
+        } else {
+            gameType = "Solo";
+        }
+        if (gameType.equals("Ranked")) {
+            int player1Rating = submittingPlayers.get(0).getUser_rating();
+            int player2Rating = remainingPlayers.get(0).getUser_rating();
+            int newPlayer1Rating = ratingSystemCalculator.calculateDeltaRating(player2Rating - player1Rating, player1Rating, 'W');
+            int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'L');
+            submittingPlayers.get(0).setUser_max_rating(Math.max(submittingPlayers.get(0).getUser_max_rating(), newPlayer1Rating));
+            submittingPlayers.get(0).setUser_rating(newPlayer1Rating);
+            remainingPlayers.get(0).setUser_max_rating(Math.max(remainingPlayers.get(0).getUser_max_rating(), newPlayer2Rating));
+            remainingPlayers.get(0).setUser_rating(newPlayer2Rating);
+
+            GameHistory gameHistory1 = new GameHistory();
+            gameHistory1.setGameDate(game.getStartTime());
+            gameHistory1.setGameType("Ranked");
+            gameHistory1.setGameResult("Win");
+            gameHistory1.setRatingChange(newPlayer1Rating - player1Rating);
+            gameHistory1.setNewRating(newPlayer1Rating);
+            gameHistory1.setUserId(submittingPlayers.get(0).getId());
+            gameHistoryRepository.save(gameHistory1);
+
+            GameHistory gameHistory2 = new GameHistory();
+            gameHistory2.setGameDate(game.getStartTime());
+            gameHistory2.setGameType("Ranked");
+            gameHistory2.setGameResult("Lose");
+            gameHistory2.setRatingChange(newPlayer2Rating - player2Rating);
+            gameHistory2.setNewRating(newPlayer2Rating);
+            gameHistory2.setUserId(remainingPlayers.get(0).getId());
+            gameHistoryRepository.save(gameHistory2);
+        } else {
+            for (UserModel sP : submittingPlayers) {
+                GameHistory gameHistory1 = new GameHistory();
+                gameHistory1.setGameDate(game.getStartTime());
+                gameHistory1.setGameType(gameType);
+                gameHistory1.setGameResult("Win");
+                gameHistory1.setRatingChange(0);
+                gameHistory1.setNewRating(sP.getUser_rating());
+                gameHistory1.setUserId(sP.getId());
+                gameHistoryRepository.save(gameHistory1);
+            }
+            for (UserModel lp : remainingPlayers) {
+                GameHistory gameHistory2 = new GameHistory();
+                gameHistory2.setGameDate(game.getStartTime());
+                gameHistory2.setGameType(gameType);
+                gameHistory2.setGameResult("Lose");
+                gameHistory2.setRatingChange(0);
+                gameHistory2.setNewRating(lp.getUser_rating());
+                gameHistory2.setUserId(lp.getId());
+                gameHistoryRepository.save(gameHistory2);
+            }
+        }
+    }
+
 
     private ResponseEntity<Object> submitCodeteam2team(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -710,16 +835,14 @@ public class GameService {
             game.setEndTime(LocalDateTime.now());
             gameRepository.save(game);
 
+            storeGameHistory(submittingPlayers, remainingPlayers, game);
+
             if (submittingPlayers.size() == 1 && remainingPlayers.size() == 1) {
                 // Update delta of the players
-                int player1Rating = submittingPlayers.get(0).getUser_rating();
-                int player2Rating = remainingPlayers.get(0).getUser_rating();
-                int newPlayer1Rating = ratingSystemCalculator.calculateDeltaRating(player2Rating - player1Rating, player1Rating, 'W');
-                int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'L');
-                submittingPlayers.get(0).setUser_max_rating(Math.max(submittingPlayers.get(0).getUser_max_rating(), newPlayer1Rating));
-                submittingPlayers.get(0).setUser_rating(newPlayer1Rating);
-                remainingPlayers.get(0).setUser_max_rating(Math.max(remainingPlayers.get(0).getUser_max_rating(), newPlayer2Rating));
-                remainingPlayers.get(0).setUser_rating(newPlayer2Rating);
+                int newPlayer1Rating = submittingPlayers.get(0).getUser_rating();
+                int newPlayer2Rating = remainingPlayers.get(0).getUser_rating();
+
+
                 submittingPlayers.get(0).setExistingGameId(null);
                 remainingPlayers.get(0).setExistingGameId(null);
 
@@ -783,6 +906,8 @@ public class GameService {
                     messagingTemplate.convertAndSendToUser(rP.getUsername(), "/games", gameResultDTO);
                 }
             }
+
+
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match", null));
         } else {
             return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));

@@ -35,8 +35,6 @@ const Profile = () => {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [messageText, setMessageText] = useState("");
 
-  console.log(loggedUser);
-
   dispatch(postActions.setStatus(""));
   dispatch(postActions.setMessage(""));
   const { username: userProfile } = useParams();
@@ -77,8 +75,6 @@ const Profile = () => {
     setMessageText("");
     setDialogVisible(false);
   };
-
-  console.log(profileUser);
 
   const friendRequestAction = async () => {
     if (profileUser.friendshipStatus !== "accepted") {

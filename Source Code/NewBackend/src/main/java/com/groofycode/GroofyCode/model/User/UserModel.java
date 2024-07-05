@@ -4,6 +4,7 @@ import com.groofycode.GroofyCode.model.Badge.BadgeModel;
 import com.groofycode.GroofyCode.model.Chat.ChatUsers;
 import com.groofycode.GroofyCode.model.Clan.ClanMember;
 import com.groofycode.GroofyCode.model.Clan.ClanRequest;
+import com.groofycode.GroofyCode.model.Game.GameHistory;
 import com.groofycode.GroofyCode.model.Game.ProgProblem;
 import com.groofycode.GroofyCode.model.Match.UserMatch;
 import com.groofycode.GroofyCode.model.Notification.NotificationModel;

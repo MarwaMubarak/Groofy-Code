@@ -16,6 +16,7 @@ const getAllUserGames = (page: number) => {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log("GAMES", response.data.body);
         dispatch(gameActions.setGames(response.data.body));
       } catch (error: any) {
         dispatch(gameActions.setResponse(error.response.data));
@@ -35,7 +36,6 @@ const getCurrentGame = (gameId: number) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("Game: ", response.data.body);
         dispatch(gameActions.setGame(response.data.body));
         dispatch(gameActions.setLoading(false));
       } catch (error: any) {
@@ -82,7 +82,6 @@ const createSoloGame = () => {
             },
           }
         );
-        console.log("my response", response.data.body);
         dispatch(gameActions.setGame(response.data.body));
         dispatch(gameActions.setLoading(false));
         dispatch(authActions.setUserGameId(response.data.body.id));
@@ -110,7 +109,6 @@ const inviteToFriendlyGame = (friendId: any) => {
             },
           }
         );
-        console.log("FRIENDLY INVITATION", response.data.body);
         dispatch(
           friendActions.changeInviteState({ friendId, isInvited: true })
         );
@@ -195,7 +193,6 @@ const rejectFriendlyGameInvitation = (invitationId: any, friendId: any) => {
           }
         );
 
-        console.log("REJECT INVITATION REPSONSE:", response);
         dispatch(gameActions.setWaitingPopup(false));
         dispatch(
           friendActions.changeInviteState({ friendId, isInvited: false })
@@ -242,6 +239,12 @@ const createFriendlyGame = (invitationId: any) => {
   };
 };
 
+const setGameType = (gameType: string) => {
+  return (dispatch: any) => {
+    dispatch(gameActions.setGameType(gameType));
+  };
+};
+
 const createRankedGame = () => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
@@ -252,6 +255,63 @@ const createRankedGame = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        dispatch(gameActions.setGameType("Ranked"));
+        if (response.data.body != null) {
+          dispatch(gameActions.setGame(response.data.body));
+          dispatch(authActions.setUserGameId(response.data.body.id));
+          return {
+            status: response.data.status,
+            message: response.data.message,
+            gameId: response.data.body.id,
+          };
+        }
+        return response.data;
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const createCasualGame = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post("/game/casual", null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(gameActions.setGameType("Casual"));
+        if (response.data.body != null) {
+          dispatch(gameActions.setGame(response.data.body));
+          dispatch(authActions.setUserGameId(response.data.body.id));
+          return {
+            status: response.data.status,
+            message: response.data.message,
+            gameId: response.data.body.id,
+          };
+        }
+        return response.data;
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const createVelocityGame = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post("/game/velocity", null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(gameActions.setGameType("Velocity"));
         if (response.data.body != null) {
           dispatch(gameActions.setGame(response.data.body));
           dispatch(authActions.setUserGameId(response.data.body.id));
@@ -293,7 +353,6 @@ const submitCode = (submission: SubmissionProps) => {
             },
           }
         );
-        console.log("PUSSSHHH RESPO", response.data);
         dispatch(submissionActions.setIsLoading(false));
         dispatch(submissionActions.setSubmission(response.data));
         await dispatch(getGameSubmissions(submission.gameID) as any);
@@ -350,6 +409,29 @@ const leaveGame = (gameId: number) => {
   };
 };
 
+const checkQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get("/game/user-queue", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data.message === "NO") {
+          dispatch(gameActions.setInQueue(false));
+        } else {
+          dispatch(gameActions.setInQueue(true));
+          dispatch(gameActions.setGameType(response.data.message));
+        }
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
 const checkRankedQueue = () => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
@@ -368,7 +450,63 @@ const checkRankedQueue = () => {
   };
 };
 
+const checkCasualQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get("/game/user-queue/casual", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(gameActions.setInQueue(response.data.message === "YES"));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const checkVelocityQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get("/game/user-queue/velocity", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(gameActions.setInQueue(response.data.message === "YES"));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
 const leaveQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await reqInstance.post("/game/leaveQueue", null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(toastActions.setToastShow(false));
+        dispatch(gameActions.setInQueue(false));
+        dispatch(gameActions.setGameType(null));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const leaveRankedQueue = () => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -380,6 +518,47 @@ const leaveQueue = () => {
         });
         dispatch(toastActions.setToastShow(false));
         dispatch(gameActions.setInQueue(false));
+        dispatch(gameActions.setGameType(null));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const leaveCasualQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await reqInstance.post("/game/leaveCasualQueue", null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(toastActions.setToastShow(false));
+        dispatch(gameActions.setInQueue(false));
+        dispatch(gameActions.setGameType(null));
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
+const leaveVelocityQueue = () => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await reqInstance.post("/game/  ", null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(toastActions.setToastShow(false));
+        dispatch(gameActions.setInQueue(false));
+        dispatch(gameActions.setGameType(null));
       } catch (error: any) {
         dispatch(gameActions.setResponse(error.response.data));
       }
@@ -415,7 +594,6 @@ const gameNotify = (
     dispatch(gameActions.setWaitingPopup(waitingPopUpState));
     dispatch(gameActions.setFriendlyDialog(searchFriendDialogState));
     dispatch(authActions.setExistingInvitation(invitationId));
-    console.log("Frie - INVITATION ID", invitationId);
   };
 };
 
@@ -424,11 +602,18 @@ const gameThunks = {
   getCurrentGame,
   createSoloGame,
   createRankedGame,
+  createCasualGame,
+  createVelocityGame,
   updateGroofyGame,
   submitCode,
   leaveGame,
+  checkQueue,
   checkRankedQueue,
-  leaveQueue,
+  checkCasualQueue,
+  checkVelocityQueue,
+  leaveRankedQueue,
+  leaveCasualQueue,
+  leaveVelocityQueue,
   dismissToast,
   changeSubmitState,
   getGameSubmissions,
@@ -441,6 +626,8 @@ const gameThunks = {
   getInvitationPlayers,
   gameNotify,
   changeSearchFriendDialog,
+  setGameType,
+  leaveQueue,
 };
 
 export default gameThunks;

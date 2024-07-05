@@ -55,10 +55,8 @@ const WebSocketConnection = () => {
 
       const onMessage = (message: any) => {
         const msg = JSON.parse(message.body);
-        console.log("Recieved message: ", msg);
 
         if (msg.notificationType === "MATCH_INVITATION_ACCEPT") {
-          console.log("Frie - Invitation accepted", msg);
           dispatch(gameThunks.gameNotify(true, false, msg.invitationId) as any);
         } else if (msg.notificationType === "MATCH_INVITATION_REJECT") {
           dispatch(gameThunks.gameNotify(false, true, null) as any);
@@ -69,7 +67,6 @@ const WebSocketConnection = () => {
 
       const onChatMessage = (message: any) => {
         const chatMsg = JSON.parse(message.body);
-        console.log("Recieved chat message: ", chatMsg);
         if (chatMsg.messageType === "CLAN") {
           dispatch(chatThunks.addClanMessage(chatMsg) as any);
         } else {
@@ -80,13 +77,11 @@ const WebSocketConnection = () => {
 
       const onGameMessage = (message: any) => {
         const msg = JSON.parse(message.body);
-        console.log("Recieved game message: ", msg);
         if (msg.body && msg.body.id !== null) {
           dispatch(gameThunks.updateGroofyGame(msg.body.id) as any);
           dispatch(gameThunks.dismissToast() as any);
           navigate(`/game/${msg.body.id}`);
         } else {
-          console.log("Frie - Match Finished", msg);
           dispatch(popupThunks.setPopUpState(true, msg) as any);
         }
       };

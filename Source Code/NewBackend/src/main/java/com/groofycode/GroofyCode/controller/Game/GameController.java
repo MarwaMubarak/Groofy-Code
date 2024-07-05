@@ -33,7 +33,7 @@ public class GameController {
         return gameService.findSoloMatch();
     }
 
-//    @PostMapping("/ranked")
+    //    @PostMapping("/ranked")
 //    public Game createRankedMatch(@RequestParam String player1, @RequestParam String player2) {
 //        RankedMatch rankedMatch = new RankedMatch(player1, player2, LocalDateTime.now());
 //        return gameService.saveGame(rankedMatch);
@@ -44,6 +44,10 @@ public class GameController {
 //        CasualMatch casualMatch = new CasualMatch(player1, player2, LocalDateTime.now());
 //        return gameService.saveGame(casualMatch);
 //    }
+    @GetMapping("/user-queue")
+    public ResponseEntity<Object> getUserQueue() {
+        return gameService.getUserQueue();
+    }
 
     @GetMapping("/user-queue/ranked")
     public ResponseEntity<Object> getUserRankedQueue() {
@@ -95,6 +99,11 @@ public class GameController {
         } else {
             return ResponseEntity.ok(ResponseUtils.successfulRes("Still looking for a match", null)); // Still looking for a match
         }
+    }
+
+    @PostMapping("/leaveQueue")
+    public ResponseEntity<Object> leaveQueue() {
+        return gameService.leaveQueue();
     }
 
     @PostMapping("/leaveRankedQueue")

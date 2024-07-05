@@ -12,8 +12,6 @@ const NotificationsContainer = (props: NotificationsContainerProps) => {
     props.setNotifyActive(false);
   });
 
-  console.log("NOTIFICATIONS: ", props.notifications);
-
   return (
     <div
       className={`${classes.notify_area} ${

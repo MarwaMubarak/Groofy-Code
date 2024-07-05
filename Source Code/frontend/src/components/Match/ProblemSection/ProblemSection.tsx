@@ -1,34 +1,12 @@
 import { useSelector } from "react-redux";
 import { Testcase } from "../..";
 import classes from "./scss/problemsection.module.css";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { MathJax } from "better-react-mathjax";
 import { MathJaxBaseContext } from "better-react-mathjax";
 
 const ProblemSection = () => {
   const problem = useSelector((state: any) => state.game.problemStatement);
-  const user = useSelector((state: any) => state.auth.user);
-  const mathJax = useContext(MathJaxBaseContext);
-  const mathElementRef = useRef(null);
-
-  useEffect(() => {
-    if (mathJax && mathElementRef.current) {
-      mathJax.promise.then((MathJaxObject: any) => {
-        MathJaxObject.typesetPromise([mathElementRef.current]);
-      });
-    }
-
-    return () => {
-      // Cleanup: Tell MathJax to stop processing if the element is removed
-      if (mathJax && mathElementRef.current) {
-        mathJax.promise.then((MathJaxObject: any) => {
-          MathJaxObject.typesetPromise([mathElementRef.current]);
-        });
-      }
-    };
-  }, [mathJax]);
-
-  console.log(problem);
 
   return (
     <div className={classes.psec}>
@@ -39,32 +17,35 @@ const ProblemSection = () => {
         <span className={classes.complexity}>
           {problem?.header.map((item: any, idx: number) => {
             if (idx !== 0) {
-              return <p>{item}</p>;
+              return <p key={idx}>{item}</p>;
             }
             return null;
           })}
         </span>
         <p className={classes.pdisc}>
-          {problem?.statement.map((row: any) => {
+          {problem?.statement.map((row: any, idx: any) => {
             if (row.startsWith("IMAGELINKGROOFYCODE")) {
               return (
-                <div
-                  style={{
-                    margin: "10px auto",
-                    width: "100%",
-                    textAlign: "center",
-                  }}
-                >
-                  <img src={row.substring(20)} alt="ProblemPhoto" />
-                </div>
+                <MathJax key={idx}>
+                  <div
+                    style={{
+                      margin: "10px auto",
+                      width: "100%",
+                      textAlign: "center",
+                    }}
+                  >
+                    <img src={row.substring(20)} alt="ProblemPhoto" />
+                  </div>
+                </MathJax>
               );
             }
             return (
-              <div
-                dangerouslySetInnerHTML={{ __html: row }}
-                ref={mathElementRef}
-                style={{ lineHeight: "1.8", color: "white" }}
-              ></div>
+              <MathJax key={idx}>
+                <div
+                  dangerouslySetInnerHTML={{ __html: row }}
+                  style={{ lineHeight: "1.8", color: "white" }}
+                ></div>
+              </MathJax>
             );
           })}
         </p>
@@ -76,11 +57,12 @@ const ProblemSection = () => {
             {problem?.input.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: row }}
-                    ref={mathElementRef}
-                    style={{ lineHeight: "1.8" }}
-                  ></div>
+                  <MathJax key={idx}>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: row }}
+                      style={{ lineHeight: "1.8" }}
+                    ></div>
+                  </MathJax>
                 );
               }
               return null;
@@ -96,11 +78,12 @@ const ProblemSection = () => {
             {problem?.output.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: row }}
-                    ref={mathElementRef}
-                    style={{ lineHeight: "1.8", color: "white" }}
-                  ></div>
+                  <MathJax key={idx}>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: row }}
+                      style={{ lineHeight: "1.8", color: "white" }}
+                    ></div>
+                  </MathJax>
                 );
               }
               return null;
@@ -129,11 +112,12 @@ const ProblemSection = () => {
             {problem?.notes.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: row }}
-                    ref={mathElementRef}
-                    style={{ lineHeight: "1.8", color: "white" }}
-                  ></div>
+                  <MathJax key={idx}>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: row }}
+                      style={{ lineHeight: "1.8", color: "white" }}
+                    ></div>
+                  </MathJax>
                 );
               }
               return null;

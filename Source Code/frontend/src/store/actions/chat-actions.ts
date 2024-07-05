@@ -30,7 +30,6 @@ const getAllUserChats = (page: number = 0) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("hahaha", response.data.body);
         dispatch(chatActions.setChats(response.data.body.chats));
         dispatch(
           notifyActions.setMessageNotifyCnt(response.data.body.unreadChatsCount)
@@ -55,7 +54,6 @@ const getUserChat = (userId: number, chatId: number, page: number = 0) => {
             },
           }
         );
-        console.log("USER CHAT", response.data.body);
         if (response.data.body.unreadCount > 0) {
           dispatch(notifyActions.openUserChat());
         }

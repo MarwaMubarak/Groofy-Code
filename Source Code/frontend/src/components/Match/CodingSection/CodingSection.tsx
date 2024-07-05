@@ -36,7 +36,6 @@ const CodingSection = () => {
   const problemURL = useSelector((state: any) => state.game.problemUrl);
   const gameID = useSelector((state: any) => state.game.gameID);
   const submissions = useSelector((state: any) => state.submission.submissions);
-  console.log("submissions", submissions);
 
   useEffect(() => {
     if (gameID) {
@@ -45,9 +44,6 @@ const CodingSection = () => {
   }, [dispatch, gameID]);
 
   const submitCode = async () => {
-    console.log("my code", currentCode);
-    console.log("problem url", problemURL);
-    console.log("game id", gameID);
     return await dispatch(
       gameThunks.submitCode({
         code: currentCode,

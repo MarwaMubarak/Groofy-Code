@@ -22,22 +22,31 @@
 .history_container table tr td.state {
   font-weight: bold;
 }
-.history_container table tr td.state.f {
+.history_container table tr td.state.ww {
   color: #18cf08;
 }
-.history_container table tr td.state.o {
-  color: #feb139;
+.history_container table tr td.state.ll {
+  color: #f55353;
+}
+.history_container table tr td.state.dd {
+  color: white;
 }
 .history_container table tr td.status {
   color: #000;
   padding: 10px 20px;
   border-radius: 12px;
+  font-weight: bold;
 }
 .history_container table tr td.status.w {
-  background-color: #8cf183;
+  background-color: #31ad26;
+  color: white;
 }
 .history_container table tr td.status.l {
   background-color: #df7777;
+  color: white;
+}
+.history_container table tr td.status.d {
+  background-color: white;
 }
 .history_container table .empty_history {
   color: #fff;

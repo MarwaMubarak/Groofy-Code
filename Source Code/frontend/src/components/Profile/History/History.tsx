@@ -14,9 +14,7 @@ import { gameThunks } from "../../../store/actions";
 
 const History = () => {
   const dispatch = useDispatch();
-  const userMatches: any[] = useSelector(
-    (state: any) => state.match.userMatches
-  );
+  const games: any[] = useSelector((state: any) => state.game.games);
   const [first, setFirst] = useState<number>(0);
   const [rows, setRows] = useState<number>(5);
   const onPageChange = (event: PaginatorPageChangeEvent) => {
@@ -99,33 +97,61 @@ const History = () => {
       <table>
         <thead>
           <tr>
-            <th>Match Type</th>
-            <th>State</th>
-            <th>Status</th>
-            <th>Played at</th>
+            <th>Game Type</th>
+            <th>Game Status</th>
+            <th>Rating Change</th>
+            <th>New Rating</th>
+            <th>Game Date</th>
           </tr>
         </thead>
         <tbody>
-          {userMatches.length === 0 && (
-            <tr className={classes.empty_history}>No matches available</tr>
+          {games.length === 0 && (
+            <tr className={classes.empty_history}>No games available</tr>
           )}
-          {userMatches.length > 0 &&
-            userMatches.map((match: any) => (
+          {games.length > 0 &&
+            games.map((game: any) => (
               <tr>
-                <td>Solo Match</td>
-                <td className={`${classes.state} ${classes.f}`}>
-                  {match.state}
+                <td>{game.gameType}</td>
+                <td
+                  className={`${classes.state}
+                  ${
+                    game.gameResult === "Win"
+                      ? classes.ww
+                      : game.gameResult === "Lose"
+                      ? classes.ll
+                      : classes.dd
+                  }
+                `}
+                >
+                  {game.gameResult}
                 </td>
                 <td
                   className={`${classes.status} ${
-                    match.status === "Accepted" ? classes.w : classes.l
+                    game.gameResult === "Win"
+                      ? classes.w
+                      : game.gameResult === "Lose"
+                      ? classes.l
+                      : classes.d
                   }`}
                 >
-                  {match.status}
+                  {game.ratingChange}
                 </td>
-                <td>{formatDate(match.createdAt)}</td>
+                <td>{game.newRating}</td>
+                <td>{formatDate(game.gameDate)}</td>
               </tr>
             ))}
+
+          {/* <tr>
+            <td>Solo Match</td>
+            <td
+              className={`${classes.status} ${
+                "Accepted" === "Accepted" ? classes.w : classes.l
+              }`}
+            >
+              Win
+            </td>
+            <td>24:52</td>
+          </tr> */}
         </tbody>
       </table>
       <Paginator

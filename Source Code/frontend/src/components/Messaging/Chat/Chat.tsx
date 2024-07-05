@@ -162,7 +162,6 @@ const Chat = (props: ChatProps) => {
   }
 
   const onEmojiClick = (event: any) => {
-    console.log("EVeeent", event);
     setMessage((msg) => msg + event.emoji);
   };
 

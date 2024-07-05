@@ -1,18 +1,19 @@
 import { Link } from "react-router-dom";
 import classes from "./scss/match-popup.module.css";
 import { MatchPopupProps } from "../../shared/types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { popupThunks } from "../../store/actions";
 
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import { useEffect } from "react";
+import { userThunks } from "../../store/actions";
 
 const MatchPopup = (props: MatchPopupProps) => {
   const dispatch = useDispatch();
   const closePopUp = () => {
     dispatch(popupThunks.setPopUpState(false, {}) as any);
   };
-  console.log("PLAYERSS", props);
   const { width, height } = useWindowSize();
 
   return (

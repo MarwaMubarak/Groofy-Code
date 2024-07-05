@@ -20,22 +20,31 @@
       td {
         &.state {
           font-weight: bold;
-          &.f {
+          &.ww {
             color: $greenColor;
           }
-          &.o {
-            color: $btnColor;
+          &.ll {
+            color: $redColor;
+          }
+          &.dd {
+            color: white;
           }
         }
         &.status {
           color: #000;
           padding: 10px 20px;
           border-radius: 12px;
+          font-weight: bold;
           &.w {
-            background-color: #8cf183;
+            background-color: #31ad26;
+            color: white;
           }
           &.l {
             background-color: #df7777;
+            color: white;
+          }
+          &.d {
+            background-color: white;
           }
         }
       }
