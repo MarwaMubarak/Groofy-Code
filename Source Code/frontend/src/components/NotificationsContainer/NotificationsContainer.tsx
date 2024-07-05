@@ -45,6 +45,7 @@ const NotificationsContainer = (props: NotificationsContainerProps) => {
               ntime={FormatDate(notify.createdAt) ?? "Some time ago"}
               nType={notify.notificationType}
               nInvId={notify.invitationId}
+              nIsAdmin={notify.isAdmin}
             />
           ))
         ) : (

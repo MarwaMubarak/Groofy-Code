@@ -46,25 +46,31 @@ export default function BurgerMenu() {
           </Link>
           <Link to={`/profile/${user.username}`}>
             <li>
-              <img src="/Assets/SVG/ProfileIcon.svg" alt="Home" />
+              <img src="/Assets/SVG/ProfileIcon.svg" alt="Profile" />
               <span>Profile</span>
             </li>
           </Link>
           <Link to="/play">
             <li>
-              <img src="/Assets/SVG/BattleIcon.svg" alt="Home" />
+              <img src="/Assets/SVG/BattleIcon.svg" alt="Play" />
               <span>Play</span>
             </li>
           </Link>
           <Link to="/clan">
             <li>
-              <img src="/Assets/SVG/shieldIcon.svg" alt="Home" />
+              <img src="/Assets/SVG/shieldIcon.svg" alt="Clan" />
               <span>Clan</span>
+            </li>
+          </Link>
+          <Link to="/teams">
+            <li>
+              <img src="/Assets/SVG/team.svg" alt="Team" />
+              <span>Teams</span>
             </li>
           </Link>
           <Link to="/leaderboard">
             <li>
-              <img src="/Assets/SVG/leaderboard.svg" alt="Home" />
+              <img src="/Assets/SVG/leaderboard.svg" alt="Leaderboard" />
               <span>Leaderboard</span>
             </li>
           </Link>

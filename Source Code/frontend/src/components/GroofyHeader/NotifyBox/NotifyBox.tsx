@@ -2,7 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { ProfileImage } from "../..";
 import { NotifyBoxProps } from "../../../shared/types";
 import classes from "./scss/notifybox.module.css";
-import { friendThunks, gameThunks, notifyThunks } from "../../../store/actions";
+import {
+  friendThunks,
+  gameThunks,
+  notifyThunks,
+  teamThunks,
+} from "../../../store/actions";
 
 const NotifyBox = (props: NotifyBoxProps) => {
   const dispatch = useDispatch();
@@ -18,6 +23,10 @@ const NotifyBox = (props: NotifyBoxProps) => {
           loggedUser.id
         ) as any
       );
+    } else if (props.nType === "TEAM_INVITATION") {
+      dispatch(teamThunks.AcceptTeamInvitation(props.nInvId) as any);
+    } else if (props.nType === "MATCH_INVITATION") {
+      dispatch(teamThunks.AcceptTeamGameInvitation(props.nInvId) as any);
     }
     dispatch(notifyThunks.removeNotification(props.nid) as any);
   };
@@ -32,6 +41,10 @@ const NotifyBox = (props: NotifyBoxProps) => {
           loggedUser.id
         ) as any
       );
+    } else if (props.nType === "TEAM_INVITATION") {
+      dispatch(teamThunks.RejectTeamInvitation(props.nInvId) as any);
+    } else if (props.nType === "MATCH_INVITATION") {
+      dispatch(teamThunks.RejectTeamGameInvitation(props.nInvId) as any);
     }
     dispatch(notifyThunks.removeNotification(props.nid) as any);
   };
@@ -60,22 +73,25 @@ const NotifyBox = (props: NotifyBoxProps) => {
           <p>{props.ntime}</p>
         </div>
       </div>
-      {props.nType !== "SEND_LIKE" && props.nType !== "FRIEND_ACCEPT" && (
-        <div className={classes.notify_btns}>
-          <img
-            className={classes.acc_btn}
-            src="/Assets/SVG/acceptIcon.svg"
-            alt="accept"
-            onClick={handleAccept}
-          />
-          <img
-            className={classes.cancel_btn}
-            src="/Assets/SVG/cancelIcon.svg"
-            alt="cancel"
-            onClick={handleReject}
-          />
-        </div>
-      )}
+      {props.nType !== "SEND_LIKE" &&
+        props.nType !== "FRIEND_ACCEPT" &&
+        props.nType === "MATCH_INVITATION" &&
+        props.nIsAdmin === true && (
+          <div className={classes.notify_btns}>
+            <img
+              className={classes.acc_btn}
+              src="/Assets/SVG/acceptIcon.svg"
+              alt="accept"
+              onClick={handleAccept}
+            />
+            <img
+              className={classes.cancel_btn}
+              src="/Assets/SVG/cancelIcon.svg"
+              alt="cancel"
+              onClick={handleReject}
+            />
+          </div>
+        )}
     </div>
   );
 };

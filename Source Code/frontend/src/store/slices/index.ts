@@ -11,6 +11,7 @@ import gameReducer from "./game-slice";
 import toastReducer from "./toast-slice";
 import popupReducer from "./popup-slice";
 import chatReducer from "./chat-slice";
+import teamReducer from "./team-slice";
 
 export {
   authReducer,
@@ -26,4 +27,5 @@ export {
   toastReducer,
   popupReducer,
   chatReducer,
+  teamReducer,
 };

@@ -48,6 +48,8 @@ import MatchPopup from "./MatchPopup/MatchPopup";
 import NotificationsContainer from "./NotificationsContainer/NotificationsContainer";
 import SearchedFriend from "./SearchedFriend/SearchedFriend";
 import SimpleUser from "./SimpleUser/SimpleUser";
+import TeamCard from "./TeamCard/TeamCard";
+import TeamSelect from "./TeamSelect/TeamSelect";
 
 export {
   MatchHeader,
@@ -100,4 +102,6 @@ export {
   NotificationsContainer,
   SearchedFriend,
   SimpleUser,
+  TeamCard,
+  TeamSelect,
 };

@@ -10,6 +10,7 @@ import Search from "./Search/Search";
 import ClanSearch from "./ClanSearch/ClanSearch";
 import Messaging from "./Messaging/Messaging";
 import Leaderboard from "./Leaderboard/Leaderboard";
+import Team from "./Team/Team";
 
 export {
   Home,
@@ -24,4 +25,5 @@ export {
   ClanSearch,
   Messaging,
   Leaderboard,
+  Team,
 };

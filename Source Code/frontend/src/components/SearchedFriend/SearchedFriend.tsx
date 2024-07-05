@@ -1,17 +1,36 @@
 import { Toast } from "primereact/toast";
 import { ProfileImage } from "..";
 import { useDispatch } from "react-redux";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FriendProps } from "../../shared/types";
-import { gameThunks } from "../../store/actions";
+import { gameThunks, teamThunks } from "../../store/actions";
 import classes from "./scss/searched-friend.module.css";
 
 const SearchedFriend = (props: FriendProps) => {
   const dispatch = useDispatch();
   const toast = useRef<Toast>(null);
+  const [isInvited, setIsInvited] = useState(props.isInvited);
+  const [invitationId, setInvitationId] = useState(props.invitationId);
 
   const inviteFriend = async () => {
     return await dispatch(gameThunks.inviteToFriendlyGame(props.userId) as any);
+  };
+
+  const inviteToTeam = async () => {
+    const res = await dispatch(
+      teamThunks.InviteToTeam(props.teamId!, props.username) as any
+    );
+    setIsInvited(true);
+    setInvitationId(res.body.invitationId);
+    return res;
+  };
+
+  const cancelInviationToTeam = async () => {
+    const res = await dispatch(
+      teamThunks.CancelTeamInvitation(invitationId!) as any
+    );
+    setIsInvited(false);
+    return res;
   };
 
   const cancelInvitation = async () => {
@@ -39,10 +58,16 @@ const SearchedFriend = (props: FriendProps) => {
         <span className={classes.friend_name}>{props.username}</span>
       </div>
       <div className={classes.friend_actions}>
-        {!props.isInvited ? (
+        {!isInvited ? (
           <button
             className={`${classes.friend_btn} ${classes.msg_btn}`}
-            onClick={inviteFriend}
+            onClick={() => {
+              if (props.teamId !== null) {
+                inviteToTeam();
+              } else {
+                inviteFriend();
+              }
+            }}
           >
             <i className="bi bi-person-fill-add"></i>
             <span>Invite</span>
@@ -50,7 +75,13 @@ const SearchedFriend = (props: FriendProps) => {
         ) : (
           <button
             className={`${classes.friend_btn} ${classes.remove_btn}`}
-            onClick={cancelInvitation}
+            onClick={() => {
+              if (props.teamId !== null) {
+                cancelInviationToTeam();
+              } else {
+                cancelInvitation();
+              }
+            }}
           >
             <i className="bi bi-person-fill-x"></i>
             <span>Cancel Invitation</span>

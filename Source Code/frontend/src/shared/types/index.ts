@@ -68,6 +68,7 @@ export interface NotifyBoxProps {
   ntime: string;
   nType: string;
   nInvId: number;
+  nIsAdmin: boolean;
 }
 
 // Single Friend Props
@@ -242,7 +243,9 @@ export interface FriendProps {
   username: string;
   photoUrl: string;
   accountColor: string;
+  teamId?: number;
   isInvited?: boolean;
+  invitationId?: number;
 }
 
 // Profile Image Props
@@ -282,4 +285,10 @@ export interface SimpleUserProps {
   photoUrl: string;
   accountColor: string;
   reverse?: boolean;
+}
+
+export interface TeamCardProps {
+  name: string;
+  membersCount: number;
+  creatorUsername: string;
 }

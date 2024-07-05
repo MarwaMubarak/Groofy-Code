@@ -13,6 +13,7 @@ import {
   toastReducer,
   popupReducer,
   chatReducer,
+  teamReducer,
 } from "./slices";
 import axios from "axios";
 
@@ -31,6 +32,7 @@ const store = configureStore({
     toast: toastReducer,
     popup: popupReducer,
     chat: chatReducer,
+    team: teamReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
