@@ -168,6 +168,8 @@ public class GameService {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
     }
 
+
+
     public ResponseEntity<Object> findCasualMatch() throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());

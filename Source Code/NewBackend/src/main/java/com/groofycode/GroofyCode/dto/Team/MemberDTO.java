@@ -6,4 +6,5 @@ import lombok.Data;
 public class MemberDTO {
     private String username;
     private String photoUrl;
+    private String accountColor;
 }

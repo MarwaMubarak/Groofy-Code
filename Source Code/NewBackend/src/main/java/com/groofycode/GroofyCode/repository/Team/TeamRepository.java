@@ -13,6 +13,8 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<TeamModel, Long> {
     Optional<TeamModel> findById(Long id);
 
+    Optional<TeamModel> findByName(String name);
+
     List<TeamModel> findByNameStartingWith(String prefix);
 
     Page<TeamModel> findByNameStartingWith(String prefix, Pageable pageable);

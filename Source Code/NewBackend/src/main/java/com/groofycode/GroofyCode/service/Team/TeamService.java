@@ -1,9 +1,12 @@
 package com.groofycode.GroofyCode.service.Team;
 
+import com.groofycode.GroofyCode.dto.Friend.FriendDTO;
 import com.groofycode.GroofyCode.dto.Team.MemberDTO;
 import com.groofycode.GroofyCode.dto.Team.TeamDTO;
 import com.groofycode.GroofyCode.dto.Team.TeamInvitationDTO;
 import com.groofycode.GroofyCode.dto.User.UserInfo;
+import com.groofycode.GroofyCode.model.Friendship.FriendshipModel;
+import com.groofycode.GroofyCode.model.Game.FriendMatchInvitation;
 import com.groofycode.GroofyCode.model.Game.TeamMatchInvitation;
 import com.groofycode.GroofyCode.model.Notification.NotificationType;
 import com.groofycode.GroofyCode.model.Notification.TeamNotificationModel;
@@ -11,13 +14,10 @@ import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.Team.TeamMember;
 import com.groofycode.GroofyCode.model.Team.TeamInvitation;
 import com.groofycode.GroofyCode.model.User.UserModel;
-import com.groofycode.GroofyCode.repository.NotificationRepository;
+import com.groofycode.GroofyCode.repository.*;
 import com.groofycode.GroofyCode.repository.Team.TeamMembersRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamRepository;
 import com.groofycode.GroofyCode.repository.Team.TeamInvitationRepository;
-import com.groofycode.GroofyCode.repository.TeamMatchInvitationRepository;
-import com.groofycode.GroofyCode.repository.TeamNotificationRepository;
-import com.groofycode.GroofyCode.repository.UserRepository;
 import com.groofycode.GroofyCode.service.NotificationService;
 import com.groofycode.GroofyCode.utilities.ResponseUtils;
 import org.modelmapper.ModelMapper;
@@ -53,9 +53,12 @@ public class TeamService {
 
     private final TeamMatchInvitationRepository teamMatchInvitationRepository;
 
+    private final FriendshipRepository friendshipRepository;
+
+
     @Autowired
     public TeamService(TeamRepository teamRepository, TeamMembersRepository teamMembersRepository, TeamInvitationRepository teamInvitationRepository,
-                       UserRepository userRepository, ModelMapper modelMapper, NotificationRepository notificationRepository, TeamNotificationRepository teamNotificationRepository, SimpMessagingTemplate messagingTemplate, NotificationService notificationService, TeamMatchInvitationRepository teamMatchInvitationRepository) {
+                       UserRepository userRepository, ModelMapper modelMapper, NotificationRepository notificationRepository, TeamNotificationRepository teamNotificationRepository, SimpMessagingTemplate messagingTemplate, NotificationService notificationService, TeamMatchInvitationRepository teamMatchInvitationRepository, FriendshipRepository friendshipRepository) {
         this.teamRepository = teamRepository;
         this.teamMembersRepository = teamMembersRepository;
         this.teamInvitationRepository = teamInvitationRepository;
@@ -66,6 +69,7 @@ public class TeamService {
         this.messagingTemplate = messagingTemplate;
         this.notificationService = notificationService;
         this.teamMatchInvitationRepository = teamMatchInvitationRepository;
+        this.friendshipRepository = friendshipRepository;
     }
 
     public ResponseEntity<Object> getAll() {
@@ -83,6 +87,8 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -95,7 +101,6 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve teams", null));
         }
     }
-
 
     public ResponseEntity<Object> getTeamsPage(int page, int size) {
         try {
@@ -114,6 +119,8 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -126,7 +133,6 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve teams", null));
         }
     }
-
 
     public ResponseEntity<Object> getTeamsByUser() {
         try {
@@ -146,6 +152,8 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -174,6 +182,8 @@ public class TeamService {
                         MemberDTO memberDTO = new MemberDTO();
                         memberDTO.setUsername(tm.getUser().getUsername());
                         memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                        memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                         return memberDTO;
                     })
                     .collect(Collectors.toList());
@@ -188,6 +198,38 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve team info", null));
         }
     }
+
+    public ResponseEntity<Object> getTeamInfo(String teamName) {
+        try {
+            Optional<TeamModel> teamOptional = teamRepository.findByName(teamName);
+            if (teamOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Team not found!", null));
+            }
+
+            TeamModel team = teamOptional.get();
+            int membersCount = teamMembersRepository.countByTeam(team);
+
+            List<MemberDTO> memberDTOs = teamMembersRepository.findByTeam(team).stream()
+                    .map(tm -> {
+                        MemberDTO memberDTO = new MemberDTO();
+                        memberDTO.setUsername(tm.getUser().getUsername());
+                        memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                        memberDTO.setAccountColor(tm.getUser().getAccountColor());
+                        return memberDTO;
+                    })
+                    .collect(Collectors.toList());
+
+            TeamDTO teamInfo = modelMapper.map(team, TeamDTO.class);
+            teamInfo.setMembersCount(membersCount);
+            teamInfo.setCreatorUsername(team.getCreator().getUsername());
+            teamInfo.setMembers(memberDTOs);
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Team retrieved successfully", teamInfo));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve team info", null));
+        }
+    }
+
 
     public ResponseEntity<Object> getTeamsByPrefixWithPagination(String prefix, int page, int size, Long team1ID) {
         try {
@@ -240,6 +282,7 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -258,7 +301,6 @@ public class TeamService {
         }
     }
 
-
     public ResponseEntity<Object> getTeamsByCreator(int page, int size) {
         try {
 
@@ -276,6 +318,7 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -342,6 +385,8 @@ public class TeamService {
                         MemberDTO memberDTO = new MemberDTO();
                         memberDTO.setUsername(tm.getUser().getUsername());
                         memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                        memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                         return memberDTO;
                     })
                     .collect(Collectors.toList());
@@ -353,7 +398,6 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to create team", null));
         }
     }
-
 
     public ResponseEntity<Object> teamInvitation(Long teamId, String receiverUsername) {
         try {
@@ -401,13 +445,14 @@ public class TeamService {
 
             // Create and save the notification
             TeamNotificationModel teamNotification = new TeamNotificationModel();
-            teamNotification.setBody(currUser.getUsername() + " has invited you to join the team " + team.get().getName());
+            teamNotification.setBody("has invited you to join the team " + team.get().getName());
             teamNotification.setSender(currUser);
             teamNotification.setCreatedAt(new Date());
             teamNotification.setReceiver(receiver);
             teamNotification.setNotificationType(NotificationType.TEAM_INVITATION);
             teamNotification.setTeam(teamInvitation.getTeam());
             teamNotification.setTeamName(teamInvitation.getTeam().getName());
+            teamNotification.setInvitationId(teamInvitation.getId());
             notificationRepository.save(teamNotification);
 
             // Send the notification via WebSocket
@@ -418,7 +463,6 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to send invitation", null));
         }
     }
-
 
     public ResponseEntity<Object> acceptInvitation(Long invitationId) {
         try {
@@ -491,7 +535,6 @@ public class TeamService {
         }
     }
 
-
     public ResponseEntity<Object> cancelInvitation(Long invitationId) {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -520,7 +563,6 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to cancel invitation", null));
         }
     }
-
 
     public ResponseEntity<Object> deleteTeam(Long teamId) {
         try {
@@ -650,6 +692,55 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Team name updated successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to update team name", null));
+        }
+    }
+
+    public ResponseEntity<Object> searchForFriendsByPrefix(int page, int size, String prefix, Long teamId) throws Exception {
+        try {
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = userInfo.getUsername();
+            UserModel currUser = userRepository.findByUsername(username);
+            if (currUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes(username + " is Not Found!", null));
+            }
+
+            Long userId = currUser.getId();
+            Pageable pageable = PageRequest.of(page, size);
+            Page<FriendshipModel> friendshipModelList = friendshipRepository.getAcceptedPage(userId, pageable);
+            if (friendshipModelList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("There are no Friends!", null));
+            }
+
+            TeamModel team = teamRepository.findById(teamId).get();
+
+            List<FriendDTO> friendDTOS = friendshipModelList.stream()
+                    .map(bm -> {
+                        FriendDTO friendDTO = new FriendDTO();
+                        UserModel friendUser;
+                        if (!bm.getSenderId().equals(userInfo.getUserId())) {
+                            friendDTO.setFriendId(bm.getSenderId());
+                            friendUser = userRepository.findById(bm.getSenderId()).orElse(null);
+                        } else {
+                            friendDTO.setFriendId(bm.getReceiverId());
+                            friendUser = userRepository.findById(bm.getReceiverId()).orElse(null);
+                        }
+
+                        if (friendUser != null) {
+                            friendDTO.setUsername(friendUser.getUsername());
+                            friendDTO.setPhotoUrl(friendUser.getPhotoUrl());
+                            friendDTO.setAccountColor(friendUser.getAccountColor());
+                            Optional<TeamInvitation> existinginvitation = teamInvitationRepository.findByTeamAndReceiver(team, friendUser);
+                            friendDTO.setIsInvited(existinginvitation.isPresent());
+                        }
+
+                        return friendDTO;
+                    })
+                    .filter(friendDTO -> friendDTO.getUsername().startsWith(prefix))
+                    .toList();
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Friends retrieved successfully", friendDTOS));
+        } catch (Exception e) {
+            throw new Exception(e);
         }
     }
 
