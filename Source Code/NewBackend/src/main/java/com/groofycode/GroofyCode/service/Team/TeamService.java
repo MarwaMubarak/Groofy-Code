@@ -83,6 +83,8 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -114,6 +116,8 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -146,6 +150,8 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -174,6 +180,8 @@ public class TeamService {
                         MemberDTO memberDTO = new MemberDTO();
                         memberDTO.setUsername(tm.getUser().getUsername());
                         memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                        memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                         return memberDTO;
                     })
                     .collect(Collectors.toList());
@@ -188,6 +196,38 @@ public class TeamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve team info", null));
         }
     }
+
+    public ResponseEntity<Object> getTeamInfo(String teamName) {
+        try {
+            Optional<TeamModel> teamOptional = teamRepository.findByName(teamName);
+            if (teamOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Team not found!", null));
+            }
+
+            TeamModel team = teamOptional.get();
+            int membersCount = teamMembersRepository.countByTeam(team);
+
+            List<MemberDTO> memberDTOs = teamMembersRepository.findByTeam(team).stream()
+                    .map(tm -> {
+                        MemberDTO memberDTO = new MemberDTO();
+                        memberDTO.setUsername(tm.getUser().getUsername());
+                        memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                        memberDTO.setAccountColor(tm.getUser().getAccountColor());
+                        return memberDTO;
+                    })
+                    .collect(Collectors.toList());
+
+            TeamDTO teamInfo = modelMapper.map(team, TeamDTO.class);
+            teamInfo.setMembersCount(membersCount);
+            teamInfo.setCreatorUsername(team.getCreator().getUsername());
+            teamInfo.setMembers(memberDTOs);
+
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Team retrieved successfully", teamInfo));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to retrieve team info", null));
+        }
+    }
+
 
     public ResponseEntity<Object> getTeamsByPrefixWithPagination(String prefix, int page, int size, Long team1ID) {
         try {
@@ -240,6 +280,7 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -276,6 +317,7 @@ public class TeamService {
                             MemberDTO memberDTO = new MemberDTO();
                             memberDTO.setUsername(tm.getUser().getUsername());
                             memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                            memberDTO.setAccountColor(tm.getUser().getAccountColor());
                             return memberDTO;
                         })
                         .collect(Collectors.toList());
@@ -342,6 +384,8 @@ public class TeamService {
                         MemberDTO memberDTO = new MemberDTO();
                         memberDTO.setUsername(tm.getUser().getUsername());
                         memberDTO.setPhotoUrl(tm.getUser().getPhotoUrl());
+                        memberDTO.setAccountColor(tm.getUser().getAccountColor());
+
                         return memberDTO;
                     })
                     .collect(Collectors.toList());

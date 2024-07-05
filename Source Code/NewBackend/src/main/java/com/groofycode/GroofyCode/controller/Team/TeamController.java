@@ -34,6 +34,12 @@ public class TeamController {
         return teamService.getTeamInfo(teamId);
     }
 
+    @GetMapping("/name/{teamName}")
+    public ResponseEntity<Object> getTeamInfo(@PathVariable String teamName) {
+        return teamService.getTeamInfo(teamName);
+    }
+
+
     @GetMapping("/invitations")
     public ResponseEntity<Object> getUserInvitations() {
         return teamService.getUserInvitations();
