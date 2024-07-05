@@ -33,12 +33,12 @@ const PSocial = (props: PSocialProps) => {
             </div>
           )}
 
-          <div
+          {/* <div
             className={`${classes.ms} ${activeTab === 2 && classes.active}`}
             onClick={() => setActiveTab(2)}
           >
             <h3>Clan</h3>
-          </div>
+          </div> */}
           <div
             className={`${classes.ms} ${activeTab === 3 && classes.active}`}
             onClick={() => setActiveTab(3)}
