@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import classes from "./scss/signup/signup.module.css";
-import styles from "./scss/dropdown.module.css";
+import styles from "./scss/signup/dropdown.module.css";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 
 interface Country {
@@ -214,21 +214,24 @@ const SignUp = () => {
               }
               errMsg={formHandler.errors.confirmPassword}
             />
-            <Dropdown
-              id="country"
-              value={formHandler.values.country}
-              onChange={(e: DropdownChangeEvent) =>
-                formHandler.setFieldValue("country", e.value)
-              }
-              options={countries}
-              optionLabel="name"
-              placeholder="Select a Country"
-              filter
-              valueTemplate={selectedCountryTemplate}
-              itemTemplate={countryOptionTemplate}
-              className={classes.drop_down_div}
-              panelClassName={styles.drop_down_panel}
-            />
+            <div className={classes.country_selector}>
+              <div className={classes.cs_title}>Country</div>
+              <Dropdown
+                id="country"
+                value={formHandler.values.country}
+                onChange={(e: DropdownChangeEvent) =>
+                  formHandler.setFieldValue("country", e.value)
+                }
+                options={countries}
+                optionLabel="name"
+                placeholder="Select a country"
+                filter
+                valueTemplate={selectedCountryTemplate}
+                itemTemplate={countryOptionTemplate}
+                className={classes.drop_down_div}
+                panelClassName={styles.drop_down_panel}
+              />
+            </div>
             <div className={classes.f_sbmt}>
               <GBtn
                 btnText="Create new account"

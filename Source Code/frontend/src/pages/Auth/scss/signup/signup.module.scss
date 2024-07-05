@@ -11,7 +11,7 @@
     margin: auto;
     .features {
       width: 40%;
-      height: 650px;
+      height: 750px;
       background-color: $mainColor;
       box-shadow: $headerShadow;
       border-radius: 6px 0 0 6px;
@@ -61,7 +61,7 @@
     }
     .auth {
       width: 60%;
-      height: 650px;
+      height: 750px;
       background-color: #fff;
       box-shadow: $headerShadow;
       border-radius: 0 6px 6px 0;
@@ -88,6 +88,19 @@
         flex-direction: column;
         padding: 30px 30px 50px;
         width: 100%;
+        .country_selector {
+          width: 400px;
+          @include between;
+          margin-bottom: 30px;
+          .cs_title {
+            margin-right: 10px;
+            color: black;
+            font-weight: bold;
+          }
+          .drop_down_div {
+            background-color: $mainColor;
+          }
+        }
         .groofy_input input:hover {
           outline-color: $blueColor;
         }

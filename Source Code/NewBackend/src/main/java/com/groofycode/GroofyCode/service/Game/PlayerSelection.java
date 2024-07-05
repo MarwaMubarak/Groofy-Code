@@ -19,11 +19,10 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 @Component
 public class PlayerSelection {
@@ -403,6 +402,40 @@ public class PlayerSelection {
             terminateSoloGame();
         }
     }
+    private Map<Integer, Consumer<UserModel>> createRatingIncrementers() {
+        Map<Integer, Consumer<UserModel>> ratingIncrementers = new HashMap<>();
+
+        ratingIncrementers.put(800, player -> player.setRate_800_cnt(player.getRate_800_cnt() + 1));
+        ratingIncrementers.put(900, player -> player.setRate_900_cnt(player.getRate_900_cnt() + 1));
+        ratingIncrementers.put(1000, player -> player.setRate_1000_cnt(player.getRate_1000_cnt() + 1));
+        ratingIncrementers.put(1100, player -> player.setRate_1100_cnt(player.getRate_1100_cnt() + 1));
+        ratingIncrementers.put(1200, player -> player.setRate_1200_cnt(player.getRate_1200_cnt() + 1));
+        ratingIncrementers.put(1300, player -> player.setRate_1300_cnt(player.getRate_1300_cnt() + 1));
+        ratingIncrementers.put(1400, player -> player.setRate_1400_cnt(player.getRate_1400_cnt() + 1));
+        ratingIncrementers.put(1500, player -> player.setRate_1500_cnt(player.getRate_1500_cnt() + 1));
+        ratingIncrementers.put(1600, player -> player.setRate_1600_cnt(player.getRate_1600_cnt() + 1));
+        ratingIncrementers.put(1700, player -> player.setRate_1700_cnt(player.getRate_1700_cnt() + 1));
+        ratingIncrementers.put(1800, player -> player.setRate_1800_cnt(player.getRate_1800_cnt() + 1));
+        ratingIncrementers.put(1900, player -> player.setRate_1900_cnt(player.getRate_1900_cnt() + 1));
+        ratingIncrementers.put(2000, player -> player.setRate_2000_cnt(player.getRate_2000_cnt() + 1));
+        ratingIncrementers.put(2100, player -> player.setRate_2100_cnt(player.getRate_2100_cnt() + 1));
+        ratingIncrementers.put(2200, player -> player.setRate_2200_cnt(player.getRate_2200_cnt() + 1));
+        ratingIncrementers.put(2300, player -> player.setRate_2300_cnt(player.getRate_2300_cnt() + 1));
+        ratingIncrementers.put(2400, player -> player.setRate_2400_cnt(player.getRate_2400_cnt() + 1));
+        ratingIncrementers.put(2500, player -> player.setRate_2500_cnt(player.getRate_2500_cnt() + 1));
+        ratingIncrementers.put(2600, player -> player.setRate_2600_cnt(player.getRate_2600_cnt() + 1));
+        ratingIncrementers.put(2700, player -> player.setRate_2700_cnt(player.getRate_2700_cnt() + 1));
+        ratingIncrementers.put(2800, player -> player.setRate_2800_cnt(player.getRate_2800_cnt() + 1));
+        ratingIncrementers.put(2900, player -> player.setRate_2900_cnt(player.getRate_2900_cnt() + 1));
+        ratingIncrementers.put(3000, player -> player.setRate_3000_cnt(player.getRate_3000_cnt() + 1));
+        ratingIncrementers.put(3100, player -> player.setRate_3100_cnt(player.getRate_3100_cnt() + 1));
+        ratingIncrementers.put(3200, player -> player.setRate_3200_cnt(player.getRate_3200_cnt() + 1));
+        ratingIncrementers.put(3300, player -> player.setRate_3300_cnt(player.getRate_3300_cnt() + 1));
+        ratingIncrementers.put(3400, player -> player.setRate_3400_cnt(player.getRate_3400_cnt() + 1));
+        ratingIncrementers.put(3500, player -> player.setRate_3500_cnt(player.getRate_3500_cnt() + 1));
+
+        return ratingIncrementers;
+    }
 
     private void storeGameHistory(List<UserModel> submittingPlayers, List<UserModel> remainingPlayers, Game game) {
         String gameType;
@@ -426,6 +459,23 @@ public class PlayerSelection {
             gameHistory1.setNewRating(sP.getUser_rating());
             gameHistory1.setUserId(sP.getId());
             gameHistoryRepository.save(gameHistory1);
+
+
+            sP.setDraws(sP.getDraws() + 1);
+            sP.setExistingGameId(null);
+
+            ProblemDTO problemDTO = problemPicker.getProblemByUrl(game.getProblemUrl());
+            ProgProblem progProblem = modelMapper.map(problemDTO, ProgProblem.class);
+
+            Map<Integer, Consumer<UserModel>> ratingIncrementer = createRatingIncrementers();
+
+            ratingIncrementer.getOrDefault(problemDTO.getRating(), player -> {
+            }).accept(sP);
+
+            progProblem.setUser(sP);
+            sP.getSolvedProblems().add(progProblem);
+
+            userRepository.save(sP);
         }
         for (UserModel lp : remainingPlayers) {
             GameHistory gameHistory2 = new GameHistory();
@@ -436,6 +486,24 @@ public class PlayerSelection {
             gameHistory2.setNewRating(lp.getUser_rating());
             gameHistory2.setUserId(lp.getId());
             gameHistoryRepository.save(gameHistory2);
+
+            lp.setDraws(lp.getDraws() + 1);
+            lp.setExistingGameId(null);
+
+            ProblemDTO problemDTO = problemPicker.getProblemByUrl(game.getProblemUrl());
+            ProgProblem progProblem = modelMapper.map(problemDTO, ProgProblem.class);
+
+            Map<Integer, Consumer<UserModel>> ratingIncrementer = createRatingIncrementers();
+
+            // Increment the count based on problem rating
+            ratingIncrementer.getOrDefault(problemDTO.getRating(), player -> {
+            }).accept(lp);
+
+            // Associate problem with user and save
+            progProblem.setUser(lp);
+            lp.getSolvedProblems().add(progProblem);
+
+            userRepository.save(lp);
         }
     }
 
@@ -462,10 +530,12 @@ public class PlayerSelection {
         int newPlayer2Rating = ratingSystemCalculator.calculateDeltaRating(player1Rating - player2Rating, player2Rating, 'D');
         player1.setUser_max_rating(Math.max(player1.getUser_max_rating(), newPlayer1Rating));
         player1.setUser_rating(newPlayer1Rating);
+        player1.setDraws(player1.getDraws() + 1);
+        player1.setExistingGameId(null);
         opponent.setUser_max_rating(Math.max(opponent.getUser_max_rating(), newPlayer2Rating));
         opponent.setUser_rating(newPlayer2Rating);
-        userRepository.save(player1);
-        userRepository.save(opponent);
+        opponent.setDraws(player1.getDraws() + 1);
+        opponent.setExistingGameId(null);
 
         GameHistory gameHistory1 = new GameHistory();
         gameHistory1.setGameDate(currentGame.getStartTime());
@@ -476,6 +546,20 @@ public class PlayerSelection {
         gameHistory1.setUserId(player1.getId());
         gameHistoryRepository.save(gameHistory1);
 
+        ProblemDTO problemDTO1 = problemPicker.getProblemByUrl(currentGame.getProblemUrl());
+        ProgProblem progProblem1 = modelMapper.map(problemDTO1, ProgProblem.class);
+
+        Map<Integer, Consumer<UserModel>> ratingIncrementer = createRatingIncrementers();
+
+        ratingIncrementer.getOrDefault(problemDTO1.getRating(), player -> {
+        }).accept(player1);
+
+        progProblem1.setUser(player1);
+        player1.getSolvedProblems().add(progProblem1);
+
+        userRepository.save(player1);
+
+
         GameHistory gameHistory2 = new GameHistory();
         gameHistory2.setGameDate(currentGame.getStartTime());
         gameHistory2.setGameType("Ranked");
@@ -484,6 +568,17 @@ public class PlayerSelection {
         gameHistory2.setNewRating(newPlayer2Rating);
         gameHistory2.setUserId(opponent.getId());
         gameHistoryRepository.save(gameHistory2);
+
+        ProblemDTO problemDTO2 = problemPicker.getProblemByUrl(currentGame.getProblemUrl());
+        ProgProblem progProblem2 = modelMapper.map(problemDTO2, ProgProblem.class);
+
+        ratingIncrementer.getOrDefault(problemDTO2.getRating(), player -> {
+        }).accept(opponent);
+
+        progProblem2.setUser(opponent);
+        opponent.getSolvedProblems().add(progProblem2);
+
+        userRepository.save(opponent);
 
         currentGame.setGameStatus(GameStatus.FINISHED);
         gameRepository.save(currentGame);
@@ -525,9 +620,6 @@ public class PlayerSelection {
 
         assert player1 != null;
         assert opponent != null;
-
-        player1.setExistingGameId(null);
-        opponent.setExistingGameId(null);
 
         storeGameHistory(List.of(player1), List.of(opponent), currentGame);
 
@@ -572,11 +664,7 @@ public class PlayerSelection {
         assert player1 != null;
         assert opponent != null;
 
-        player1.setExistingGameId(null);
-        opponent.setExistingGameId(null);
-
         storeGameHistory(List.of(player1), List.of(opponent), currentGame);
-
 
         currentGame.setGameStatus(GameStatus.FINISHED);
         gameRepository.save(currentGame);
@@ -616,8 +704,6 @@ public class PlayerSelection {
         UserModel player1 = userRepository.fetchById(soloMatch.getPlayers1().get(0).getId());
 
         assert player1 != null;
-
-        player1.setExistingGameId(null);
 
         storeGameHistory(List.of(player1), List.of(), currentGame);
 

@@ -111,8 +111,9 @@ const History = () => {
           {games.length > 0 &&
             games.map((game: any) => (
               <tr>
-                <td>{game.gameType}</td>
+                <td style={{ width: "70px" }}>{game.gameType}</td>
                 <td
+                  style={{ width: "80px" }}
                   className={`${classes.state}
                   ${
                     game.gameResult === "Win"
@@ -134,6 +135,7 @@ const History = () => {
                       : classes.d
                   }`}
                 >
+                  {classes.w === "w" ? "+" : null}
                   {game.ratingChange}
                 </td>
                 <td>{game.newRating}</td>
@@ -157,7 +159,7 @@ const History = () => {
       <Paginator
         first={first}
         rows={rows}
-        totalRecords={20}
+        totalRecords={games.length}
         rowsPerPageOptions={[5, 10]}
         onPageChange={onPageChange}
         template={PaginatorTemplate}

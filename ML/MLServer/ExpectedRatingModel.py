@@ -7,7 +7,7 @@ import joblib
 
 
 def calculate_expected_rating(df):
-    MIN_DELTA, MAX_DELTA = 100, 900
+    MIN_DELTA, MAX_DELTA = -200, 700
     difficulty_weights = {
         800: 0.5, 900: 0.6, 1000: 0.7, 1100: 0.8, 1200: 0.9,
         1300: 1.0, 1400: 1.1, 1500: 1.2, 1600: 1.3, 1700: 1.4,
