@@ -399,7 +399,8 @@ public class GameService {
             } else {
                 gameDTO = new GameDTO(game);
             }
-
+            gameDTO.setPlayers1Ids(game.getPlayers1().stream().map(UserModel::getId).collect(Collectors.toList()));
+            gameDTO.setPlayers2Ids(game.getPlayers2().stream().map(UserModel::getId).collect(Collectors.toList()));
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
         } catch (
                 Exception e) {

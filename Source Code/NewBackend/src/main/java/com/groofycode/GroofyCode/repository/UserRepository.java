@@ -24,6 +24,9 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
     @Query("SELECT u FROM UserModel u LEFT JOIN FETCH u.clanMember WHERE u.username=:username")
     UserModel fetchUserWithClanMemberByUsername(@Param("username") String username);
 
+    @Query("SELECT u FROM UserModel u LEFT JOIN FETCH u.clanMember WHERE u.id=:id")
+    UserModel fetchUserWithClanMemberById(@Param("id") Long id);
+
     @Query("SELECT u FROM UserModel u LEFT JOIN FETCH u.clanRequest WHERE u.username=:username")
     UserModel fetchUserWithClanRequestByUsername(@Param("username") String username);
 

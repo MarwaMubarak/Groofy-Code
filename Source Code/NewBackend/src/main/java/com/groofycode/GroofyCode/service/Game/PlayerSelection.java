@@ -173,6 +173,8 @@ public class PlayerSelection {
         if (waitingRankedPlayers.size() >= 2) {  // Example: Need at least two players to match
             List<MatchPlayerDTO> matchedPlayers = selectPlayersForMatch(waitingRankedPlayers);
 
+            if (matchedPlayers.size() < 2) return;
+
             UserModel player1 = userRepository.fetchById(matchedPlayers.get(0).getId());
             UserModel opponent = userRepository.fetchById(matchedPlayers.get(1).getId());
 
@@ -224,6 +226,8 @@ public class PlayerSelection {
         if (waitingCasualPlayers.size() >= 2) {  // Example: Need at least two players to match
             List<MatchPlayerDTO> matchedPlayers = selectPlayersForMatch(waitingCasualPlayers);
 
+            if (matchedPlayers.size() < 2) return;
+
             UserModel player1 = userRepository.fetchById(matchedPlayers.get(0).getId());
             UserModel opponent = userRepository.fetchById(matchedPlayers.get(1).getId());
 
@@ -274,6 +278,8 @@ public class PlayerSelection {
         // Implement your matchmaking logic here
         if (waitingVelocityPlayers.size() >= 2) {  // Example: Need at least two players to match
             List<MatchPlayerDTO> matchedPlayers = selectPlayersForMatch(waitingVelocityPlayers);
+
+            if (matchedPlayers.size() < 2) return;
 
             UserModel player1 = userRepository.fetchById(matchedPlayers.get(0).getId());
             UserModel opponent = userRepository.fetchById(matchedPlayers.get(1).getId());

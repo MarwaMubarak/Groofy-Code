@@ -353,22 +353,10 @@ const Home = () => {
                   }}
                 />
                 <Gamemode
-                  id="custom_match_card"
-                  title="Custom Match"
-                  img="/Assets/Images/customize.png"
-                  clickEvent={() => {}}
-                />
-                <Gamemode
                   id="team_match_card"
                   title="Team Vs Team"
                   img="/Assets/Images/coop.png"
                   clickEvent={() => setSelectTeamDialog(true)}
-                />
-                <Gamemode
-                  id="clan_card"
-                  title="Join Clan"
-                  img="/Assets/Images/clan.png"
-                  clickEvent={() => {}}
                 />
                 <Gamemode
                   id="beat_friend_card"

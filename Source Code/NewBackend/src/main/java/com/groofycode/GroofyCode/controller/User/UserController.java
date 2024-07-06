@@ -31,6 +31,11 @@ public class UserController {
         return userService.getProfile();
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Object> getUserById(@PathVariable Long id) throws Exception {
+        return userService.getUserById(id);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<Object> createUser(@RequestBody @Valid RegisterDTO registerDTO) throws Exception {
         return userService.createUser(registerDTO);
@@ -42,7 +47,7 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<Object> updatedUser(@RequestPart("user_data") @Valid UpdatedUserDTO updatedUserDTO) throws Exception {
+    public ResponseEntity<Object> updatedUser(@RequestBody @Valid UpdatedUserDTO updatedUserDTO) throws Exception {
         return userService.updatedUser(updatedUserDTO);
     }
 

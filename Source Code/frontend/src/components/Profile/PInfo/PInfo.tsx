@@ -31,14 +31,14 @@ const PInfo = (props: PInfoProps) => {
             </abbr>
           </div>
           <div className={classes.ps_container_box}>
-            <div className={classes.psi_single_details}>
+            {/* <div className={classes.psi_single_details}>
               <span>
                 Last Seen:
                 <span className={classes.ls}>
                   {props.profileUser.isOnline ? "Online" : "Offline"}
                 </span>
               </span>
-            </div>
+            </div> */}
             <div className={classes.psi_single_details}>
               <span>
                 Friends:

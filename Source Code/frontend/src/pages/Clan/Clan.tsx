@@ -87,7 +87,7 @@ const Clan = () => {
       {clan && (
         <div className={classes.clan_div}>
           <div className={classes.c_info}>
-            <div className={classes.c_dashboard}>
+            {/* <div className={classes.c_dashboard}>
               <div className={classes.c_details_wrapper}>
                 <div className={classes.c_details}>
                   <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
@@ -132,8 +132,26 @@ const Clan = () => {
                   <span className={classes.stat_num}>{clan.losses}</span>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className={classes.c_box}>
+              <div className={classes.c_details_wrapper}>
+                <div className={classes.c_details}>
+                  <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
+                  <span>{clan.name}</span>
+                </div>
+                <div className={classes.c_actions}>
+                  {clan.leader === loggedUser.username && (
+                    <i
+                      className="bi bi-person-plus-fill"
+                      onClick={() => setRequestsVisible(true)}
+                    />
+                  )}
+                  <i
+                    className="bi bi-box-arrow-left"
+                    onClick={confirmLeaveClan}
+                  />
+                </div>
+              </div>
               <div className={classes.c_header}>
                 <h3 className={classes.c_title}>Members</h3>
                 <img

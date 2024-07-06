@@ -1,11 +1,45 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./scss/scoreboard.module.css";
 import ProfileImage from "../../ProfileImage/ProfileImage";
+import { useEffect } from "react";
+import { userThunks } from "../../../store/actions";
 
 const Scoreboard = () => {
+  const dispatch = useDispatch();
   const loggedUser = useSelector((state: any) => state.auth.user);
+  const opponent = useSelector((state: any) => state.user.user);
   const gameType = useSelector((state: any) => state.game.gameType);
   const gameDuration = useSelector((state: any) => state.game.duration);
+  const players1Ids: any[] = useSelector(
+    (state: any) => state.game.players1Ids
+  );
+  const players2Ids: any[] = useSelector(
+    (state: any) => state.game.players2Ids
+  );
+
+  console.log("Player1ids", players1Ids);
+
+  console.log("Player2ids", players2Ids);
+
+  useEffect(() => {
+    const getUserById = async (id: any) => {
+      await dispatch(userThunks.getUserById(id) as any);
+    };
+    if (players1Ids?.at(0) === loggedUser.id) {
+      players2Ids?.forEach((id: any) => {
+        getUserById(id);
+      });
+    } else {
+      players1Ids?.forEach((id: any) => {
+        getUserById(id);
+      });
+    }
+  }, [dispatch, loggedUser.id, players1Ids, players2Ids]);
+
+  console.log("Oppo", opponent);
+
+  if (opponent === null) return <div>Loading...</div>;
+
   return (
     <div className={classes.scoreboard}>
       <div className={classes.m_infobox}>
@@ -51,9 +85,20 @@ const Scoreboard = () => {
             <div className={classes.pr + " " + classes.y}>3</div>
           </div> */}
               <div className={classes.info}>
-                <div className={classes.usn}>Tourist</div>
+                <div className={classes.usn}>{opponent?.username}</div>
                 <div className={classes.img}>
-                  <img src="/Assets/Images/tourist.jpg" alt="ProfilePhoto" />
+                  <ProfileImage
+                    photoUrl={opponent?.photoUrl}
+                    username={opponent?.username}
+                    style={{
+                      cursor: "pointer",
+                      backgroundColor: opponent?.accountColor,
+                      width: "45px",
+                      height: "45px",
+                      fontSize: "20px",
+                    }}
+                    canClick={false}
+                  />
                 </div>
               </div>
               {/* <div className={classes.second_status}>

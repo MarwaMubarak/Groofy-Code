@@ -10,55 +10,34 @@ import { chatThunks } from "../../../store/actions";
 import ProfileImage from "../../ProfileImage/ProfileImage";
 import Picker from "emoji-picker-react";
 import EmojiPicker from "emoji-picker-react";
+import { useNavigate } from "react-router-dom";
 
 const Chat = (props: ChatProps) => {
   const [showPicker, setShowPicker] = useState(false);
+  const chatUser = useSelector((state: any) => state.chat.chatUser);
+  const navigate = useNavigate();
 
   const menu = useRef<any>(null);
   const items: MenuItem[] = [
     {
       label: "View Profile",
       icon: "pi pi-user",
+      command(event) {
+        navigate(`/profile/${chatUser.username}`);
+      },
     },
     {
       separator: true,
     },
     {
-      label: "Mute",
-      icon: "bi bi-bell-slash-fill",
-      items: [
-        {
-          label: "For 15 minutes",
-        },
-        {
-          label: "For 1 hour",
-        },
-        {
-          label: "For 8 hours",
-        },
-        {
-          label: "For 24 hours",
-        },
-        {
-          label: "Until I turn it back on",
-        },
-      ],
-    },
-
-    {
       label: "Unfriend",
       icon: "bi bi-person-fill-x",
       className: `${classes.unfriend}`,
-    },
-    {
-      label: "Block",
-      icon: "bi bi-ban",
     },
   ];
   const dispatch = useDispatch();
   const loggedUser = useSelector((state: any) => state.auth.user);
   const stompClient = useSelector((state: any) => state.socket.stompClient);
-  const chatUser = useSelector((state: any) => state.chat.chatUser);
   const clan = useSelector((state: any) => state.clan.clan);
   const chatId = useSelector((state: any) => state.chat.chatId);
   const clanMessages: any[] = useSelector(

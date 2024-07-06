@@ -121,6 +121,28 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public ResponseEntity<Object> getUserById(Long id) throws Exception {
+        try {
+            UserModel userModel = userRepository.fetchUserWithClanMemberById(id);
+            UserDTO userDTO = modelMapper.map(userModel, UserDTO.class);
+            if (userModel.getClanMember() != null) {
+                userDTO.setClanName(userModel.getClanMember().getClan().getName());
+            }
+            Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(userModel);
+            Integer friendNotifyCnt = notificationRepository.countFriendUnRetrievedByReceiver(userModel);
+            Integer messageNotifyCnt = messageService.getCountUnreadChats();
+            userDTO.setNotifyCnt(notifyCnt > 99 ? "99+" : notifyCnt.toString());
+            userDTO.setFriendNotifyCnt(friendNotifyCnt > 99 ? "99+" : friendNotifyCnt.toString());
+            userDTO.setMessageNotifyCnt(messageNotifyCnt > 99 ? "99+" : messageNotifyCnt.toString());
+            userDTO.setWorldRank(userRepository.getUserRank(userModel.getId()));
+
+            return ResponseEntity.ok(ResponseUtils.successfulRes("Profile retrieved successfully", userDTO));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public ResponseEntity<Object> createUser(RegisterDTO registerDTO) throws Exception {
         try {
             UserModel existingUser = userRepository.findByEmailOrUsername(registerDTO.getEmail(), registerDTO.getUsername());
