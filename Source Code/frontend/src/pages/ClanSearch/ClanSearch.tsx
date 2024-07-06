@@ -139,9 +139,9 @@ const ClanSearch = () => {
             {searchedClans.length === 0 && !isTyping && searchTouched && (
               <div style={{ color: "#fff" }}>No clans found</div>
             )}
-            {searchedClans.length === 0 && !isTyping && !searchTouched && (
+            {/* {searchedClans.length === 0 && !isTyping && !searchTouched && (
               <div style={{ color: "#fff" }}>Search for clans</div>
-            )}
+            )} */}
             {searchedClans.length > 0 &&
               !isTyping &&
               searchedClans.map((clan: any) => (
@@ -157,19 +157,21 @@ const ClanSearch = () => {
                 />
               ))}
           </div>
-          <div className={classes.paginator}>
-            <Button icon="bi bi-chevron-left" className={classes.pag_btn} />
-            {Array.from({ length: Math.ceil(totalClans / size) }).map(
-              (_, idx) => (
-                <Button
-                  key={idx}
-                  label={`${idx + 1}`}
-                  className={classes.pag_btn}
-                />
-              )
-            )}
-            <Button icon="bi bi-chevron-right" className={classes.pag_btn} />
-          </div>
+          {searchedClans.length > 0 && !isTyping && !isLoading && (
+            <div className={classes.paginator}>
+              <Button icon="bi bi-chevron-left" className={classes.pag_btn} />
+              {Array.from({ length: Math.ceil(totalClans / size) }).map(
+                (_, idx) => (
+                  <Button
+                    key={idx}
+                    label={`${idx + 1}`}
+                    className={classes.pag_btn}
+                  />
+                )
+              )}
+              <Button icon="bi bi-chevron-right" className={classes.pag_btn} />
+            </div>
+          )}
         </div>
       </div>
     </GroofyWrapper>

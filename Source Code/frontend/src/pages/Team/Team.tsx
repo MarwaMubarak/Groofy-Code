@@ -47,6 +47,7 @@ const Team = () => {
           <Button
             label={`${isLoading ? "Creating..." : "Create"}`}
             className={classes.create_btn}
+            style={{ color: "white" }}
             onClick={() => {
               createTeam()
                 .then((res: any) => {
@@ -81,11 +82,17 @@ const Team = () => {
         </Dialog>
         <div className={classes.teams_container}>
           <div className={classes.teams_container_header}>
-            <h2 className={classes.header}>Your teams:</h2>
+            <h2 className={classes.header}>My teams</h2>
             <Button
               label="Create Team"
               icon="bi bi-plus-lg"
               className={classes.create_btn}
+              style={{
+                color: "white",
+                backgroundColor: "#1890ff",
+                border: "none",
+                width: "180px",
+              }}
               onClick={() => setCreateDialog(true)}
             />
           </div>

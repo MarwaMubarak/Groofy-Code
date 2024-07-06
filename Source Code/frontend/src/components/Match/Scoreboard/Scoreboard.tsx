@@ -38,7 +38,7 @@ const Scoreboard = () => {
 
   console.log("Oppo", opponent);
 
-  if (opponent === null) return <div>Loading...</div>;
+  if (opponent === null && gameType !== "Solo") return <div>Loading...</div>;
 
   return (
     <div className={classes.scoreboard}>

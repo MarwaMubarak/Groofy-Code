@@ -26,10 +26,7 @@ const ClanResult = (props: ClanResultProps) => {
         <div className={classes.clan_details}>
           <div className={classes.clan_name}>{props.clanName}</div>
           <div className={classes.clan_tags}>
-            <span>Members: {props.members}/10</span>
-            <span>World Rank: #{props.worldRank}</span>
-            <span>Wins: {props.wins}</span>
-            <span>Losses: {props.losses}</span>
+            <span>Members: {props.members}/50</span>
           </div>
         </div>
       </div>

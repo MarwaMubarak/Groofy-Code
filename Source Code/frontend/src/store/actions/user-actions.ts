@@ -165,6 +165,27 @@ const changePhoto = (userPhoto: File | null) => {
   };
 };
 
+const changeBackgroundColor = (color: string) => {
+  return async (dispatch: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await reqInstance.put(
+        `/users/background-color`,
+        { color: color },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      dispatch(authActions.setUser(response.data.body));
+      return response;
+    } catch (error: any) {
+      return error;
+    }
+  };
+};
+
 const changePassword = (
   currentPassword: string,
   password: string,
@@ -217,6 +238,7 @@ const userThunks = {
   changePhoto,
   changePassword,
   searchForUsers,
+  changeBackgroundColor,
 };
 
 export default userThunks;

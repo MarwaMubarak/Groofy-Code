@@ -11,6 +11,12 @@
     color: $hoverColor;
   }
   .edit_content {
+    .color_section {
+      span {
+        margin-right: 10px;
+      }
+      margin-bottom: 40px;
+    }
     .groofybtn {
       @include center;
       background-color: $blueColor;

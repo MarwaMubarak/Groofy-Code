@@ -65,6 +65,7 @@
 .clan_card .clan_actions .cr_btn.cancel {
   background-color: #ff3d3d;
   border-color: #ff3d3d;
+  color: white;
 }
 .clan_card .clan_actions .cr_btn.cancel:hover, .clan_card .clan_actions .cr_btn.cancel:active, .clan_card .clan_actions .cr_btn.cancel:focus {
   box-shadow: none;
@@ -74,6 +75,7 @@
 .clan_card .clan_actions .cr_btn.join {
   background-color: #16b308;
   border-color: #16b308;
+  color: white;
 }
 .clan_card .clan_actions .cr_btn.join:hover, .clan_card .clan_actions .cr_btn.join:active, .clan_card .clan_actions .cr_btn.join:focus {
   box-shadow: none;
@@ -83,6 +85,7 @@
 .clan_card .clan_actions .cr_btn.view {
   background-color: #27b7ff;
   border-color: #27b7ff;
+  color: white;
 }
 .clan_card .clan_actions .cr_btn.view:hover, .clan_card .clan_actions .cr_btn.view:active, .clan_card .clan_actions .cr_btn.view:focus {
   box-shadow: none;

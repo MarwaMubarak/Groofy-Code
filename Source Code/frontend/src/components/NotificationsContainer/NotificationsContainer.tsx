@@ -58,7 +58,7 @@ const NotificationsContainer = (props: NotificationsContainerProps) => {
           </div>
         )}
       </div>
-      <div className={classes.see_all}>See more</div>
+      {/* <div className={classes.see_all}>See more</div> */}
     </div>
   );
 };

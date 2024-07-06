@@ -1,5 +1,6 @@
 package com.groofycode.GroofyCode.controller.User;
 
+import com.groofycode.GroofyCode.dto.User.BackgroundColorDTO;
 import com.groofycode.GroofyCode.dto.User.ChangePasswordDTO;
 import com.groofycode.GroofyCode.dto.User.RegisterDTO;
 import com.groofycode.GroofyCode.dto.User.UpdatedUserDTO;
@@ -61,6 +62,13 @@ public class UserController {
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception {
         return userService.changePassword(changePasswordDTO);
     }
+
+    @PutMapping("/users/background-color")
+    public ResponseEntity<Object> changeBackgroundColor(@RequestBody BackgroundColorDTO color) throws Exception {
+        return userService.changeBackgroundColor(color);
+    }
+
+
 
 
     @GetMapping("/users/{username}")

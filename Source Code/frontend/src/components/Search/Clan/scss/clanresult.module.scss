@@ -59,6 +59,8 @@
       &.cancel {
         background-color: #ff3d3d;
         border-color: #ff3d3d;
+        color: white;
+
         &:hover,
         &:active,
         &:focus {
@@ -70,6 +72,7 @@
       &.join {
         background-color: #16b308;
         border-color: #16b308;
+        color: white;
         &:hover,
         &:active,
         &:focus {
@@ -81,6 +84,8 @@
       &.view {
         background-color: #27b7ff;
         border-color: #27b7ff;
+        color: white;
+
         &:hover,
         &:active,
         &:focus {

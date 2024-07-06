@@ -6,6 +6,7 @@
   margin-top: 40px;
 }
 .single_team_container .header {
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -14,6 +15,17 @@
 .single_team_container .header h3 {
   color: #fff;
   margin-right: 30px;
+  width: 100%;
+}
+.single_team_container .header .buttonsBox {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+.single_team_container .header .buttonsBox .create_btn {
+  color: white;
+  margin-right: 20px;
+  border: none;
 }
 .single_team_container .members_box h3 {
   color: #fff;
