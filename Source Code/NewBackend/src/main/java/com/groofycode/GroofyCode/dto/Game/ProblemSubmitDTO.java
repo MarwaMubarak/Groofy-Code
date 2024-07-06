@@ -14,4 +14,5 @@ import java.util.UUID;
 public class ProblemSubmitDTO {
     String language;
     String code;
+    Long problemNumber;
 }

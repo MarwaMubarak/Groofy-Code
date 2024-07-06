@@ -169,7 +169,6 @@ public class GameService {
     }
 
 
-
     public ResponseEntity<Object> findCasualMatch() throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());
@@ -944,7 +943,6 @@ public class GameService {
         }
     }
 
-
     private ResponseEntity<Object> submitCodeteam2team(Game game, ProblemSubmitDTO problemSubmitDTO) throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel submittingPlayer = userRepository.findByUsername(userInfo.getUsername());
@@ -966,7 +964,18 @@ public class GameService {
             throw new IllegalArgumentException("Submitting player is not part of this game");
         }
 
-        Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
+        String problemURL = game.getProblemUrl();
+
+        if (game instanceof TeamMatch) {
+            if (problemSubmitDTO.getProblemNumber() == 2) {
+                problemURL = ((TeamMatch) game).getProblemUrl2();
+            }else if (problemSubmitDTO.getProblemNumber() == 3) {
+                problemURL = ((TeamMatch) game).getProblemUrl3();
+            }
+        }
+
+
+        Integer verdict = codeforcesSubmissionService.submitCode(problemURL, problemSubmitDTO);
 
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // Default response, simulate the actual submission process
 
@@ -1044,7 +1053,6 @@ public class GameService {
         }
     }
 
-
     private MatchNotificationModel createNotification(String body, UserModel sender, UserModel receiver, Game game, NotificationType type) {
         MatchNotificationModel notification = new MatchNotificationModel();
         notification.setBody(body);
@@ -1056,7 +1064,6 @@ public class GameService {
         notificationRepository.save(notification);
         return notification;
     }
-
 
     private List<String> get3problems(TeamModel team1, TeamModel team2) throws Exception {
 
