@@ -13,4 +13,5 @@ public class FriendDTO {
     private String username;
     private String accountColor;
     private Boolean isInvited;
+    private Long invitationId;
 }

@@ -58,11 +58,11 @@ public abstract class Game {
 
     }
 
-    public Integer getGameType() {
-        return gameType != null ? gameType.ordinal() : null;
-    }
+//    public Integer getGameType() {
+//        return gameType != null ? gameType.ordinal() : null;
+//    }
 
-    public Integer getGameStatus() {
-        return gameStatus != null ? gameStatus.ordinal() : null;
-    }
+//    public Integer getGameStatus() {
+//        return gameStatus != null ? gameStatus.ordinal() : null;
+//    }
 }

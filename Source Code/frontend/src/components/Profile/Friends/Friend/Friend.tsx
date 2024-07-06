@@ -64,10 +64,10 @@ const Friend = (props: FriendProps) => {
         <span className={classes.friend_name}>{props.username}</span>
       </div>
       <div className={classes.friend_actions}>
-        <button className={`${classes.friend_btn} ${classes.msg_btn}`}>
+        {/* <button className={`${classes.friend_btn} ${classes.msg_btn}`}>
           <i className="bi bi-chat-dots-fill"></i>
           <span>Message</span>
-        </button>
+        </button> */}
         <button
           className={`${classes.friend_btn} ${classes.remove_btn}`}
           onClick={confirmRemoveFriend}

@@ -731,6 +731,7 @@ public class TeamService {
                             friendDTO.setAccountColor(friendUser.getAccountColor());
                             Optional<TeamInvitation> existinginvitation = teamInvitationRepository.findByTeamAndReceiver(team, friendUser);
                             friendDTO.setIsInvited(existinginvitation.isPresent());
+                            friendDTO.setInvitationId(existinginvitation.isPresent() ? existinginvitation.get().getId() : null);
                         }
 
                         return friendDTO;

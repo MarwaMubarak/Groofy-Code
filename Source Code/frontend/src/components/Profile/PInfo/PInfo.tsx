@@ -31,14 +31,14 @@ const PInfo = (props: PInfoProps) => {
             </abbr>
           </div>
           <div className={classes.ps_container_box}>
-            <div className={classes.psi_single_details}>
+            {/* <div className={classes.psi_single_details}>
               <span>
                 Last Seen:
                 <span className={classes.ls}>
                   {props.profileUser.isOnline ? "Online" : "Offline"}
                 </span>
               </span>
-            </div>
+            </div> */}
             <div className={classes.psi_single_details}>
               <span>
                 Friends:
@@ -65,7 +65,9 @@ const PInfo = (props: PInfoProps) => {
                 Total Matches
               </span>
               <span className={classes.any}>
-                {props.profileUser.totalMatches}
+                {props.profileUser.wins +
+                  props.profileUser.losses +
+                  props.profileUser.draws}
               </span>
             </div>
             <div className={classes.psi_single_details}>

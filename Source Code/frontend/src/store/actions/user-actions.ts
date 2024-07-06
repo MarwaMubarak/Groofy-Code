@@ -70,6 +70,39 @@ const getProfile = () => {
   };
 };
 
+const getUserById = (userId: number) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(`/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        dispatch(userActions.setUser(response.data.body));
+
+        dispatch(
+          gameActions.setWaitingPopup(
+            response.data.body.existingInvitationId !== null
+          )
+        );
+
+        dispatch(
+          notifyActions.setNotificationsCnt({
+            notifyCnt: response.data.body.notifyCnt,
+            messageNotifyCnt: response.data.body.messageNotifyCnt,
+            friendNotifyCnt: response.data.body.friendNotifyCnt,
+          })
+        );
+      } catch (error: any) {
+        throw error;
+      }
+    }
+  };
+};
+
 const updateUser = (editInfo: EditInfo) => {
   return async (dispatch: any) => {
     try {
@@ -179,6 +212,7 @@ const searchForUsers = (searchQuery: string) => {
 const userThunks = {
   getUser,
   getProfile,
+  getUserById,
   updateUser,
   changePhoto,
   changePassword,

@@ -25,8 +25,6 @@ public class ClanDTO {
 
     private Integer losses;
 
-    private Integer totalMatches;
-
     private Integer worldRank;
 
     private Integer requestStatus;

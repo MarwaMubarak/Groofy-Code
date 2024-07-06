@@ -15,8 +15,12 @@
 #
 # # Define cluster ratings based on the actual outputs of your clustering analysis
 # cluster_ratings = {
-#     0: 900,  1: 1100,  2: 1300,  3: 1500,  4: 1700,
-#     5: 1900,  6: 2100,  7: 2300,  8: 2500,  9: 2700
+#     0: 800,  1: 900,  2: 1000,  3: 1100,  4: 1200,
+#     5: 1300,  6: 1400,  7: 1500,  8: 1600,  9: 1700,
+#     10: 1800, 11: 1900, 12: 2000, 13: 2100, 14: 2200,
+#     15: 2300, 16: 2400, 17: 2500, 18: 2600, 19: 2700,
+#     20: 2800, 21: 2900, 22: 3000, 23: 3100, 24: 3200,
+#     25: 3300, 26: 3400, 27: 3500
 # }
 #
 # # Define difficulty weights as used in the model training
@@ -40,11 +44,11 @@
 #
 #     # Calculate weighted and average difficulty features as per the model training
 #     for rate, weight in difficulty_weights.items():
-#         features_df[f'weighted_rate_{rate}_cnt'] = features_df.get(f'rate_{rate}_cnt', 0) * weight
+#         features_df[f'weighted_rate_{rate}_cnt'] = features_df.get(f'rate_{rate}_cnt', pd.Series([0])) * weight
 #
 #     features_df['average_difficulty'] = features_df.apply(
 #         lambda row: sum(row[f'weighted_rate_{rate}_cnt'] for rate in difficulty_weights) /
-#                     sum(row[f'rate_{rate}_cnt'] for rate in difficulty_weights if row[f'rate_{rate}_cnt'] > 0),
+#                     sum(row[f'rate_{rate}_cnt'] for rate in difficulty_weights),
 #         axis=1
 #     )
 #
@@ -67,6 +71,7 @@
 #
 # if __name__ == '__main__':
 #     app.run(host='0.0.0.0', port=5000)
+#
 
 
 from flask import Flask, request, jsonify

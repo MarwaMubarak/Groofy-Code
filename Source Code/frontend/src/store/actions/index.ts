@@ -7,6 +7,7 @@ import gameThunks from "./game-actions";
 import toastThunks from "./toast-actions";
 import popupThunks from "./popup-actions";
 import chatThunks from "./chat-actions";
+import teamThunks from "./team-actions";
 
 export {
   authThunks,
@@ -18,4 +19,5 @@ export {
   toastThunks,
   popupThunks,
   chatThunks,
+  teamThunks,
 };

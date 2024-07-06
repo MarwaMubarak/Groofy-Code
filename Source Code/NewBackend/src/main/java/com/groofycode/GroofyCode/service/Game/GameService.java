@@ -399,7 +399,8 @@ public class GameService {
             } else {
                 gameDTO = new GameDTO(game);
             }
-
+            gameDTO.setPlayers1Ids(game.getPlayers1().stream().map(UserModel::getId).collect(Collectors.toList()));
+            gameDTO.setPlayers2Ids(game.getPlayers2().stream().map(UserModel::getId).collect(Collectors.toList()));
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
         } catch (
                 Exception e) {
@@ -499,7 +500,7 @@ public class GameService {
         List<UserModel> players2 = game.getPlayers2();
 
         // Check if both sides have at least one player
-        if ((players1.isEmpty() || players2.isEmpty()) && game.getGameType() != GameType.SOLO.ordinal()) {
+        if ((players1.isEmpty() || players2.isEmpty()) && !game.getGameType().getValue().equals(GameType.SOLO.getValue())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseUtils.unsuccessfulRes("Match is already incomplete", null));
         }
@@ -618,6 +619,7 @@ public class GameService {
                 newRating -= 30;
             }
 
+
             GameHistory gameHistory1 = new GameHistory();
             gameHistory1.setGameDate(game.getStartTime());
             gameHistory1.setGameType(gameType);
@@ -627,10 +629,14 @@ public class GameService {
             gameHistory1.setUserId(lp.getId());
             gameHistoryRepository.save(gameHistory1);
 
+            lp.setUser_rating(newRating);
+            lp.setUser_max_rating(Math.max(lp.getUser_max_rating(), newRating));
+
             ProblemDTO problemDTO1 = problemPicker.getProblemByUrl(game.getProblemUrl());
             ProgProblem progProblem1 = modelMapper.map(problemDTO1, ProgProblem.class);
 
             Map<Integer, Consumer<UserModel>> ratingIncrementer = createRatingIncrementers();
+
 
             ratingIncrementer.getOrDefault(problemDTO1.getRating(), player -> {
             }).accept(lp);
@@ -715,7 +721,7 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Match not found", null));
         }
 
-        if (game.getGameStatus() != null && game.getGameStatus() == GameStatus.FINISHED.ordinal()) {
+        if (game.getGameStatus() != null && game.getGameStatus().getValue().equals(GameStatus.FINISHED.getValue())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Match is already finished", null));
         }
 

@@ -94,6 +94,22 @@ const Profile = () => {
     }
   };
 
+  const getUserRankBadge = (userRating: any) => {
+    if (userRating < 1200) {
+      return <img src="/Assets/Badges/Badge1.svg" alt="RankImg" />;
+    } else if (userRating < 1600) {
+      return <img src="/Assets/Badges/Badge2.svg" alt="RankImg" />;
+    } else if (userRating < 2000) {
+      return <img src="/Assets/Badges/Badge3.svg" alt="RankImg" />;
+    } else if (userRating < 2400) {
+      return <img src="/Assets/Badges/Badge4.svg" alt="RankImg" />;
+    } else if (userRating < 2800) {
+      return <img src="/Assets/Badges/Badge5.svg" alt="RankImg" />;
+    } else if (userRating >= 2800) {
+      return <img src="/Assets/Badges/Badge6.svg" alt="RankImg" />;
+    }
+  };
+
   return (
     <div className={classes.newprofile_container}>
       <Toast ref={toast} />
@@ -242,7 +258,7 @@ const Profile = () => {
                 </div>
                 <div className={classes.middle_upper_section}>
                   <div className={classes.rank_img}>
-                    <img src="/Assets/Badges/Badge5.svg" alt="RankImg" />
+                    {getUserRankBadge(profileUser.user_rating)}
                   </div>
                   <div className={classes.rank_info}>
                     <h3>Elite</h3>
@@ -270,7 +286,7 @@ const Profile = () => {
                   <div className={classes.middle_down_info}>
                     <h3>Max Rating</h3>
                     <div className={classes.middle_down_box}>
-                      <img src="/Assets/Badges/Badge6.svg" alt="RankImg" />
+                      {getUserRankBadge(profileUser.user_max_rating)}
                       <span>{profileUser.user_max_rating}</span>
                     </div>
                   </div>

@@ -81,7 +81,7 @@ const ChatUsers = () => {
     <div className={classes.chats_container}>
       <div className={classes.chats_header}>
         <h3>Messages</h3>
-        <i className="bi bi-pencil-square" />
+        {/* <i className="bi bi-pencil-square" /> */}
       </div>
       <div className={classes.chats_search}>
         <InputText className={classes.search_input} placeholder="Search" />

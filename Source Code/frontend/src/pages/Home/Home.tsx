@@ -7,6 +7,7 @@ import {
   PostsContainer,
   SearchedFriend,
   SimpleUser,
+  TeamSelect,
 } from "../../components";
 import { postActions } from "../../store/slices/post-slice";
 import {
@@ -35,6 +36,7 @@ const Home = () => {
     (state: any) => state.game.searchFriendDialog
   );
   const gamePlayers = useSelector((state: any) => state.game.gamePlayers);
+  const [selectTeamDialog, setSelectTeamDialog] = useState(false);
 
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
@@ -96,6 +98,18 @@ const Home = () => {
       <Toast ref={toast} style={{ padding: "0.75rem" }} />
       <Toaster />
       <SideBar idx={0} />
+      <Dialog
+        header="Team match"
+        visible={selectTeamDialog}
+        style={{ width: "1000px" }}
+        onHide={() => {
+          if (!selectTeamDialog) return;
+          setSelectTeamDialog(false);
+        }}
+        className={classes.beat_friend_dialog}
+      >
+        <TeamSelect />
+      </Dialog>
       <Dialog
         header="Friendly Match"
         visible={searchFriendDialog}
@@ -238,7 +252,9 @@ const Home = () => {
                   title="Join Clan"
                   description="Level up your gamplay and form alliances as you become a part of a gaming community by joining a clan."
                   img="/Assets/Images/clan.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    navigate("/clan");
+                  }}
                 />
                 <Gamemode
                   id="solo_practice_play_card"
@@ -339,22 +355,10 @@ const Home = () => {
                   }}
                 />
                 <Gamemode
-                  id="custom_match_card"
-                  title="Custom Match"
-                  img="/Assets/Images/customize.png"
-                  clickEvent={() => {}}
-                />
-                <Gamemode
-                  id="3v3_match_card"
-                  title="3 Vs 3"
+                  id="team_match_card"
+                  title="Team Vs Team"
                   img="/Assets/Images/coop.png"
-                  clickEvent={() => {}}
-                />
-                <Gamemode
-                  id="clan_card"
-                  title="Join Clan"
-                  img="/Assets/Images/clan.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => setSelectTeamDialog(true)}
                 />
                 <Gamemode
                   id="beat_friend_card"

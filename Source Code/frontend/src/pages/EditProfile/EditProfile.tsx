@@ -48,7 +48,7 @@ const EditProfile = () => {
               </div>
               <span className={classes.es_title}>Appearance & Style</span>
             </div>
-            <div
+            {/* <div
               className={`${
                 classes.edit_section +
                 " " +
@@ -60,7 +60,7 @@ const EditProfile = () => {
                 <i className="pi pi-lock" />
               </div>
               <span className={classes.es_title}>Privacy Preferences</span>
-            </div>
+            </div> */}
             <div
               className={`${
                 classes.edit_section +
@@ -74,7 +74,7 @@ const EditProfile = () => {
               </div>
               <span className={classes.es_title}>Security Settings</span>
             </div>
-            <div
+            {/* <div
               className={`${
                 classes.edit_section +
                 " " +
@@ -86,13 +86,13 @@ const EditProfile = () => {
                 <i className="pi pi-bell" />
               </div>
               <span className={classes.es_title}>Notification Center</span>
-            </div>
+            </div> */}
           </div>
           {activeSection === 0 && <PersonalDetails />}
           {activeSection === 1 && <Appearance />}
-          {activeSection === 2 && <Privacy />}
+          {/* {activeSection === 2 && <Privacy />} */}
           {activeSection === 3 && <Security />}
-          {activeSection === 4 && <Notifications />}
+          {/* {activeSection === 4 && <Notifications />} */}
         </div>
       </div>
     </div>

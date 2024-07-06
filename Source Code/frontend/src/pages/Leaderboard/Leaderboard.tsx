@@ -21,7 +21,7 @@ const Leaderboard = () => {
   const token = localStorage.getItem("token");
   const [users, setUsers] = useState([]);
   const [first, setFirst] = useState<number>(0);
-  const [rows, setRows] = useState<number>(1);
+  const [rows, setRows] = useState<number>(20);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const countries: Country[] = [
     { name: "Australia", code: "AU" },
@@ -123,7 +123,7 @@ const Leaderboard = () => {
   }, [first, token]);
   return (
     <div className={classes.leaderboard_container}>
-      <SideBar idx={4} />
+      <SideBar idx={5} />
       <div className={classes.activity_section}>
         <GroofyHeader />
         <DataTable

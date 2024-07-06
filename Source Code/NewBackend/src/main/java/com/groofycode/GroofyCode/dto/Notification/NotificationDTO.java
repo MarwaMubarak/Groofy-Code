@@ -23,4 +23,5 @@ public class NotificationDTO {
     private boolean isRead;
     private String notifyCnt;
     private Long invitationId;
+    private Boolean isAdmin;
 }

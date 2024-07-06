@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,13 @@ public class NotificationService {
                 notificationDTO.setSenderId(notify.getSender().getId());
                 if (notify instanceof FriendMatchInvitationNotificationModel) {
                     notificationDTO.setInvitationId(((FriendMatchInvitationNotificationModel) notify).getFriendMatchInvitation().getId());
+                }
+                if (notify instanceof MatchInvitationNotificationModel) {
+                    notificationDTO.setIsAdmin(
+                            Objects.equals(((MatchInvitationNotificationModel) notify).getTeam1().getCreator().getId(), userInfo.getUserId())
+                            || Objects.equals(((MatchInvitationNotificationModel) notify).getTeam2().getCreator().getId(), userInfo.getUserId())
+                    );
+                    notificationDTO.setInvitationId(((MatchInvitationNotificationModel) notify).getMatchInvitation().getId());
                 }
                 return notificationDTO;
             }).toList();
