@@ -8,11 +8,23 @@
   flex-direction: column;
   margin-top: 40px;
   .header {
+    width: 100%;
     @include start;
     margin-bottom: 40px;
     h3 {
       color: #fff;
       margin-right: 30px;
+      width: 100%;
+    }
+    .buttonsBox {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+      .create_btn {
+        color: white;
+        margin-right: 20px;
+        border: none;
+      }
     }
   }
   .members_box {

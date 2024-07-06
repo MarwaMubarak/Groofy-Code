@@ -8,7 +8,7 @@ const TeamCard = (props: TeamCardProps) => {
   return (
     <div className={classes.team_card}>
       <div className={classes.team_info}>
-        <h3>Team Name</h3>
+        <h3>Team Name: {props.name}</h3>
         <div className={classes.team_tags}>
           <span>Members: {props.membersCount}/3</span>
           <span>
@@ -23,6 +23,7 @@ const TeamCard = (props: TeamCardProps) => {
         <Button
           label="View"
           icon="bi bi-eye-fill"
+          style={{ color: "white" }}
           className={`${classes.cr_btn} ${classes.view}`}
           onClick={() => navigate(`/teams/${props.name}`)}
         />
