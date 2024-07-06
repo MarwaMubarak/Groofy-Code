@@ -137,6 +137,7 @@ public class MatchInvitationService {
             UserModel admin2 = team2.getCreator();
 
 
+
             // Ensure the user is the owner of at least one of the teams
             if (!user.getId().equals(admin1.getId()) && !user.getId().equals(admin2.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -231,7 +232,9 @@ public class MatchInvitationService {
         notification.setTeam2(team2);
         notification.setMatchInvitation(matchInvitation);
 
-        matchInvitationNotificationRepository.save(notification);
+        if (matchInvitation != null) {
+            matchInvitationNotificationRepository.save(notification);
+        }
 
         MatchInvitationNotificationDTO matchInvitationNotificationDTO = new MatchInvitationNotificationDTO();
         matchInvitationNotificationDTO.setBody(notification.getBody());
@@ -240,7 +243,9 @@ public class MatchInvitationService {
         matchInvitationNotificationDTO.setColor(currUser.getAccountColor());
         matchInvitationNotificationDTO.setTeam1ID(team1.getId());
         matchInvitationNotificationDTO.setTeam2ID(team2.getId());
-        matchInvitationNotificationDTO.setInvitationID(matchInvitation.getId());
+        if (matchInvitation != null) {
+            matchInvitationNotificationDTO.setInvitationID(matchInvitation.getId());
+        }
         matchInvitationNotificationDTO.setCreatedAt(notification.getCreatedAt());
         matchInvitationNotificationDTO.setNotificationType(notificationType);
         Integer notifyCnt = notificationRepository.countNormalUnRetrievedByReceiver(player);
@@ -310,12 +315,12 @@ public class MatchInvitationService {
             List<TeamMember> team1members = team1.getMembers();
             List<TeamMember> team2members = team2.getMembers();
 
-            List<UserModel> team1Players = List.of();
+            List<UserModel> team1Players = new ArrayList<>(List.of());
             for (TeamMember teamMember : team1members) {
                 team1Players.add(teamMember.getUser());
             }
 
-            List<UserModel> team2Players = List.of();
+            List<UserModel> team2Players = new ArrayList<>(List.of());
             for (TeamMember teamMember : team2members) {
                 team2Players.add(teamMember.getUser());
             }
@@ -342,7 +347,7 @@ public class MatchInvitationService {
             }
 
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Match invitation sent successfully!", null));
+            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtils.successfulRes("Match invitation sent successfully!", matchInvitation.getId()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Failed to send invitation", null));
         }
@@ -382,17 +387,23 @@ public class MatchInvitationService {
             List<TeamMember> team1Members = teamModel1.getMembers();
             List<TeamMember> team2Members = teamModel2.getMembers();
 
-            List<UserModel> team1Players = List.of();
+            List<UserModel> team1Players = new ArrayList<>(List.of());
             for (TeamMember teamMember : team1Members) {
                 team1Players.add(teamMember.getUser());
             }
 
-            List<UserModel> team2Players = List.of();
+            List<UserModel> team2Players = new ArrayList<>(List.of());
             for (TeamMember teamMember : team2Members) {
                 team2Players.add(teamMember.getUser());
             }
 
             setPlayersInvitation(team2Players, invitationId);
+
+            // Delete the corresponding notification
+            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(teamModel1, teamModel2);
+            if (!notificationOPT.isEmpty()) {
+                matchInvitationNotificationRepository.deleteAll(notificationOPT);
+            }
 
             for (UserModel player : team1Players) {
                 if (player.getId().equals(teamModel1.getCreator().getId())) {
@@ -408,13 +419,6 @@ public class MatchInvitationService {
                 if (!player.getId().equals(teamModel2.getCreator().getId()))
                     sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
                             , "Your admin " + currUser.getUsername() + " accepted the invitation from " + teamModel1.getName() + " team", false, NotificationType.MATCH_INVITATION_ACCEPT);
-            }
-            // Delete the corresponding notification
-            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(teamModel1, teamModel2);
-            MatchInvitationNotificationModel notification;
-            if (!notificationOPT.isEmpty()) {
-                notification = notificationOPT.get(0);
-                matchInvitationNotificationRepository.delete(notification);
             }
 
 
@@ -439,15 +443,12 @@ public class MatchInvitationService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot reject this invitation!", null));
             }
 
-            teamMatchInvitationRepository.delete(matchInvitation);
-
 
             TeamModel teamModel1 = ((TeamMatchInvitation) matchInvitation).getTeam1();
             TeamModel teamModel2 = ((TeamMatchInvitation) matchInvitation).getTeam2();
             // Delete the corresponding notification
             List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(teamModel1, teamModel2);
             if (!notificationOPT.isEmpty()) {
-
                 matchInvitationNotificationRepository.deleteAll(notificationOPT);
             }
 
@@ -455,12 +456,12 @@ public class MatchInvitationService {
             List<TeamMember> team1Members = teamModel1.getMembers();
             List<TeamMember> team2Members = teamModel2.getMembers();
 
-            List<UserModel> team1Players = List.of();
+            List<UserModel> team1Players = new ArrayList<>(List.of());
             for (TeamMember teamMember : team1Members) {
                 team1Players.add(teamMember.getUser());
             }
 
-            List<UserModel> team2Players = List.of();
+            List<UserModel> team2Players = new ArrayList<>(List.of());
             for (TeamMember teamMember : team2Members) {
                 team2Players.add(teamMember.getUser());
             }
@@ -470,19 +471,20 @@ public class MatchInvitationService {
             for (UserModel player : team1Players) {
 
                 if (player.getId().equals(teamModel1.getCreator().getId())) {
-                    sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
+                    sendNotifcation(player, currUser, teamModel1, teamModel2, null
                             , invitationOpt.get().getTeam2().getName() + " team reject your invitation", true, NotificationType.MATCH_INVITATION_REJECT);
                 } else {
-                    sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
+                    sendNotifcation(player, currUser, teamModel1, teamModel2, null
                             , invitationOpt.get().getTeam2().getName() + " team reject your invitation", false, NotificationType.MATCH_INVITATION_REJECT);
                 }
             }
 
             for (UserModel player : team2Players) {
                 if (!player.getId().equals(teamModel2.getCreator().getId()))
-                    sendNotifcation(player, currUser, teamModel1, teamModel2, matchInvitation
+                    sendNotifcation(player, currUser, teamModel1, teamModel2, null
                             , "Your admin " + currUser.getUsername() + " reject the invitation from " + teamModel1.getName() + " team", false, NotificationType.MATCH_INVITATION_REJECT);
             }
+            teamMatchInvitationRepository.delete(matchInvitation);
 
             return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("Invitation rejected", null));
         } catch (Exception e) {
@@ -555,16 +557,16 @@ public class MatchInvitationService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseUtils.unsuccessfulRes("You cannot cancel this invitation!", null));
             }
             // Delete the corresponding notification
-            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(matchInvitation.getTeam1(), matchInvitation.getTeam1());
+            List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByMatchInvitation(matchInvitation);
             if (!notificationOPT.isEmpty()) {
                 matchInvitationNotificationRepository.deleteAll(notificationOPT);
             }
 
+            List<TeamMember> team1Members = matchInvitation.getTeam1().getMembers();
             teamMatchInvitationRepository.delete(matchInvitation);
 
 
-            List<TeamMember> team1Members = matchInvitation.getTeam1().getMembers();
-            List<UserModel> team1Players = List.of();
+            List<UserModel> team1Players = new ArrayList<>(List.of());
             for (TeamMember teamMember : team1Members) {
                 team1Players.add(teamMember.getUser());
             }
