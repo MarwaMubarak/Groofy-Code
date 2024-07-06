@@ -86,6 +86,7 @@ const Team = () => {
               label="Create Team"
               icon="bi bi-plus-lg"
               className={classes.create_btn}
+              style={{ color: "white" }}
               onClick={() => setCreateDialog(true)}
             />
           </div>
