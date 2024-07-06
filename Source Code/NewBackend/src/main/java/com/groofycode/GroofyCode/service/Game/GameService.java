@@ -399,7 +399,10 @@ public class GameService {
             gameDTO.setPlayers1Ids(game.getPlayers1().stream().map(UserModel::getId).collect(Collectors.toList()));
             gameDTO.setPlayers2Ids(game.getPlayers2().stream().map(UserModel::getId).collect(Collectors.toList()));
 
-//            gameDTO.setProblems1ID(List.of({}));
+
+            gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
+            gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
+
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
         } catch (
                 Exception e) {
@@ -407,10 +410,22 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error getting match", e.getMessage()));
         }
     }
-//    public List<Boolean> setProblemsSolvedForATeam(List<UserModel> users,Game game){
-//        List<Boolean> problemsSolved = new ArrayList<>();
-//
-//    }
+
+    public List<Boolean> setProblemsSolvedForATeam(List<UserModel> users, Game game) {
+        List<Boolean> problemsSolved = new ArrayList<>(3);
+        for (UserModel user : users) {
+            List<Submission> submissions = submissionRepository.findByUserId(user.getId(), game.getId());
+            for (Submission submission : submissions) {
+                if (submission.getProblemUrl().equals(game.getProblemUrl()))
+                    problemsSolved.set(0, true);
+                else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl2()))
+                    problemsSolved.set(1, true);
+                else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl3()))
+                    problemsSolved.set(2, true);
+            }
+        }
+        return problemsSolved;
+    }
 
     public ResponseEntity<Object> getMatchInvitation(Long id) {
         if (id == null) {
@@ -1023,8 +1038,7 @@ public class GameService {
                 messagingTemplate.convertAndSendToUser(submittingPlayers.get(0).getUsername(), "/games", player1GameResult);
                 messagingTemplate.convertAndSendToUser(remainingPlayers.get(0).getUsername(), "/games", player2GameResult);
 
-            }
-            else if (isAllAccepted(submittingPlayers, game)) {
+            } else if (isAllAccepted(submittingPlayers, game)) {
                 for (UserModel sP : submittingPlayers) {
                     sP.setExistingGameId(null);
                     userRepository.save(sP);
