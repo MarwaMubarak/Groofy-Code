@@ -52,8 +52,6 @@ public class UserModel implements UserDetails {
 
     private Integer status;
 
-    private Integer totalMatches;
-
     private Integer wins;
 
     private Integer draws;
@@ -140,7 +138,6 @@ public class UserModel implements UserDetails {
         this.user_rating = 1200;
         this.worldRank = 0;
         this.user_max_rating = 1200;
-        this.totalMatches = 0;
         this.wins = 0;
         this.draws = 0;
         this.losses = 0;

@@ -619,6 +619,7 @@ public class GameService {
                 newRating -= 30;
             }
 
+
             GameHistory gameHistory1 = new GameHistory();
             gameHistory1.setGameDate(game.getStartTime());
             gameHistory1.setGameType(gameType);
@@ -628,10 +629,14 @@ public class GameService {
             gameHistory1.setUserId(lp.getId());
             gameHistoryRepository.save(gameHistory1);
 
+            lp.setUser_rating(newRating);
+            lp.setUser_max_rating(Math.max(lp.getUser_max_rating(), newRating));
+
             ProblemDTO problemDTO1 = problemPicker.getProblemByUrl(game.getProblemUrl());
             ProgProblem progProblem1 = modelMapper.map(problemDTO1, ProgProblem.class);
 
             Map<Integer, Consumer<UserModel>> ratingIncrementer = createRatingIncrementers();
+
 
             ratingIncrementer.getOrDefault(problemDTO1.getRating(), player -> {
             }).accept(lp);

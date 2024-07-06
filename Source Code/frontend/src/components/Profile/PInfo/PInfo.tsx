@@ -65,7 +65,9 @@ const PInfo = (props: PInfoProps) => {
                 Total Matches
               </span>
               <span className={classes.any}>
-                {props.profileUser.totalMatches}
+                {props.profileUser.wins +
+                  props.profileUser.losses +
+                  props.profileUser.draws}
               </span>
             </div>
             <div className={classes.psi_single_details}>

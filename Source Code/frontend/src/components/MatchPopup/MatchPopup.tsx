@@ -17,6 +17,7 @@ const MatchPopup = (props: MatchPopupProps) => {
   console.log("Game Status", gameStatus);
   const closePopUp = () => {
     dispatch(popupThunks.setPopUpState(false, {}) as any);
+    dispatch(userThunks.getProfile() as any);
   };
   const { width, height } = useWindowSize();
   const gameStartTime = useSelector((state: any) => state.game.startTime);

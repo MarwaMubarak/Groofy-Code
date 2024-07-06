@@ -30,8 +30,6 @@ public class UserDTO {
 
     private String clanName;
 
-    private Integer totalMatches;
-
     private String notifyCnt;
 
     private String messageNotifyCnt;
