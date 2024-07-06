@@ -22,6 +22,7 @@
   background-color: #16b308;
   border-color: #16b308;
   border-radius: 25px;
+  color: white;
 }
 .clan_search .search_area .create_btn:focus, .clan_search .search_area .create_btn:hover, .clan_search .search_area .create_btn:active {
   background-color: #18cf08;
@@ -42,4 +43,23 @@
   justify-content: center;
   align-items: center;
   padding-bottom: 30px;
+}
+.clan_search .paginator .pag_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #18191a;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.clan_search .paginator .pag_btn:hover {
+  background-color: #303031;
+}
+.clan_search .paginator .pag_btn.active {
+  background-color: #f2f2f2;
 }/*# sourceMappingURL=clansearch.module.css.map */
