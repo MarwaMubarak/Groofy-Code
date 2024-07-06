@@ -1185,7 +1185,9 @@ public class GameService {
 
                 // Update each player's existing game ID
                 team1Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
+                team1Users.forEach(player -> player.setExistingInvitationId(null));
                 team2Users.forEach(player -> player.setExistingGameId(teamMatch.getId()));
+                team2Users.forEach(player -> player.setExistingInvitationId(null));
                 userRepository.saveAll(team1Users);
                 userRepository.saveAll(team2Users);
 
@@ -1203,13 +1205,13 @@ public class GameService {
                 // Notify all players about the match start
                 for (UserModel player : team1Users) {
                     if (!player.getUsername().equals(userInfo.getUsername())) {
-                        messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                        messagingTemplate.convertAndSendToUser(player.getUsername(), "/games",
                                 ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
                     }
                 }
                 for (UserModel player : team2Users) {
                     if (!player.getUsername().equals(userInfo.getUsername())) {
-                        messagingTemplate.convertAndSendToUser(player.getUsername(), "/notification",
+                        messagingTemplate.convertAndSendToUser(player.getUsername(), "/games",
                                 ResponseUtils.successfulRes("Team Match started successfully", teamMatchDTO));
                     }
                 }

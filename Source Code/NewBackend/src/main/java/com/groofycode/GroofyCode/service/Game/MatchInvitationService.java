@@ -244,7 +244,8 @@ public class MatchInvitationService {
         matchInvitationNotificationDTO.setTeam1ID(team1.getId());
         matchInvitationNotificationDTO.setTeam2ID(team2.getId());
         if (matchInvitation != null) {
-            matchInvitationNotificationDTO.setInvitationID(matchInvitation.getId());
+//            matchInvitationNotificationDTO.setInvitationID(matchInvitation.getId());
+            matchInvitationNotificationDTO.setInvitationId(matchInvitation.getId());
         }
         matchInvitationNotificationDTO.setCreatedAt(notification.getCreatedAt());
         matchInvitationNotificationDTO.setNotificationType(notificationType);
@@ -501,10 +502,8 @@ public class MatchInvitationService {
 
             // Delete the corresponding notification
             List<MatchInvitationNotificationModel> notificationOPT = matchInvitationNotificationRepository.findByTeams(team1, team2);
-            MatchInvitationNotificationModel notification;
             if (!notificationOPT.isEmpty()) {
-                notification = notificationOPT.get(0);
-                matchInvitationNotificationRepository.delete(notification);
+                matchInvitationNotificationRepository.deleteAll(notificationOPT);
             }
 
             TeamMatchInvitation matchInvitation = invitationOpt.get();
