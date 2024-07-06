@@ -1,6 +1,6 @@
 .sidebar_container {
   height: 100vh;
-  width: 150px;
+  width: 200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -103,7 +103,7 @@
   justify-content: flex-start;
   align-items: center;
   padding: 9px 20px;
-  width: 150px;
+  width: 200px;
   cursor: pointer;
   transition: 0.3s;
 }

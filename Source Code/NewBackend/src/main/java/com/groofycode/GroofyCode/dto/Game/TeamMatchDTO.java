@@ -35,6 +35,7 @@ public class TeamMatchDTO extends GameDTO {
                 "Team",
                 teamMatch.getGameStatus().toString(),
                 null // problemStatement will be assigned later
+                , null, null
         );
         this.team1Id = teamMatch.getTeam1().getId();
         this.team2Id = teamMatch.getTeam2().getId();

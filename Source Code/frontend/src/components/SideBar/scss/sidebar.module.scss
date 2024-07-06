@@ -6,7 +6,7 @@
     display: none;
   }
   height: 100vh;
-  width: 150px;
+  width: 200px;
   @include between;
   padding: 0 20px;
   background-color: $mainColor;
@@ -98,7 +98,7 @@
         li {
           @include start;
           padding: 9px 20px;
-          width: 150px;
+          width: 200px;
           cursor: pointer;
           transition: 0.3s;
           &.active {

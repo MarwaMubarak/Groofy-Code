@@ -28,6 +28,7 @@ public class BeatAFriendDTO extends GameDTO {
                 "Friendly",
                 beatAFriend.getGameStatus().toString(),
                 null // assign it later
+                , null, null
         );
         setProblemStatement(problemStatement);
     }

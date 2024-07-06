@@ -25,7 +25,7 @@ const TeamSelect = () => {
 
   useEffect(() => {
     const getTeams = async () => {
-      await dispatch(teamThunks.GetUserTeams() as any);
+      await dispatch(teamThunks.GetUserIsAdminTeams() as any);
     };
 
     getTeams();
@@ -99,23 +99,23 @@ const TeamSelect = () => {
               value={searchText}
               onChange={(e: any) => setSearchText(e.target.value)}
               placeholder="Search for teams..."
+              className={classes.input_text}
             />
             <Button
               label="Search"
               style={{ color: "#fff" }}
               onClick={searchTeams}
+              className={classes.search_btn}
             />
           </div>
           <div className={classes.team_select_content}>
             <div className={classes.friends}>
-              {(teams === null || teams.length === 0) && (
-                <h3>No teams available.</h3>
-              )}
               {teams !== null &&
                 teams.map((team: any, idx: number) => (
                   <div className={classes.single_team} key={idx}>
                     <h3>{team.name}</h3>
                     <Button
+                      className={classes.invite_btn}
                       label="Invite team"
                       onClick={() => {
                         sendInviteToTeam((selectedTeam! as any).id, team.id)

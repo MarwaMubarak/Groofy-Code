@@ -31,12 +31,16 @@ const Home = () => {
   const searchedFriends: any[] = useSelector(
     (state: any) => state.friend.friends
   );
+
   const waitingPopUp = useSelector((state: any) => state.game.waitingPopup);
   const searchFriendDialog = useSelector(
     (state: any) => state.game.searchFriendDialog
   );
+  const selectTeamDialog = useSelector(
+    (state: any) => state.game.selectTeamDialog
+  );
+
   const gamePlayers = useSelector((state: any) => state.game.gamePlayers);
-  const [selectTeamDialog, setSelectTeamDialog] = useState(false);
 
   const toast = useRef<Toast>(null);
   dispatch(postActions.setStatus(""));
@@ -66,6 +70,13 @@ const Home = () => {
     );
   };
 
+  const createTeamMatch = async () => {
+    if (user.existingInvitationId === null) return;
+    return await dispatch(
+      gameThunks.createTeamMatch(user.existingInvitationId) as any
+    );
+  };
+
   const searchFriends = async () => {
     if (searchText === "") return;
     return await dispatch(friendThunks.SearchFriends(searchText) as any);
@@ -89,9 +100,19 @@ const Home = () => {
     dispatch(gameThunks.changeSearchFriendDialog(false) as any);
   };
 
+  const openSelectTeamDialog = () => {
+    dispatch(gameThunks.changeSelectTeamDialog(true) as any);
+  };
+
+  const closeSelectTeamDialog = () => {
+    dispatch(gameThunks.changeSelectTeamDialog(false) as any);
+  };
+
   useEffect(() => {
     dispatch(userThunks.getProfile() as any);
   }, [dispatch]);
+
+  console.log("Game players:", gamePlayers);
 
   return (
     <div className={classes.home_container}>
@@ -99,19 +120,19 @@ const Home = () => {
       <Toaster />
       <SideBar idx={0} />
       <Dialog
-        header="Team match"
+        header="Team Vs Team Game - Select Teams"
         visible={selectTeamDialog}
         style={{ width: "1000px" }}
         onHide={() => {
           if (!selectTeamDialog) return;
-          setSelectTeamDialog(false);
+          closeSelectTeamDialog();
         }}
         className={classes.beat_friend_dialog}
       >
         <TeamSelect />
       </Dialog>
       <Dialog
-        header="Friendly Match"
+        header="Beat a Friend Game - Search for Friends"
         visible={searchFriendDialog}
         style={{ width: "600px" }}
         onHide={() => {
@@ -125,18 +146,17 @@ const Home = () => {
             value={searchText}
             onChange={(e: any) => setSearchText(e.target.value)}
             placeholder="Search for your friends..."
+            className={classes.beat_friend_header_input}
           />
           <Button
             label="Search"
             style={{ color: "#fff" }}
             onClick={searchFriends}
+            className={classes.beat_friend_header_btn}
           />
         </div>
         <div className={classes.beat_friend_content}>
           <div className={classes.friends}>
-            {(searchedFriends === null || searchedFriends.length === 0) && (
-              <h3>You have no friends</h3>
-            )}
             {searchedFriends !== null &&
               searchedFriends.map((friend: any, idx: number) => (
                 <SearchedFriend
@@ -152,7 +172,11 @@ const Home = () => {
         </div>
       </Dialog>
       <Dialog
-        header="Beat a friend Game"
+        header={
+          gamePlayers.team1Players?.length > 1
+            ? "Team VS Team Game"
+            : "Beat a friend Game"
+        }
         visible={waitingPopUp}
         style={{ width: "600px" }}
         onShow={getInvitationPlayers}
@@ -168,7 +192,9 @@ const Home = () => {
               {gamePlayers.team1Players?.map((player: any, idx: number) => (
                 <SimpleUser
                   key={idx}
-                  username={`${player.username} (You)`}
+                  username={`${player.username} ${
+                    player.username === user.username ? "(You)" : ""
+                  }`}
                   accountColor={player.accountColor}
                   photoUrl={player.photoUrl}
                 />
@@ -193,13 +219,23 @@ const Home = () => {
                 label="Start Game"
                 style={{ color: "#fff" }}
                 onClick={() => {
-                  createBeatAFriendGame()
-                    .then((res: any) => {
-                      if (res.status === "success") {
-                        navigate(`/game/${res.gameId}`);
-                      }
-                    })
-                    .catch((error: any) => {});
+                  if (gamePlayers.team1Players.length > 1) {
+                    createTeamMatch()
+                      .then((res: any) => {
+                        if (res.status === "success") {
+                          navigate(`/game/${res.gameId}`);
+                        }
+                      })
+                      .catch((error: any) => {});
+                  } else {
+                    createBeatAFriendGame()
+                      .then((res: any) => {
+                        if (res.status === "success") {
+                          navigate(`/game/${res.gameId}`);
+                        }
+                      })
+                      .catch((error: any) => {});
+                  }
                 }}
               />
             </div>
@@ -358,7 +394,7 @@ const Home = () => {
                   id="team_match_card"
                   title="Team Vs Team"
                   img="/Assets/Images/coop.png"
-                  clickEvent={() => setSelectTeamDialog(true)}
+                  clickEvent={openSelectTeamDialog}
                 />
                 <Gamemode
                   id="beat_friend_card"

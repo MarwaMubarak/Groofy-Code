@@ -29,6 +29,7 @@ public class SoloMatchDTO extends GameDTO {
                 "Solo",
                 soloMatch.getGameStatus().toString(),
                 null // assgin it later
+                , null, null
         );
         setProblemStatement(problemStatement);
     }

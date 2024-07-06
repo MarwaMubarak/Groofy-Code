@@ -12,6 +12,9 @@
     width: 326px;
     border-radius: 6px;
     box-shadow: $lightShadow;
+    &:not(:last-of-type) {
+      margin-bottom: 20px;
+    }
     .tc_title {
       display: block;
       width: fit-content;

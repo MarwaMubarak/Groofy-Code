@@ -269,3 +269,29 @@
     text-align: right;
   }
 }
+
+.beat_friend_dialog {
+  .beat_friend_header {
+    @include start;
+    .beat_friend_header_input {
+      width: calc(80% - 20px);
+      margin-right: 20px;
+    }
+    .beat_friend_header_btn {
+      width: 20%;
+    }
+  }
+  .beat_friend_content {
+    h3 {
+      color: #fff;
+      font-size: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .friends {
+      border-top: 1px solid #284a7a;
+      margin-top: 15px;
+      padding-top: 15px;
+    }
+  }
+}

@@ -204,10 +204,10 @@ export interface ChatProps {
 
 // Submission Props
 export interface SubmissionProps {
-  problemUrl?: string;
   language?: string;
   code: string;
   gameID: string;
+  problemNumber?: number;
 }
 
 // Clan Result Props

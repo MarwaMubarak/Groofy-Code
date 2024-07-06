@@ -1,5 +1,7 @@
 import { reqInstance } from "..";
+import { authActions } from "../slices/auth-slice";
 import { friendActions } from "../slices/friend-slice";
+import { gameActions } from "../slices/game-slice";
 import { teamActions } from "../slices/team-slice";
 
 const GetUserTeams = (page: Number = 0) => {
@@ -39,6 +41,27 @@ const GetTeamByName = (teamName: any) => {
       } catch (error: any) {
         dispatch(teamActions.setLoading(false));
         dispatch(teamActions.setSingleTeam(null));
+      }
+    }
+  };
+};
+
+const GetUserIsAdminTeams = (page: Number = 0) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.get(`/teams/my-teams?page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(teamActions.setTeams(response.data.body));
+        dispatch(teamActions.setLoading(false));
+        return response.data;
+      } catch (error: any) {
+        dispatch(teamActions.setLoading(false));
+        throw error.response.data;
       }
     }
   };
@@ -231,7 +254,7 @@ const AcceptTeamGameInvitation = (invitationId: number) => {
     if (token) {
       try {
         const response = await reqInstance.post(
-          `/api/match/acceptInvitation?invitationId=${invitationId}`,
+          `/api/match/acceptInvitation/${invitationId}`,
           null,
           {
             headers: {
@@ -239,6 +262,12 @@ const AcceptTeamGameInvitation = (invitationId: number) => {
             },
           }
         );
+        dispatch(gameActions.setWaitingPopup(true));
+        dispatch(authActions.setExistingInvitation(invitationId));
+        dispatch(gameActions.setFriendlyDialog(false));
+        // dispatch(
+        //   friendActions.changeInviteState({ friendId, isInvited: false })
+        // );
         return response.data;
       } catch (error: any) {
         throw error.response.data;
@@ -253,7 +282,7 @@ const CancelTeamGameInvitation = (invitationId: number) => {
     if (token) {
       try {
         const response = await reqInstance.post(
-          `/api/match/cancelInvitation?invitationId=${invitationId}`,
+          `/api/match/cancelInvitation/${invitationId}`,
           null,
           {
             headers: {
@@ -275,7 +304,7 @@ const RejectTeamGameInvitation = (invitationId: number) => {
     if (token) {
       try {
         const response = await reqInstance.post(
-          `/api/match/rejectInvitation?invitationId=${invitationId}`,
+          `/api/match/rejectInvitation/${invitationId}`,
           null,
           {
             headers: {
@@ -342,6 +371,7 @@ const teamThunks = {
   DeleteTeam,
   ClearTeam,
   ClearTeams,
+  GetUserIsAdminTeams,
 };
 
 export default teamThunks;

@@ -21,6 +21,7 @@ import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 const SingleTeam = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loggedUser = useSelector((state: any) => state.auth.user);
   const team = useSelector((state: any) => state.team.singleTeam);
   const toast = useRef<Toast>(null);
   const [searchFriendDialog, setSearchFriendDialog] = useState(false);
@@ -138,20 +139,22 @@ const SingleTeam = () => {
           <div className={classes.single_team_container}>
             <div className={classes.header}>
               <h3>Team Name: {team.name}</h3>
-              <div className={classes.buttonsBox}>
-                <Button
-                  label="Delete team"
-                  className={classes.create_btn}
-                  onClick={confirmDeleteTeam}
-                  style={{ backgroundColor: "#ff4d4f", color: "#fff" }}
-                />
-                <Button
-                  label="Invite members"
-                  className={classes.create_btn}
-                  onClick={() => setSearchFriendDialog(true)}
-                  style={{ backgroundColor: "#1890ff", color: "#fff" }}
-                />
-              </div>
+              {loggedUser.username === team.creatorUsername && (
+                <div className={classes.buttonsBox}>
+                  <Button
+                    label="Delete team"
+                    className={classes.create_btn}
+                    onClick={confirmDeleteTeam}
+                    style={{ backgroundColor: "#ff4d4f", color: "#fff" }}
+                  />
+                  <Button
+                    label="Invite members"
+                    className={classes.create_btn}
+                    onClick={() => setSearchFriendDialog(true)}
+                    style={{ backgroundColor: "#1890ff", color: "#fff" }}
+                  />
+                </div>
+              )}
             </div>
             <div className={classes.members_box}>
               <h3>Members:</h3>

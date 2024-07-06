@@ -28,6 +28,7 @@ public class VelocityMatchDTO extends GameDTO {
                 "Velocity",
                 casualMatch.getGameStatus().toString(),
                 null // assgin it later
+                , null, null
         );
         setProblemStatement(problemStatement);
     }

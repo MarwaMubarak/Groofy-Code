@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   problemStatement: null,
+  problemStatement2: null,
+  problemStatement3: null,
   problemUrl: null,
   games: [],
   gameID: null,
@@ -14,11 +16,14 @@ const initialState = {
   inQueue: false,
   players1Ids: [],
   players2Ids: [],
+  problems1ID: [] as any,
   responseStatus: null,
   responseMessage: null,
   waitingPopup: null,
   searchFriendDialog: null,
+  selectTeamDialog: null,
   gamePlayers: {},
+  selectedProblem: null,
 };
 
 const gameSlice = createSlice({
@@ -32,6 +37,8 @@ const gameSlice = createSlice({
       state.problemUrl = action.payload.problemUrl;
       state.gameID = action.payload.id;
       state.problemStatement = action.payload.problemStatement;
+      state.problemStatement2 = action.payload.problemStatement2;
+      state.problemStatement3 = action.payload.problemStatement3;
       state.duration = action.payload.duration;
       state.startTime = action.payload.startTime;
       state.endTime = action.payload.endTime;
@@ -39,6 +46,7 @@ const gameSlice = createSlice({
       state.gameStatus = action.payload.gameStatus;
       state.players1Ids = action.payload.players1Ids;
       state.players2Ids = action.payload.players2Ids;
+      state.problems1ID = action.payload.problems1ID;
     },
     setResponse(state, action) {
       state.responseStatus = action.payload.status;
@@ -68,8 +76,14 @@ const gameSlice = createSlice({
     setFriendlyDialog(state, action) {
       state.searchFriendDialog = action.payload;
     },
+    setTeamDialog(state, action) {
+      state.selectTeamDialog = action.payload;
+    },
     setGameType(state, action) {
       state.gameType = action.payload;
+    },
+    setSelectedProblem(state, action) {
+      state.selectedProblem = action.payload;
     },
   },
 });

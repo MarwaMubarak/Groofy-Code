@@ -29,6 +29,7 @@ public class CasualMatchDTO extends GameDTO {
                 "Casual",
                 casualMatch.getGameStatus().toString(),
                 null // assgin it later
+                , null, null
         );
         setProblemStatement(problemStatement);
     }

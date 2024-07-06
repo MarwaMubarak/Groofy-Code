@@ -1,21 +1,83 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Testcase } from "../..";
 import classes from "./scss/problemsection.module.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { MathJax } from "better-react-mathjax";
 import { MathJaxBaseContext } from "better-react-mathjax";
+import { gameThunks } from "../../../store/actions";
 
 const ProblemSection = () => {
-  const problem = useSelector((state: any) => state.game.problemStatement);
+  const dispatch = useDispatch();
+  const problem1 = useSelector((state: any) => state.game.problemStatement);
+  const problem2 = useSelector((state: any) => state.game.problemStatement2);
+  const problem3 = useSelector((state: any) => state.game.problemStatement3);
+  const problems1ID = useSelector((state: any) => state.game.problems1ID);
+
+  const [currentProblem, setCurrentProblem] = useState(problem1);
+
+  const gameType = useSelector((state: any) => state.game.gameType);
+  const [problemIdx, setProblemIdx] = useState(1);
+
+  console.log("Idx:", problemIdx);
+
+  console.log("Problem Ids:", problems1ID);
+
+  const changeCurrentProblem = (idx: any) => {
+    dispatch(gameThunks.changeSelectedProblem(idx) as any);
+    setProblemIdx(idx);
+    if (idx === 1) {
+      setCurrentProblem(problem1);
+    } else if (idx === 2) {
+      setCurrentProblem(problem2);
+    } else {
+      setCurrentProblem(problem3);
+    }
+  };
 
   return (
     <div className={classes.psec}>
-      <div className={classes.problem_disc}>
+      {gameType === "Team" && (
+        <div className={classes.problem_tabs} style={{ marginBottom: "20px" }}>
+          <span>Problems</span>
+          <div className={classes.tabs}>
+            <div
+              className={`${classes.tab} ${
+                problemIdx === 1 && classes.active
+              } ${
+                problems1ID.at(problemIdx - 1) === true ? classes.accepted : ""
+              }`}
+              onClick={() => {
+                changeCurrentProblem(1);
+              }}
+            >
+              1
+            </div>
+            <div
+              className={`${classes.tab} ${problemIdx === 2 && classes.active}`}
+              onClick={() => {
+                changeCurrentProblem(2);
+              }}
+            >
+              2
+            </div>
+            <div
+              className={`${classes.tab} ${problemIdx === 3 && classes.active}`}
+              onClick={() => {
+                changeCurrentProblem(3);
+              }}
+            >
+              3
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className={classes.problem_disc} style={{ marginBottom: "20px" }}>
         <span className={classes.ptitle}>
-          {problem?.header[0].substring(3)}
+          {currentProblem?.header[0].substring(3)}
         </span>
         <span className={classes.complexity}>
-          {problem?.header.map((item: any, idx: number) => {
+          {currentProblem?.header.map((item: any, idx: number) => {
             if (idx !== 0) {
               return <p key={idx}>{item}</p>;
             }
@@ -23,7 +85,7 @@ const ProblemSection = () => {
           })}
         </span>
         <p className={classes.pdisc}>
-          {problem?.statement.map((row: any, idx: any) => {
+          {currentProblem?.statement.map((row: any, idx: any) => {
             if (row.startsWith("IMAGELINKGROOFYCODE")) {
               return (
                 <MathJax key={idx}>
@@ -50,11 +112,11 @@ const ProblemSection = () => {
           })}
         </p>
       </div>
-      {problem?.input.length > 0 && (
-        <div className={classes.problem_disc}>
-          <span className={classes.ptitle}>{problem?.input[0]}</span>
+      {currentProblem?.input.length > 0 && (
+        <div className={classes.problem_disc} style={{ marginBottom: "20px" }}>
+          <span className={classes.ptitle}>{currentProblem?.input[0]}</span>
           <p className={classes.pdisc}>
-            {problem?.input.map((row: any, idx: number) => {
+            {currentProblem?.input.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
                   <MathJax key={idx}>
@@ -71,11 +133,11 @@ const ProblemSection = () => {
         </div>
       )}
 
-      {problem?.output.length > 0 && (
+      {currentProblem?.output.length > 0 && (
         <div className={classes.problem_disc}>
-          <span className={classes.ptitle}>{problem?.output[0]}</span>
+          <span className={classes.ptitle}>{currentProblem?.output[0]}</span>
           <p className={classes.pdisc}>
-            {problem?.output.map((row: any, idx: number) => {
+            {currentProblem?.output.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
                   <MathJax key={idx}>
@@ -91,11 +153,11 @@ const ProblemSection = () => {
           </p>
         </div>
       )}
-      {problem?.sampleTests.length > 0 && (
+      {currentProblem?.sampleTests.length > 0 && (
         <div className={classes.testcases}>
           <span className={classes.tch}>Testcases</span>
           <div className={classes.tcs_container}>
-            {problem?.sampleTests.map((tc: any, idx: number) => (
+            {currentProblem?.sampleTests.map((tc: any, idx: number) => (
               <div className={classes.tc_box} key={idx}>
                 <span className={classes.tc_num}>Testcase {idx + 1}:</span>
                 <Testcase input={tc[0]} output={tc[1]} />
@@ -105,11 +167,11 @@ const ProblemSection = () => {
         </div>
       )}
 
-      {problem?.notes.length > 0 && (
+      {currentProblem?.notes.length > 0 && (
         <div className={classes.problem_disc}>
-          <span className={classes.ptitle}>{problem?.notes[0]}</span>
+          <span className={classes.ptitle}>{currentProblem?.notes[0]}</span>
           <p className={classes.pdisc}>
-            {problem?.notes.map((row: any, idx: number) => {
+            {currentProblem?.notes.map((row: any, idx: number) => {
               if (idx !== 0) {
                 return (
                   <MathJax key={idx}>

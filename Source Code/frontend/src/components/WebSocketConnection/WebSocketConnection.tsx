@@ -57,9 +57,12 @@ const WebSocketConnection = () => {
         const msg = JSON.parse(message.body);
 
         if (msg.notificationType === "MATCH_INVITATION_ACCEPT") {
-          dispatch(gameThunks.gameNotify(true, false, msg.invitationId) as any);
+          console.log("HERE: ", msg);
+          dispatch(
+            gameThunks.gameNotify(true, false, false, msg.invitationId) as any
+          );
         } else if (msg.notificationType === "MATCH_INVITATION_REJECT") {
-          dispatch(gameThunks.gameNotify(false, true, null) as any);
+          dispatch(gameThunks.gameNotify(false, true, true, null) as any);
         }
 
         dispatch(notifyThunks.socketNotification(msg) as any);

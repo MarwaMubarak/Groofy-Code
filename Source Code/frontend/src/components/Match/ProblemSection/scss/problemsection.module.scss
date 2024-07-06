@@ -7,6 +7,46 @@
   overflow-y: auto;
   overflow-x: hidden;
   border-right: 2px solid #ababab;
+  .problem_tabs {
+    @include between;
+    background-color: #3a3b3c;
+    margin-left: 20px;
+    margin-right: 10px;
+    border-radius: 12px;
+    padding: 5px 20px;
+    box-shadow: $cardShadow;
+    span {
+      color: #fff;
+      font-size: 20px;
+    }
+    .tabs {
+      @include center;
+      .accepted {
+        background-color: $greenColor !important;
+      }
+      .tab {
+        @include center;
+        color: white;
+        width: 38px;
+        height: 38px;
+        background-color: $mainColor;
+        border-radius: 12px;
+        transition: 0.3s;
+        outline: 1px solid transparent;
+        cursor: pointer;
+        &:not(:last-of-type) {
+          margin-right: 8px;
+        }
+        &:hover {
+          background-color: #2a2b2c;
+        }
+        &.active {
+          background-color: #2a2b2c;
+          outline-color: #fff;
+        }
+      }
+    }
+  }
   .problem_disc {
     margin-left: 20px;
     margin-right: 10px;
@@ -14,10 +54,6 @@
     border-radius: 12px;
     box-shadow: $cardShadow;
     padding: 15px;
-    &:nth-of-type(2),
-    &:nth-of-type(3) {
-      margin-top: 20px;
-    }
     .ptitle {
       display: flex;
       justify-content: center;

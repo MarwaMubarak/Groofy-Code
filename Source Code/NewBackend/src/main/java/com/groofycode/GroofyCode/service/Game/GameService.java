@@ -412,16 +412,21 @@ public class GameService {
     }
 
     public List<Boolean> setProblemsSolvedForATeam(List<UserModel> users, Game game) {
-        List<Boolean> problemsSolved = new ArrayList<>(3);
+        List<Boolean> problemsSolved = new ArrayList<>();
+        problemsSolved.add(false);
+        problemsSolved.add(false);
+        problemsSolved.add(false);
         for (UserModel user : users) {
             List<Submission> submissions = submissionRepository.findByUserId(user.getId(), game.getId());
             for (Submission submission : submissions) {
-                if (submission.getProblemUrl().equals(game.getProblemUrl()))
-                    problemsSolved.set(0, true);
-                else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl2()))
-                    problemsSolved.set(1, true);
-                else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl3()))
-                    problemsSolved.set(2, true);
+                if (matchStatusMapper.getStatusIntToString().get(submission.getResult()).equals("Accepted")) {
+                    if (submission.getProblemUrl().equals(game.getProblemUrl()))
+                        problemsSolved.set(0, true);
+                    else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl2()))
+                        problemsSolved.set(1, true);
+                    else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl3()))
+                        problemsSolved.set(2, true);
+                }
             }
         }
         return problemsSolved;
@@ -915,7 +920,10 @@ public class GameService {
                 gameHistory1.setNewRating(sP.getUser_rating());
                 gameHistory1.setUserId(sP.getId());
                 gameHistoryRepository.save(gameHistory1);
-                sP.setExistingGameId(null);
+
+                if (gameType.equals(GameType.TEAM.getValue()) && isAllAccepted(submittingPlayers, game)) {
+                    sP.setExistingGameId(null);
+                }
 
                 ProblemDTO problemDTO = problemPicker.getProblemByUrl(game.getProblemUrl());
                 ProgProblem progProblem = modelMapper.map(problemDTO, ProgProblem.class);
@@ -1078,7 +1086,9 @@ public class GameService {
         for (UserModel user : users) {
             List<Submission> submissions = submissionRepository.findByUserId(user.getId(), game.getId());
             for (Submission submission : submissions) {
-                st.add(submission.getProblemUrl());
+                if (matchStatusMapper.getStatusIntToString().get(submission.getResult()).equals("Accepted")) {
+                    st.add(submission.getProblemUrl());
+                }
             }
         }
         return (st.size() == 3);

@@ -28,6 +28,7 @@ public class RankedMatchDTO extends GameDTO {
                 "Ranked",
                 rankedMatch.getGameStatus().toString(),
                 null // assgin it later
+                , null, null
         );
         setProblemStatement(problemStatement);
     }

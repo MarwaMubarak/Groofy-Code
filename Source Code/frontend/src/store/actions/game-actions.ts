@@ -487,6 +487,40 @@ const checkVelocityQueue = () => {
   };
 };
 
+const createTeamMatch = (invitationId: number) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post(
+          `/game/team-match/${invitationId}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("TEAM Match response:");
+        if (response.data.body !== null) {
+          dispatch(gameActions.setGame(response.data.body));
+          dispatch(authActions.setUserGameId(response.data.body.id));
+          dispatch(gameActions.setWaitingPopup(false));
+          dispatch(authActions.setExistingInvitation(null));
+          return {
+            status: response.data.status,
+            message: response.data.message,
+            gameId: response.data.body.id,
+          };
+        }
+        return response.data;
+      } catch (error: any) {
+        dispatch(gameActions.setResponse(error.response.data));
+      }
+    }
+  };
+};
+
 const leaveQueue = () => {
   return async (dispatch: any) => {
     const token = localStorage.getItem("token");
@@ -586,15 +620,29 @@ const changeSearchFriendDialog = (state: boolean) => {
   };
 };
 
+const changeSelectTeamDialog = (state: boolean) => {
+  return (dispatch: any) => {
+    dispatch(gameActions.setTeamDialog(state));
+  };
+};
+
 const gameNotify = (
   waitingPopUpState: boolean,
   searchFriendDialogState: boolean,
+  selectTeamDialogState: boolean,
   invitationId: any
 ) => {
   return (dispatch: any) => {
     dispatch(gameActions.setWaitingPopup(waitingPopUpState));
     dispatch(gameActions.setFriendlyDialog(searchFriendDialogState));
+    dispatch(gameActions.setTeamDialog(selectTeamDialogState));
     dispatch(authActions.setExistingInvitation(invitationId));
+  };
+};
+
+const changeSelectedProblem = (idx: number) => {
+  return (dispatch: any) => {
+    dispatch(gameActions.setSelectedProblem(idx));
   };
 };
 
@@ -629,6 +677,9 @@ const gameThunks = {
   changeSearchFriendDialog,
   setGameType,
   leaveQueue,
+  createTeamMatch,
+  changeSelectedProblem,
+  changeSelectTeamDialog,
 };
 
 export default gameThunks;

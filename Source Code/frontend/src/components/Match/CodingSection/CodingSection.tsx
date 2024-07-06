@@ -33,9 +33,11 @@ const CodingSection = () => {
   const isSubmitting = useSelector((state: any) => state.submission.isLoading);
   const submitState = useSelector((state: any) => state.submission.submitState);
   const toast = useRef<Toast>(null);
-  const problemURL = useSelector((state: any) => state.game.problemUrl);
   const gameID = useSelector((state: any) => state.game.gameID);
   const submissions = useSelector((state: any) => state.submission.submissions);
+  const selectedProblem = useSelector(
+    (state: any) => state.game.selectedProblem
+  );
 
   useEffect(() => {
     if (gameID) {
@@ -48,8 +50,8 @@ const CodingSection = () => {
       gameThunks.submitCode({
         code: currentCode,
         language: "GNU G++17 7.3.0",
-        problemUrl: problemURL,
         gameID: gameID,
+        problemNumber: selectedProblem,
       }) as any
     );
   };
