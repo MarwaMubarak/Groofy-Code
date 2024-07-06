@@ -168,7 +168,6 @@ public class GameService {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(ResponseUtils.successfulRes("Added to waiting list", null)); // No available match found yet
     }
 
-
     public ResponseEntity<Object> findCasualMatch() throws Exception {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel player = userRepository.findByUsername(userInfo.getUsername());
@@ -356,7 +355,6 @@ public class GameService {
         }
     }
 
-
     public ResponseEntity<Object> getMatch(Long id) {
         if (id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("ID must not be null", null));
@@ -400,6 +398,8 @@ public class GameService {
             }
             gameDTO.setPlayers1Ids(game.getPlayers1().stream().map(UserModel::getId).collect(Collectors.toList()));
             gameDTO.setPlayers2Ids(game.getPlayers2().stream().map(UserModel::getId).collect(Collectors.toList()));
+
+//            gameDTO.setProblems1ID(List.of({}));
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
         } catch (
                 Exception e) {
@@ -407,6 +407,10 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.unsuccessfulRes("Error getting match", e.getMessage()));
         }
     }
+//    public List<Boolean> setProblemsSolvedForATeam(List<UserModel> users,Game game){
+//        List<Boolean> problemsSolved = new ArrayList<>();
+//
+//    }
 
     public ResponseEntity<Object> getMatchInvitation(Long id) {
         if (id == null) {
@@ -451,13 +455,12 @@ public class GameService {
                 TeamModel team1;
                 TeamModel team2;
 
-                if (//check if the current user is a member of team1
-                        ((TeamMatchInvitation) invitation).getTeam1().getMembers().stream().anyMatch(user -> user.getId().equals(currUser.getId()))) {
+                if (((TeamMatchInvitation) invitation).getTeam1().getMembers().stream().anyMatch(user -> user.getId().equals(currUser.getId()))) {
                     team1 = ((TeamMatchInvitation) invitation).getTeam1();
                     team2 = ((TeamMatchInvitation) invitation).getTeam2();
                 } else {
-                    team1 = ((TeamMatchInvitation) invitation).getTeam2();
                     team2 = ((TeamMatchInvitation) invitation).getTeam1();
+                    team1 = ((TeamMatchInvitation) invitation).getTeam2();
                 }
 
                 List<PlayerDisplayDTO> team1Players = team1.getMembers().stream().map(teamMember -> {
@@ -751,7 +754,7 @@ public class GameService {
         Integer verdict = codeforcesSubmissionService.submitCode(game.getProblemUrl(), problemSubmitDTO);
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // default response, simulate the actual submission process
 
-        Submission submission = new Submission(game, submittingPlayer, blobConverter.convertObjectToBlob(problemSubmitDTO.getCode()), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
+        Submission submission = new Submission(game, submittingPlayer, blobConverter.convertObjectToBlob(problemSubmitDTO.getCode()), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict, game.getProblemUrl());
         submissionRepository.save(submission);
 
 
@@ -969,7 +972,7 @@ public class GameService {
         if (game instanceof TeamMatch) {
             if (problemSubmitDTO.getProblemNumber() == 2) {
                 problemURL = ((TeamMatch) game).getProblemUrl2();
-            }else if (problemSubmitDTO.getProblemNumber() == 3) {
+            } else if (problemSubmitDTO.getProblemNumber() == 3) {
                 problemURL = ((TeamMatch) game).getProblemUrl3();
             }
         }
@@ -979,13 +982,16 @@ public class GameService {
 
         String codeForceResponse = matchStatusMapper.getStatusIntToString().get(verdict); // Default response, simulate the actual submission process
 
-        Submission submission = new Submission(game, submittingPlayer, blobConverter.convertObjectToBlob(problemSubmitDTO.getCode()), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict);
+        Submission submission = new Submission(game, submittingPlayer, blobConverter.convertObjectToBlob(problemSubmitDTO.getCode()), problemSubmitDTO.getLanguage(), LocalDateTime.now(), verdict, problemURL);
         submissionRepository.save(submission);
         if (codeForceResponse.equals("Accepted")) {
-            // End the game and notify the remaining player that they lost
-            game.setGameStatus(GameStatus.FINISHED);
-            game.setEndTime(LocalDateTime.now());
-            gameRepository.save(game);
+            if (!(game instanceof TeamMatch) || isAllAccepted(submittingPlayers, game)) {
+
+                // End the game and notify the remaining player that they lost
+                game.setGameStatus(GameStatus.FINISHED);
+                game.setEndTime(LocalDateTime.now());
+                gameRepository.save(game);
+            }
 
             storeGameHistory(submittingPlayers, remainingPlayers, game);
 
@@ -1017,7 +1023,8 @@ public class GameService {
                 messagingTemplate.convertAndSendToUser(submittingPlayers.get(0).getUsername(), "/games", player1GameResult);
                 messagingTemplate.convertAndSendToUser(remainingPlayers.get(0).getUsername(), "/games", player2GameResult);
 
-            } else {
+            }
+            else if (isAllAccepted(submittingPlayers, game)) {
                 for (UserModel sP : submittingPlayers) {
                     sP.setExistingGameId(null);
                     userRepository.save(sP);
@@ -1046,12 +1053,23 @@ public class GameService {
                 }
             }
 
-
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match", null));
         } else {
             return ResponseEntity.ok(ResponseUtils.successfulRes("Code submitted successfully", codeForceResponse));
         }
     }
+
+    private boolean isAllAccepted(List<UserModel> users, Game game) {
+        Set<String> st = new HashSet<>();
+        for (UserModel user : users) {
+            List<Submission> submissions = submissionRepository.findByUserId(user.getId(), game.getId());
+            for (Submission submission : submissions) {
+                st.add(submission.getProblemUrl());
+            }
+        }
+        return (st.size() == 3);
+    }
+
 
     private MatchNotificationModel createNotification(String body, UserModel sender, UserModel receiver, Game game, NotificationType type) {
         MatchNotificationModel notification = new MatchNotificationModel();
@@ -1298,7 +1316,6 @@ public class GameService {
             throw new Exception(e.getMessage());
         }
     }
-
 
     public List<ProblemDTO> mapProblemsToDTOs(List<ProgProblem> problems) {
         return problems.stream()

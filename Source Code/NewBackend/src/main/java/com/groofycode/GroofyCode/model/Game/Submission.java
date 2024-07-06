@@ -34,16 +34,19 @@ public class Submission {
 
     private Integer result;
 
+    private String problemUrl;
+
     // Constructors, getters, and setters
     public Submission() {
     }
 
-    public Submission(Game game, UserModel user, byte[] code, String language ,LocalDateTime submissionTime, Integer result) {
+    public Submission(Game game, UserModel user, byte[] code, String language, LocalDateTime submissionTime, Integer result, String problemUrl) {
         this.game = game;
         this.user = user;
         this.code = code;
         this.language = language;
         this.submissionTime = submissionTime;
         this.result = result;
+        this.problemUrl = problemUrl;
     }
 }
