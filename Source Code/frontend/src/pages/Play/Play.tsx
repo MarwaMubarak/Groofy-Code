@@ -55,15 +55,15 @@ const Play = () => {
   };
 
   const closeWaitingPopUp = () => {
-    dispatch(gameThunks.changeWaitingPopup(false) as any);
+    return dispatch(gameThunks.changeWaitingPopup(false) as any);
   };
 
   const openSearchFriendDialog = () => {
-    dispatch(gameThunks.changeSearchFriendDialog(true) as any);
+    return dispatch(gameThunks.changeSearchFriendDialog(true) as any);
   };
 
   const closeSearchFriendDialog = () => {
-    dispatch(gameThunks.changeSearchFriendDialog(false) as any);
+    return dispatch(gameThunks.changeSearchFriendDialog(false) as any);
   };
 
   const searchFriends = async () => {
@@ -104,7 +104,7 @@ const Play = () => {
           />
         </div>
         <div className={classes.beat_friend_content}>
-          <div className={classes.friends}>
+          <div className={classes.friends} style={{ marginTop: "10px" }}>
             {(searchedFriends === null || searchedFriends.length === 0) && (
               <h3>You have no friends</h3>
             )}
@@ -134,7 +134,16 @@ const Play = () => {
         className={classes.beat_friend_waiting_dialog}
       >
         <div className={classes.beat_friend_waiting_wrapper}>
-          <div className={classes.beat_friend_waiting_content}>
+          <div
+            className={classes.beat_friend_waiting_content}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              alignItems: "center",
+              gap: "60px",
+            }}
+          >
             <div className={`${classes.team_players} ${classes.first}`}>
               {gamePlayers.team1Players?.map((player: any, idx: number) => (
                 <SimpleUser
@@ -159,7 +168,15 @@ const Play = () => {
             </div>
           </div>
           {gamePlayers.sender === true && (
-            <div className={classes.start_game_btn}>
+            <div
+              className={classes.start_game_btn}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+                marginTop: "30px",
+              }}
+            >
               <Button
                 label="Start Game"
                 style={{ color: "#fff" }}
@@ -168,6 +185,13 @@ const Play = () => {
                     .then((res: any) => {
                       if (res.status === "success") {
                         navigate(`/game/${res.gameId}`);
+                      } else {
+                        toast.current?.show({
+                          severity: "error",
+                          summary: res.status,
+                          detail: res.message,
+                          life: 3000,
+                        });
                       }
                     })
                     .catch((error: any) => {});

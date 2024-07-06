@@ -232,8 +232,9 @@ const createFriendlyGame = (invitationId: any) => {
             gameId: response.data.body.id,
           };
         }
+        return response.data;
       } catch (error: any) {
-        dispatch(gameActions.setResponse(error.response.data));
+        return dispatch(gameActions.setResponse(error.response.data)).payload;
       }
     }
   };

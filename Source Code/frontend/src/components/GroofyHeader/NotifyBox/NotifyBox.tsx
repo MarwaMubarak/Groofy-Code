@@ -49,6 +49,52 @@ const NotifyBox = (props: NotifyBoxProps) => {
     dispatch(notifyThunks.removeNotification(props.nid) as any);
   };
 
+  const RenderButtonsAction = () => {
+    if (props.nType === "SEND_LIKE") {
+      return null;
+    } else if (props.nType === "FRIEND_ACCEPT") {
+      return null;
+    } else if (props.nType === "MATCH_INVITATION") {
+      if (props.nIsAdmin === true) {
+        return (
+          <div className={classes.notify_btns}>
+            <img
+              className={classes.acc_btn}
+              src="/Assets/SVG/acceptIcon.svg"
+              alt="accept"
+              onClick={handleAccept}
+            />
+            <img
+              className={classes.cancel_btn}
+              src="/Assets/SVG/cancelIcon.svg"
+              alt="cancel"
+              onClick={handleReject}
+            />
+          </div>
+        );
+      } else {
+        return null;
+      }
+    } else {
+      return (
+        <div className={classes.notify_btns}>
+          <img
+            className={classes.acc_btn}
+            src="/Assets/SVG/acceptIcon.svg"
+            alt="accept"
+            onClick={handleAccept}
+          />
+          <img
+            className={classes.cancel_btn}
+            src="/Assets/SVG/cancelIcon.svg"
+            alt="cancel"
+            onClick={handleReject}
+          />
+        </div>
+      );
+    }
+  };
+
   return (
     <div className={classes.notify_box}>
       <div className={classes.notify_info}>
@@ -73,25 +119,7 @@ const NotifyBox = (props: NotifyBoxProps) => {
           <p>{props.ntime}</p>
         </div>
       </div>
-      {props.nType !== "SEND_LIKE" &&
-        props.nType !== "FRIEND_ACCEPT" &&
-        props.nType === "MATCH_INVITATION" &&
-        props.nIsAdmin === true && (
-          <div className={classes.notify_btns}>
-            <img
-              className={classes.acc_btn}
-              src="/Assets/SVG/acceptIcon.svg"
-              alt="accept"
-              onClick={handleAccept}
-            />
-            <img
-              className={classes.cancel_btn}
-              src="/Assets/SVG/cancelIcon.svg"
-              alt="cancel"
-              onClick={handleReject}
-            />
-          </div>
-        )}
+      {RenderButtonsAction()}
     </div>
   );
 };

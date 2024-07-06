@@ -62,7 +62,7 @@ const SearchedFriend = (props: FriendProps) => {
           <button
             className={`${classes.friend_btn} ${classes.msg_btn}`}
             onClick={() => {
-              if (props.teamId !== null) {
+              if (props.teamId !== null && props.teamId !== undefined) {
                 inviteToTeam();
               } else {
                 inviteFriend();
@@ -76,7 +76,7 @@ const SearchedFriend = (props: FriendProps) => {
           <button
             className={`${classes.friend_btn} ${classes.remove_btn}`}
             onClick={() => {
-              if (props.teamId !== null) {
+              if (props.teamId !== null && props.teamId !== undefined) {
                 cancelInviationToTeam();
               } else {
                 cancelInvitation();
