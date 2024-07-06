@@ -21,18 +21,18 @@ public class matchInvitationController {
         }
     }
 
-    @PostMapping("/acceptInvitation")
-    public ResponseEntity<Object> acceptInvitation(@RequestParam Long invitationId) {
+    @PostMapping("/acceptInvitation/{invitationId}")
+    public ResponseEntity<Object> acceptInvitation(@PathVariable Long invitationId) {
         return matchInvitationService.acceptMatchInvitation(invitationId);
     }
 
-    @PostMapping("/rejectInvitation")
-    public ResponseEntity<Object> rejectInvitation(@RequestParam Long invitationId) {
+    @PostMapping("/rejectInvitation/{invitationId}")
+    public ResponseEntity<Object> rejectInvitation(@PathVariable Long invitationId) {
         return matchInvitationService.rejectMatchInvitation(invitationId);
     }
 
-    @PostMapping("/cancelInvitation")
-    public ResponseEntity<Object> cancelInvitation(@RequestParam Long invitationId) {
+    @PostMapping("/cancelInvitation/{invitationId}")
+    public ResponseEntity<Object> cancelInvitation(@PathVariable Long invitationId) {
         return matchInvitationService.cancelMatchInvitation(invitationId);
     }
 }
