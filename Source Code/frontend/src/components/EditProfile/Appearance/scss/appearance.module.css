@@ -8,6 +8,12 @@
   margin-bottom: 30px;
   color: #f2f2f2;
 }
+.edit_info .edit_content .color_section {
+  margin-bottom: 40px;
+}
+.edit_info .edit_content .color_section span {
+  margin-right: 10px;
+}
 .edit_info .edit_content .groofybtn {
   display: flex;
   justify-content: center;

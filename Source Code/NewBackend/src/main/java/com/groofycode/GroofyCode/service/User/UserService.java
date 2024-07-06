@@ -277,6 +277,29 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public ResponseEntity<Object> changeBackgroundColor(BackgroundColorDTO color) throws Exception {
+        try {
+            // Find current user
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel currentUser = userRepository.findByUsername(userInfo.getUsername());
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtils.unsuccessfulRes("Action not allowed", null));
+            }
+
+            // Update password
+            currentUser.setAccountColor(color.getColor());
+            userRepository.save(currentUser);
+
+            UserDTO userDTO = modelMapper.map(currentUser, UserDTO.class);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ResponseUtils.successfulRes("Background Color Updated Successfully", userDTO));
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
     public ResponseEntity<Object> getUserByUsername(String username) throws Exception {
         try {
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
