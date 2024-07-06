@@ -49,14 +49,20 @@ const Clan = () => {
                 detail: res.message,
                 life: 3000,
               });
+              setTimeout(() => {
+                dispatch(clanThunks.clearClan() as any);
+              }, 1000);
+            } else if (res.status === "failure") {
+              toast.current?.show({
+                severity: "error",
+                summary: res.status,
+                detail: res.message,
+                life: 3000,
+              });
             }
           })
-          .then(() => {
-            setTimeout(() => {
-              dispatch(clanThunks.clearClan() as any);
-            }, 1000);
-          })
           .catch((error: any) => {
+            console.log("CLAN ERROR", error);
             toast.current?.show({
               severity: "error",
               summary: error.status,
