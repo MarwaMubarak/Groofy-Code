@@ -2,20 +2,72 @@ import { Link } from "react-router-dom";
 import classes from "./scss/match-popup.module.css";
 import { MatchPopupProps } from "../../shared/types";
 import { useDispatch, useSelector } from "react-redux";
-import { popupThunks } from "../../store/actions";
+import { gameThunks, popupThunks } from "../../store/actions";
 
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { userThunks } from "../../store/actions";
 
 const MatchPopup = (props: MatchPopupProps) => {
   const dispatch = useDispatch();
+  const [date, setDate] = useState("");
+  const gameStatus = useSelector((state: any) => state.game.gameStatus);
+  const gameID = useSelector((state: any) => state.game.gameID);
+  console.log("Game Status", gameStatus);
   const closePopUp = () => {
     dispatch(popupThunks.setPopUpState(false, {}) as any);
   };
   const { width, height } = useWindowSize();
+  const gameStartTime = useSelector((state: any) => state.game.startTime);
 
+  useEffect(() => {
+    const updateGame = async () => {
+      await dispatch(gameThunks.getCurrentGame(gameID) as any);
+    };
+    updateGame();
+
+    const now = Date.now();
+    const timeLeft = Math.max(now - new Date(gameStartTime).getTime(), 0);
+
+    const minutes = Math.floor(timeLeft / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    setDate(`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`);
+  }, []);
+
+  const getMatchHeader = () => {
+    if (gameStatus === "FINISHED") {
+      if (
+        props.submissions.length > 0 &&
+        props.submissions.at(0).verdict === "Accepted"
+      ) {
+        return "Congratulations";
+      } else {
+        return "Better Luck Next Time";
+      }
+    } else if (gameStatus === "OPPONENT_LEFT") {
+      return "Your Opponent has Left";
+    } else {
+      return "Game Over";
+    }
+  };
+
+  const getGamePhoto = () => {
+    if (gameStatus === "FINISHED") {
+      if (
+        props.submissions.length > 0 &&
+        props.submissions.at(0).verdict === "Accepted"
+      ) {
+        return "/Assets/SVG/trophyIconYellow.svg";
+      } else {
+        return "/Assets/SVG/sad.svg";
+      }
+    } else if (gameStatus === "OPPONENT_LEFT") {
+      return "/Assets/SVG/surrender.svg";
+    } else {
+      return "/Assets/SVG/sad.svg";
+    }
+  };
   return (
     <div className={classes.match_overlay}>
       {props.submissions.length > 0 &&
@@ -24,19 +76,9 @@ const MatchPopup = (props: MatchPopupProps) => {
         )}
       <div className={classes.match_popup}>
         <div className={classes.trophy_icn}>
-          {props.submissions.length > 0 &&
-          props.submissions.at(0).verdict === "Accepted" ? (
-            <img src="/Assets/SVG/trophyIconYellow.svg" alt="Trophy" />
-          ) : (
-            <img src="/Assets/SVG/sad.svg" alt="Trophy" />
-          )}
+          <img src={getGamePhoto()} alt="Trophy" />
         </div>
-        <h2 className={classes.match_status}>
-          {props.submissions.length > 0 &&
-          props.submissions.at(0).verdict === "Accepted"
-            ? "Congratulations"
-            : "Better Luck Next Time"}
-        </h2>
+        <h2 className={classes.match_status}>{getMatchHeader()}</h2>
         <div className={classes.info_game}>
           <div className={classes.info_game_attemps}>
             <span>{props.submissions.length}</span>
@@ -45,11 +87,9 @@ const MatchPopup = (props: MatchPopupProps) => {
           <div className={classes.info_game_elapsedtime}>
             {props.submissions.length > 0 &&
             props.submissions.at(0).verdict === "Accepted" ? (
-              <>
-                <span>{props.submissions.at(0).submissionTime}</span>
-              </>
+              <span>{props.submissions.at(0).submissionTime}</span>
             ) : (
-              <span>60:00</span>
+              <span>{date}</span>
             )}
             <h3>Elapsed Time</h3>
           </div>

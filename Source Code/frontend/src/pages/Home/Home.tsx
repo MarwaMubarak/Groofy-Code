@@ -252,7 +252,9 @@ const Home = () => {
                   title="Join Clan"
                   description="Level up your gamplay and form alliances as you become a part of a gaming community by joining a clan."
                   img="/Assets/Images/clan.png"
-                  clickEvent={() => {}}
+                  clickEvent={() => {
+                    navigate("/clan");
+                  }}
                 />
                 <Gamemode
                   id="solo_practice_play_card"

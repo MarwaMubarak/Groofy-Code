@@ -500,7 +500,7 @@ public class GameService {
         List<UserModel> players2 = game.getPlayers2();
 
         // Check if both sides have at least one player
-        if ((players1.isEmpty() || players2.isEmpty()) && game.getGameType() != GameType.SOLO.ordinal()) {
+        if ((players1.isEmpty() || players2.isEmpty()) && !game.getGameType().getValue().equals(GameType.SOLO.getValue())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseUtils.unsuccessfulRes("Match is already incomplete", null));
         }
@@ -716,7 +716,7 @@ public class GameService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseUtils.unsuccessfulRes("Match not found", null));
         }
 
-        if (game.getGameStatus() != null && game.getGameStatus() == GameStatus.FINISHED.ordinal()) {
+        if (game.getGameStatus() != null && game.getGameStatus().getValue().equals(GameStatus.FINISHED.getValue())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseUtils.unsuccessfulRes("Match is already finished", null));
         }
 
