@@ -5,6 +5,7 @@ import { submissionActions } from "../slices/submission-slice";
 import { authActions } from "../slices/auth-slice";
 import { toastActions } from "../slices/toast-slice";
 import { friendActions } from "../slices/friend-slice";
+import { useSelector } from "react-redux";
 
 const getAllUserGames = (page: number) => {
   return async (dispatch: any) => {
@@ -16,7 +17,6 @@ const getAllUserGames = (page: number) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("GAMES", response.data.body);
         dispatch(gameActions.setGames(response.data.body));
       } catch (error: any) {
         dispatch(gameActions.setResponse(error.response.data));
@@ -36,6 +36,7 @@ const getCurrentGame = (gameId: number) => {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log("GAME", response.data.body);
         dispatch(gameActions.setGame(response.data.body));
         dispatch(gameActions.setLoading(false));
       } catch (error: any) {
@@ -385,6 +386,36 @@ const getGameSubmissions = (gameId: any) => {
   };
 };
 
+const getGamePlayersSubmissions = (
+  gameId: any,
+  players1Ids: any,
+  problemUrl: any
+) => {
+  return async (dispatch: any) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await reqInstance.post(
+          `/game/${gameId}/submissions`,
+          {
+            players1Ids: players1Ids,
+            gameId: gameId,
+            problemUrl: problemUrl,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(submissionActions.setSubmissions(response.data.body));
+      } catch (error: any) {
+        console.log("error", error.response.data);
+      }
+    }
+  };
+};
+
 const changeSubmitState = (state: string) => {
   return (dispatch: any) => {
     dispatch(submissionActions.setSubmitState(state));
@@ -501,7 +532,6 @@ const createTeamMatch = (invitationId: number) => {
             },
           }
         );
-        console.log("TEAM Match response:");
         if (response.data.body !== null) {
           dispatch(gameActions.setGame(response.data.body));
           dispatch(authActions.setUserGameId(response.data.body.id));
@@ -680,6 +710,7 @@ const gameThunks = {
   createTeamMatch,
   changeSelectedProblem,
   changeSelectTeamDialog,
+  getGamePlayersSubmissions,
 };
 
 export default gameThunks;

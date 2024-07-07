@@ -5,6 +5,8 @@ const initialState = {
   problemStatement2: null,
   problemStatement3: null,
   problemUrl: null,
+  problemUrl2: null,
+  problemUrl3: null,
   games: [],
   gameID: null,
   gameType: null,
@@ -35,6 +37,8 @@ const gameSlice = createSlice({
     },
     setGame(state, action) {
       state.problemUrl = action.payload.problemUrl;
+      state.problemUrl2 = action.payload.problemUrl2;
+      state.problemUrl3 = action.payload.problemUrl3;
       state.gameID = action.payload.id;
       state.problemStatement = action.payload.problemStatement;
       state.problemStatement2 = action.payload.problemStatement2;

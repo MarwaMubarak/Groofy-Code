@@ -32,7 +32,6 @@ const TeamSelect = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("TEAMS", teams);
     if (teams !== null && teams !== undefined && teams.length > 0) {
       const arr = Array.from(
         teams.map((team) => {
@@ -120,7 +119,6 @@ const TeamSelect = () => {
                       onClick={() => {
                         sendInviteToTeam((selectedTeam! as any).id, team.id)
                           .then((res: any) => {
-                            console.log("RESPONSE:", res);
                             if (res.status === "success") {
                               toast.current?.show({
                                 severity: "success",

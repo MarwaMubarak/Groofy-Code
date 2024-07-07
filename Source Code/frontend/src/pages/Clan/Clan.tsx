@@ -62,7 +62,6 @@ const Clan = () => {
             }
           })
           .catch((error: any) => {
-            console.log("CLAN ERROR", error);
             toast.current?.show({
               severity: "error",
               summary: error.status,

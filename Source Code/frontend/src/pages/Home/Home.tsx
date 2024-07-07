@@ -112,8 +112,6 @@ const Home = () => {
     dispatch(userThunks.getProfile() as any);
   }, [dispatch]);
 
-  console.log("Game players:", gamePlayers);
-
   return (
     <div className={classes.home_container}>
       <Toast ref={toast} style={{ padding: "0.75rem" }} />

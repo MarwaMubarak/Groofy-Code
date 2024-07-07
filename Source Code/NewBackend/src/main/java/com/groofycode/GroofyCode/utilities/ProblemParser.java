@@ -169,6 +169,10 @@ public class ProblemParser {
 
     }
 
+    public String parseCodeforcesProblemDTO(ProblemDTO problemDTO){
+        return "https://codeforces.com/contest/" + problemDTO.getContestId() + "/problem/" + problemDTO.getIndex();
+    }
+
     public ProblemDTO parseCodeforcesUrl(String url) {
         String baseUrl = "https://codeforces.com/contest/";
 

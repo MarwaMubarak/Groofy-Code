@@ -39,6 +39,9 @@
 .psec .problem_tabs .tabs .accepted {
   background-color: #18cf08 !important;
 }
+.psec .problem_tabs .tabs .wrong {
+  background-color: #f55353 !important;
+}
 .psec .problem_tabs .tabs .tab {
   display: flex;
   justify-content: center;

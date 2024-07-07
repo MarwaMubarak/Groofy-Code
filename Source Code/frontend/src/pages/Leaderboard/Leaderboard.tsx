@@ -37,7 +37,6 @@ const Leaderboard = () => {
   ];
 
   const onPageChange = (event: PaginatorPageChangeEvent) => {
-    console.log(event);
     setFirst(event.first);
     setRows(event.rows);
   };

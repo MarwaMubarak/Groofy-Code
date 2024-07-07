@@ -17,10 +17,6 @@ const Scoreboard = () => {
     (state: any) => state.game.players2Ids
   );
 
-  console.log("Player1ids", players1Ids);
-
-  console.log("Player2ids", players2Ids);
-
   useEffect(() => {
     const getUserById = async (id: any) => {
       await dispatch(userThunks.getUserById(id) as any);
@@ -35,8 +31,6 @@ const Scoreboard = () => {
       });
     }
   }, [dispatch, loggedUser.id, players1Ids, players2Ids]);
-
-  console.log("Oppo", opponent);
 
   if (opponent === null && gameType !== "Solo") return <div>Loading...</div>;
 

@@ -14,7 +14,6 @@ const MatchPopup = (props: MatchPopupProps) => {
   const [date, setDate] = useState("");
   const gameStatus = useSelector((state: any) => state.game.gameStatus);
   const gameID = useSelector((state: any) => state.game.gameID);
-  console.log("Game Status", gameStatus);
   const closePopUp = () => {
     dispatch(popupThunks.setPopUpState(false, {}) as any);
     dispatch(userThunks.getProfile() as any);

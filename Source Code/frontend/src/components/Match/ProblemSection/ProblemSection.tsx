@@ -12,15 +12,16 @@ const ProblemSection = () => {
   const problem2 = useSelector((state: any) => state.game.problemStatement2);
   const problem3 = useSelector((state: any) => state.game.problemStatement3);
   const problems1ID = useSelector((state: any) => state.game.problems1ID);
+  const players1Ids = useSelector((state: any) => state.game.players1Ids);
+  const problemUrl = useSelector((state: any) => state.game.problemUrl);
+  const problemUrl2 = useSelector((state: any) => state.game.problemUrl2);
+  const problemUrl3 = useSelector((state: any) => state.game.problemUrl3);
+  const gameID = useSelector((state: any) => state.game.gameID);
 
   const [currentProblem, setCurrentProblem] = useState(problem1);
 
   const gameType = useSelector((state: any) => state.game.gameType);
   const [problemIdx, setProblemIdx] = useState(1);
-
-  console.log("Idx:", problemIdx);
-
-  console.log("Problem Ids:", problems1ID);
 
   const changeCurrentProblem = (idx: any) => {
     dispatch(gameThunks.changeSelectedProblem(idx) as any);
@@ -32,7 +33,56 @@ const ProblemSection = () => {
     } else {
       setCurrentProblem(problem3);
     }
+    if (gameID && gameType && players1Ids && idx) {
+      if (gameType === "Team") {
+        if (idx === 1) {
+          if (problemUrl) {
+            dispatch(
+              gameThunks.getGamePlayersSubmissions(
+                gameID,
+                players1Ids,
+                problemUrl
+              ) as any
+            );
+          }
+        } else if (idx === 2) {
+          if (problemUrl2) {
+            dispatch(
+              gameThunks.getGamePlayersSubmissions(
+                gameID,
+                players1Ids,
+                problemUrl2
+              ) as any
+            );
+          }
+        } else {
+          if (problemUrl3) {
+            dispatch(
+              gameThunks.getGamePlayersSubmissions(
+                gameID,
+                players1Ids,
+                problemUrl3
+              ) as any
+            );
+          }
+        }
+      }
+    }
   };
+  useEffect(() => {
+    if (problem1 !== null && problemUrl !== null && gameID !== null) {
+      setCurrentProblem(problem1);
+      setProblemIdx(1);
+      dispatch(gameThunks.changeSelectedProblem(1) as any);
+      dispatch(
+        gameThunks.getGamePlayersSubmissions(
+          gameID,
+          players1Ids,
+          problemUrl
+        ) as any
+      );
+    }
+  }, [dispatch, gameID, players1Ids, problem1, problemUrl]);
 
   return (
     <div className={classes.psec}>
@@ -44,7 +94,11 @@ const ProblemSection = () => {
               className={`${classes.tab} ${
                 problemIdx === 1 && classes.active
               } ${
-                problems1ID.at(problemIdx - 1) === true ? classes.accepted : ""
+                problems1ID.at(0) === 3
+                  ? classes.accepted
+                  : problems1ID.at(0) === 2
+                  ? classes.wrong
+                  : ""
               }`}
               onClick={() => {
                 changeCurrentProblem(1);
@@ -53,7 +107,15 @@ const ProblemSection = () => {
               1
             </div>
             <div
-              className={`${classes.tab} ${problemIdx === 2 && classes.active}`}
+              className={`${classes.tab} ${
+                problemIdx === 2 && classes.active
+              } ${
+                problems1ID.at(1) === 3
+                  ? classes.accepted
+                  : problems1ID.at(1) === 2
+                  ? classes.wrong
+                  : ""
+              }`}
               onClick={() => {
                 changeCurrentProblem(2);
               }}
@@ -61,7 +123,15 @@ const ProblemSection = () => {
               2
             </div>
             <div
-              className={`${classes.tab} ${problemIdx === 3 && classes.active}`}
+              className={`${classes.tab} ${
+                problemIdx === 3 && classes.active
+              } ${
+                problems1ID.at(2) === 3
+                  ? classes.accepted
+                  : problems1ID.at(2) === 2
+                  ? classes.wrong
+                  : ""
+              }`}
               onClick={() => {
                 changeCurrentProblem(3);
               }}

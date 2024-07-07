@@ -24,6 +24,9 @@
       .accepted {
         background-color: $greenColor !important;
       }
+      .wrong {
+        background-color: $redColor !important;
+      }
       .tab {
         @include center;
         color: white;

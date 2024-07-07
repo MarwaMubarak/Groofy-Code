@@ -140,8 +140,6 @@ const GroofyHeader = () => {
     dispatch(gameThunks.changeWaitingPopup(true) as any);
   };
 
-  console.log("NOTIFICATIONS: ", notifications);
-
   return (
     <div className={classes.header_container}>
       <NotificationsContainer

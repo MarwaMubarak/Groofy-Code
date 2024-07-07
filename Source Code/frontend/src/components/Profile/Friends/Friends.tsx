@@ -16,8 +16,6 @@ const Friends = () => {
     getFriends();
   }, [dispatch]);
 
-  console.log("Friends", friends);
-
   return (
     <div className={classes.friends}>
       {(friends === null || friends?.length === 0) && (

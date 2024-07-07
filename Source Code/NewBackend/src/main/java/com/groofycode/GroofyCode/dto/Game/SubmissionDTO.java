@@ -12,4 +12,6 @@ public class SubmissionDTO {
     private String language;
 
     private String verdict;
+
+    private Long userId;
 }

@@ -1,6 +1,7 @@
 package com.groofycode.GroofyCode.controller.Game;
 
 
+import com.groofycode.GroofyCode.dto.Game.PlayersSubmissionsDTO;
 import com.groofycode.GroofyCode.dto.Game.ProblemSubmitDTO;
 import com.groofycode.GroofyCode.model.Team.TeamModel;
 import com.groofycode.GroofyCode.model.User.UserModel;
@@ -58,6 +59,12 @@ public class GameController {
     public ResponseEntity<Object> getSubmissions(@PathVariable Long gameId) {
         return gameService.getSubmissions(gameId);
     }
+
+    @PostMapping("/{gameId}/submissions")
+    public ResponseEntity<Object> getSubmissions(@RequestBody PlayersSubmissionsDTO game) {
+        return gameService.getSubmissions(game);
+    }
+
 
 
     @PostMapping("/ranked")

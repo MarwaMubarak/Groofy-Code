@@ -35,18 +35,18 @@ const CodingSection = () => {
   const toast = useRef<Toast>(null);
   const gameID = useSelector((state: any) => state.game.gameID);
   const submissions = useSelector((state: any) => state.submission.submissions);
+  const players1Ids = useSelector((state: any) => state.game.players1Ids);
+  const problemUrl = useSelector((state: any) => state.game.problemUrl);
+  const problemUrl2 = useSelector((state: any) => state.game.problemUrl2);
+  const problemUrl3 = useSelector((state: any) => state.game.problemUrl3);
+  const gameType = useSelector((state: any) => state.game.gameType);
+
   const selectedProblem = useSelector(
     (state: any) => state.game.selectedProblem
   );
 
-  useEffect(() => {
-    if (gameID) {
-      dispatch(gameThunks.getGameSubmissions(gameID) as any);
-    }
-  }, [dispatch, gameID]);
-
   const submitCode = async () => {
-    return await dispatch(
+    const sub = await dispatch(
       gameThunks.submitCode({
         code: currentCode,
         language: "GNU G++17 7.3.0",
@@ -54,6 +54,43 @@ const CodingSection = () => {
         problemNumber: selectedProblem,
       }) as any
     );
+
+    if (gameID && gameType && players1Ids && selectedProblem) {
+      if (gameType === "Team") {
+        if (selectedProblem === 1) {
+          if (problemUrl) {
+            dispatch(
+              gameThunks.getGamePlayersSubmissions(
+                gameID,
+                players1Ids,
+                problemUrl
+              ) as any
+            );
+          }
+        } else if (selectedProblem === 2) {
+          if (problemUrl2) {
+            dispatch(
+              gameThunks.getGamePlayersSubmissions(
+                gameID,
+                players1Ids,
+                problemUrl2
+              ) as any
+            );
+          }
+        } else {
+          if (problemUrl3) {
+            dispatch(
+              gameThunks.getGamePlayersSubmissions(
+                gameID,
+                players1Ids,
+                problemUrl3
+              ) as any
+            );
+          }
+        }
+      }
+      return sub;
+    }
   };
 
   return (
@@ -145,14 +182,14 @@ const CodingSection = () => {
               <span
                 style={{
                   color:
-                    rowData.verdict === "Accepted"
+                    rowData?.verdict === "Accepted"
                       ? "green"
-                      : rowData.verdict === "Wrong Answer"
+                      : rowData?.verdict === "Wrong Answer"
                       ? "#f55353"
                       : "yellow",
                 }}
               >
-                {rowData.verdict}
+                {rowData?.verdict}
               </span>
             );
           }}

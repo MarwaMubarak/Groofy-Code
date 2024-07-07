@@ -707,9 +707,6 @@ public class TeamService {
             Long userId = currUser.getId();
             Pageable pageable = PageRequest.of(page, size);
             Page<FriendshipModel> friendshipModelList = friendshipRepository.getAcceptedPage(userId, pageable);
-            if (friendshipModelList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body(ResponseUtils.successfulRes("There are no Friends!", null));
-            }
 
             TeamModel team = teamRepository.findById(teamId).get();
 

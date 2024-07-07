@@ -27,8 +27,8 @@ public class GameDTO {
     private String gameType;
     private String gameStatus;
     private Object problemStatement;
-    private List<Boolean> problems1ID;
-    private List<Boolean> problems2ID;
+    private List<Integer> problems1ID;
+    private List<Integer> problems2ID;
 
     // Custom constructor to map from Game entity
     public GameDTO(Game game) {

@@ -131,8 +131,26 @@ public class GameService {
             Duration duration = Duration.between(sub.getSubmissionTime(), LocalDateTime.now());
             subDTO.setSubmissionTime(duration.getSeconds() / 60 + " min");
             subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+            subDTO.setUserId(sub.getUser().getId());
             return subDTO;
         }).toList();
+        return ResponseEntity.ok(ResponseUtils.successfulRes("Submissions retrieved successfully", submissionDTOS));
+    }
+
+    public ResponseEntity<Object> getSubmissions(PlayersSubmissionsDTO game) {
+        List<Submission> submissions = submissionRepository.findByGameId(game.getGameId());
+        List<SubmissionDTO> submissionDTOS = new ArrayList<>();
+        for(Submission sub : submissions) {
+            if(game.getPlayers1Ids().stream().noneMatch(id -> id.equals(sub.getUser().getId())) || !game.getProblemUrl().equals(sub.getProblemUrl())){
+                continue;
+            }
+            SubmissionDTO subDTO = modelMapper.map(sub, SubmissionDTO.class);
+            Duration duration = Duration.between(sub.getSubmissionTime(), LocalDateTime.now());
+            subDTO.setSubmissionTime(duration.getSeconds() / 60 + " min");
+            subDTO.setVerdict(matchStatusMapper.getStatusIntToString().get(sub.getResult()));
+            subDTO.setUserId(sub.getUser().getId());
+            submissionDTOS.add(subDTO);
+        }
         return ResponseEntity.ok(ResponseUtils.successfulRes("Submissions retrieved successfully", submissionDTOS));
     }
 
@@ -392,16 +410,24 @@ public class GameService {
                 ResponseEntity<Object> problem2Parsed = problemParser.parseFullProblem(problemDTO2.getContestId(), problemDTO2.getIndex());
                 ResponseEntity<Object> problem3Parsed = problemParser.parseFullProblem(problemDTO3.getContestId(), problemDTO3.getIndex());
 
-                gameDTO = new TeamMatchDTO((TeamMatch) game, problemParsed.getBody(), problem2Parsed.getBody(), problem3Parsed.getBody());
+                String problem2Url = problemParser.parseCodeforcesProblemDTO(problemDTO2);
+                String problem3Url = problemParser.parseCodeforcesProblemDTO(problemDTO3);
+
+                gameDTO = new TeamMatchDTO((TeamMatch) game, problemParsed.getBody(), problem2Parsed.getBody(), problem3Parsed.getBody(), problem2Url, problem3Url);
             } else {
                 gameDTO = new GameDTO(game);
             }
             gameDTO.setPlayers1Ids(game.getPlayers1().stream().map(UserModel::getId).collect(Collectors.toList()));
             gameDTO.setPlayers2Ids(game.getPlayers2().stream().map(UserModel::getId).collect(Collectors.toList()));
 
-
-            gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
-            gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
+            UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (game.getPlayers1().stream().anyMatch(user -> user.getUsername().equals(userInfo.getUsername()))) {
+                gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
+                gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
+            } else {
+                gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
+                gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
+            }
 
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
         } catch (
@@ -411,21 +437,31 @@ public class GameService {
         }
     }
 
-    public List<Boolean> setProblemsSolvedForATeam(List<UserModel> users, Game game) {
-        List<Boolean> problemsSolved = new ArrayList<>();
-        problemsSolved.add(false);
-        problemsSolved.add(false);
-        problemsSolved.add(false);
+    public List<Integer> setProblemsSolvedForATeam(List<UserModel> users, Game game) {
+        List<Integer> problemsSolved = new ArrayList<>();
+        problemsSolved.add(1);
+        problemsSolved.add(1);
+        problemsSolved.add(1);
         for (UserModel user : users) {
             List<Submission> submissions = submissionRepository.findByUserId(user.getId(), game.getId());
             for (Submission submission : submissions) {
-                if (matchStatusMapper.getStatusIntToString().get(submission.getResult()).equals("Accepted")) {
-                    if (submission.getProblemUrl().equals(game.getProblemUrl()))
-                        problemsSolved.set(0, true);
-                    else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl2()))
-                        problemsSolved.set(1, true);
-                    else if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl3()))
-                        problemsSolved.set(2, true);
+                if (submission.getProblemUrl().equals(game.getProblemUrl())) {
+                    int value = 2;
+                    if (matchStatusMapper.getStatusIntToString().get(submission.getResult()).equals("Accepted"))
+                        value = 3;
+                    problemsSolved.set(0, Math.max(problemsSolved.get(0), value));
+                }
+                if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl2())) {
+                    int value = 2;
+                    if (matchStatusMapper.getStatusIntToString().get(submission.getResult()).equals("Accepted"))
+                        value = 3;
+                    problemsSolved.set(1, Math.max(problemsSolved.get(1), value));
+                }
+                if (submission.getProblemUrl().equals(((TeamMatch) game).getProblemUrl3())) {
+                    int value = 2;
+                    if (matchStatusMapper.getStatusIntToString().get(submission.getResult()).equals("Accepted"))
+                        value = 3;
+                    problemsSolved.set(2, Math.max(problemsSolved.get(2), value));
                 }
             }
         }
@@ -1242,7 +1278,10 @@ public class GameService {
                 ResponseEntity<Object> problemParsed2 = problemParser.parseFullProblem(problemDTO2.getContestId(), problemDTO2.getIndex());
                 ResponseEntity<Object> problemParsed3 = problemParser.parseFullProblem(problemDTO3.getContestId(), problemDTO3.getIndex());
 
-                TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody(), problemParsed2.getBody(), problemParsed3.getBody());
+                String problem2Url = problemParser.parseCodeforcesProblemDTO(problemDTO2);
+                String problem3Url = problemParser.parseCodeforcesProblemDTO(problemDTO3);
+
+                TeamMatchDTO teamMatchDTO = new TeamMatchDTO(teamMatch, problemParsed.getBody(), problemParsed2.getBody(), problemParsed3.getBody(), problem2Url, problem3Url);
 
                 // Notify all players about the match start
                 for (UserModel player : team1Users) {
