@@ -34,8 +34,9 @@ public class FirebaseManager {
 
     public void deletePhoto(String photoUrl, String folderName) throws Exception {
         try {
-            String fileName = photoUrl.substring(photoUrl.lastIndexOf("%2F") + 3, photoUrl.lastIndexOf("?"));
-            BlobId blobId = BlobId.of(bucketName, folderName + "/" + fileName);
+            GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(accountAuth));
+            Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+            BlobId blobId = BlobId.of(bucketName, folderName + "/" + photoUrl);
             storage.delete(blobId);
         } catch (Exception e) {
             throw new Exception(e.getMessage());

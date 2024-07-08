@@ -21,6 +21,7 @@ const Match = () => {
   const popupShow = useSelector((state: any) => state.popup.show);
   const popupBody = useSelector((state: any) => state.popup.body);
   const [isLoading, setIsLoading] = useState(true);
+  const submissions = useSelector((state: any) => state.submission.submissions);
 
   useEffect(() => {
     const tim = setTimeout(() => {
@@ -58,6 +59,19 @@ const Match = () => {
           <ProblemSection />
           <CodingSection />
           {popupShow &&
+            popupBody.gameType === "Team" &&
+            createPortal(
+              <MatchPopup
+                matchResult={popupBody.gameResult}
+                matchType={popupBody.gameType}
+                newRank={popupBody.newRank}
+                oldRank={loggedUser.user_rating}
+                submissions={submissions}
+              />,
+              document.getElementById("root") as any
+            )}
+          {popupShow &&
+            popupBody.gameType !== "Team" &&
             createPortal(
               <MatchPopup
                 matchResult={popupBody.gameResult}

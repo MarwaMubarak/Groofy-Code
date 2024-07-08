@@ -138,7 +138,7 @@ public class CodeforcesSubmissionService {
         String apiUrl = "https://codeforces.com/api/user.status?handle=GroofyCode&count=1";
         int timeoutInSeconds = 60; // Adjust timeout as needed
         long startTime = System.currentTimeMillis();
-        String verdict;
+        String verdict = "TESTING";
 
         do {
             // Check if timeout has elapsed
@@ -157,6 +157,11 @@ public class CodeforcesSubmissionService {
             String response = restTemplate.getForObject(apiUrl, String.class);
             JsonNode jsonResponse = objectMapper.readTree(response);
             JsonNode resultNode = jsonResponse.get("result").get(0);
+            if (resultNode == null) {
+                continue;
+            } else if (resultNode.get("verdict") == null) {
+                continue;
+            }
             verdict = resultNode.get("verdict").asText();
 
         } while (verdict.equals("TESTING"));

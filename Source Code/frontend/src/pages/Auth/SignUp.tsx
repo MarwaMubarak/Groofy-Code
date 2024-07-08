@@ -63,10 +63,7 @@ const SignUp = () => {
           (toast.current as any)?.show({
             severity: "error",
             summary: "Failed",
-            detail:
-              error.response.data.body[
-                Object.keys(error.response.data.body)[0]
-              ],
+            detail: error.response.data.message,
             life: 1500,
           });
         });

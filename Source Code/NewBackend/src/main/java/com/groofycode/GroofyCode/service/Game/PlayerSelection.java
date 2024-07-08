@@ -328,8 +328,8 @@ public class PlayerSelection {
             return;
         }
         for (MatchPlayerDTO waitingPlayer : waitingRankedPlayers) {
-            waitingPlayer.setExpectedRatingL(waitingPlayer.getExpectedRatingL() - 10);
-            waitingPlayer.setExpectedRatingR(waitingPlayer.getExpectedRatingR() + 10);
+            waitingPlayer.setExpectedRatingL(waitingPlayer.getExpectedRatingL() - 30);
+            waitingPlayer.setExpectedRatingR(waitingPlayer.getExpectedRatingR() + 30);
         }
     }
 

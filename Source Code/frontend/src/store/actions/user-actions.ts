@@ -63,8 +63,10 @@ const getProfile = () => {
             friendNotifyCnt: response.data.body.friendNotifyCnt,
           })
         );
+        return response.data;
       } catch (error: any) {
-        throw error;
+        localStorage.removeItem("token");
+        throw error.response.data;
       }
     }
   };
@@ -145,7 +147,11 @@ const changePhoto = (userPhoto: File | null) => {
             },
           }
         );
-        dispatch(authActions.updateUserPhoto(response.data.body));
+        if (userPhoto !== null) {
+          dispatch(authActions.updateUserPhoto(response.data.body));
+        } else {
+          dispatch(authActions.updateUserPhoto(null));
+        }
         if (userPhoto !== null) {
           dispatch(authActions.setIsUploading(false));
         } else {

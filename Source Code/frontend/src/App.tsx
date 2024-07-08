@@ -53,10 +53,16 @@ function App() {
   useEffect(() => {
     const getProfile = async () => {
       await dispatch(userThunks.getProfile() as any);
-      await dispatch(gameThunks.checkQueue() as any);
     };
     if (!loggedUser) {
-      getProfile();
+      const response = getProfile();
+      response
+        .then(async () => {
+          await dispatch(gameThunks.checkQueue() as any);
+        })
+        .catch(() => {
+          localStorage.removeItem("token");
+        });
     }
   }, [dispatch, loggedUser, gameType]);
 

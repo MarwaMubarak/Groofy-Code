@@ -421,14 +421,15 @@ public class GameService {
             gameDTO.setPlayers2Ids(game.getPlayers2().stream().map(UserModel::getId).collect(Collectors.toList()));
 
             UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (game.getPlayers1().stream().anyMatch(user -> user.getUsername().equals(userInfo.getUsername()))) {
-                gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
-                gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
-            } else {
-                gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
-                gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
+            if(game instanceof TeamMatch) {
+                if (game.getPlayers1().stream().anyMatch(user -> user.getUsername().equals(userInfo.getUsername()))) {
+                    gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
+                    gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
+                } else {
+                    gameDTO.setProblems1ID(setProblemsSolvedForATeam(game.getPlayers2(), game));
+                    gameDTO.setProblems2ID(setProblemsSolvedForATeam(game.getPlayers1(), game));
+                }
             }
-
             return ResponseEntity.ok(ResponseUtils.successfulRes("Match started successfully", gameDTO));
         } catch (
                 Exception e) {

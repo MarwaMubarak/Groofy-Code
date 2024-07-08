@@ -110,7 +110,8 @@
   font-weight: bold;
 }
 .align .signup_div .auth .auth_form .country_selector .drop_down_div {
-  background-color: #18191a;
+  background-color: #242526;
+  border: none;
 }
 .align .signup_div .auth .auth_form .groofy_input input:hover {
   outline-color: #00aaff;

@@ -53,6 +53,7 @@ const MatchPopup = (props: MatchPopupProps) => {
   };
 
   const getGamePhoto = () => {
+    console.log("submissions", props.submissions);
     if (gameStatus === "FINISHED") {
       if (
         props.submissions.length > 0 &&

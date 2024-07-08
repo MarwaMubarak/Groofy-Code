@@ -6,7 +6,8 @@
   background-color: $blueColor;
   color: #fff;
   border-radius: 12px;
-  width: 140px;
+  min-width: 140px;
+  width: fit-content;
   box-shadow: $headerShadow;
   padding: 8px 12px;
   transition: 0.3s;
