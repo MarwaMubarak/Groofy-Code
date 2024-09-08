@@ -1,0 +1,68 @@
+.toast_testing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #eee;
+  border-radius: 6px;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+.toast_testing:not(.exit) {
+  animation: show-animation 0.5s ease-in-out forwards;
+}
+.toast_testing.exit {
+  animation: hide-animation 0.5s ease-in-out forwards;
+}
+.toast_testing .top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 78%;
+}
+.toast_testing .top i {
+  font-size: 30px;
+}
+.toast_testing .top span {
+  margin-top: 20px;
+}
+.toast_testing .cancel_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 22%;
+  border-top: 1px solid #f55353;
+  width: 100%;
+  color: #f55353;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.toast_testing .cancel_btn:hover {
+  background-color: #f55353;
+  color: white;
+}
+
+@keyframes show-animation {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes hide-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}/*# sourceMappingURL=testing-socket.module.css.map */

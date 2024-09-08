@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket.IO Chat</title>
+  </head>
+  <body>
+    <h1>Socket.IO Chat</h1>
+    <div id="create-room">
+      <input type="text" id="room-name" placeholder="Enter room name" />
+      <button onclick="createRoom()">Create Room</button>
+    </div>
+    <div id="join-room">
+      <input type="text" id="room-name-join" placeholder="Enter room name" />
+      <button onclick="joinRoom()">Join Room</button>
+    </div>
+    <div id="chat-room" style="display: none">
+      <h2>Chat Room</h2>
+      <div id="messages"></div>
+      <input type="text" id="message" placeholder="Type your message" />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+    <script>
+      const socket = io("http://localhost:3000");
+
+      socket.on("connect", () => {
+        console.log(`Connected to server with socket ID: ${socket.id}`);
+      });
+
+      // Function to create a room
+      function createRoom() {
+        const roomName = document.getElementById("room-name").value;
+        socket.emit("create_room", roomName);
+      }
+
+      // Function to join a room
+      function joinRoom() {
+        const roomName = document.getElementById("room-name-join").value;
+        socket.emit("join_room", roomName);
+      }
+
+      // Function to send a message
+      function sendMessage() {
+        const message = document.getElementById("message").value;
+        socket.emit("send_message", { message });
+      }
+
+      // Handle room created event
+      socket.on("room_created", (roomName) => {
+        console.log(`Room '${roomName}' created successfully!`);
+        document.getElementById("create-room").style.display = "none";
+        document.getElementById("join-room").style.display = "none";
+        document.getElementById("chat-room").style.display = "block";
+      });
+
+      // Handle room joined event
+      socket.on("room_joined", (roomName) => {
+        console.log(`Joined room '${roomName}' successfully!`);
+        document.getElementById("create-room").style.display = "none";
+        document.getElementById("join-room").style.display = "none";
+        document.getElementById("chat-room").style.display = "block";
+      });
+
+      // Handle room not found event
+      socket.on("room_not_found", (roomName) => {
+        console.log(`Room '${roomName}' not found!`);
+      });
+
+      // Handle received message event
+      socket.on("message_received", (data) => {
+        const { sender, message } = data;
+        const messagesDiv = document.getElementById("messages");
+        messagesDiv.innerHTML += `<p><strong>${sender}:</strong> ${message}</p>`;
+      });
+    </script>
+  </body>
+</html>

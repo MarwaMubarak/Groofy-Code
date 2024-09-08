@@ -1,0 +1,84 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.team_card {
+  @include center;
+  flex-direction: column;
+  padding: 0 15px;
+  border-radius: 6px;
+  background-color: #fff;
+  width: 380px;
+  height: 190px;
+  .team_info {
+    width: 100%;
+    h3 {
+      width: 100%;
+      text-align: start;
+      margin-bottom: 10px;
+    }
+    .team_tags {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: start;
+      flex-direction: column;
+      gap: 5px 0;
+      a {
+        color: $blueColor;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+  .team_details {
+    @include center;
+    flex-direction: column;
+    .clan_name {
+      width: 100%;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .clan_tags {
+      @include around;
+      flex-wrap: wrap;
+      span {
+        margin-bottom: 10px;
+        &:nth-child(odd) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+  .team_actions {
+    @include end;
+    width: 100%;
+    gap: 0 10px;
+    .view_btn {
+      background-color: #27b7ff;
+      border-color: #27b7ff;
+      &:hover,
+      &:active,
+      &:focus {
+        box-shadow: none;
+        background-color: $blueColor;
+        border-color: $blueColor;
+      }
+    }
+    .cr_btn {
+      &.view {
+        background-color: #27b7ff;
+        border-color: #27b7ff;
+        &:hover,
+        &:active,
+        &:focus {
+          box-shadow: none;
+          background-color: $blueColor;
+          border-color: $blueColor;
+        }
+      }
+    }
+  }
+}

@@ -1,29 +1,49 @@
-<<<<<<< HEAD
 {
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@codemirror/lang-cpp": "^6.0.2",
+    "@codemirror/lang-java": "^6.0.1",
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/lang-python": "^6.1.6",
     "@reduxjs/toolkit": "^1.9.7",
+    "@stomp/stompjs": "^7.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/css-modules": "^1.0.5",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.58",
     "@types/react": "^18.2.28",
     "@types/react-dom": "^18.2.13",
+    "@uiw/codemirror-theme-vscode": "^4.22.0",
+    "@uiw/react-codemirror": "^4.22.0",
     "axios": "^1.5.1",
-    "bootstrap": "^5.3.2",
+    "better-react-mathjax": "^2.0.3",
+    "bootstrap-icons": "^1.11.3",
+    "emoji-picker-react": "^4.11.0",
     "formik": "^2.4.5",
+    "primeflex": "^3.3.1",
+    "primeicons": "^6.0.1",
+    "primereact": "^10.7.0",
     "react": "^18.2.0",
+    "react-confetti": "^6.1.0",
     "react-country-flag": "^3.1.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.17.0",
     "react-scripts": "^5.0.1",
+    "react-stomp": "^5.1.0",
+    "react-use": "^17.5.0",
     "sass": "^1.69.4",
+    "socket.io-client": "^4.7.5",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.3.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -48,58 +68,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/sockjs-client": "^1.5.4",
+    "tailwindcss": "^3.4.1"
   }
 }
-=======
-{
-  "name": "frontend",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.9.7",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.58",
-    "@types/react": "^18.2.28",
-    "@types/react-dom": "^18.2.13",
-    "axios": "^1.5.1",
-    "bootstrap": "^5.3.2",
-    "formik": "^2.4.5",
-    "react": "^18.2.0",
-    "react-country-flag": "^3.1.0",
-    "react-dom": "^18.2.0",
-    "react-redux": "^8.1.3",
-    "react-router-dom": "^6.17.0",
-    "react-scripts": "5.0.1",
-    "sass": "^1.69.4",
-    "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
-}
->>>>>>> e9a9b6c849578ccf3b3b8eb842f570e781a73eea

@@ -1,0 +1,48 @@
+.single_friend {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.single_friend:not(:last-of-type) {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #242526;
+  margin-bottom: 10px;
+}
+.single_friend .friend_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.single_friend .friend_info .friend_name {
+  font-size: 18px;
+  color: #fff;
+  margin-left: 10px;
+  font-weight: bold;
+}
+.single_friend .friend_actions .friend_btn {
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.single_friend .friend_actions .friend_btn i {
+  margin-right: 7px;
+}
+.single_friend .friend_actions .friend_btn:not(:last-of-type) {
+  margin-right: 10px;
+}
+.single_friend .friend_actions .friend_btn.msg_btn {
+  background-color: #00aaff;
+}
+.single_friend .friend_actions .friend_btn.msg_btn:hover {
+  background-color: #0a7cff;
+}
+.single_friend .friend_actions .friend_btn.remove_btn {
+  background-color: #f55353;
+}
+.single_friend .friend_actions .friend_btn.remove_btn:hover {
+  background-color: #ca3c3c;
+}/*# sourceMappingURL=single-friend.module.css.map */

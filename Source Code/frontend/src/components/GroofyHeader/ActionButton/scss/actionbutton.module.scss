@@ -1,0 +1,38 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+.action {
+  @include center;
+  padding: 8px;
+  border-radius: 50%;
+  background-color: $mainColor;
+  margin-right: 15px;
+  cursor: pointer;
+  position: relative;
+  &:active {
+    transform: scale(0.95);
+  }
+  .action_cnt {
+    @include center;
+    position: absolute;
+    background-color: #e41e3f;
+    border-radius: 50%;
+    top: -7px;
+    right: -5px;
+    padding: 5px 3px;
+    min-width: 18px;
+    height: 17px;
+    span {
+      line-height: 1;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #fff;
+      margin-top: 2px;
+    }
+  }
+  &:hover {
+    background-color: $mainColorHover2;
+  }
+  .header_pr_action {
+    width: 28px;
+  }
+}

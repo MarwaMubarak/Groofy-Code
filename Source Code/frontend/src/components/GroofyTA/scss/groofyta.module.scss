@@ -1,0 +1,19 @@
+@use "../../../shared/styles/colors" as *;
+
+.gta {
+  font-family: OpenSans, Arial, Helvetica, sans-serif;
+  width: calc(100% - 192px);
+  overflow-y: hidden;
+  border: none;
+  padding: 12.2px 15px 5px;
+  border-radius: 6px;
+  background-color: $mainColor2;
+  caret-color: $hoverColor;
+  color: $hoverColor;
+  margin-right: 20px;
+  font-size: 16px;
+  resize: none;
+  &:focus {
+    outline: none;
+  }
+}

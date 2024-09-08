@@ -1,0 +1,23 @@
+.pr_ph {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pr_ph .header_pr_ph {
+  border-radius: 50%;
+}
+.pr_ph .header_pr_ph.can_click:active {
+  transform: scale(0.95);
+}
+.pr_ph .account_color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.pr_ph .account_color.can_click:active {
+  transform: scale(0.95);
+}
+.pr_ph .account_color span {
+  color: #fff !important;
+}/*# sourceMappingURL=profile-image.module.css.map */

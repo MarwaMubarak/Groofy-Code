@@ -20,6 +20,13 @@
   align-items: center;
 }
 
+// End
+@mixin end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 // Around
 @mixin around {
   display: flex;

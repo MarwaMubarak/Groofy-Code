@@ -1,277 +1,333 @@
-import { SideBar, GroofyHeader, GBtn, SinglePost } from "../../components";
-import "./scss/profile.css";
-import { ChangeEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  SideBar,
+  GroofyHeader,
+  PSocial,
+  PInfo,
+  ProfileImage,
+} from "../../components";
+import { useSelector } from "react-redux";
 import ReactCountryFlag from "react-country-flag";
+import { Toast } from "primereact/toast";
+import { Image } from "primereact/image";
+import { postActions } from "../../store/slices/post-slice";
+import { userThunks, friendThunks } from "../../store/actions";
+import { useDispatch } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import classes from "./scss/profile.module.css";
+import FormatDate from "../../shared/functions/format-date";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
+
+interface Country {
+  name: string;
+  code: string;
+}
 
 const Profile = () => {
-  const handleExpanding = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    autoExpand(e.target);
+  const dispatch = useDispatch();
+  const toast = useRef<Toast>(null);
+  const stompClient = useSelector((state: any) => state.socket.stompClient);
+  const loggedUser = useSelector((state: any) => state.auth.user);
+  const profileUser = useSelector((state: any) => state.user.user);
+  const profileRes = useSelector((state: any) => state.user.res);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [messageText, setMessageText] = useState("");
+
+  dispatch(postActions.setStatus(""));
+  dispatch(postActions.setMessage(""));
+  const { username: userProfile } = useParams();
+  const countries: Country[] = [
+    { name: "Australia", code: "AU" },
+    { name: "Brazil", code: "BR" },
+    { name: "China", code: "CN" },
+    { name: "Egypt", code: "EG" },
+    { name: "France", code: "FR" },
+    { name: "Germany", code: "DE" },
+    { name: "India", code: "IN" },
+    { name: "Japan", code: "JP" },
+    { name: "Spain", code: "ES" },
+    { name: "United States", code: "US" },
+  ];
+
+  useEffect(() => {
+    const getUser = async () => {
+      await dispatch(userThunks.getUser(userProfile!) as any);
+    };
+    getUser();
+  }, [dispatch, userProfile]);
+
+  const sendMessage = () => {
+    if (messageText.trim() === "") return;
+
+    const data = {
+      userId: loggedUser.id,
+      content: messageText,
+    };
+
+    stompClient.send(
+      `/app/user/${profileUser.username}/sendMessage`,
+      { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      JSON.stringify(data)
+    );
+
+    setMessageText("");
+    setDialogVisible(false);
   };
 
-  const autoExpand = (textarea: HTMLTextAreaElement) => {
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
+  const friendRequestAction = async () => {
+    if (profileUser.friendshipStatus !== "accepted") {
+      if (profileUser.friendshipStatus === "pending") {
+        return await dispatch(
+          friendThunks.CancelFriendRequest(profileUser.id) as any
+        );
+      } else if (profileUser.friendshipStatus === "requested") {
+        return await dispatch(
+          friendThunks.AcceptFriendRequest(profileUser.id) as any
+        );
+      } else {
+        return await dispatch(friendThunks.AddFriend(profileUser.id) as any);
+      }
+    } else {
+      return await dispatch(friendThunks.RemoveFriend(profileUser.id) as any);
+    }
   };
+
+  const getUserRankBadge = (userRating: any) => {
+    if (userRating < 1200) {
+      return <img src="/Assets/Badges/Badge1.svg" alt="RankImg" />;
+    } else if (userRating < 1600) {
+      return <img src="/Assets/Badges/Badge2.svg" alt="RankImg" />;
+    } else if (userRating < 2000) {
+      return <img src="/Assets/Badges/Badge3.svg" alt="RankImg" />;
+    } else if (userRating < 2400) {
+      return <img src="/Assets/Badges/Badge4.svg" alt="RankImg" />;
+    } else if (userRating < 2800) {
+      return <img src="/Assets/Badges/Badge5.svg" alt="RankImg" />;
+    } else if (userRating >= 2800) {
+      return <img src="/Assets/Badges/Badge6.svg" alt="RankImg" />;
+    }
+  };
+
   return (
-    <div className="newprofile-container">
+    <div className={classes.newprofile_container}>
+      <Toast ref={toast} />
       <SideBar idx={1} />
-      <div className="userprofile align">
-        <GroofyHeader />
-        <div className="up-info">
-          <div className="up-info-img">
-            <img src="/Assets/Images/Hazem Adel.jpg" />
-          </div>
-          <div className="up-info-details">
-            <div className="up-info-d-box">
-              <h3>Rokba</h3>
-              <div className="up-info-d-box-edit">
-                <img src="/Assets/SVG/edit.svg" />
-                <span>Edit</span>
-              </div>
-            </div>
-            <h4>
-              Hazem Adel, Giza, Egypt
-              <ReactCountryFlag
-                countryCode="EG"
-                svg
-                style={{
-                  width: "1em",
-                  height: "1em",
-                  marginLeft: "8px",
-                }}
-                title="Egypt"
-              />
-            </h4>
-            <p>
-              Dedicated competitive programmer excelling in algorithmic mastery
-              and problem-solving. Consistently achieving top ranks in coding
-              competitions. Driven by a passion for code optimization and
-              continuous improvement.
-            </p>
-            <div className="up-info-details-controls">
-              <GBtn
-                btnText="Message"
-                icnSrc="/Assets/SVG/message.svg"
-                clickEvent={() => {}}
-              />
-              <GBtn
-                btnText="Add Friend"
-                icnSrc="/Assets/SVG/addfriend.svg"
-                clickEvent={() => {}}
-              />
-            </div>
-          </div>
+      <Dialog
+        header="Send your message"
+        visible={dialogVisible}
+        style={{ width: "600px" }}
+        onHide={() => {
+          if (!dialogVisible) return;
+          setDialogVisible(false);
+        }}
+      >
+        <InputTextarea
+          autoResize
+          value={messageText}
+          onChange={(e: any) => setMessageText(e.target.value)}
+          style={{ width: "100%", minHeight: "200px" }}
+          maxLength={700}
+          placeholder="Type your message here..."
+        />
+        <div
+          className="send_message_btn"
+          style={{ width: "100%", marginTop: "20px", textAlign: "right" }}
+        >
+          <Button
+            label="Send message"
+            style={{ color: "#fff" }}
+            onClick={sendMessage}
+          />
         </div>
-        <div className="userprofile-side">
-          <div className="up-side-left">
-            <div className="media-section">
-              <form className="posts-container">
-                <div className="post-header">
-                  <div className="post-header-single active">
-                    <h3>Posts</h3>
+      </Dialog>
+      <div className={classes.userprofile}>
+        <GroofyHeader />
+        {profileRes.status === "success" ? (
+          <>
+            <div className={classes.up_info}>
+              <div className={classes.left_up_info}>
+                <div className={classes.up_info_img}>
+                  {profileUser.photoUrl !== null ? (
+                    <Image
+                      src={profileUser.photoUrl}
+                      alt="Image"
+                      width="180"
+                      preview
+                    />
+                  ) : (
+                    <div
+                      className={classes.account_color}
+                      style={{ backgroundColor: profileUser.accountColor }}
+                    >
+                      <span>
+                        {profileUser.username.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className={classes.up_info_details}>
+                  <div className={classes.up_info_d_box}>
+                    <div className={classes.up_info_d_box_names}>
+                      <h3>
+                        {profileUser.displayName}
+                        {
+                          <ReactCountryFlag
+                            countryCode={
+                              countries.find(
+                                (country) =>
+                                  country.name === profileUser.country
+                              )?.code || " "
+                            }
+                            svg
+                            style={{
+                              width: "1em",
+                              height: "1em",
+                              marginLeft: "8px",
+                            }}
+                            title={profileUser.country || ""}
+                          />
+                        }
+                      </h3>
+                      <h4>@{profileUser.username}</h4>
+                    </div>
+                    {userProfile === loggedUser.username && (
+                      <Link to="/profile/edit">
+                        <div className={classes.up_info_d_box_edit}>
+                          <img src="/Assets/SVG/edit.svg" alt="EditBtn" />
+                          <span>Edit</span>
+                        </div>
+                      </Link>
+                    )}
+                    {userProfile !== loggedUser.username && (
+                      <div className={classes.up_info_details_controls}>
+                        <button
+                          className={
+                            "bi bi-chat-dots-fill " + classes.user_action_btn
+                          }
+                          onClick={() => setDialogVisible(true)}
+                        />
+                        <button
+                          className={` ${
+                            profileUser.friendshipStatus === "pending"
+                              ? `bi bi-person-fill-x ${classes.pending}`
+                              : profileUser.friendshipStatus === "requested"
+                              ? `bi bi-person-check-fill ${classes.requested}`
+                              : profileUser.friendshipStatus === "accepted"
+                              ? `bi bi-person-dash-fill ${classes.accepted}`
+                              : "bi bi-person-plus-fill"
+                          } ${classes.user_action_btn}`}
+                          onClick={() => {
+                            friendRequestAction()
+                              .then((res: any) => {
+                                toast.current?.show({
+                                  severity: "success",
+                                  summary: res.status,
+                                  detail: res.message,
+                                });
+                              })
+                              .catch((error: any) => {
+                                toast.current?.show({
+                                  severity: "error",
+                                  summary: error.status,
+                                  detail: error.message,
+                                });
+                              });
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
-                  <div className="post-header-single">
-                    <h3>My Friends</h3>
+                  <div className={classes.psi_single_details}>
+                    <span>
+                      <img src="/Assets/SVG/calendar.svg" alt="calender" />
+                      Joined
+                      <span className={classes.beside}>
+                        {FormatDate(profileUser.createdAt)}
+                      </span>
+                    </span>
                   </div>
-                  <div className="post-header-single">
+
+                  <p>{profileUser.bio || ""}</p>
+                </div>
+              </div>
+              <div className={classes.middle_up_info}>
+                <div className={classes.ps_header}>
+                  <h3>Division</h3>
+                </div>
+                <div className={classes.middle_upper_section}>
+                  <div className={classes.rank_img}>
+                    {getUserRankBadge(profileUser.user_rating)}
+                  </div>
+                  <div className={classes.rank_info}>
+                    <h3>Elite</h3>
+                    <div className={classes.rank_box}>
+                      <img
+                        src="/Assets/SVG/trophyIconYellow.svg"
+                        alt="RankImg"
+                      />
+                      <span>{profileUser.user_rating}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={classes.middle_down_section}>
+                  <div className={classes.middle_down_info}>
+                    <h3>World rank</h3>
+                    <div className={classes.middle_down_box}>
+                      <img src="/Assets/SVG/world_rank.svg" alt="RankImg" />
+                      <span>
+                        {profileUser.worldRank === 0
+                          ? "Unranked"
+                          : `#${profileUser.worldRank}`}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={classes.middle_down_info}>
+                    <h3>Max Rating</h3>
+                    <div className={classes.middle_down_box}>
+                      {getUserRankBadge(profileUser.user_max_rating)}
+                      <span>{profileUser.user_max_rating}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={classes.right_up_info}>
+                <div className={classes.ps_info}>
+                  <div className={classes.ps_header}>
                     <h3>Clan</h3>
                   </div>
-                  <div className="post-header-single">
-                    <h3>History</h3>
-                  </div>
-                </div>
-                <div className="post-box">
-                  <div className="post-row">
-                    <img src="/Assets/Images/Hazem Adel.jpg" alt="" />
-                    <textarea
-                      placeholder="Share your coding insights and experiences"
-                      onChange={handleExpanding}
-                      maxLength={500}
-                    ></textarea>
-                    <GBtn
-                      btnText="Quick Post"
-                      icnSrc="/Assets/SVG/quick.svg"
-                      clickEvent={() => {}}
-                    />
-                  </div>
-                  <div className="posts">
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="Hello world! this is my first post"
-                    />
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="I wanna to beat someone now!!"
-                    />
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="Ez"
-                    />
-                    <SinglePost
-                      postUser="Hazem Adel"
-                      postUserImg="/Assets/Images/Hazem Adel.jpg"
-                      postContent="Hakona Matata XD."
-                    />
-                  </div>
-                </div>
-              </form>
-
-              {/* <ProfileCard
-            username="Hazem Adel"
-            bio="Student at FCAI - Cairo University | ECPC’23 Champion - Candidate Master @Codeforces"
-            worldRank={5}
-            followers={5}
-            level={5}
-            percentage={30}
-            userImg="/Assets/Images/Hazem Adel.jpg"
-            clanImg="/Assets/Images/clan1.png"
-            clanName="Ghosts"
-            rankImg="/Assets/Images/elite-rank.png"
-            rankName="Elite"
-            badges={[
-              ["Groofy Predator", "/Assets/Images/apex-predator-rank.png"],
-              ["High Accuracy", "/Assets/Images/attackbadge.png"],
-              ["Master Wins", "/Assets/Images/win20badge.png"],
-            ]}
-          /> */}
-            </div>
-            {/* <div className="up-achievement"></div>
-            <div className="up-history"></div> */}
-          </div>
-          <div className="up-side-right">
-            <div className="profile-section">
-              <div className="ps-info">
-                <div className="ps-header">
-                  <h3>Info</h3>
-                  <abbr title="Info">
-                    <img
-                      src="/Assets/SVG/info.svg"
-                      className="info-btn"
-                      alt="Info"
-                    />
-                  </abbr>
-                </div>
-                <div className="ps-container-box">
-                  <div className="psi-single-details">
-                    <span>
-                      World Rank: <span className="beside"> #4529</span>
-                    </span>
-                  </div>
-                  <div className="psi-single-details">
-                    <span>
-                      Last Seen: <span className="ls">Online</span>
-                    </span>
-                  </div>
-                  <div className="psi-single-details">
-                    <span>
-                      Friends: <span className="friends">42</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="ps-info">
-                <div className="ps-header">
-                  <h3>Statistics</h3>
-                  <abbr title="Info">
-                    <img
-                      src="/Assets/SVG/info.svg"
-                      className="info-btn"
-                      alt="Info"
-                    />
-                  </abbr>
-                </div>
-                <div className="ps-container-box">
-                  <div className="psi-single-details">
-                    <span>
-                      <img src="/Assets/Images/battleicon.png" />
-                      Total Matches
-                    </span>
-                    <span className="any">800</span>
-                  </div>
-                  <div className="psi-single-details">
-                    <span>
-                      <img src="/Assets/Images/Yellow_trophy.png" />
-                      Highest Trophies
-                    </span>
-                    <span className="any">5030</span>
-                  </div>
-                  <div className="psi-single-details">
-                    <span>Wins</span>
-                    <span className="any">733</span>
-                  </div>
-                  <div className="psi-single-details">
-                    <span>Loses</span>
-                    <span className="any">52</span>
-                  </div>
-                  <div className="psi-single-details">
-                    <span>Draws</span>
-                    <span className="any">15</span>
-                  </div>
-                </div>
-              </div>
-              <div className="ps-info">
-                <div className="ps-header">
-                  <h3>Division</h3>
-                  <abbr title="Info">
-                    <img
-                      src="/Assets/SVG/info.svg"
-                      className="info-btn"
-                      alt="Info"
-                    />
-                  </abbr>
-                </div>
-                <div className="ps-container">
-                  <div className="psi-box">
-                    <img src="/Assets/Images/elite-rank.png" alt="RankImg" />
-                    <div className="wrapper">
-                      <span>Rank</span>
-                      <h3>Elite</h3>
-                    </div>
-                  </div>
-                  <div className="psi-box">
-                    <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
-                    <div className="wrapper">
-                      <span>Clan</span>
-                      <h3>Ghosts</h3>
+                  <div className={classes.ps_container}>
+                    <div className={classes.psi_box}>
+                      <img src="/Assets/Badges/Badge1.svg" alt="ClanImg" />
+                      <div className={classes.wrapper}>
+                        <span>Clan</span>
+                        <h3>
+                          {profileUser.clanName === null
+                            ? "No clan"
+                            : profileUser.clanName}
+                        </h3>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="ps-info">
-                <div className="ps-header">
-                  <h3>Badges</h3>
-                  <abbr title="Info">
-                    <img
-                      src="/Assets/SVG/info.svg"
-                      className="info-btn"
-                      alt="Info"
-                    />
-                  </abbr>
-                </div>
-                <div className="ps-container">
-                  <div className="psi-badge">
-                    <img
-                      src="/Assets/Images/apex-predator-rank.png"
-                      alt="Badge"
-                    />
-                    <span>Groofy Predator</span>
-                  </div>
-                  <div className="psi-badge">
-                    <img src="/Assets/Images/attackbadge.png" alt="Badge" />
-                    <span>High Accuracy</span>
-                  </div>
-                  <div className="psi-badge">
-                    <img src="/Assets/Images/win20badge.png" alt="Badge" />
-                    <span>Master Wins</span>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
+            <div className={classes.userprofile_side}>
+              <PSocial
+                profName={userProfile!}
+                loggedUser={loggedUser.username}
+                profileUser={profileUser}
+                toast={toast}
+              />
+              <PInfo profileUser={profileUser} />
+            </div>
+          </>
+        ) : profileRes.status !== "failure" ? (
+          <div>Loading...</div>
+        ) : (
+          <div>{profileRes.message}</div>
+        )}
       </div>
     </div>
   );

@@ -1,1 +1,1 @@
-{"version":3,"sources":["followcard.scss","../../../../shared/styles/_colors.scss","followcard.css"],"names":[],"mappings":"AAGA;EACI,+CCUU;EDTV,uBAAA;EACA,uBAAA;EACA,YAAA;EACA,mBAAA;EACA,gBAAA;EACA,iBAAA;EACA,aAAA;AEFJ;AFGI;EACI,YAAA;EACA,eAAA;EACA,cCdI;ACaZ","file":"followcard.css"}
+{"version":3,"sources":["followcard.scss","../../../../shared/styles/_colors.scss","followcard.css"],"names":[],"mappings":"AAGA;EACI,+CCkBU;EDjBV,uBAAA;EACA,uBAAA;EACA,YAAA;EACA,mBAAA;EACA,gBAAA;EACA,iBAAA;EACA,aAAA;AEFJ;AFGI;EACI,YAAA;EACA,eAAA;EACA,cCdI;ACaZ","file":"followcard.css"}

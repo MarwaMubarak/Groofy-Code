@@ -1,27 +1,21 @@
-import { useState } from "react";
 import { GroofyInputProps } from "../../../shared/types";
-import "./scss/groofyfield.css";
+import classes from "./scss/groofyfield.module.css";
 
 const GroofyField = (props: GroofyInputProps) => {
-  const [fieldValue, setFieldValue] = useState("");
-  const handleInputChange = (event: { target: { value: any } }) => {
-    try {
-      const value = event.target.value;
-      setFieldValue(value);
-      props.onChange(value);
-    } catch (e) {
-      console.log(e);
-    }
-  };
   return (
-    <div className="groofy-input">
-      <span className="gi-text">{props.giText}</span>
+    <div className={classes.groofy_input}>
+      <span className={classes.gi_text}>{props.giText}</span>
       <input
+        className={`${props.errState && classes.err}`}
         type={props.giType}
         placeholder={props.giPlaceholder}
-        onChange={handleInputChange}
-        value={fieldValue}
+        value={props.giValue}
+        onChange={props.onChange}
+        onBlur={props.onBlur}
       />
+      {props.errState && (
+        <span className={classes.err_msg}>{props.errMsg}</span>
+      )}
     </div>
   );
 };

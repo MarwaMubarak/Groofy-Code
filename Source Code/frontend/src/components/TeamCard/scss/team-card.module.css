@@ -1,0 +1,83 @@
+.team_card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 15px;
+  border-radius: 6px;
+  background-color: #fff;
+  width: 380px;
+  height: 190px;
+}
+.team_card .team_info {
+  width: 100%;
+}
+.team_card .team_info h3 {
+  width: 100%;
+  text-align: start;
+  margin-bottom: 10px;
+}
+.team_card .team_info .team_tags {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  flex-direction: column;
+  gap: 5px 0;
+}
+.team_card .team_info .team_tags a {
+  color: #00aaff;
+  text-decoration: none;
+}
+.team_card .team_info .team_tags a:hover {
+  text-decoration: underline;
+}
+.team_card .team_details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.team_card .team_details .clan_name {
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.team_card .team_details .clan_tags {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.team_card .team_details .clan_tags span {
+  margin-bottom: 10px;
+}
+.team_card .team_details .clan_tags span:nth-child(odd) {
+  margin-right: 10px;
+}
+.team_card .team_actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  gap: 0 10px;
+}
+.team_card .team_actions .view_btn {
+  background-color: #27b7ff;
+  border-color: #27b7ff;
+}
+.team_card .team_actions .view_btn:hover, .team_card .team_actions .view_btn:active, .team_card .team_actions .view_btn:focus {
+  box-shadow: none;
+  background-color: #00aaff;
+  border-color: #00aaff;
+}
+.team_card .team_actions .cr_btn.view {
+  background-color: #27b7ff;
+  border-color: #27b7ff;
+}
+.team_card .team_actions .cr_btn.view:hover, .team_card .team_actions .cr_btn.view:active, .team_card .team_actions .cr_btn.view:focus {
+  box-shadow: none;
+  background-color: #00aaff;
+  border-color: #00aaff;
+}/*# sourceMappingURL=team-card.module.css.map */

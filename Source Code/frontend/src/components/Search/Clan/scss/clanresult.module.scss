@@ -1,0 +1,99 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.clan_card {
+  @include center;
+  flex-direction: column;
+  padding: 0 15px;
+  border-radius: 6px;
+  background-color: #fff;
+  width: 388px;
+  height: 190px;
+  .clan_info {
+    @include center;
+    .clan_img {
+      margin-right: 10px;
+      img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+    }
+    .clan_details {
+      @include center;
+      flex-direction: column;
+      .clan_name {
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .clan_tags {
+        @include around;
+        flex-wrap: wrap;
+        span {
+          margin-bottom: 10px;
+          &:nth-child(odd) {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+  .clan_actions {
+    @include end;
+    width: 100%;
+    gap: 0 10px;
+    .view_btn {
+      background-color: #27b7ff;
+      border-color: #27b7ff;
+      &:hover,
+      &:active,
+      &:focus {
+        box-shadow: none;
+        background-color: $blueColor;
+        border-color: $blueColor;
+      }
+    }
+    .cr_btn {
+      &.cancel {
+        background-color: #ff3d3d;
+        border-color: #ff3d3d;
+        color: white;
+
+        &:hover,
+        &:active,
+        &:focus {
+          box-shadow: none;
+          background-color: $redColor;
+          border-color: $redColor;
+        }
+      }
+      &.join {
+        background-color: #16b308;
+        border-color: #16b308;
+        color: white;
+        &:hover,
+        &:active,
+        &:focus {
+          box-shadow: none;
+          background-color: $greenColor;
+          border-color: $greenColor;
+        }
+      }
+      &.view {
+        background-color: #27b7ff;
+        border-color: #27b7ff;
+        color: white;
+
+        &:hover,
+        &:active,
+        &:focus {
+          box-shadow: none;
+          background-color: $blueColor;
+          border-color: $blueColor;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.notify_area {
+  position: absolute;
+  top: 100%;
+  background-color: #fff;
+  box-shadow: $headerShadow;
+  width: 430px;
+  border-radius: 0 0 10px 10px;
+  z-index: 100000;
+  &.false {
+    display: none;
+  }
+  .notify_header {
+    @include between;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px 5px;
+    h3 {
+      font-size: 18px;
+    }
+    .clear_notify {
+      @include center;
+      margin-right: 10px;
+      padding: 7px;
+      border-radius: 50%;
+      transition: 0.3s;
+      cursor: pointer;
+      &:hover {
+        background-color: #eee;
+      }
+      img {
+        width: 18px;
+      }
+    }
+  }
+  .na_content {
+    max-height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    @include scrollbar;
+    .empty_box {
+      @include center;
+      flex-direction: column;
+      margin-bottom: 20px;
+      img {
+        width: 60px;
+      }
+      span {
+        color: #777;
+        font-size: 14px;
+      }
+    }
+  }
+  .see_all {
+    @include center;
+    border-top: 1px solid #ddd;
+    padding: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #eee;
+    transition: 0.2s;
+    border-radius: 0 0 10px 10px;
+    user-select: none;
+    cursor: pointer;
+    &:hover {
+      background-color: $mainColor;
+      color: #fff;
+    }
+  }
+}

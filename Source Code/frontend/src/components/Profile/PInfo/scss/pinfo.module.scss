@@ -1,0 +1,149 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.up_side_right {
+  @include center;
+  flex-direction: column;
+  margin-left: 30px;
+  @media (max-width: 1053px) {
+    margin-left: 0;
+    width: 100%;
+  }
+  .profile_section {
+    @include start;
+    flex-direction: column;
+    @media (max-width: 1053px) {
+      width: 100%;
+    }
+    .ps_info {
+      @include center;
+      flex-direction: column;
+      background-color: $mainColor;
+      border-radius: 6px;
+      padding: 20px;
+      width: 290px;
+      box-shadow: $lightShadow;
+      @media (max-width: 1053px) {
+        width: 100%;
+      }
+      .ps_container_box {
+        width: 100%;
+        @include start;
+        flex-direction: column;
+        align-items: flex-start;
+        color: #f2f2f2;
+        .psi_single_details {
+          @include between;
+          width: 100%;
+          margin-top: 10px;
+          span {
+            @include center;
+            align-items: flex-end;
+            span {
+              margin-left: 5px;
+            }
+            img {
+              width: 20px;
+              margin-right: 5px;
+            }
+
+            .ls {
+              color: rgb(0, 255, 0);
+              font-weight: bold;
+            }
+            .friends {
+              color: $blueColor;
+              font-weight: bold;
+            }
+          }
+          .any {
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+          }
+        }
+      }
+      &:not(:last-of-type) {
+        margin-bottom: 30px;
+      }
+      .ps_header {
+        width: 100%;
+        @include between;
+        padding-bottom: 10px;
+        margin-bottom: 5px;
+        border-bottom: 3px solid $mainColor2;
+        h3 {
+          color: $hoverColor;
+          font-size: 20px;
+          font-weight: bold;
+        }
+        .info_btn {
+          width: 18px;
+          cursor: pointer;
+        }
+      }
+      .ps_container {
+        @include center;
+        width: 100%;
+        .psi_box {
+          @include center;
+          flex-direction: column;
+          position: relative;
+          height: 150px;
+          // background-color: $mainColor2;
+          padding: 10px 15px;
+          margin: 0 -40px;
+          border-radius: 12px;
+          &:not(:last-of-type) {
+            margin-right: 60px;
+          }
+          img {
+            width: 85px;
+          }
+          .wrapper {
+            @include center;
+            flex-direction: column;
+            span {
+              color: #ddd;
+              font-size: 14px;
+            }
+            h3 {
+              color: #fff;
+              font-size: 20px;
+            }
+          }
+        }
+        .psi_badge {
+          @include center;
+          flex-direction: column;
+          position: relative;
+          height: 150px;
+          &:not(:last-of-type) {
+            margin-right: 20px;
+          }
+          &::after {
+            content: "";
+            position: absolute;
+            height: 3px;
+            width: 60px;
+            bottom: 17px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f93535;
+            border-radius: 12px;
+          }
+          img {
+            width: 60px;
+            margin-bottom: 10px;
+          }
+          span {
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}

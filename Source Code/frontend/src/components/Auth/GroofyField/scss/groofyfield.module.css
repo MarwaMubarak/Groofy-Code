@@ -1,0 +1,46 @@
+.groofy_input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.groofy_input:not(:last-of-type) {
+  margin-bottom: 25px;
+}
+.groofy_input .gi_text {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.groofy_input input {
+  background-color: #eee;
+  border-radius: 6px;
+  padding: 10px;
+  border: none;
+  caret-color: #feb139;
+  font-size: 16px;
+  transition: 0.3s;
+  width: 400px;
+  outline: 2px solid transparent;
+  color: black;
+}
+.groofy_input input.err {
+  outline-color: #f55353;
+}
+.groofy_input input:not(.err):focus, .groofy_input input:not(.err):hover {
+  outline-color: #00aaff;
+}
+.groofy_input input::-moz-placeholder {
+  opacity: 0.5;
+  font-size: 14px;
+  color: #000;
+}
+.groofy_input input::placeholder {
+  opacity: 0.5;
+  font-size: 14px;
+  color: #000;
+}
+.groofy_input .err_msg {
+  color: #f55353;
+  font-size: 14px;
+  margin-top: 5px;
+  width: 400px;
+}/*# sourceMappingURL=groofyfield.module.css.map */

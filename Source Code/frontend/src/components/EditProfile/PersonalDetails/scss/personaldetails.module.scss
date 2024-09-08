@@ -1,0 +1,154 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.edit_info {
+  height: 100%;
+  width: 75%;
+  padding-left: 50px;
+  .edit_header {
+    font-size: 40px;
+    margin-bottom: 30px;
+    color: $hoverColor;
+  }
+  .edit_content {
+    .editprofile_photo {
+      @include center;
+      flex-direction: column;
+      position: absolute;
+      right: 150px;
+      img {
+        width: 170px;
+        border-radius: 50%;
+        margin-bottom: 25px;
+      }
+      .change_photo_btn {
+        cursor: pointer;
+        color: $hoverColor;
+        font-size: 16px;
+        background-color: #008ace;
+        padding: 10px 15px;
+        width: 160px;
+        border-radius: 6px;
+        font-weight: bold;
+        text-align: center;
+        &.y {
+          border-radius: 6px 6px 0 0;
+        }
+      }
+      .photo_menu {
+        display: none;
+        background-color: #ddd;
+        color: #000;
+        width: 160px;
+        border-radius: 0 0 6px 6px;
+        border: 1px solid #5d5d5d;
+        overflow: hidden;
+        &.y {
+          display: block;
+        }
+        .photo_menu_item {
+          width: 100%;
+          padding: 10px 15px;
+          @include start;
+          transition: 0.3s;
+          background-color: $mainColor2;
+          color: #fff;
+          cursor: pointer;
+          &:hover {
+            background-color: $mainColorHover2;
+          }
+          &.dis {
+            cursor: not-allowed;
+            background-color: $mainColorHover2;
+          }
+          // &:not(:last-of-type) {
+          //   border-bottom: 1px solid rgba(#000, 0.2);
+          // }
+          i {
+            margin-right: 10px;
+          }
+          span {
+            font-weight: bold;
+          }
+          // &.up {
+          //   &:hover {
+          //     background-color: $mainColorHover;
+          //   }
+          // }
+          // &.rem {
+          //   &:hover {
+          //     background-color: $redColor;
+          //   }
+          // }
+        }
+      }
+    }
+    .bio_content {
+      h1 {
+        font-size: 16px;
+      }
+      textarea {
+        font-family: OpenSans, Arial, Helvetica, sans-serif;
+        width: 400px;
+        overflow-y: hidden;
+        border: none;
+        padding: 12.2px 15px 5px;
+        border-radius: 6px;
+        background-color: $mainColor;
+        caret-color: $hoverColor;
+        color: $hoverColor;
+        margin-right: 20px;
+        font-size: 16px;
+        resize: none;
+        &:focus {
+          outline: none;
+        }
+        margin-bottom: 10px;
+      }
+    }
+    .country_selector {
+      @include start;
+      margin-bottom: 30px;
+      .cs_title {
+        margin-right: 10px;
+        color: $hoverColor;
+      }
+      .drop_down_div {
+        background-color: $mainColor;
+      }
+    }
+    .groofybtn {
+      @include center;
+      background-color: $blueColor;
+      color: #fff;
+      border-radius: 12px;
+      width: 140px;
+      box-shadow: $headerShadow;
+      padding: 8px 12px;
+      transition: 0.3s;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      &:hover {
+        box-shadow: none;
+        background-color: $blueHoverColor;
+      }
+      &:disabled {
+        background-color: $darkColor;
+        cursor: not-allowed;
+      }
+      .btn_text {
+        font-size: 12px;
+        font-weight: 500;
+        font-family: "Roboto", sans-serif;
+      }
+      .btn_icn {
+        width: 25px;
+      }
+    }
+  }
+}
+
+.drop_down_panel {
+  background-color: $mainColor;
+}

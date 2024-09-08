@@ -6,26 +6,29 @@
     @include between;
     gap: 0 80px;
     padding: 5px 12px;
-    span {
+    .vs_word {
+      position: relative;
+      left: -5px;
       font-size: 40px;
       font-weight: bold;
+      color: #fff;
     }
     .player {
       @include center;
-      .first-status,
-      .second-status {
+      .first_status,
+      .second_status {
         position: relative;
         border-radius: 50%;
         width: 28px;
         height: 28px;
         top: 10px;
       }
-      .first-status {
+      .first_status {
         background-color: #cecece;
-        left: 10px;
+        left: 15px;
       }
-      .second-status {
-        right: 10px;
+      .second_status {
+        right: -3px;
         img {
           max-width: 100%;
           border-radius: 50%;
@@ -35,20 +38,21 @@
         @include center;
         flex-direction: column;
         .usn {
-          background-color: $btnColor;
-          color: #000;
+          // background-color: $btnColor;
+          margin-bottom: 7px;
+          color: #fff;
           font-weight: 500;
           border-radius: 15px;
           padding: 0 16px;
           font-size: 14px;
         }
         img {
-          width: 65px;
-          height: 65px;
+          width: 50px;
+          height: 50px;
           border-radius: 50%;
         }
       }
-      .pr-st {
+      .pr_st {
         @include center;
         gap: 0 8px;
         position: relative;

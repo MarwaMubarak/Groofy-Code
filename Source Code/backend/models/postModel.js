@@ -9,17 +9,48 @@ const PostSchema = new mongoose.Schema(
     },
     content: {
       type: String,
+      trim: true,
       required: true,
-      minlength: 10,
+      minlength: 1,
     },
-    like: [
+    createdAt:{
+      type: Date,
+      default:Date.now
+    },
+    updatedAt:{
+      type: Date,
+      default:Date.now
+
+    }
+    ,
+    likes: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },
-  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  {  toJSON: {
+    virtuals: true,
+    transform: function (doc, ret) {
+      // Transform the 'likes' array elements
+      ret.likes = ret.likes.map((like) => ({
+        date: like.date,
+        user: like.user
+      }));
+
+      delete ret.id;
+      delete ret.__v;
+
+      return ret;
+    },
+  }, toObject: { virtuals: true } }
 );
 
 const Post = mongoose.model("Post", PostSchema);
@@ -31,7 +62,7 @@ const Post = mongoose.model("Post", PostSchema);
 // Create Post
 const createPostValidation = (post) => {
   const schema = Joi.object({
-    content: Joi.string().min(10).required(),
+    content: Joi.string().min(1).required(),
     user: Joi.string(),
   });
   return schema.validate(post);
@@ -39,7 +70,7 @@ const createPostValidation = (post) => {
 // Edit Post
 const updatePostValidation = (post) => {
   const schema = Joi.object({
-    content: Joi.string().min(10),
+    content: Joi.string().min(1),
     user: Joi.string(),
     upvotes: Joi.array(),
     downvotes: Joi.array(),

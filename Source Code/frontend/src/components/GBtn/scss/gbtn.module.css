@@ -1,0 +1,37 @@
+.groofybtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00aaff;
+  color: #fff;
+  border-radius: 12px;
+  min-width: 140px;
+  width: -moz-fit-content;
+  width: fit-content;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 8px 12px;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.groofybtn:hover {
+  box-shadow: none;
+  background-color: #29b8ff;
+}
+.groofybtn:disabled {
+  background-color: #484848;
+  cursor: not-allowed;
+}
+.groofybtn .btn_text {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+.groofybtn .btn_icn {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}/*# sourceMappingURL=gbtn.module.css.map */

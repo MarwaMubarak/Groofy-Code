@@ -88,7 +88,7 @@
 }
 .sf-popup .sfp-section3 {
   border: 1px solid white;
-  background-color: #0e141e;
+  background-color: #18191a;
   display: flex;
   padding: 5px 0px;
 }
@@ -115,7 +115,7 @@
 }
 .sf-popup .sfp-section4 {
   border: 1px solid white;
-  background: linear-gradient(0deg, #0e141e, rgb(20, 49, 94), rgb(31, 75, 141));
+  background: linear-gradient(0deg, #18191a, rgb(20, 49, 94), rgb(31, 75, 141));
   display: flex;
   justify-content: center;
   align-items: center;

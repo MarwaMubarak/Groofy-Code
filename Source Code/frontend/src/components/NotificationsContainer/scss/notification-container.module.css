@@ -1,0 +1,88 @@
+.notify_area {
+  position: absolute;
+  top: 100%;
+  background-color: #fff;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  width: 430px;
+  border-radius: 0 0 10px 10px;
+  z-index: 100000;
+}
+.notify_area.false {
+  display: none;
+}
+.notify_area .notify_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 15px 5px;
+}
+.notify_area .notify_header h3 {
+  font-size: 18px;
+}
+.notify_area .notify_header .clear_notify {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  padding: 7px;
+  border-radius: 50%;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.notify_area .notify_header .clear_notify:hover {
+  background-color: #eee;
+}
+.notify_area .notify_header .clear_notify img {
+  width: 18px;
+}
+.notify_area .na_content {
+  max-height: 350px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.notify_area .na_content::-webkit-scrollbar {
+  width: 6px;
+}
+.notify_area .na_content::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 10px;
+}
+.notify_area .na_content::-webkit-scrollbar-thumb {
+  background-color: #18191a;
+  border-radius: 10px;
+}
+.notify_area .na_content .empty_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.notify_area .na_content .empty_box img {
+  width: 60px;
+}
+.notify_area .na_content .empty_box span {
+  color: #777;
+  font-size: 14px;
+}
+.notify_area .see_all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #eee;
+  transition: 0.2s;
+  border-radius: 0 0 10px 10px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+.notify_area .see_all:hover {
+  background-color: #18191a;
+  color: #fff;
+}/*# sourceMappingURL=notification-container.module.css.map */

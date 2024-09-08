@@ -1,0 +1,12 @@
+Performance Score_i = \sum_{r=800}^{3500} GamesAtRating_r \times DifficultyWeight_r
+
+AdjustedScore_i = Performance Score_i + (1 + \dfrac{Wins_i}{Losses_i + 1}) + Draws_i \times 0.1
+
+MaxRatingInfluence_i = \dfrac{UserMaxRating_i}{3500}
+
+AdjustedScore_i = AdjustedScore_i + (AdjustedScore_i \times MaxRatingInfluence_i)
+
+NormalizedScore_i = \dfrac{AdjustedScore_i - Min(AdjustedScore)}{Max(AdjustedScore) - Min(AdjustedScore)} \times (MAX DELTA - MIN DELTA) + MIN DELTA
+
+
+ExpectedRating_i = UserRating_i + clip(NormalizedScore_i, MINDELTA, MAXDELTA)

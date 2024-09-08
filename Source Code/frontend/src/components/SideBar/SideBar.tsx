@@ -1,19 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./scss/sidebar.css";
+import { useSelector } from "react-redux";
+import classes from "./scss/sidebar.module.css";
 
 const SideBar = (probs: { idx: number }) => {
-  const [sbActive, setSBActive] = useState(true);
+  const lsb =
+    localStorage.getItem("sbActive") === ("true" || null) ? true : false;
+  const [sbActive, setSBActive] = useState<boolean>(lsb);
+  const user = useSelector((state: any) => state.auth.user);
   return (
-    <div className={`sidebar-container ${sbActive}`}>
-      <div className="sidebar-up">
-        <div className="sidebar-header">
-          <img src="/Assets/SVG/menu.svg" alt="Menu" />
-          <span className="sidebar-logo">Menu</span>
+    <div
+      className={`${classes.sidebar_container} ${!sbActive && classes.false}`}
+    >
+      <div className={classes.sidebar_up}>
+        <div className={classes.sidebar_header}>
+          <img src="/Assets/SVG/codeIcon2.svg" alt="Menu" />
+          <span className={classes.sidebar_logo}>Menu</span>
         </div>
-        <ul className="sidebar-nav-items">
+        <ul className={classes.sidebar_nav_items}>
           <Link to="/">
-            <li className={`${!probs.idx ? "active" : ""}`}>
+            <li className={`${!probs.idx && classes.active}`}>
               <img
                 src={`/Assets/SVG/${
                   !probs.idx ? "HomeIconColored" : "HomeIcon"
@@ -23,8 +29,8 @@ const SideBar = (probs: { idx: number }) => {
               <span>Home</span>
             </li>
           </Link>
-          <Link to="/profile">
-            <li className={`${probs.idx === 1 ? "active" : ""}`}>
+          <Link to={`/profile/${user.username}`}>
+            <li className={`${probs.idx === 1 && classes.active}`}>
               <img
                 src={`/Assets/SVG/${
                   probs.idx === 1 ? "ProfileIconColored" : "ProfileIcon"
@@ -35,7 +41,7 @@ const SideBar = (probs: { idx: number }) => {
             </li>
           </Link>
           <Link to="/play">
-            <li className={`${probs.idx === 2 ? "active" : ""}`}>
+            <li className={`${probs.idx === 2 && classes.active}`}>
               <img
                 src={`/Assets/SVG/${
                   probs.idx === 2 ? "BattleIconColored" : "BattleIcon"
@@ -46,7 +52,7 @@ const SideBar = (probs: { idx: number }) => {
             </li>
           </Link>
           <Link to="/clan">
-            <li className={`${probs.idx === 3 ? "active" : ""}`}>
+            <li className={`${probs.idx === 3 && classes.active}`}>
               <img
                 src={`/Assets/SVG/${
                   probs.idx === 3 ? "ClanIconColored" : "ClanIcon"
@@ -56,33 +62,36 @@ const SideBar = (probs: { idx: number }) => {
               <span>Clan</span>
             </li>
           </Link>
-          <Link to="/news">
-            <li className={`${probs.idx === 4 ? "active" : ""}`}>
+          <Link to="/teams">
+            <li className={`${probs.idx === 4 && classes.active}`}>
               <img
                 src={`/Assets/SVG/${
-                  probs.idx === 4 ? "NewsIconColored" : "NewsIcon"
+                  probs.idx === 4 ? "team-colored" : "team"
                 }.svg`}
                 alt=""
               />
-              <span>News</span>
+              <span>Teams</span>
             </li>
           </Link>
-          <Link to="/help">
-            <li className={`${probs.idx === 5 ? "active" : ""}`}>
+          <Link to="/leaderboard">
+            <li className={`${probs.idx === 5 && classes.active}`}>
               <img
                 src={`/Assets/SVG/${
-                  probs.idx === 5 ? "HelpIconColored" : "HelpIcon"
+                  probs.idx === 5 ? "leaderboard_colored" : "leaderboard"
                 }.svg`}
                 alt=""
               />
-              <span>Help</span>
+              <span>Leaderboard</span>
             </li>
           </Link>
         </ul>
       </div>
       <div
-        className="sidebar-down"
-        onClick={() => setSBActive((state) => !state)}
+        className={classes.sidebar_down}
+        onClick={() => {
+          setSBActive((state: boolean) => !state);
+          localStorage.setItem("sbActive", (!sbActive).toString());
+        }}
       >
         <img src="/Assets/SVG/collapse.svg" alt="Collapse" />
         <span>Collapse</span>

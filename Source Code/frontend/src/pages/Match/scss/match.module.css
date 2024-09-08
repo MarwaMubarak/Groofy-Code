@@ -1,0 +1,10 @@
+.match_div {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 100%;
+}
+.match_div .match_sections {
+  display: flex;
+  margin-top: 25px;
+}/*# sourceMappingURL=match.module.css.map */

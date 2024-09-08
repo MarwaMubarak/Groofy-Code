@@ -1,0 +1,16 @@
+.friends {
+  width: 100%;
+  margin-top: 20px;
+  background-color: #18191a;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.friends h3 {
+  color: #fff;
+  font-weight: normal;
+}/*# sourceMappingURL=friends.module.css.map */

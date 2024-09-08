@@ -1,0 +1,283 @@
+.clan_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 42px;
+  height: calc(100vh - 40px);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.clan_div .c_info {
+  display: flex;
+  flex-direction: column;
+  gap: 25px 0;
+  height: 100%;
+  width: 30%;
+}
+.clan_div .c_info .c_box {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  flex: 1;
+}
+.clan_div .c_info .c_box .c_details_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0px;
+  border-bottom: 1px solid #ddd;
+}
+.clan_div .c_info .c_box .c_details_wrapper .c_details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clan_div .c_info .c_box .c_details_wrapper .c_details img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.clan_div .c_info .c_box .c_details_wrapper .c_details span {
+  font-size: 18px;
+}
+.clan_div .c_info .c_box .c_details_wrapper .c_actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+}
+.clan_div .c_info .c_box .c_details_wrapper .c_actions i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px;
+  border-radius: 50%;
+  font-size: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.clan_div .c_info .c_box .c_details_wrapper .c_actions i:first-of-type:hover {
+  color: #00aaff;
+  background-color: #f5f5f5;
+}
+.clan_div .c_info .c_box .c_details_wrapper .c_actions i:last-of-type:hover {
+  color: #f55353;
+  background-color: #f5f5f5;
+}
+.clan_div .c_info .c_box .c_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #eaedf2;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+.clan_div .c_info .c_box .c_header .ch_icn {
+  width: 25px;
+  cursor: pointer;
+}
+.clan_div .c_info .c_box .m_box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px 0;
+  height: 260px;
+  overflow: auto;
+}
+.clan_div .c_info .c_box .m_box .member {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-radius: 6px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+.clan_div .c_info .c_box .m_box .member:hover {
+  background-color: #f5f5f5;
+}
+.clan_div .c_info .c_box .m_box .member .m_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clan_div .c_info .c_box .m_box .member .m_info .m_usn {
+  font-size: 15px;
+}
+.clan_div .c_info .c_box .m_box .member .m_rank {
+  font-size: 13px;
+  font-weight: bold;
+  position: relative;
+  text-transform: capitalize;
+}
+.clan_div .c_info .c_box .m_box .member .m_rank.l {
+  color: #feb139;
+}
+.clan_div .c_info .c_box .m_box .member .m_rank.m {
+  color: #00aaff;
+}
+.clan_div .c_info .c_box .rm_box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px 0;
+  margin-bottom: 30px;
+}
+.clan_div .c_info .c_box .rm_box .member {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.clan_div .c_info .c_box .rm_box .member .rm_usn {
+  font-size: 15px;
+}
+.clan_div .c_info .c_box .rm_box .member .rm_usp {
+  font-size: 14px;
+  color: #959595;
+}
+.clan_div .c_chat {
+  height: 100%;
+  width: 70%;
+  border-radius: 12px;
+  background-color: #303031;
+}
+.clan_div .c_chat .ch_header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0 20px;
+  padding: 20px 40px 15px;
+}
+.clan_div .c_chat .ch_header .cl_img {
+  background-color: #f55353;
+  border-radius: 50%;
+  padding: 13px;
+}
+.clan_div .c_chat .ch_header .cl_img img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  opacity: 0.5;
+}
+.clan_div .c_chat .ch_header .cl_i .cln {
+  margin-bottom: 5px;
+}
+.clan_div .c_chat .ch_header .cl_i .cld {
+  color: #7d7d7d;
+}
+.clan_div .c_chat .ch {
+  background-color: #18191a;
+  height: calc(100% - 173px);
+  overflow-y: auto;
+  margin-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.clan_div .c_chat .ch::-webkit-scrollbar {
+  width: 6px;
+}
+.clan_div .c_chat .ch::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 10px;
+}
+.clan_div .c_chat .ch::-webkit-scrollbar-thumb {
+  background-color: #18191a;
+  border-radius: 10px;
+}
+.clan_div .c_chat .ch .msg_box {
+  display: flex;
+  align-items: center;
+  gap: 0 10px;
+}
+.clan_div .c_chat .ch .msg_box .msg_info .msg {
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 0px 6px 6px 6px;
+  background-color: #afafaf;
+  color: #fff;
+}
+.clan_div .c_chat .ch .msg_box .msg_info .msg_usn {
+  color: #fff;
+}
+.clan_div .c_chat .ch .msg_box.to {
+  flex-direction: row-reverse;
+}
+.clan_div .c_chat .ch .msg_box.to .msg_info .msg_usn {
+  text-align: end;
+}
+.clan_div .c_chat .ch .msg_box.to .msg_info .msg {
+  background-color: #00aaff;
+  border-radius: 6px 0px 6px 6px;
+}
+.clan_div .c_chat .ch .msg_box .u_img img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.clan_div .c_chat .ch_msg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #242526;
+  padding: 10px;
+}
+.clan_div .c_chat .ch_msg textarea {
+  color: #fff;
+  padding: 10px 75px 5px 40px;
+  width: calc(100% - 70px);
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  resize: none;
+  overflow-y: auto;
+  border: none;
+}
+.clan_div .c_chat .ch_msg textarea::-webkit-scrollbar {
+  width: 6px;
+}
+.clan_div .c_chat .ch_msg textarea::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 10px;
+}
+.clan_div .c_chat .ch_msg textarea::-webkit-scrollbar-thumb {
+  background-color: #18191a;
+  border-radius: 10px;
+}
+.clan_div .c_chat .ch_msg textarea:focus {
+  outline: none;
+}
+.clan_div .c_chat .ch_msg textarea::-moz-placeholder {
+  font-family: "Roboto", sans-serif;
+  color: #9f9f9f;
+  font-size: 16px;
+}
+.clan_div .c_chat .ch_msg textarea::placeholder {
+  font-family: "Roboto", sans-serif;
+  color: #9f9f9f;
+  font-size: 16px;
+}
+.clan_div .c_chat .ch_msg .submit_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+}
+.clan_div .c_chat .ch_msg .submit_btn button {
+  border: none;
+  background-color: #feb139;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+.clan_div .c_chat .ch_msg .submit_btn button img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  opacity: 0.5;
+  transition: 0.3s;
+}/*# sourceMappingURL=clan.module.css.map */

@@ -1,0 +1,144 @@
+@use "../../../shared/styles/mixins" as *;
+@use "../../../shared/styles/colors" as *;
+
+.single_team_container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 40px;
+  .header {
+    width: 100%;
+    @include start;
+    margin-bottom: 40px;
+    h3 {
+      color: #fff;
+      margin-right: 30px;
+      width: 100%;
+    }
+    .buttonsBox {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+      .create_btn {
+        color: white;
+        margin-right: 20px;
+        border: none;
+      }
+    }
+  }
+  .members_box {
+    h3 {
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .members {
+      @include start;
+      flex-wrap: wrap;
+      gap: 20px;
+      width: 100%;
+      .search_result {
+        position: relative;
+        @include center;
+        flex-direction: column;
+        width: 270px;
+        height: 400px;
+        .message_user {
+          position: absolute;
+          right: 20px;
+          top: 28%;
+          .user_msg {
+            color: #000;
+            border-color: #000;
+            font-size: 22px;
+            cursor: pointer;
+          }
+        }
+        .user_skin {
+          height: 25%;
+          width: 100%;
+          background-color: $redColor;
+          border-radius: 25px 25px 0 0;
+        }
+        .sr_user {
+          @include center;
+          flex-direction: column;
+          position: absolute;
+          left: 50%;
+          top: 60px;
+          transform: translateX(-50%);
+          .user_img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            box-shadow: 0px 10px 15px 0px rgba(144, 144, 144, 0.75);
+          }
+          .sr_username {
+            @include center;
+            margin-top: 10px;
+            h3 {
+              color: #000;
+            }
+            .user_flag {
+              margin-left: 8px;
+            }
+          }
+        }
+        .user_info {
+          @include center;
+          flex-direction: column;
+          padding: 10px 15px;
+          height: 75%;
+          width: 100%;
+          background-color: #fff;
+          border-radius: 0 0 25px 25px;
+          .user_divisions {
+            @include center;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 80px);
+            justify-content: center;
+            align-items: center;
+            gap: 20px 25px;
+            margin-top: 100px;
+            margin-bottom: 20px;
+            width: 100%;
+            .division {
+              @include center;
+              flex-direction: column;
+              h3 {
+                // color: #0296e1;
+                color: black;
+                font-size: 16px;
+              }
+              span {
+                color: #a3a3a3;
+                font-size: 12px;
+              }
+            }
+          }
+          .sr_controls {
+            @include center;
+            width: 100%;
+            gap: 0 10px;
+            button {
+              @include center;
+              width: 100%;
+              // background-color: #ffcc00;
+              background-color: $blueColor;
+              border: none;
+              &:hover {
+                // background-color: #fdd638;
+                background-color: $blueHoverColor;
+              }
+              span {
+                font-size: 12px;
+                color: #fff;
+                flex: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

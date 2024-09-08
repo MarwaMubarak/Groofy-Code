@@ -1,84 +1,101 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GBtn, GroofyField } from "../../components";
-import "./scss/login/login.css";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { authThunks } from "../../store/actions";
+import { loginSchema } from "../../shared/schemas";
+import { useFormik } from "formik";
+import { useRef } from "react";
+import { Toast } from "primereact/toast";
+import classes from "./scss/login/login.module.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const toast = useRef<Toast>(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleLoginClick = async (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    try {
-      console.log("Login Clicked");
-      console.log(email, password);
+  const formHandler = useFormik({
+    initialValues: {
+      usernameOrEmail: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values, actions) => {
+      const logUser = async () => {
+        await dispatch(authThunks.login(values) as any);
+      };
+      logUser()
+        .then(() => {
+          (toast.current as any)?.show({
+            severity: "success",
+            summary: "Success",
+            detail: "Login successful",
+            life: 1500,
+          });
+          setTimeout(() => {
+            actions.resetForm();
+            navigate("/");
+          }, 700);
+        })
+        .catch((error: any) => {
+          actions.resetForm({ values: { ...values, password: "" } });
+          (toast.current as any)?.show({
+            severity: "error",
+            summary: "Failed",
+            detail: error.response.data.message,
+            life: 1500,
+          });
+        });
+    },
+  });
 
-      if (email === "" || password === "") {
-        alert("Please fill all the fields");
-      }
-      const response = await fetch("http://localhost:8000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-      console.log(response, "response");
-      const data = await response.json();
-      if (data.error) {
-        alert(data.error);
-        return;
-      }
-      console.log("Login Successfull", data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const handleEmailChange = (e: any) => {
-    try {
-      console.log("Email Changed");
-      setEmail(e);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const handlePasswordChange = (e: any) => {
-    try {
-      console.log("Password Changed");
-      setPassword(e);
-    } catch (e) {
-      console.log(e);
-    }
-  };
   return (
-    <div className="align">
-      <div className="login-div">
-        <div className="auth-title">
+    <div className={classes.align}>
+      <Toast ref={toast} />
+      <div className={classes.login_div}>
+        <div className={classes.auth_title}>
           Login as a <span>Groofy</span>
         </div>
-        <form className="auth-form">
+        <form className={classes.auth_form} onSubmit={formHandler.handleSubmit}>
           <GroofyField
-            giText="Email"
-            giPlaceholder="Enter your username or email"
-            giType="email"
-            onChange={handleEmailChange}
+            giText="Email/Username"
+            giPlaceholder="Enter your email or username"
+            giType="text"
+            giValue={formHandler.values.usernameOrEmail}
+            onChange={formHandler.handleChange("usernameOrEmail")}
+            onBlur={formHandler.handleBlur("usernameOrEmail")}
+            errState={
+              (formHandler.errors.usernameOrEmail &&
+                formHandler.touched.usernameOrEmail) ||
+              false
+            }
+            errMsg={formHandler.errors.usernameOrEmail}
           />
           <GroofyField
             giText="Password"
             giPlaceholder="Enter your password"
             giType="password"
-            onChange={handlePasswordChange}
+            giValue={formHandler.values.password}
+            onChange={formHandler.handleChange("password")}
+            onBlur={formHandler.handleBlur("password")}
+            errState={
+              (formHandler.errors.password && formHandler.touched.password) ||
+              false
+            }
+            errMsg={formHandler.errors.password}
           />
-          <div className="f-sbmt">
-            <GBtn btnText="Login" clickEvent={handleLoginClick} />
-            <Link to="/forgetpass" className="frg-pass">
+          <div className={classes.f_sbmt}>
+            <GBtn
+              btnText="Login"
+              clickEvent={() => {}}
+              btnType={true}
+              btnState={formHandler.isSubmitting}
+            />
+            <Link to="/forgetpass" className={classes.frg_pass}>
               Forget Password?
             </Link>
-            <span className="alrg">
+            <span className={classes.alrg}>
               Don't an account?<Link to="/signup">Sign Up</Link>
             </span>
-            SignUp
           </div>
         </form>
       </div>

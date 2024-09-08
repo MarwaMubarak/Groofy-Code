@@ -1,7 +1,7 @@
 @use "../../../../../shared/styles/colors" as *;
 @use "../../../../../shared/styles/mixins" as *;
 @mixin editorSection {
-  .coding-sec {
+  .coding_sec {
     position: relative;
     @include bottomSeparator(calc(100% - 10px), 0, -32px, 0);
     &::after {
@@ -11,8 +11,9 @@
       margin-left: 30px;
       display: flex;
       align-items: center;
-      .cl-title {
+      .cl_title {
         font-size: 25px;
+        color: #fff;
       }
       select {
         margin-left: 15px;
@@ -20,8 +21,8 @@
         width: 200px;
         padding: 10px;
         border-radius: 6px;
-        background-color: #fff;
-        color: $mainColor;
+        background-color: #3a3b3c;
+        color: #fff;
         font-size: 18px;
         font-weight: bold;
         box-shadow: $cardShadow;
@@ -50,7 +51,7 @@
         }
       }
     }
-    .compiling-btns {
+    .compiling_btns {
       @include center;
       gap: 0 20px;
       margin-top: 15px;

@@ -1,0 +1,126 @@
+.scoreboard {
+  background-color: #3a3b3c;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 5px auto 10px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+}
+.scoreboard .m_infobox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 0 5px;
+  background-color: #484848;
+  color: #00aaff;
+  border-radius: 15px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  padding: 1px 20px;
+}
+.scoreboard .m_infobox .dot {
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: #f55353;
+  left: 10px;
+}
+.scoreboard .m_infobox .match_info {
+  margin-left: 5px;
+}
+.scoreboard .players {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 80px;
+  padding: 5px 12px;
+}
+.scoreboard .players .vs_word {
+  position: relative;
+  left: -5px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #fff;
+}
+.scoreboard .players .player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.scoreboard .players .player .first_status,
+.scoreboard .players .player .second_status {
+  position: relative;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  top: 10px;
+}
+.scoreboard .players .player .first_status {
+  background-color: #cecece;
+  left: 15px;
+}
+.scoreboard .players .player .second_status {
+  right: -3px;
+}
+.scoreboard .players .player .second_status img {
+  max-width: 100%;
+  border-radius: 50%;
+}
+.scoreboard .players .player .info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.scoreboard .players .player .info .usn {
+  margin-bottom: 7px;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 15px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+.scoreboard .players .player .info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.scoreboard .players .player .pr_st {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 8px;
+  position: relative;
+}
+.scoreboard .players .player .pr_st .pr {
+  border-radius: 4px;
+  height: 18px;
+  width: 18px;
+  font-size: 15px;
+  text-align: center;
+  color: #000;
+}
+.scoreboard .players .player .pr_st .pr.y {
+  background-color: #18cf08;
+}
+.scoreboard .players .player .pr_st .pr.n {
+  background-color: #ee0000;
+}
+.scoreboard .players .player .pr_st .pr.p {
+  background-color: #a3a3a3;
+}
+.scoreboard .players .player .pr_st.first, .scoreboard .players .player .pr_st.second {
+  top: 8px;
+}
+.scoreboard .players .player .pr_st.first {
+  right: 16px;
+}
+.scoreboard .players .player .pr_st.second {
+  left: 16px;
+}/*# sourceMappingURL=scoreboard.module.css.map */

@@ -1,0 +1,42 @@
+.single_request {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.single_request .user_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.single_request .request_actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.single_request .request_actions .req_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.single_request .request_actions .req_btn:not(:last-of-type) {
+  margin-right: 12px;
+}
+.single_request .request_actions .req_btn.acc {
+  background-color: #18cf08;
+  color: white;
+}
+.single_request .request_actions .req_btn.acc:hover {
+  background-color: #129e06;
+}
+.single_request .request_actions .req_btn.rej {
+  background-color: #f55353;
+  color: white;
+}
+.single_request .request_actions .req_btn.rej:hover {
+  background-color: #f22323;
+}/*# sourceMappingURL=clan-requests.module.css.map */

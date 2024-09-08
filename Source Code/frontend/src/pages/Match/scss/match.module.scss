@@ -1,0 +1,13 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+.match_div {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 100%;
+
+  .match_sections {
+    display: flex;
+    margin-top: 25px;
+  }
+}

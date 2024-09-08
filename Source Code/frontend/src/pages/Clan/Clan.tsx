@@ -1,119 +1,204 @@
-import { NavBar } from "../../components";
-import "./scss/clan.css";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Chat,
+  ClanRequests,
+  GroofyWrapper,
+  ProfileImage,
+} from "../../components";
+import classes from "./scss/clan.module.css";
+import { useEffect, useRef, useState } from "react";
+import clanThunks from "../../store/actions/clan-actions";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
+import { useNavigate } from "react-router-dom";
 
 const Clan = () => {
+  const dispatch = useDispatch();
+  const clan = useSelector((state: any) => state.clan.clan);
+  const loggedUser = useSelector((state: any) => state.auth.user);
+  const isLoading = useSelector((state: any) => state.clan.isLoading);
+  const [fetchClan, setFetchClan] = useState(false);
+  const [requestsVisible, setRequestsVisible] = useState(false);
+  const toast = useRef<Toast>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getClan = async () => {
+      await dispatch(clanThunks.getClan() as any);
+    };
+
+    getClan();
+  }, [dispatch, fetchClan]);
+
+  const leaveClan = async () => {
+    return await dispatch(clanThunks.leaveClan() as any);
+  };
+
+  const confirmLeaveClan = () => {
+    confirmDialog({
+      message: "Are you sure you want to leave the clan?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () =>
+        leaveClan()
+          .then((res: any) => {
+            if (res.status === "success") {
+              toast.current?.show({
+                severity: "success",
+                summary: res.status,
+                detail: res.message,
+                life: 3000,
+              });
+              setTimeout(() => {
+                dispatch(clanThunks.clearClan() as any);
+              }, 1000);
+            } else if (res.status === "failure") {
+              toast.current?.show({
+                severity: "error",
+                summary: res.status,
+                detail: res.message,
+                life: 3000,
+              });
+            }
+          })
+          .catch((error: any) => {
+            toast.current?.show({
+              severity: "error",
+              summary: error.status,
+              detail: error.message,
+              life: 3000,
+            });
+          }),
+      reject: () => null,
+    });
+  };
+
+  if (!clan && !isLoading) {
+    navigate("/clan-search");
+  }
+
   return (
-    <>
-      <NavBar idx={3} />
-      <div className="clan-div">
-        <div className="c-info">
-          <div className="c-box">
-            <div className="c-header">
-              <h3 className="c-title">Members</h3>
-              <img
-                className="ch-icn"
-                src="/Assets/SVG/view-all.svg"
-                alt="ViewAll"
-              />
-            </div>
-            <div className="m-box">
-              <div className="member">
-                <div className="m-img">
-                  <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
+    <GroofyWrapper idx={3}>
+      <Toast ref={toast} />
+      <ConfirmDialog />
+      <ClanRequests
+        clanId={clan?.id}
+        clanReqVisible={requestsVisible}
+        setClanReqVisible={setRequestsVisible}
+        fetchClan={fetchClan}
+        setFetchClan={setFetchClan}
+      />
+      {isLoading && <div>Loading...</div>}
+      {clan && (
+        <div className={classes.clan_div}>
+          <div className={classes.c_info}>
+            {/* <div className={classes.c_dashboard}>
+              <div className={classes.c_details_wrapper}>
+                <div className={classes.c_details}>
+                  <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
+                  <span>{clan.name}</span>
                 </div>
-                <div className="m-info">
-                  <span className="m-usn">Username</span>
-                  <span className="m-usi">Information about the user</span>
+                <div className={classes.c_actions}>
+                  {clan.leader === loggedUser.username && (
+                    <i
+                      className="bi bi-person-plus-fill"
+                      onClick={() => setRequestsVisible(true)}
+                    />
+                  )}
+                  <i
+                    className="bi bi-box-arrow-left"
+                    onClick={confirmLeaveClan}
+                  />
                 </div>
               </div>
-              <div className="member">
-                <div className="m-img">
-                  <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
+              <div className={classes.c_stats}>
+                <div className={classes.c_stat}>
+                  <span className={classes.stat_title}>Members:</span>
+                  <span className={classes.stat_num}>
+                    {clan.membersCount}/10
+                  </span>
                 </div>
-                <div className="m-info">
-                  <span className="m-usn">Username</span>
-                  <span className="m-usi">Information about the user</span>
+                <div className={classes.c_stat}>
+                  <span className={classes.stat_title}>World Rank:</span>
+                  <span className={classes.stat_num}>
+                    {clan.worldRank === 0 ? "Unranked" : clan.worldRank}
+                  </span>
+                </div>
+                <div className={classes.c_stat}>
+                  <span className={classes.stat_title}>Total Matches:</span>
+                  <span className={classes.stat_num}>{clan.totalMatches}</span>
+                </div>
+                <div className={classes.c_stat}>
+                  <span className={classes.stat_title}>Wins:</span>
+                  <span className={classes.stat_num}>{clan.wins}</span>
+                </div>
+                <div className={classes.c_stat}>
+                  <span className={classes.stat_title}>Losses:</span>
+                  <span className={classes.stat_num}>{clan.losses}</span>
                 </div>
               </div>
-              <div className="member">
-                <div className="m-img">
-                  <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
+            </div> */}
+            <div className={classes.c_box}>
+              <div className={classes.c_details_wrapper}>
+                <div className={classes.c_details}>
+                  <img src="/Assets/Images/elite-rank.png" alt="ClanImg" />
+                  <span>{clan.name}</span>
                 </div>
-                <div className="m-info">
-                  <span className="m-usn">Username</span>
-                  <span className="m-usi">Information about the user</span>
+                <div className={classes.c_actions}>
+                  {clan.leader === loggedUser.username && (
+                    <i
+                      className="bi bi-person-plus-fill"
+                      onClick={() => setRequestsVisible(true)}
+                    />
+                  )}
+                  <i
+                    className="bi bi-box-arrow-left"
+                    onClick={confirmLeaveClan}
+                  />
                 </div>
+              </div>
+              <div className={classes.c_header}>
+                <h3 className={classes.c_title}>Members</h3>
+                <img
+                  className={classes.ch_icn}
+                  src="/Assets/SVG/view-all.svg"
+                  alt="ViewAll"
+                />
+              </div>
+              <div className={classes.m_box}>
+                {clan.members.map((member: any, idx: number) => (
+                  <div className={classes.member} key={idx}>
+                    <div className={classes.m_info}>
+                      <ProfileImage
+                        photoUrl={member.photoUrl}
+                        username={member.username}
+                        style={{
+                          backgroundColor: member.accountColor,
+                          width: "42px",
+                          height: "42px",
+                          fontSize: "18px",
+                          marginRight: "10px",
+                        }}
+                        canClick={false}
+                      />
+                      <span className={classes.m_usn}>{member.username}</span>
+                    </div>
+                    <div
+                      className={`${classes.m_rank} ${
+                        member.role === "leader" ? classes.l : classes.m
+                      }`}
+                    >
+                      {member.role}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          <div className="c-box">
-            <div className="c-header">
-              <h3 className="c-title">Top rated in the clan</h3>
-              <img
-                className="ch-icn"
-                src="/Assets/SVG/view-all.svg"
-                alt="ViewAll"
-              />
-            </div>
-            <div className="rm-box">
-              <div className="member">
-                <span className="rm-usn">1. Username</span>
-                <span className="rm-usp">2437</span>
-              </div>
-              <div className="member">
-                <span className="rm-usn">2. Username</span>
-                <span className="rm-usp">1762</span>
-              </div>
-              <div className="member">
-                <span className="rm-usn">3. Username</span>
-                <span className="rm-usp">1249</span>
-              </div>
-            </div>
-          </div>
+          <Chat type="clan" />
         </div>
-        <div className="c-chat">
-          <div className="ch-header">
-            <div className="cl-img">
-              <img src="/Assets/SVG/code.svg" alt="Code" />
-            </div>
-            <div className="cl-i">
-              <h3 className="cln">Clan Name</h3>
-              <p className="cld">short description</p>
-            </div>
-          </div>
-          <div className="ch">
-            <div className="msg-box fr">
-              <div className="u-img">
-                <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
-              </div>
-              <div className="msg-info">
-                <h4 className="msg-usn">User1</h4>
-                <p className="msg">
-                  This is a test message, not an online one.
-                </p>
-              </div>
-            </div>
-            <div className="msg-box to">
-              <div className="u-img">
-                <img src="/Assets/Images/defAv.png" alt="profilePhoto" />
-              </div>
-              <div className="msg-info">
-                <h4 className="msg-usn">User2</h4>
-                <p className="msg">
-                  This is a test response, not an online one.
-                </p>
-              </div>
-            </div>
-          </div>
-          <form className="ch-msg">
-            <textarea placeholder="type a message here"></textarea>
-            <button type="submit">
-              <img src="/Assets/SVG/send.svg" alt="Send" />
-            </button>
-          </form>
-        </div>
-      </div>
-    </>
+      )}
+    </GroofyWrapper>
   );
 };
 

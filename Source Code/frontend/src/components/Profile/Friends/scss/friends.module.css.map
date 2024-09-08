@@ -1,0 +1,1 @@
+{"version":3,"sources":["friends.module.scss","../../../../shared/styles/_colors.scss","../../../../shared/styles/_mixins.scss","friends.module.css"],"names":[],"mappings":"AAGA;EACE,WAAA;EACA,gBAAA;EACA,yBCLU;EDMV,0BAAA;EACA,+CAAA;EACA,aAAA;EENA,aAAA;EACA,uBAAA;EACA,mBAAA;EFMA,sBAAA;AGAF;AHCE;EACE,WAAA;EACA,mBAAA;AGCJ","file":"friends.module.css"}

@@ -2,7 +2,7 @@
 @use "../../../../../shared/styles/mixins" as *;
 
 @mixin matchInfoBox {
-  .m-infobox {
+  .m_infobox {
     @include center;
     position: relative;
     gap: 0 5px;
@@ -20,7 +20,7 @@
       background-color: $redColor;
       left: 10px;
     }
-    .match-info {
+    .match_info {
       margin-left: 5px;
     }
   }

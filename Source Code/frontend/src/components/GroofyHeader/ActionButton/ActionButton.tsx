@@ -1,17 +1,15 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import "./scss/actionbutton.css";
 import { ActionButtonProps } from "../../../shared/types";
+import classes from "./scss/actionbutton.module.css";
 
 const ActionButton = (props: ActionButtonProps) => {
   return (
-    <div className="action" onClick={props.clickEvent}>
+    <div className={classes.action} onClick={props.clickEvent}>
       {props.count > 0 && (
-        <div className="action-cnt">
+        <div className={classes.action_cnt}>
           <span>{props.count}</span>
         </div>
       )}
-      <img className="header-pr-action" src={props.img} alt="action" />
+      <img className={classes.header_pr_action} src={props.img} alt="action" />
     </div>
   );
 };

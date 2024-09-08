@@ -1,8 +1,13 @@
+import { Toast } from "primereact/toast";
+import { RefObject } from "react";
+
 // button props
 export interface btnProps {
   btnText: string;
   icnSrc?: string;
-  clickEvent: any;
+  clickEvent?: () => void;
+  btnType?: boolean;
+  btnState?: boolean;
 }
 // testcase result props
 export interface tcrProps {
@@ -44,15 +49,26 @@ export interface GroofyInputProps {
   giText: string;
   giPlaceholder: string;
   giType: string;
+  giValue: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  errState: boolean;
+  errMsg?: string;
 }
 
 // Notify Box Props
 
 export interface NotifyBoxProps {
+  nid: number;
+  nuid: number;
   nuImg: string;
   nusn: string;
+  ncolor: string;
+  nbody: string;
   ntime: string;
+  nType: string;
+  nInvId: number;
+  nIsAdmin: boolean;
 }
 
 // Single Friend Props
@@ -119,13 +135,160 @@ export interface GamemodeProps {
   title: string;
   description?: string;
   type?: string;
+  id?: string;
   img: string;
   clickEvent: () => void;
 }
 
 // Single Post props
 export interface SinglePostProps {
+  userid: string;
   postUser: string;
   postUserImg: string;
   postContent: string;
+  postUserColor: string;
+  postTime: string;
+  postID: string;
+  postLikesCnt: number;
+  isLiked: boolean;
+  isEdited: boolean;
+}
+
+// User Props
+export interface UserProps {
+  username?: string;
+  displayName: string;
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  country?: any;
+}
+
+// Posts Container Props
+export interface PostsContainerProps {
+  user: any;
+  toast: RefObject<Toast>;
+  self: boolean;
+}
+
+// Posts Props
+export interface PostsProps {
+  posts: any[];
+  user: any;
+  loggedUser: string;
+}
+
+// Groofy Textarea Props
+export interface GroofyTAProps {
+  taValue: string;
+  changeHandler: (val: string) => void;
+}
+
+// PSocial Props
+export interface PSocialProps {
+  profileUser: any;
+  profName: string;
+  loggedUser: string;
+  toast: RefObject<Toast>;
+}
+
+// PInfo Props
+export interface PInfoProps {
+  profileUser: any;
+}
+
+// Chat Props
+export interface ChatProps {
+  type: string;
+}
+
+// Submission Props
+export interface SubmissionProps {
+  language?: string;
+  code: string;
+  gameID: string;
+  problemNumber?: number;
+}
+
+// Clan Result Props
+export interface ClanResultProps {
+  clanId: number;
+  clanName: string;
+  members: number;
+  worldRank: number;
+  wins: number;
+  losses: number;
+  status: number;
+}
+
+// Clan Requests Props
+export interface ClanRequestsProps {
+  clanId: number;
+  clanReqVisible: boolean;
+  setClanReqVisible: (val: boolean) => void;
+  fetchClan: boolean;
+  setFetchClan: (val: boolean) => void;
+}
+
+// Clan Request Action
+export interface ClanRequestAction {
+  clanId: number;
+  clanRequestId: number;
+  action: string;
+}
+
+// Single Friend Props
+export interface FriendProps {
+  userId: number;
+  username: string;
+  photoUrl: string;
+  accountColor: string;
+  teamId?: number;
+  isInvited?: boolean;
+  invitationId?: number;
+}
+
+// Profile Image Props
+export interface ProfileImageProps {
+  username: string;
+  photoUrl: string;
+  style: any;
+  canClick: boolean;
+  exec?: any;
+}
+
+export interface TestcaseProps {
+  input: string;
+  output: string;
+}
+
+export interface MatchPopupProps {
+  matchResult: string;
+  matchType: string;
+  oldRank: number;
+  newRank: number;
+  submissions: any[];
+}
+
+export interface NotificationsContainerProps {
+  title: string;
+  desc: string;
+  notifications: any[];
+  isActive: boolean;
+  setNotifyCnt: (val: number) => void;
+  setNotifyActive: (val: boolean) => void;
+  rightPosition: string;
+}
+
+export interface SimpleUserProps {
+  username: string;
+  photoUrl: string;
+  accountColor: string;
+  reverse?: boolean;
+}
+
+export interface TeamCardProps {
+  name: string;
+  membersCount: number;
+  creatorUsername: string;
 }

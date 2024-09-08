@@ -1,0 +1,160 @@
+.psec {
+  flex: 1;
+  height: calc(100vh - 229px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 2px solid #ababab;
+}
+.psec::-webkit-scrollbar {
+  width: 6px;
+}
+.psec::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 10px;
+}
+.psec::-webkit-scrollbar-thumb {
+  background-color: #18191a;
+  border-radius: 10px;
+}
+.psec .problem_tabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3a3b3c;
+  margin-left: 20px;
+  margin-right: 10px;
+  border-radius: 12px;
+  padding: 5px 20px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+}
+.psec .problem_tabs span {
+  color: #fff;
+  font-size: 20px;
+}
+.psec .problem_tabs .tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.psec .problem_tabs .tabs .accepted {
+  background-color: #18cf08 !important;
+}
+.psec .problem_tabs .tabs .wrong {
+  background-color: #f55353 !important;
+}
+.psec .problem_tabs .tabs .tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  width: 38px;
+  height: 38px;
+  background-color: #18191a;
+  border-radius: 12px;
+  transition: 0.3s;
+  outline: 1px solid transparent;
+  cursor: pointer;
+}
+.psec .problem_tabs .tabs .tab:not(:last-of-type) {
+  margin-right: 8px;
+}
+.psec .problem_tabs .tabs .tab:hover {
+  background-color: #2a2b2c;
+}
+.psec .problem_tabs .tabs .tab.active {
+  background-color: #2a2b2c;
+  outline-color: #fff;
+}
+.psec .problem_disc {
+  margin-left: 20px;
+  margin-right: 10px;
+  background-color: #3a3b3c;
+  border-radius: 12px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+}
+.psec .problem_disc .ptitle {
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: bold;
+  position: relative;
+  color: #fff;
+}
+.psec .problem_disc .ptitle::after {
+  content: "";
+  position: absolute;
+  width: 250px;
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
+}
+.psec .problem_disc .complexity {
+  display: block;
+  width: 100%;
+  margin-top: 30px;
+  text-align: center;
+}
+.psec .problem_disc .complexity p {
+  font-size: 14px;
+  color: #ddd;
+}
+.psec .problem_disc .complexity p:not(:last-of-type) {
+  margin-bottom: 5px;
+}
+.psec .problem_disc .pdisc {
+  margin-top: 25px;
+  font-size: 18px;
+  color: #dbdbdb;
+  line-height: 1.5;
+}
+.psec .testcases {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 15px;
+}
+.psec .testcases .tch {
+  font-weight: 500;
+  font-size: 25px;
+  background-color: #18191a;
+  color: #fff;
+  padding: 8px 60px;
+  border-radius: 4px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.psec .testcases .tcs_container {
+  display: flex;
+  flex-direction: column;
+  gap: 65px 0;
+  width: 100%;
+  margin-left: 20px;
+  margin-top: 50px;
+  padding: 15px;
+}
+.psec .testcases .tcs_container .tc_box {
+  position: relative;
+}
+.psec .testcases .tcs_container .tc_box .tc_num {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+}
+.psec .testcases .tcs_container .tc_box:not(:last-of-type)::after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 120px);
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -40px;
+}
+.psec .testcases .tcs_container .tc_box:not(:last-of-type)::after {
+  background-color: #ababab;
+}/*# sourceMappingURL=problemsection.module.css.map */

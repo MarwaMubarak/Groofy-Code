@@ -1,0 +1,91 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared//styles/mixins" as *;
+
+.history_container {
+  width: 100%;
+  margin-top: 20px;
+  background-color: $mainColor;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  table {
+    width: 100%;
+    thead tr {
+      border-bottom: 2px solid #242526;
+    }
+    tr {
+      padding: 20px 30px;
+      @include between;
+      width: 100%;
+      color: #fff;
+      td {
+        &.state {
+          font-weight: bold;
+          &.ww {
+            color: $greenColor;
+          }
+          &.ll {
+            color: $redColor;
+          }
+          &.dd {
+            color: white;
+          }
+        }
+        &.status {
+          color: #000;
+          padding: 10px 20px;
+          border-radius: 12px;
+          font-weight: bold;
+          &.w {
+            background-color: #31ad26;
+            color: white;
+          }
+          &.l {
+            background-color: #df7777;
+            color: white;
+          }
+          &.d {
+            background-color: white;
+          }
+        }
+      }
+    }
+    .empty_history {
+      color: #fff;
+    }
+  }
+  .paginator {
+    background-color: $mainColor2;
+    li {
+      background-color: $mainColor2 !important;
+    }
+  }
+}
+
+.paginator > [class="p-paginator-pages"] {
+  display: flex;
+  gap: 7px;
+  background-color: $mainColor2;
+}
+
+.paginator_page_links {
+  padding: 15px 20px;
+  border-radius: 6px;
+  background-color: $mainColor2;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  &:hover {
+    background-color: $lighHoverColor;
+  }
+}
+.active {
+  background-color: $lighHoverColor;
+}
+
+.paginator_dropdown {
+  background-color: $lighHoverColor;
+  li {
+    background-color: $mainColor2 !important;
+  }
+}

@@ -1,0 +1,97 @@
+.toast_testing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #eee;
+  width: 400px;
+  height: 300px;
+  overflow: hidden;
+  border: #f55353 4px solid;
+  background-image: url("/public/Assets/Images/background.jpg");
+  background-size: cover;
+  &:not(.exit) {
+    animation: show-animation 0.5s ease-in-out forwards;
+  }
+  &.exit {
+    animation: hide-animation 0.5s ease-in-out forwards;
+  }
+
+  .toast_header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    background-color: #f55353;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%);
+    padding: 15px 45px;
+  }
+  .top {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 78%;
+    .top_title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      i {
+        font-size: 24px;
+        color: #f55353;
+        margin-right: 10px;
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: bold;
+        font-style: italic;
+      }
+    }
+  }
+  .cancel_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 22%;
+    border-top: 1px solid #f55353;
+    width: 100%;
+    color: #f55353;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+    color: white;
+
+    &:hover {
+      background-color: #f55353;
+    }
+  }
+}
+
+@keyframes show-animation {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes hide-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}

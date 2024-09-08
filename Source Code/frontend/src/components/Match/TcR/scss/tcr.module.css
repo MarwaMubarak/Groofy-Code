@@ -1,0 +1,33 @@
+.tcr {
+  background-color: #4e4f50;
+  border-radius: 6px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0 8px;
+  padding: 6px 9px;
+}
+.tcr .tcr_text {
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+}
+.tcr .tcr_icn {
+  width: 25px;
+  border-radius: 50%;
+}
+.tcr .details {
+  display: inline-block;
+  color: rgba(245, 83, 83, 0.6);
+  margin-left: 25px;
+  font-weight: normal;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.tcr .details:hover {
+  color: #f55353;
+  font-weight: bold;
+}/*# sourceMappingURL=tcr.module.css.map */

@@ -1,0 +1,52 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.leaderboard_container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+  .activity_section {
+    height: 100%;
+    width: 1450px;
+    margin: 0 auto;
+    .paginator {
+      background-color: $mainColor2;
+      li {
+        background-color: $mainColor2 !important;
+      }
+    }
+  }
+}
+
+.paginator > [class="p-paginator-pages"] {
+  display: flex;
+  gap: 7px;
+  background-color: $mainColor2;
+}
+
+.paginator_page_links {
+  padding: 15px 20px;
+  border-radius: 6px;
+  background-color: $mainColor2;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  &:hover {
+    background-color: $lighHoverColor;
+  }
+}
+.active {
+  background-color: $lighHoverColor;
+}
+
+.paginator_dropdown {
+  background-color: $lighHoverColor;
+  li {
+    background-color: $mainColor2 !important;
+  }
+}
+.p-datatable .p-datatable-tbody > tr {
+  background-color: #303031;
+}

@@ -1,0 +1,16 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+@use "./sections/matchinfobox" as *;
+@use "./sections/players" as *;
+
+.scoreboard {
+  background-color: #3a3b3c;
+  border-radius: 12px;
+  @include center;
+  flex-direction: column;
+  width: fit-content;
+  margin: 5px auto 10px;
+  box-shadow: $cardShadow;
+  @include matchInfoBox;
+  @include players;
+}

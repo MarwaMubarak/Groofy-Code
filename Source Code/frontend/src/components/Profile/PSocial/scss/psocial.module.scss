@@ -1,0 +1,49 @@
+@use "../../../../shared/styles/colors" as *;
+@use "../../../../shared/styles/mixins" as *;
+
+.up_side_left {
+  @include center;
+  flex-direction: column;
+  flex: 3;
+  margin-bottom: auto;
+  @media (max-width: 1053px) {
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 20px;
+  }
+  .media_section {
+    @include center;
+    flex-direction: column;
+    width: 100%;
+    .media_selectors {
+      @include around;
+      width: 100%;
+      color: $hoverColor;
+      margin-bottom: 20px;
+      background-color: $mainColor;
+      border-radius: 6px;
+      box-shadow: $lightShadow;
+      &.false {
+        margin-bottom: 0px;
+      }
+      .ms {
+        @include center;
+        padding: 15px 0px;
+        width: 100%;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover {
+          background-color: $mainColor2;
+        }
+        h3 {
+          font-size: 20px;
+        }
+        &.active {
+          background-color: $mainColorHover2;
+          border-bottom-color: #eee;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+@use "../../../shared/styles/colors" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.toast_testing {
+  @include center;
+  flex-direction: column;
+  background-color: #eee;
+  border-radius: 6px;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  &:not(.exit) {
+    animation: show-animation 0.5s ease-in-out forwards;
+  }
+  &.exit {
+    animation: hide-animation 0.5s ease-in-out forwards;
+  }
+  // &:not(.exit) {
+  //   animation: show-animation 0.5s ease-in-out;
+  // }
+  // &.exit {
+  //   animation: show-animation 0.5s ease-in-out reverse;
+  // }
+  .top {
+    @include center;
+    flex-direction: column;
+    height: 78%;
+    i {
+      font-size: 30px;
+    }
+    span {
+      margin-top: 20px;
+    }
+  }
+  .cancel_btn {
+    @include center;
+    height: 22%;
+    border-top: 1px solid $redColor;
+    width: 100%;
+    color: $redColor;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background-color: $redColor;
+      color: white;
+    }
+  }
+}
+
+@keyframes show-animation {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes hide-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
